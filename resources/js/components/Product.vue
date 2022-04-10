@@ -40,6 +40,10 @@
             producto:{
                 required: true,
                 type: String
+            },
+            ruta:{
+                required: true,
+                type: String
             }
         },
         data (){
@@ -62,9 +66,9 @@
         methods: {
             setVisitas(){
 
-                // let url = '/lorgeliz_tienda_copia/public/productos/visitas/update/'+this.producto;
                 // let url = `/lorgeliz_tienda_copia/public/productos/${this.producto}/update/visitas`;
-                let url = `/lorgeliz_tienda_copia/public/api/productos/${this.producto}/update/visitas`;
+                // let url = `/lorgeliz_tienda_copia/public/api/productos/${this.producto}/update/visitas`;
+                let url = `${this.ruta}/api/productos/${this.producto}/update/visitas`
                 axios.put(url).then(response => {
                    
                 }).catch(error => {
@@ -93,7 +97,9 @@
             getTallas(){
 
                 // let url = '/lorgeliz_tienda_copia/public/tallas/productos/'+this.producto;
-                let url = '/lorgeliz_tienda_copia/public/api/tallas/'+this.producto;
+                // let url = '/lorgeliz_tienda_copia/public/api/tallas/'+this.producto;
+
+                let url = `${this.ruta}/api/tallas/${this.producto}`
 
                 axios.get(url).then(response => {
                     // this.arrayTallas = response.data.tallas;
@@ -105,7 +111,9 @@
             }, 
 
             getCarrito(){
-                let url = '/lorgeliz_tienda_copia/public/cart/buscarCarrito';
+                // let url = '/lorgeliz_tienda_copia/public/cart/buscarCarrito';
+
+                let url = `${this.ruta}/cart/buscarCarrito`
 
                 if ((this.cantidad != '' && this.cantidad != 0) && this.talla != '') {
 
@@ -116,7 +124,10 @@
                         if (this.arrayCarrito != null){
                             this.carrito = this.arrayCarrito.id;
 
-                            let url = '/lorgeliz_tienda_copia/public/cart/update';
+                            // let url = '/lorgeliz_tienda_copia/public/cart/update';
+
+                            let url = `${this.ruta}/cart/update`
+                            
             
                             for (let i = 0; i < this.arrayTallas.length; i++) {
                                 if (this.arrayTallas[i].id == this.talla) {
@@ -180,7 +191,9 @@
                         } else{
             
                             // let url = '/lorgeliz_tienda_copia/public/cart/store';
-                            let url = '/lorgeliz_tienda_copia/public/cart';
+                            // let url = '/lorgeliz_tienda_copia/public/cart';
+
+                            let url = `${this.ruta}/cart`
                 
                             for (let i = 0; i < this.arrayTallas.length; i++) {
                                 if (this.arrayTallas[i].id == this.talla) {

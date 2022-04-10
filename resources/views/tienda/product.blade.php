@@ -129,7 +129,7 @@
                                 </div>
                     
                                 {{-- <product producto="{{$producto->cop}}"></product> --}}
-                                <product producto="{{$producto->id}}"></product>
+                                <product producto="{{$producto->id}}" :ruta="ruta"></product>
                             {{--<div class="product_text">
                                 <span style="color: black; font-weight: bold;">Talla</span>
                                 <select name="talla" id="talla" class="form-control" v-model="talla" @change="setStock()" @click="change()">
