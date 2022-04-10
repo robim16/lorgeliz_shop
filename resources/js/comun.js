@@ -32,7 +32,8 @@ if (document.getElementById('app')) {
         el: '#app',
         data: {
             keyword: '',
-            location: ''
+            location: '',
+            ruta: 'http://lorenzogeliztienda.com'
         }, 
         methods:{
             setCategoria(categoria){
