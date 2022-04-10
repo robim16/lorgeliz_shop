@@ -38,20 +38,21 @@ if (document.getElementById('app')) {
         methods:{
             setCategoria(categoria){
                 localStorage.setItem('category', JSON.stringify(categoria));
-                window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
+                // window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
+                window.location.href = `${this.ruta}/categorias`;
             },
 
             setSubcategoria(subcategoria){
                 localStorage.setItem('subcategory', JSON.stringify(subcategoria));
-                window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
+                window.location.href = `${this.ruta}/categorias`;
             },
 
             search(){
                 this.location = window.location.pathname;
 
-                if (this.location != '/lorgeliz_tienda_copia/public/categorias') {
+                if (this.location != `${this.ruta}/categorias`) {
                     localStorage.setItem('keyword', JSON.stringify(this.keyword));
-                    window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
+                    window.location.href = `${this.ruta}/categorias`;
                 } 
             }
         }
