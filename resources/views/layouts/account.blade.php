@@ -101,7 +101,7 @@
 
       <!-- Right navbar links -->
       <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-        <messages></messages>
+        <messages :ruta="ruta"></messages>
         <!-- Messages Dropdown Menu -->
         {{-- <li id="message" class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
@@ -188,7 +188,7 @@
             </div>
           </li>
         </div> --}}
-        <notifications></notifications>
+        <notifications :ruta="ruta"></notifications>
         
         <li class="nav-item dropdown">
           <a id="navbarDropdown"

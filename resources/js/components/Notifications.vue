@@ -32,7 +32,12 @@
 
 <script>
     export default {
-
+        props: {
+            ruta:{
+                required: true,
+                type: String
+            }
+        },
         data (){
             return {
                 notifications: [], 
@@ -41,7 +46,8 @@
 
         methods:{
             readNotification(id,ruta){
-                let url = '/lorgeliz_tienda_copia/public/notification/'+id;
+                // let url = '/lorgeliz_tienda_copia/public/notification/'+id;
+                let url = `${this.ruta}/notification/${id}`
                 axios.put(url).then(response => {
                     window.location.href = ruta;
                 }).catch(error => {
@@ -51,7 +57,9 @@
         },
 
         created() {
-            axios.get('/lorgeliz_tienda_copia/public/notification').then(response => {
+            // let url = '/lorgeliz_tienda_copia/public/notification';
+            let url = `${this.ruta}/notification`;
+            axios.get(url).then(response => {
                 this.notifications = response.data;
             }).catch(error => {
                 console.log(error)

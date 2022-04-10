@@ -99,6 +99,11 @@
             //     required:true,
             //     type:Number
             // }
+
+            ruta:{
+                required: true,
+                type: String
+            }
         },
         data (){
             return {
@@ -114,7 +119,8 @@
         methods:{
 
             loadMessages(){
-                let url ='/lorgeliz_tienda_copia/public/chats';
+                // let url ='/lorgeliz_tienda_copia/public/chats';
+                let url = `${this.ruta}/chats`
                 axios.get(url).then(response =>{
                     this.arrayMensajes = response.data.chats;
                     this.user = response.data.user;
@@ -127,8 +133,10 @@
                 if (this.mensaje != '') {
 
                     this.error = false;
-                    let url = '/lorgeliz_tienda_copia/public/chats';
+                    // let url = '/lorgeliz_tienda_copia/public/chats';
                     // let me = this;
+
+                    let url = `${this.ruta}/chats`
 
                     axios.post(url,{
                         'mensaje': this.mensaje,

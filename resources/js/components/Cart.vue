@@ -248,6 +248,10 @@
             user_id: {
                 type: Number,
                 required: true
+            },
+            ruta:{
+                required: true,
+                type: String
             }
         },
         data (){
@@ -265,7 +269,8 @@
 
         methods : {
             loadCart(){
-                let url = '/lorgeliz_tienda_copia/public/cart/user';
+                // let url = '/lorgeliz_tienda_copia/public/cart/user';
+                let url = `${this.ruta}/cart/user`
                 axios.get(url).then(response => {
                     this.arrayProductos = response.data.productos;
 
@@ -288,8 +293,10 @@
                 this.producto = producto;
                 this.operacion = operacion;
 
-                let url = '/lorgeliz_tienda_copia/public/cart/setCantidad';
+                // let url = '/lorgeliz_tienda_copia/public/cart/setCantidad';
                 // let me = this;
+
+                let url = `${this.ruta}/cart/setCantidad`
 
                 axios.post(url,{
                 'producto': this.producto,
@@ -314,8 +321,10 @@
             remove(producto){
                 this.producto = producto;
                 // let url = '/lorgeliz_tienda_copia/public/cart/remove/'+this.producto;
-                let url = `/lorgeliz_tienda_copia/public/cart/${this.producto}/remove`;
+                // let url = `/lorgeliz_tienda_copia/public/cart/${this.producto}/remove`;
                 // let me = this;
+
+                let url = `${this.ruta}/cart/${this.producto}/remove`
         
                 axios.delete(url).then(response => {
                     if (response.data.data == 'success') {
@@ -329,7 +338,9 @@
             limpiarCarrito(){
                 // let url = '/lorgeliz_tienda_copia/public/cart/delete/'+this.carrito;
                 // let me = this;
-                let url = `/lorgeliz_tienda_copia/public/cart/${this.carrito}/delete`;
+                // let url = `/lorgeliz_tienda_copia/public/cart/${this.carrito}/delete`;
+
+                let url = `${this.ruta}/cart/${this.carrito}/delete`
         
                 axios.delete(url).then(response => {
                     if (response.data.data == 'success') {
