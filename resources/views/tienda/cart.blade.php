@@ -28,7 +28,7 @@
 			</div>
 		</div>
 
-		<cart :user_id="{{  auth()->user() ? json_encode(auth()->id()) : '0' }}"></cart>
+		<cart :user_id="{{  auth()->user() ? json_encode(auth()->id()) : '0' }}" :ruta="ruta"></cart>
 			<!-- Cart -->
 		{{--<div class="cart_section">
 			<div class="container">

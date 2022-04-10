@@ -75,7 +75,7 @@
 </div> --}}
 
 <div id="app" class="">
-    <chat :user="{{  auth()->user()->id }}"></chat>
+    <chat :user="{{  auth()->user()->id }}" :ruta="ruta"></chat>
 </div>
 
 @endsection

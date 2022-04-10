@@ -32,7 +32,12 @@
 
 <script>
     export default {
-
+        props: {
+            ruta:{
+                required: true,
+                type: String
+            }
+        },
         data (){
             return {
                messages: [], 
@@ -41,8 +46,9 @@
 
         methods:{
             read_at(id){
-                let url = '/lorgeliz_tienda_copia/public/chats/'+id;
+                // let url = '/lorgeliz_tienda_copia/public/chats/'+id;
                 // let me = this;
+                let url = `${this.ruta}/chats/${id}`
                 axios.put(url).then(response => {
                     this.loadMessages();
                 }).catch(error => {
@@ -52,7 +58,9 @@
 
             //obtiene los mensajes del cliente para mostrar las notificaciones
             loadMessages(){
-                axios.get('/lorgeliz_tienda_copia/public/chats/messages').then(response => {
+                // let url = '/lorgeliz_tienda_copia/public/chats/messages';
+                let url = `${this.ruta}/chats/messages`
+                axios.get(url).then(response => {
                     this.messages = response.data.chats;
                 }).catch(error => {
                     console.log(error)

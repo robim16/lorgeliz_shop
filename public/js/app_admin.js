@@ -4204,6 +4204,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     producto: {
       required: true,
       type: String
+    },
+    ruta: {
+      required: true,
+      type: String
     }
   },
   data: function data() {
@@ -4219,9 +4223,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     setVisitas: function setVisitas() {
-      // let url = '/lorgeliz_tienda_copia/public/productos/visitas/update/'+this.producto;
       // let url = `/lorgeliz_tienda_copia/public/productos/${this.producto}/update/visitas`;
-      var url = "/lorgeliz_tienda_copia/public/api/productos/".concat(this.producto, "/update/visitas");
+      // let url = `/lorgeliz_tienda_copia/public/api/productos/${this.producto}/update/visitas`;
+      var url = "".concat(this.ruta, "/api/productos/").concat(this.producto, "/update/visitas");
       axios.put(url).then(function (response) {})["catch"](function (error) {
         console.log(error);
       });
@@ -4244,7 +4248,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       // let url = '/lorgeliz_tienda_copia/public/tallas/productos/'+this.producto;
-      var url = '/lorgeliz_tienda_copia/public/api/tallas/' + this.producto;
+      // let url = '/lorgeliz_tienda_copia/public/api/tallas/'+this.producto;
+      var url = "".concat(this.ruta, "/api/tallas/").concat(this.producto);
       axios.get(url).then(function (response) {
         // this.arrayTallas = response.data.tallas;
         _this.arrayTallas = response.data;
@@ -4255,7 +4260,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getCarrito: function getCarrito() {
       var _this2 = this;
 
-      var url = '/lorgeliz_tienda_copia/public/cart/buscarCarrito';
+      // let url = '/lorgeliz_tienda_copia/public/cart/buscarCarrito';
+      var url = "".concat(this.ruta, "/cart/buscarCarrito");
 
       if (this.cantidad != '' && this.cantidad != 0 && this.talla != '') {
         if (this.error) this.error = false;
@@ -4263,8 +4269,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this2.arrayCarrito = response.data.carrito;
 
           if (_this2.arrayCarrito != null) {
-            _this2.carrito = _this2.arrayCarrito.id;
-            var _url = '/lorgeliz_tienda_copia/public/cart/update';
+            _this2.carrito = _this2.arrayCarrito.id; // let url = '/lorgeliz_tienda_copia/public/cart/update';
+
+            var _url = "".concat(_this2.ruta, "/cart/update");
 
             for (var i = 0; i < _this2.arrayTallas.length; i++) {
               if (_this2.arrayTallas[i].id == _this2.talla) {
@@ -4300,7 +4307,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
           } else {
             // let url = '/lorgeliz_tienda_copia/public/cart/store';
-            var _url2 = '/lorgeliz_tienda_copia/public/cart';
+            // let url = '/lorgeliz_tienda_copia/public/cart';
+            var _url2 = "".concat(_this2.ruta, "/cart");
 
             for (var _i = 0; _i < _this2.arrayTallas.length; _i++) {
               if (_this2.arrayTallas[_i].id == _this2.talla) {
@@ -76280,23 +76288,25 @@ if (document.getElementById('app')) {
     el: '#app',
     data: {
       keyword: '',
-      location: ''
+      location: '',
+      ruta: 'http://lorenzogeliztienda.com'
     },
     methods: {
       setCategoria: function setCategoria(categoria) {
-        localStorage.setItem('category', JSON.stringify(categoria));
-        window.location.href = "/lorgeliz_tienda_copia/public/categorias";
+        localStorage.setItem('category', JSON.stringify(categoria)); // window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
+
+        window.location.href = "".concat(this.ruta, "/categorias");
       },
       setSubcategoria: function setSubcategoria(subcategoria) {
         localStorage.setItem('subcategory', JSON.stringify(subcategoria));
-        window.location.href = "/lorgeliz_tienda_copia/public/categorias";
+        window.location.href = "".concat(this.ruta, "/categorias");
       },
       search: function search() {
         this.location = window.location.pathname;
 
-        if (this.location != '/lorgeliz_tienda_copia/public/categorias') {
+        if (this.location != "".concat(this.ruta, "/categorias")) {
           localStorage.setItem('keyword', JSON.stringify(this.keyword));
-          window.location.href = "/lorgeliz_tienda_copia/public/categorias";
+          window.location.href = "".concat(this.ruta, "/categorias");
         }
       }
     }
