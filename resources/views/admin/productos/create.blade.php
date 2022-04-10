@@ -118,7 +118,7 @@
                                 <div class="form-group">
 
                                     <label>Categoria</label>
-                                    <select name="category_id" id="category_id" class="form-control "
+                                    <select name="category_id" id="category_id" class="form-control"
                                         style="width: 100%;" required>
                                         <option value="{{ "0" }}">
                                             {{ "Seleccione una categoría" }}
@@ -146,7 +146,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Subcategoria</label>
-                                    <select name="subcategory_id" id="subcategory_id" class="form-control "
+                                    <select name="subcategory_id" id="subcategory_id" class="form-control"
                                         style="width: 100%;" required>
                                        
                                     </select>
@@ -471,21 +471,19 @@
                             <div class="col-md-6">
                                 <div class="form-group">
 
-
                                     <label>Estado</label>
-                                    <select name="estado" id="estado" class="form-control " style="width: 100%;">
-                                        @foreach (\App\Producto::groupBy('estado')->pluck('estado') as $estado)
-                                        <option value="{{ $estado }}">
-                                            @if ($estado == 1)
-                                            {{"Nuevo"}}
-                                            @else
-                                            {{"En oferta"}}
-                                            @endif
-                                        </option>
+                                    <select name="estado" id="estado" class="form-control" style="width: 100%;">
+                                        @foreach ($estados as $estado)
+                                            <option value="{{$estado}}">
+                                                @if ($estado == 1)
+                                                {{ "nuevo" }} 
+                                                @else
+                                                {{"En oferta"}}
+                                                @endif
+                                            </option>
                                         @endforeach
-
+                                
                                     </select>
-
 
                                 </div>
                                 <!-- /.form-group -->
@@ -568,25 +566,24 @@
 
 @section('scripts')
 
+<script src="{{ asset('adminlte/ckeditor/ckeditor.js') }}"></script>
+
 <!-- Select2 -->
 <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
 
-<script src="{{ asset('adminlte/ckeditor/ckeditor.js') }}"></script>
-
 <script>
-    $(function () {
-        //Initialize Select2 Elements
-        $('#category_id').select2()
 
-        //Initialize Select2 Elements
-        $('.select2bs4').select2({
-            theme: 'bootstrap4'
-        });
-    });
+    // $('#estado').select2();
+
+    // //Initialize Select2 Elements
+    // $('.select2bs4').select2({
+    //     theme: 'bootstrap4'
+    // });
 
     window.data = {
         editar: 'No',
     }
+
 </script>
 
 <script>
@@ -608,15 +605,16 @@
 
 				$.ajax({
 					type: "GET",
-					url: "{{ route('subcategory.get') }}",
+                    // "route('subcategory.get')",
+                    url: '/lorgeliz_tienda_copia/public/api/admin/subcategorias',
 					data:{categoria:categoria},
 					dataType: 'json',
 					success: function (response) {
-
+                        
 						$('#subcategory_id').html('');
 						$('#subcategory_id').append('<option value="0">Seleccione una</option>')
-						
-						$.each(response.data, function (key, value) {
+						// response.data
+						$.each(response, function (key, value) {
 							$('#subcategory_id').append("<option value='" 
 								+ value.id + "'>" + value.nombre + "</option>");
 						});
@@ -629,6 +627,7 @@
 
 		});
 
+        // url: " route('tipo.get') }",
         $(document).on('change', '#subcategory_id', function(e) { 
 			e.preventDefault();
 
@@ -638,7 +637,7 @@
 
 				$.ajax({
 					type: "GET",
-					url: "{{ route('tipo.get') }}",
+					url: "/lorgeliz_tienda_copia/public/api/admin/tipos",
 					data:{subcategoria:subcategoria},
 					dataType: 'json',
 					success: function (response) {
@@ -646,7 +645,7 @@
 						$('#tipo_id').html('');
 						$('#tipo_id').append('<option value="0">Seleccione una</option>')
 						
-						$.each(response.data, function (key, value) {
+						$.each(response, function (key, value) {
 							$('#tipo_id').append("<option value='" 
 								+ value.id + "'>" + value.nombre + "</option>");
 						});

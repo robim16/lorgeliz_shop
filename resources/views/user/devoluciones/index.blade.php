@@ -52,7 +52,7 @@
                                 </thead>
                                 <tbody>
 
-                                    @foreach ($productos as $producto)
+                                    {{-- @foreach ($productos as $producto)
 
                                     <tr>
                                         <td>{{ date('d/m/Y h:i A', strtotime($producto->fecha)) }}</td>
@@ -69,7 +69,29 @@
                                         <td>{{ $producto->color  }}</td>
                                         <td>{{ $producto->cantidad }}</td>
                                        
-                                        <td><a href="{{ route('devolucion.detail', $producto->id) }}" class="btn btn-primary" title="ver solicitud"> <i class="fas fa-eye"></i></a></td>
+                                        <td><a href="{{ route('devolucion.show', $producto->id) }}" class="btn btn-primary" title="ver solicitud"> <i class="fas fa-eye"></i></a></td>
+                                    </tr>
+                                        
+                                    @endforeach --}}
+
+                                    @foreach ($productos as $producto)
+
+                                    <tr>
+                                        <td>{{ date('d/m/Y h:i A', strtotime($producto->fecha)) }}</td>
+                                        <td><a href="{{ route('pedidos.show', $producto->venta->pedido->id)}}"
+                                                class="" title="ver pedido">{{ $producto->venta->pedido->id }}</a>
+                                        </td>
+                                        <td>{{ $producto->productoReferencia->colorProducto->producto->nombre }}</td>
+                                        <td>
+                                            <a href="{{ route('productos.show', $producto->productoReferencia->colorProducto->slug) }}">
+                                            <img src="{{ url('storage/' . $producto->productoReferencia->colorProducto->imagenes[0]->url) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
+                                            </a>
+                                        </td>
+                                        <td>{{ $producto->productoReferencia->talla->nombre }}</td>
+                                        <td>{{ $producto->productoReferencia->colorProducto->color->nombre  }}</td>
+                                        <td>{{ $producto->cantidad }}</td>
+                                       
+                                        <td><a href="{{ route('devolucion.show', $producto->id) }}" class="btn btn-primary" title="ver solicitud"> <i class="fas fa-eye"></i></a></td>
                                     </tr>
                                         
                                     @endforeach

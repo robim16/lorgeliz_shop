@@ -50,7 +50,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
-            <a class=" m-2 float-right btn btn-primary" href="{{ route('product.color', $productos[0]->id)}}">Crear</a>
+            <a class=" m-2 float-right btn btn-primary" href="{{ route('product.color', $productos[0]->id)}}"><i class="fas fa-plus"></i> Crear</a>
                 <table class="table1 table-head-fixed">
                     <thead>
                         <tr>
@@ -67,7 +67,7 @@
 
                         @foreach ($productos as $producto)
                         <tr>
-                            <td> {{$producto->id }} </td>
+                            {{-- <td> {{$producto->id }} </td>
                             <td>
                                 @foreach(\App\Imagene::where('imageable_type', 'App\ColorProducto')
                                     ->where('imageable_id', $producto->cop)->pluck('url', 'id')->take(1) as $id => $imagen)    
@@ -79,6 +79,21 @@
                             <td> {{$producto->marca }} </td>
                             <td> {{$producto->color}}</td>
                             <td> {{$producto->slider_principal }} </td>
+
+                            <td> <a class="btn btn-default" href="{{ route('product.showColor', $producto->slug) }}" title="ver producto"><i class="fas fa-eye"></i></a>
+                            </td>
+
+                            <td> <a class="btn btn-info" href="{{ route('product.editColor', $producto->slug) }}" title="editar"><i class="fas fa-pen"></i></a>
+                            </td> --}}
+
+                            <td> {{$producto->producto->id }} </td>
+                            <td>
+                                <img src="{{ url('storage/' . $producto->imagenes[0]->url) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
+                            </td>
+                            <td> {{$producto->producto->nombre }} </td>
+                            <td> {{$producto->producto->marca }} </td>
+                            <td> {{$producto->color->nombre}}</td>
+                            <td> {{$producto->producto->slider_principal }} </td>
 
                             <td> <a class="btn btn-default" href="{{ route('product.showColor', $producto->slug) }}" title="ver producto"><i class="fas fa-eye"></i></a>
                             </td>

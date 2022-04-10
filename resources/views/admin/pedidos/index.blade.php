@@ -21,14 +21,19 @@
                             <div class="card-tools">
                                 <form>
                                     <div class="input-group input-group-sm">
-                                        <input type="text" name="busqueda" class="form-control float-right" placeholder="Buscar"
-                                        value="{{ request()->get('busqueda') }}">
+                                        <select name="tipo" class="form-control mr-sm-2" id="tipo">
+                                            <option>Buscar por...</option>
+                                            <option>id</option>
+                                            <option>fecha</option>
+                                        </select>
+                                        <input type="text" name="keyword" class="form-control float-right" placeholder="Buscar"
+                                        value="{{ request()->get('keyword') }}">
 
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
                                         </div>
                                         <div class="input-group-append">
-                                            <a href="" class="btn btn-success mx-1" v-on:click.prevent="pdfInformePedidos()"><i class="fas fa-print"></i></a>
+                                            <a href="" class="btn btn-success mx-1" @click.prevent="pdfInformePedidos"><i class="fas fa-print"></i></a>
                                         </div>
                                     </div>
                                 </form>
@@ -52,7 +57,7 @@
     
                                     @foreach ($pedidos as $pedido)
     
-                                    <tr>
+                                    {{-- <tr>
                                         <td>{{ $pedido->id }}</td>
                                         <td>{{ date('d/m/Y h:i:s A', strtotime($pedido->fecha)) }}</td>
                                         <td><a href="{{ route('cliente.show', $pedido->cliente)}}"
@@ -76,7 +81,47 @@
                                         <td>${{ floatval($pedido->valor) }}</td>
                                         <td><a href="{{ route('venta.show', $pedido->venta)}}"
                                            title="ver venta">{{ $pedido->venta}}</a></td>
-                                        <td><a href="{{ route('pedidos.show-id', $pedido->id)}}"
+                                        <td><a href="{{ route('admin.pedidos.show', $pedido->id)}}"
+                                        class="btn btn-primary" title="ver pedido">
+                                         <i class="fas fa-eye"></i></a>
+                                        </td>
+                                        <td><a href=""
+                                            class="btn btn-warning" title="cambiar estado"
+                                            data-toggle="modal"
+                                            data-target="#modalEstado"
+                                            data-id="{{$pedido['id']}}"
+                                            data-status="{{$pedido['estado']}}">
+                                            <i class="fas fa-pen"></i></a>
+                                        </td>
+                                        <td><a class="btn btn-success" href="" v-on:click.prevent="imprimir({{ $pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
+                                        </td>
+                                    </tr> --}}
+
+                                    <tr>
+                                        <td>{{ $pedido->id }}</td>
+                                        <td>{{ date('d/m/Y h:i:s A', strtotime($pedido->fecha)) }}</td>
+                                        <td><a href="{{ route('cliente.show', $pedido->venta->cliente->id)}}"
+                                            title="ver cliente">{{ $pedido->venta->cliente->user->nombres }} {{ $pedido->venta->cliente->user->apellidos }}</a>
+                                        </td>
+                                        <td><span class="badge badge-success">
+                                            @if ($pedido->estado == 1 )
+                                            {{ "pendiente" }}
+                                            @endif
+                                            @if ($pedido->estado == 2)
+                                            {{ "en proceso"}}
+                                            @endif
+                                            @if ($pedido->estado == 3)
+                                            {{ "enviado"}}
+                                            @endif
+                                            @if ($pedido->estado == 4)
+                                            {{ "entregado"}}
+                                            @endif
+                                            </span>
+                                        </td>
+                                        <td>${{ floatval($pedido->venta->valor) }}</td>
+                                        <td><a href="{{ route('venta.show', $pedido->venta->id)}}"
+                                           title="ver venta">{{ $pedido->venta->id}}</a></td>
+                                        <td><a href="{{ route('admin.pedidos.show', $pedido->id)}}"
                                         class="btn btn-primary" title="ver pedido">
                                          <i class="fas fa-eye"></i></a>
                                         </td>
@@ -123,7 +168,7 @@
 
 			<div class="modal-body">
 
-                <form id='formEstado' class="form-horizontal" action="{{ route('pedido.update')}}" method="POST">
+                <form id='formEstado' class="form-horizontal" action="{{ route('admin.pedidos.update')}}" method="POST">
                 @csrf
                 @method('PUT')
                     <div class="form-group row">

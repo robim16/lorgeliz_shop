@@ -10,7 +10,8 @@
 @section('content')
 
 <div class="super_container_inner">
-<div id="product_cart">
+{{--<div id="product_cart">--}}
+    <div id="">
     {{--<div class="super_container_inner">--}}
         <div class="super_overlay"></div>
     
@@ -22,14 +23,24 @@
                     <div class="home_title">Página del Producto </div>
                     <div class="breadcrumbs d-flex flex-column align-items-center justify-content-center">
                         <ul class="d-flex flex-row align-items-start justify-content-start text-center">
-                        <li><a href="{{ route('home')}}">Inicio</a></li>
-                            <li><a href="../categorias?categoria={{strtolower($producto->tipo->subcategoria->categoria->nombre)}}">{{ $producto->tipo->subcategoria->categoria->nombre }}</a></li>
-                            <li><a href="../categorias?categoria={{strtolower($producto->tipo->subcategoria->categoria->nombre)}}&subcategoria={{$producto->tipo->id}}">{{ Str::title($producto->tipo->nombre) }}</a></li>
+                        {{-- <li><a href="{{ route('home')}}">Inicio</a></li>
+                            <li><a href="" @click.prevent="setSubcategoria({{strtolower($producto->tipo->subcategoria->categoria->nombre)}})">{{ $producto->tipo->subcategoria->categoria->nombre }}</a></li>
+                            <li><a href="" @click.prevent="setSubcategoria({{$producto->tipo->id}})">{{ Str::title($producto->tipo->nombre) }}</a></li>
                             @if ($producto->estado == 1)
-                            <li><a href="../categorias?categoria=nuevos">Nuevos Productos</a></li>
+                            <li><a href="" @click.prevent="setCategoria('nuevos')">Nuevos Productos</a></li>
                             @endif 
                             @if ($producto->estado == 2)
-                            <li><a href="../categorias?categoria=ofertas">Ofertas</a></li>
+                            <li><a href="" @click.prevent="setCategoria('ofertas')">Ofertas</a></li>
+                            @endif 
+                        </ul> --}}
+                        <li><a href="{{ route('home')}}">Inicio</a></li>
+                            <li><a href="" @click.prevent="setSubcategoria({{strtolower($producto->producto->tipo->subcategoria->categoria->nombre)}})">{{ $producto->producto->tipo->subcategoria->categoria->nombre }}</a></li>
+                            <li><a href="" @click.prevent="setSubcategoria({{$producto->producto->tipo->id}})">{{ Str::title($producto->producto->tipo->nombre) }}</a></li>
+                            @if ($producto->producto->estado == 1)
+                            <li><a href="" @click.prevent="setCategoria('nuevos')">Nuevos Productos</a></li>
+                            @endif 
+                            @if ($producto->producto->estado == 2)
+                            <li><a href="" @click.prevent="setCategoria('ofertas')">Ofertas</a></li>
                             @endif 
                         </ul>
                     </div>
@@ -46,7 +57,7 @@
                     <!-- Product Image -->
                     <div class="col-lg-6">
                         <div class="product_image_slider_container">
-                            @if ($producto->estado==1)<span class="badge-new"><b>Nuevo</b></span>@endif 
+                            {{-- @if ($producto->estado==1)<span class="badge-new"><b>Nuevo</b></span>@endif 
                             @if ($producto->porcentaje_descuento>0)<span class="badge-offer">
                             <b> - {{$producto->porcentaje_descuento}}%</b></span>@endif 
                             <div id="slider" class="flexslider">
@@ -54,26 +65,36 @@
                                     @foreach(\App\Imagene::where('imageable_type', 'App\ColorProducto')
                                     ->where('imageable_id', $producto->cop)->pluck('url', 'id') as $id => $imagen) 
                                     <li>
-                                        {{--<img src="{{ url('storage/' . $imagen) }}" alt="" >--}}
-                                        <img src="{{ $imagen }}" alt="">
+                                        <img src="{{ url('storage/' . $imagen) }}" alt="">
                                     </li>   
                                     @endforeach
+                                </ul>
+                            </div> --}}
+
+                            @if ($producto->producto->estado==1)<span class="badge-new"><b>Nuevo</b></span>@endif 
+                            @if ($producto->producto->porcentaje_descuento>0)<span class="badge-offer">
+                            <b> - {{$producto->producto->porcentaje_descuento}}%</b></span>@endif 
+                            <div id="slider" class="flexslider">
+                                <ul class="slides">
+                                    @foreach ($producto->imagenes as $item)
+                                    <li>
+                                        <img src="{{ url('storage/' . $item->url) }}" alt="">
+                                        {{--<img src="{{ $imagen }}" alt="">--}}
+                                    </li> 
+                                    @endforeach  
                                 </ul>
                             </div>
                             <div class="carousel_container">
                                 <div id="carousel" class="flexslider">
                                     <ul class="slides">
-    
-                                        @foreach(\App\Imagene::where('imageable_type', 'App\ColorProducto')
-                                        ->where('imageable_id', $producto->cop)->pluck('url', 'id') as $id => $imagen) 
+                                        @foreach ($producto->imagenes as $item)
                                         <li>
                                             <div>
-                                                {{--<img src="{{ url('storage/' . $imagen) }}" alt="" >--}}
-                                                <img src="{{ $imagen }}" alt="">
+                                                <img src="{{ url('storage/' . $item->url) }}" alt="">
+                                                {{--<img src="{{ $imagen }}" alt="">--}}
                                             </div>     
-                                        </li>   
-                                        @endforeach
-                                        
+                                        </li>
+                                        @endforeach   
                                     </ul>
                                 </div>
                                 <div class="fs_prev fs_nav disabled"><i class="fa fa-chevron-up" aria-hidden="true"></i>
@@ -85,20 +106,33 @@
                     </div>
     
                     <!-- Product Info -->
-                    <div class="col-lg-6 product_col">
+                    {{-- <div class="col-lg-6 product_col">
                     <div class="product_info info" id="{{ $producto->id}}">
                             <div class="product_name">{{ $producto->nombre }} - {{ $producto->colores }}</div>
-                            <div class="product_category">En <a href="../categorias?categoria={{strtolower($producto->tipo->subcategoria->categoria->nombre)}}&subcategoria={{$producto->tipo->id}}">{{$producto->tipo->nombre}}</a></div>
+                            <div class="product_category">En <a href="" @click.prevent="setSubcategoria({{$producto->tipo->id}})">{{$producto->tipo->nombre}}</a></div>
     
                             <div class="product_price">${{ floatval($producto->precio_actual)}}<del class="price-old"> ${{ floatval($producto->precio_anterior)}}</del></div>
     
                             <div class="product_text">
                                 <p>{!! $producto->descripcion_corta !!}</p>
-                            </div>
-    
-                            <div class="product_text">
+                            </div> --}}
+
+                    <div class="col-lg-6 product_col">
+                        <div class="product_info info" id="{{ $producto->producto->id}}">
+                                <div class="product_name">{{ $producto->producto->nombre }} - {{ $producto->color->nombre }}</div>
+                                <div class="product_category">En <a href="" @click.prevent="setSubcategoria({{$producto->producto->tipo->id}})">{{$producto->producto->tipo->nombre}}</a></div>
+        
+                                <div class="product_price">${{ floatval($producto->producto->precio_actual)}}<del class="price-old"> ${{ floatval($producto->producto->precio_anterior)}}</del></div>
+        
+                                <div class="product_text">
+                                    <p>{!! $producto->producto->descripcion_corta !!}</p>
+                                </div>
+                    
+                                {{-- <product producto="{{$producto->cop}}"></product> --}}
+                                <product producto="{{$producto->id}}"></product>
+                            {{--<div class="product_text">
                                 <span style="color: black; font-weight: bold;">Talla</span>
-                                <select name="talla" id="talla" class="form-control" v-model="talla" @change="setStock()"   @click="change()">
+                                <select name="talla" id="talla" class="form-control" v-model="talla" @change="setStock()" @click="change()">
                                     <option value="0" selected>Seleccione una talla</option>
                                     <option v-for="talla in arrayTallas" :key="talla.id" :value="talla.id" v-text="select ? talla.nombre : talla.nombre  + ' unidades disponibles: ' + talla.stock"></option>
                                 </select>
@@ -123,7 +157,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>--}}
                         </div>
                     </div>
                 </div>
@@ -158,7 +192,8 @@
                             <p>varios colores</p>
     
                             <p>En stock.<br>
-                                <p>{!!$producto->descripcion_larga!!}</p>
+                                {{-- <p>{!!$producto->descripcion_larga!!}</p> --}}
+                                <p>{!!$producto->producto->descripcion_larga!!}</p>
                             </p>
                         </div>
     
@@ -166,7 +201,8 @@
                     <div class="tab-pane fade" id="especificaciones">
                         <h3>Especificaciones</h3>
                         <ol>
-                            {!!$producto->especificaciones!!}
+                            {{-- {!!$producto->especificaciones!!} --}}
+                            {!!$producto->producto->especificaciones!!}
                         </ol>
                     </div>
                     <div class="tab-pane fade" id="datosinteres">
@@ -214,13 +250,13 @@
 @endsection
 
 @section('scripts')
-    <script>
+    {{-- <script>
     window.data = {
         datos: {
             "producto": "{{$producto->cop}}",
         }
     }
-    </script>
+    </script> --}}
     {{--<script src="{{ asset('asset/plugins/OwlCarousel2-2.2.1/owl.carousel.js') }}"></script>
     <script src="{{ asset('asset/plugins/flexslider/jquery.flexslider-min.js') }}"></script>--}}
     <script src="{{ asset('asset/js/product.js') }}"></script>

@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-<div id="informepago">
+<div id="">
     <div class="content">
         <div class="container">
             <div class="row">
@@ -17,7 +17,7 @@
                         <div class="card-header">
                             <h3 class="card-title mb-2">Pagos mensuales</h3>
 
-                            <div class="card-tools">
+                            <div class="card-tools" id="app">
                                 <form>
                                     <div class="input-group input-group-sm">
                                         <input type="text" name="busqueda" class="form-control float-right" placeholder="Buscar"
@@ -26,9 +26,12 @@
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
                                         </div>
-                                        <div class="input-group-append">
+
+                                        <pagos></pagos>
+                                        
+                                        {{-- <div class="input-group-append">
                                             <a href="" class="btn btn-success mx-1" v-on:click.prevent="pdfInformePagos()"><i class="fas fa-print"></i></a>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </form>
                             </div>

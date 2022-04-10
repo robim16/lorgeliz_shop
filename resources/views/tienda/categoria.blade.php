@@ -33,9 +33,8 @@
 		</div>
 	</div>
 
-	<div id="app">
-		<category categoria="{{$categoria}}" subcategoria="{{$subcategoria}}"></category>
-		
+	<div id="">
+		<category :keyword="keyword"></category>
 	</div>
 	<!-- Products -->
 
@@ -155,17 +154,17 @@
 	</div>--}}
 @endsection
 
-@section('scripts')
+{{-- @section('scripts')
 
 <script>
 	window.data = {
-		categoria: "{{$categoria}}",
-		subcategoria: "{{$subcategoria}}",
+		categoria: "",
+		subcategoria: "",
     }
-</script>
+</script> --}}
 {{--<script src="{{ asset('asset/plugins/OwlCarousel2-2.2.1/owl.carousel.js') }}"></script>
 <script src="{{ asset('asset/plugins/progressbar/progressbar.min.js') }}"></script>--}}
 {{--<script src="{{ asset('asset/plugins/Isotope/isotope.pkgd.min.js') }}"></script>--}}
 {{--<script src="{{ asset('asset/plugins/Isotope/fitcolumns.js') }}"></script>--}}
 {{--<script src="{{ asset('asset/js/category.js') }}"></script>--}}
-@endsection
+{{-- @endsection --}}

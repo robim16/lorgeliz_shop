@@ -98,8 +98,8 @@
             <tbody>
                 @foreach ($ventas as $venta)
                 <tr>
-                    <td>{{$venta->id}}</td>
-                    <td>{{ date('d/m/Y', strtotime($venta->fecha)) }}</td>
+                    {{-- <td>{{$venta->id}}</td>
+                    <td>{{ date('d/m/Y h:i:s A', strtotime($venta->fecha)) }}</td>
                     <td>{{$venta->nombres}}</td>
                     <td>${{floatval($venta->valor)}}</td>
                     <td> @if ($venta->estado == 1)
@@ -117,7 +117,29 @@
                         {{ "Anulada" }}
                         </span>
                         @endif
+                    </td> --}}
+
+                    <td>{{$venta->id}}</td>
+                    <td>{{ date('d/m/Y h:i:s A', strtotime($venta->fecha)) }}</td>
+                    <td>{{$venta->cliente->user->nombres}}</td>
+                    <td>${{floatval($venta->valor)}}</td>
+                    <td> @if ($venta->estado == 1)
+                        <span class="badge badge-success">
+                        {{ "Pagada" }}
+                        </span>
+                        @endif
+                        @if ($venta->estado == 2)
+                        <span class="badge badge-warning">
+                        {{ "Con saldo" }} 
+                        </span>
+                        @endif
+                        @if ($venta->estado == 3)
+                        <span class="badge badge-danger">
+                        {{ "Anulada" }}
+                        </span>
+                        @endif
                     </td>
+                    
                 </tr>
                 @endforeach                                
             </tbody>

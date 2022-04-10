@@ -497,7 +497,7 @@
                                     class="img-fluid mb-2" />
                                 </a>
                                 <br>
-                                <a href="{{ $imagen }}" v-on:click.prevent="eliminarimagen({{$id}})">
+                                <a href="{{ $imagen }}" @click.prevent="eliminarimagen({{$id}})">
                                     <i class="fas fa-trash-alt" style="color:red"></i> Id:{{ $id }}
                                 </a>
                             </div>
@@ -628,12 +628,12 @@
     }
     $(function () {
         //Initialize Select2 Elements
-        $('#category_id').select2()
+        // $('#category_id').select2()
 
-        //Initialize Select2 Elements
-        $('.select2bs4').select2({
-            theme: 'bootstrap4'
-        });
+        // //Initialize Select2 Elements
+        // $('.select2bs4').select2({
+        //     theme: 'bootstrap4'
+        // });
 
         //uso de lightbox
         $(document).on('click', '[data-toggle="lightbox"]', function (event) {

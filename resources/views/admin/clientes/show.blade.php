@@ -14,7 +14,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-            <h3 class="card-title">Información de {{ $cliente->nombres}}</h3>
+            <h3 class="card-title">Información de {{ $pedidos[0]->cliente->user->nombres}}</h3>
 
                 <div class="card-tools">
 
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0" style="height: 110px;">
+            <div class="card-body table-responsive p-0" style="height: 130px;">
                 <table class="table table-head-fixed">
                     <thead>
                         <tr>
@@ -41,6 +41,8 @@
                             <th>Nombres</th>
                             <th>Apellidos</th>
                             <th>Cédula</th>
+                            <th>Departamento</th>
+                            <th>Municipio</th>
                             <th>Dirección</th>
                             <th>Telefóno</th>
                             <th>Email</th>
@@ -49,7 +51,7 @@
                     <tbody>
 
                         <tr>
-                            <td>{{$cliente->id }} </td>
+                            {{-- <td>{{$cliente->id }} </td>
                             <td>
                                 @if ($cliente->imagene)
                                 <img style="height: 40px; width: 40px;"
@@ -64,9 +66,32 @@
                             <td>{{$cliente->nombres }} </td>
                             <td>{{$cliente->apellidos }} </td>
                             <td>{{$cliente->identificacion }} </td>
+                            <td>{{$cliente->departamento }}</td>
+                            <td>{{$cliente->municipio }}</td>
                             <td>{{$cliente->direccion }} </td>
                             <td>{{$cliente->telefono }} </td>
-                            <td>{{$cliente->email }} </td>
+                            <td>{{$cliente->email }} </td> --}}
+
+                            <td>{{$pedidos[0]->cliente->user->id }} </td>
+                            <td>
+                                @if ($pedidos[0]->cliente->user->imagene)
+                                <img style="height: 40px; width: 40px;"
+                                src="{{ url('storage/' . $pedidos[0]->cliente->user->imagene->url) }}"
+                                class="rounded-circle">
+                                @else
+                                <img style="height: 40px; width: 40px;"
+                                src=""
+                                class="rounded-circle">
+                                @endif
+                            </td>
+                            <td>{{$pedidos[0]->cliente->user->nombres }} </td>
+                            <td>{{$pedidos[0]->cliente->user->apellidos }} </td>
+                            <td>{{$pedidos[0]->cliente->user->identificacion }} </td>
+                            <td>{{$pedidos[0]->cliente->user->departamento }}</td>
+                            <td>{{$pedidos[0]->cliente->user->municipio }}</td>
+                            <td>{{$pedidos[0]->cliente->user->direccion }} </td>
+                            <td>{{$pedidos[0]->cliente->user->telefono }} </td>
+                            <td>{{$pedidos[0]->cliente->user->email }} </td>
                         </tr>
                         
                     </tbody>
@@ -99,17 +124,33 @@
                     </thead>
                     <tbody>
 
-                        @foreach ($pedidos as $pedido)
+                        {{-- @foreach ($pedidos as $pedido)
 
                         <tr>
                             <td>{{ $pedido->id }}</td>
                             <td>{{ date('d/m/Y h:i:s A', strtotime($pedido->fecha)) }}</td>
                             <td>{{ $pedido->prefijo }}{{ $pedido->consecutivo }}</td>
                             <td>${{ floatval($pedido->valor)}}</td>
-                            <td><a href="{{ route('pedidos.show-id', $pedido->id)}}" class="btn btn-primary"
+                            <td><a href="{{ route('admin.pedidos.show', $pedido->id)}}" class="btn btn-primary"
                             title="ver pedido"><i class="fas fa-eye"></i></a>
                             </td>
                             <td><a class="btn btn-success" href="" v-on:click.prevent="imprimir({{ $pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
+                            </td>
+                        </tr>
+
+                        @endforeach --}}
+
+                        @foreach ($pedidos as $pedido)
+
+                        <tr>
+                            <td>{{ $pedido->pedido->id }}</td>
+                            <td>{{ date('d/m/Y h:i:s A', strtotime($pedido->pedido->fecha)) }}</td>
+                            <td>{{ $pedido->factura->prefijo }}{{ $pedido->factura->consecutivo }}</td>
+                            <td>${{ floatval($pedido->valor)}}</td>
+                            <td><a href="{{ route('admin.pedidos.show', $pedido->pedido->id)}}" class="btn btn-primary"
+                            title="ver pedido"><i class="fas fa-eye"></i></a>
+                            </td>
+                            <td><a class="btn btn-success" href="" @click.prevent="imprimir({{ $pedido->pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
                             </td>
                         </tr>
 

@@ -7,21 +7,14 @@ use App\Cliente;
 use App\ColorProducto;
 use App\Factura;
 use App\Producto;
+use App\ProductoReferencia;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //$this->middleware('auth');
-    }
-
+   
     /**
      * Show the application dashboard.
      *
@@ -34,215 +27,244 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $productoSlider = Producto::join('color_producto','productos.id','color_producto.producto_id')
-        ->join('imagenes','color_producto.id','imagenes.imageable_id')
-        ->join('producto_referencia','color_producto.id','producto_referencia.color_producto_id')
-        ->select('productos.*','color_producto.slug as slug','color_producto.id as cop', 'imagenes.url as imagen')
-        ->where('productos.slider_principal', 'Si')
-        ->where('color_producto.activo', 'Si')
-        ->where('imagenes.imageable_type', 'App\ColorProducto')
-        ->where('producto_referencia.stock', '>', '0')
-        ->groupBy('color_producto.id')
+        // $productoSlider = Producto::join('color_producto','productos.id','color_producto.producto_id')
+        // ->join('imagenes','color_producto.id','imagenes.imageable_id')
+        // ->join('producto_referencia','color_producto.id','producto_referencia.color_producto_id')
+        // ->select('productos.*','color_producto.slug as slug','color_producto.id as cop',
+        // 'imagenes.url as imagen')
+        // ->where('productos.slider_principal', 'Si')
+        // ->where('color_producto.activo', 'Si')
+        // ->where('imagenes.imageable_type', 'App\ColorProducto')
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->groupBy('color_producto.id')
+        // ->get();
+
+        $disponibles = ProductoReferencia::disponibles();
+
+        $productoSlider = ColorProducto::whereHas('producto', function (Builder $query) {
+            $query->where('slider_principal', 'Si');
+        })
+        ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->where('activo', 'Si')
+        ->activo()
+        ->whereIn('id', $disponibles)
         ->get();
 
+        // $producto_mas_visto = Producto::join('color_producto','productos.id','color_producto.producto_id')
+        // ->join('imagenes','color_producto.id','imagenes.imageable_id')
+        // ->join('colores','color_producto.color_id','colores.id')
+        // ->join('tipos','productos.tipo_id','tipos.id')
+        // ->join('producto_referencia','color_producto.id','producto_referencia.color_producto_id')
+        // ->select('productos.*', 'color_producto.slug as slug', 'color_producto.id as cop',
+        // 'color_producto.visitas', 'tipos.nombre as tipo', 'tipos.id as tipo_id', 'colores.nombre as color',
+        // 'imagenes.url as imagen')
+        // ->where('color_producto.visitas', '>', '0')
+        // ->where('color_producto.activo', 'Si')
+        // ->where('imagenes.imageable_type', 'App\ColorProducto')
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->groupBy('color_producto.id')
+        // ->orderBy('color_producto.visitas', 'DESC')
+        // ->take(5)
+        // ->get();
 
-        //$nuevosproductos = Producto::join('color_producto','productos.id','color_producto.producto_id')
-        //->join('imagenes','color_producto.id','imagenes.imageable_id')
-        //->join('colores','color_producto.color_id','colores.id')
-        //->join('tipos','productos.tipo_id','tipos.id')
-        //->join('producto_referencia','color_producto.id','producto_referencia.color_producto_id')
-        //->select('productos.*', 'color_producto.slug as slug', 'color_producto.id as cop', 'tipos.nombre as tipo', 'tipos.id as tipo_id', 'colores.nombre as color', 'imagenes.url as imagen')
-        //->where('productos.estado', '=', '1')
-        //->where('color_producto.activo', 'Si')
-        //->where('imagenes.imageable_type', 'App\ColorProducto')
-        //->where('producto_referencia.stock', '>', '0')
-        //->groupBy('color_producto.id')
-        //->orderBy('color_producto.producto_id', 'DESC')
-        //->take(9)
-        //->get();
 
-        $producto_mas_visto = Producto::join('color_producto','productos.id','color_producto.producto_id')
-        ->join('imagenes','color_producto.id','imagenes.imageable_id')
-        ->join('colores','color_producto.color_id','colores.id')
-        ->join('tipos','productos.tipo_id','tipos.id')
-        ->join('producto_referencia','color_producto.id','producto_referencia.color_producto_id')
-        ->select('productos.*', 'color_producto.slug as slug', 'color_producto.id as cop', 'color_producto.visitas', 'tipos.nombre as tipo', 'tipos.id as tipo_id', 'colores.nombre as color', 'imagenes.url as imagen')
-        ->where('color_producto.visitas', '>', '0')
-        ->where('color_producto.activo', 'Si')
-        ->where('imagenes.imageable_type', 'App\ColorProducto')
-        ->where('producto_referencia.stock', '>', '0')
-        ->groupBy('color_producto.id')
-        ->orderBy('color_producto.visitas', 'DESC')
+        $producto_mas_visto = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->where('visitas', '>', '0')
+        // ->where('activo', 'Si')
+        ->visitas()
+        ->activo()
+        ->whereIn('id', $disponibles)
+        ->orderBy('visitas', 'DESC')
         ->take(5)
         ->get();
 
         
-        $productos_vendidos = DB::table('productos')
-        ->join('color_producto','productos.id','color_producto.producto_id')
-        ->join('imagenes','color_producto.id','imagenes.imageable_id')
-        ->join('colores','color_producto.color_id','colores.id')
-        ->join('tipos','productos.tipo_id','tipos.id')
-        ->join('producto_referencia','color_producto.id','producto_referencia.color_producto_id')
-        ->join('producto_venta','producto_referencia.id','producto_venta.producto_referencia_id')
-        ->where('color_producto.activo', 'Si')
-        ->where('imagenes.imageable_type', 'App\ColorProducto')
+        // $productos_vendidos = DB::table('productos')
+        // ->join('color_producto','productos.id','color_producto.producto_id')
+        // ->join('imagenes','color_producto.id','imagenes.imageable_id')
+        // ->join('colores','color_producto.color_id','colores.id')
+        // ->join('tipos','productos.tipo_id','tipos.id')
+        // ->join('producto_referencia','color_producto.id','producto_referencia.color_producto_id')
+        // ->join('producto_venta','producto_referencia.id','producto_venta.producto_referencia_id')
+        // ->where('color_producto.activo', 'Si')
+        // ->where('imagenes.imageable_type', 'App\ColorProducto')
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->select('color_producto.id as cop', 'productos.id', 'productos.nombre', 'productos.precio_actual',
+        // 'color_producto.slug as slug', 'tipos.nombre as tipo', 'tipos.id as tipo_id',
+        // 'colores.nombre as color', 'imagenes.url as imagen', DB::raw('SUM(producto_venta.cantidad) as cantidad')
+        // )->groupBy('producto_referencia.color_producto_id')
+        // ->orderBy('cantidad', 'DESC')
+        // ->take(5)
+        // ->get();
+
+        $productos_vendidos = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        ->join('producto_referencia', 'color_producto.id', 'producto_referencia.color_producto_id')
+        ->join('producto_venta', 'producto_referencia.id', 'producto_venta.producto_referencia_id')
+        // ->where('activo', 'Si')
+        ->activo()
         ->where('producto_referencia.stock', '>', '0')
-        ->select('color_producto.id as cop', 'productos.id', 'productos.nombre', 'productos.precio_actual', 'color_producto.slug as slug', 'tipos.nombre as tipo', 'tipos.id as tipo_id', 'colores.nombre as color', 'imagenes.url as imagen', DB::raw('SUM(producto_venta.cantidad) as cantidad')
-        )->groupBy('producto_referencia.color_producto_id')
+        ->select('color_producto.*', DB::raw('SUM(producto_venta.cantidad) as cantidad'))
+        ->groupBy('color_producto.id')
         ->orderBy('cantidad', 'DESC')
         ->take(5)
         ->get();
 
-        //return $productos_vendidos;
+        // $productosoferta = Producto::join('color_producto','productos.id','color_producto.producto_id')
+        // ->join('imagenes','color_producto.id','imagenes.imageable_id')
+        // ->join('colores','color_producto.color_id','colores.id')
+        // //->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
+        // ->join('producto_referencia','color_producto.id','producto_referencia.color_producto_id')
+        // ->select('productos.*', 'color_producto.slug as slug', 'color_producto.id as cop',
+        // 'colores.nombre as color', 'imagenes.url as imagen')
+        // ->where('productos.estado', '=', '2')
+        // ->where('color_producto.activo', 'Si')
+        // ->where('imagenes.imageable_type', 'App\ColorProducto')
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->groupBy('color_producto.id')
+        // ->orderBy('color_producto.producto_id', 'DESC')
+        // ->take(5)
+        // ->get();
 
-        $productosoferta = Producto::join('color_producto','productos.id','color_producto.producto_id')
-        ->join('imagenes','color_producto.id','imagenes.imageable_id')
-        ->join('colores','color_producto.color_id','colores.id')
-        //->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
-        ->join('producto_referencia','color_producto.id','producto_referencia.color_producto_id')
-        ->select('productos.*', 'color_producto.slug as slug', 'color_producto.id as cop','colores.nombre as color', 'imagenes.url as imagen')
-        ->where('productos.estado', '=', '2')
-        ->where('color_producto.activo', 'Si')
-        ->where('imagenes.imageable_type', 'App\ColorProducto')
-        ->where('producto_referencia.stock', '>', '0')
-        ->groupBy('color_producto.id')
-        ->orderBy('color_producto.producto_id', 'DESC')
+        $productosoferta = ColorProducto::whereHas('producto', function (Builder $query) {
+            $query->where('estado', '2');
+        })
+        ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->where('activo', 'Si')
+        ->activo()
+        ->whereIn('id', $disponibles)
+        ->orderBy('id', 'DESC')
         ->take(5)
         ->get();
 
-        return view('tienda.index', compact('productoSlider', 'producto_mas_visto', 'productos_vendidos', 'productosoferta'));
+        return view('tienda.index', compact('productoSlider','producto_mas_visto', 
+        'productos_vendidos', 'productosoferta'));
     }
     // función para implementar index con ajax
     public function productsIndex(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
 
-        //$slider = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        //->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        //->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        //->select('productos.*', 'color_producto.slug as slug', 'color_producto.id as cop', 'imagenes.url as imagen')
-        //->where('productos.slider_principal', 'Si')
-        //->where('color_producto.activo', 'Si')
-        //->where('imagenes.imageable_type', 'App\ColorProducto')
-        //->where('producto_referencia.stock', '>', '0')
-        //->groupBy('color_producto.id')
-        //->get();
+        $disponibles = ProductoReferencia::disponibles();
+
+        // $slider = ColorProducto::whereHas('producto', function (Builder $query) {
+        //     $query->where('slider_principal', 'Si');
+        // })
+        // ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->where('activo', 'Si')
+        // ->whereIn('id', $disponibles)
+        // ->get();
+
         $cantidad = 6 * $request->cantidad;
 
-        $nuevos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        ->join('colores', 'color_producto.color_id', '=', 'colores.id')
-        ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
-        ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        ->select('productos.*', 'color_producto.slug as slug', 'color_producto.id as cop', 'tipos.nombre as tipo', 'colores.nombre as color', 'imagenes.url as imagen')
-        ->where('productos.estado', '=', '1')
-        ->where('color_producto.activo', 'Si')
-        ->where('imagenes.imageable_type', 'App\ColorProducto')
-        ->where('producto_referencia.stock', '>', '0')
-        ->groupBy('color_producto.id')
-        ->orderBy('color_producto.producto_id', 'DESC')
+        // $nuevos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
+        // ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
+        // ->join('colores', 'color_producto.color_id', '=', 'colores.id')
+        // ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
+        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
+        // ->select('productos.*', 'color_producto.slug as slug', 'color_producto.id as cop',
+        // 'tipos.nombre as tipo', 'colores.nombre as color', 'imagenes.url as imagen')
+        // ->where('productos.estado', '=', '1')
+        // ->where('color_producto.activo', 'Si')
+        // ->where('imagenes.imageable_type', 'App\ColorProducto')
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->groupBy('color_producto.id')
+        // ->orderBy('color_producto.producto_id', 'DESC')
+        // ->take($cantidad)
+        // ->get();
+
+        
+
+        $nuevos = ColorProducto::whereHas('producto', function (Builder $query) {
+            $query->where('estado', '1');
+        })
+        ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->where('activo', 'Si')
+        ->activo()
+        ->whereIn('id', $disponibles)
+        ->orderBy('id', 'DESC')
         ->take($cantidad)
         ->get();
 
-        //$populares = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        //->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        //->join('colores', 'color_producto.color_id', '=', 'colores.id')
-        //->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
-        //->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        //->select('productos.*', 'color_producto.slug as slug', 'color_producto.id as cop', 'color_producto.visitas', 'tipos.//nombre as tipo', 'colores.nombre as color', 'imagenes.url as imagen')
-        //->where('color_producto.visitas', '>', '0')
-        //->where('color_producto.activo', 'Si')
-        //->where('imagenes.imageable_type', 'App\ColorProducto')
-        //->where('producto_referencia.stock', '>', '0')
-        //->groupBy('color_producto.id')
-        //->orderBy('color_producto.visitas', 'DESC')
-        //->take(5)
-        //->get();
+        // $populares = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->where('visitas', '>', '0')
+        // ->where('activo', 'Si')
+        // ->whereIn('id', $disponibles)
+        // ->orderBy('visitas', 'DESC')
+        // ->take(5)
+        // ->get();
 
         
-        //$vendidos = DB::table('productos')
-        //->join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
-        //->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        //->join('colores', 'color_producto.color_id', '=', 'colores.id')
-        //->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
-        //->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        //->join('producto_venta', 'producto_referencia.id', '=', 'producto_venta.producto_referencia_id')
-        //->where('color_producto.activo', 'Si')
-        //->where('imagenes.imageable_type', 'App\ColorProducto')
-        //->where('producto_referencia.stock', '>', '0')
-        //->select('color_producto.id as cop', 'productos.id', 'productos.nombre', 'productos.precio_actual', 'color_producto.slug as slug', 'tipos.nombre as tipo', 'colores.nombre as color', 'imagenes.url as imagen', DB::raw('SUM(producto_venta.cantidad) as cantidad')
-       // )->groupBy('producto_referencia.color_producto_id')
-        //->orderBy('cantidad', 'DESC')
-        //->take(5)
-        //->get();
+        // $vendidos = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->join('producto_referencia', 'color_producto.id', 'producto_referencia.color_producto_id')
+        // ->join('producto_venta', 'producto_referencia.id', 'producto_venta.producto_referencia_id')
+        // ->where('activo', 'Si')
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->select('color_producto.*', DB::raw('SUM(producto_venta.cantidad) as cantidad'))
+        // ->groupBy('color_producto.id')
+        // ->orderBy('cantidad', 'DESC')
+        // ->take(5)
+        // ->get();
 
-        //$ofertas = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        //->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        //->join('colores', 'color_producto.color_id', '=', 'colores.id')
-        //->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
-        //->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        //->select('productos.*', 'color_producto.slug as slug', 'color_producto.id as cop', 'tipos.nombre as tipo','colores.//nombre as color', 'imagenes.url as imagen')
-        //->where('productos.estado', '=', '2')
-        //->where('color_producto.activo', 'Si')
-        //->where('imagenes.imageable_type', 'App\ColorProducto')
-        //->where('producto_referencia.stock', '>', '0')
-        //->groupBy('color_producto.id')
-        //->orderBy('color_producto.producto_id', 'DESC')
-        //->take(2)
-        //->get();
+        // $ofertas = ColorProducto::whereHas('producto', function (Builder $query) {
+        //     $query->where('estado', '2');
+        // })
+        // ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->where('activo', 'Si')
+        // ->whereIn('id', $disponibles)
+        // ->orderBy('id', 'DESC')
+        // ->take(5)
+        // ->get();
+       
 
-        //return ['slider' => $slider, 'nuevos' => $nuevos, 'populares' => $populares, 'vendidos' => $vendidos, 'ofertas' => $ofertas];
+        // return ['slider' => $slider, 'nuevos' => $nuevos, 'populares' => $populares, 'vendidos' => $vendidos, 'ofertas' => $ofertas];
         return ['nuevos' => $nuevos];
     }
     
-    public function categorias(Request $request)
+    public function categorias()
     {
-        $categoria = $request->categoria;
-        $subcategoria = $request->subcategoria;
-        
-        return view('tienda.categoria', compact('categoria','subcategoria'));
+        return view('tienda.categoria');
     }
 
     public function checkout()
     {
-        $carrito = Carrito::join('clientes','carritos.cliente_id', '=', 'clientes.id')
-        ->join('users','clientes.user_id', '=', 'users.id')
-        ->where('estado', 1)
-        ->where('cliente_id', auth()->user()->cliente->id)
-        ->select('carritos.*', 'users.nombres', 'users.apellidos', 'users.direccion', 'users.telefono',
-        'users.identificacion')
+        $carrito = Carrito::with('cliente.user')
+        ->estado()
+        ->cliente(auth()->user()->cliente->id)
         ->firstOrFail();
-
+        
+        // ->where('estado', 1)
+        // ->where('cliente_id', auth()->user()->cliente->id)
         return view('tienda.checkout', compact('carrito'));
     }
 
-    public function product($slug)
-    {
-        $producto = Producto::join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
-        ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        ->select('productos.*', 'color_producto.id as cop', 'colores.id as color', 'color_producto.slug as slug', 'color_producto.visitas as visitas', 'colores.nombre as colores')
-        ->where('color_producto.slug',$slug)
-        ->firstOrFail();
-        
-        return view('tienda.product', compact('producto'));
-    }
-
+    //todas las funciones asociadas a la página de categorías fueron 
+    //implementadas en api/CategoryController
     public function getProductos(Request $request)
     {
         //obtener todos los productos, en vista categorías
         if (!$request->ajax()) return redirect('/');
 
-        $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
-        ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        ->select('color_producto.id as cop','productos.*','color_producto.slug as slug', 'imagenes.url', 'tipos.nombre as tipo', 'colores.nombre as color')
-        ->where('imagenes.imageable_type', 'App\ColorProducto')
-        ->where('color_producto.activo', 'Si')
-        ->where('producto_referencia.stock', '>', '0')
-        ->groupBy('color_producto.id')
+        // $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
+        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
+        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
+        // ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
+        // ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
+        // ->select('color_producto.id as cop','productos.*','color_producto.slug as slug', 'imagenes.url',
+        // 'tipos.nombre as tipo', 'colores.nombre as color')
+        // ->where('imagenes.imageable_type', 'App\ColorProducto')
+        // ->where('color_producto.activo', 'Si')
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->groupBy('color_producto.id')
+        // ->paginate(12);
+
+        $disponibles = ProductoReferencia::disponibles();
+
+        $productos = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->where('activo', 'Si')
+        ->activo()
+        ->whereIn('id', $disponibles)
         ->paginate(12);
+
 
         return [
             'pagination' => [
@@ -263,19 +285,33 @@ class HomeController extends Controller
 
         $estado = $request->estado;
 
-        $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
-        ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        ->select('productos.*', 'color_producto.slug as slug', 'color_producto.id as cop', 'imagenes.url', 'tipos.nombre as tipo','colores.nombre as color')
-        ->where('imagenes.imageable_type', 'App\ColorProducto')
-        ->where('productos.estado', '=', $estado)
-        ->where('color_producto.activo', 'Si')
-        ->where('producto_referencia.stock', '>', '0')
-        ->groupBy('color_producto.id')
-        ->orderBy('color_producto.producto_id', 'DESC')
-        ->paginate(12); // obtener productos nuevos o en oferta
+        // $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
+        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
+        // ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
+        // ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
+        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
+        // ->select('productos.*', 'color_producto.slug as slug', 'color_producto.id as cop', 'imagenes.url',
+        // 'tipos.nombre as tipo','colores.nombre as color')
+        // ->where('imagenes.imageable_type', 'App\ColorProducto')
+        // ->where('productos.estado', '=', $estado)
+        // ->where('color_producto.activo', 'Si')
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->groupBy('color_producto.id')
+        // ->orderBy('color_producto.producto_id', 'DESC')
+        // ->paginate(12); // obtener productos nuevos o en oferta
+
+        $disponibles = ProductoReferencia::disponibles();
+
+        $productos = ColorProducto::whereHas('producto', function (Builder $query) 
+        use ($estado) {
+            $query->where('estado', $estado);
+        })
+        ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->where('activo', 'Si')
+        ->activo()
+        ->whereIn('id', $disponibles)
+        ->orderBy('id', 'DESC')
+        ->paginate(12);
         
         return [
             'pagination' => [
@@ -295,21 +331,35 @@ class HomeController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
 
-        $productos = DB::table('productos')
-        ->join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
-        ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        ->join('producto_venta', 'producto_referencia.id', '=', 'producto_venta.producto_referencia_id')
-        ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
-        ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        ->select('color_producto.id as cop', 'productos.id', 'productos.nombre', 'productos.precio_actual', 'color_producto.slug as slug', 'tipos.nombre as tipo', 'imagenes.url', 'colores.nombre as color', DB::raw('SUM(producto_venta.cantidad) as cantidad'))
-        ->where('imagenes.imageable_type', 'App\ColorProducto')
-        ->where('color_producto.activo', 'Si')
-        ->where('producto_referencia.stock', '>', '0')
-        ->groupBy('color_producto.id')
-        ->orderBy('cantidad', 'DESC')  
-        ->paginate(12); //obtener productos más vendidos
+        // $productos = DB::table('productos')
+        // ->join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
+        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
+        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
+        // ->join('producto_venta', 'producto_referencia.id', '=', 'producto_venta.producto_referencia_id')
+        // ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
+        // ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
+        // ->select('color_producto.id as cop', 'productos.id', 'productos.nombre', 'productos.precio_actual',
+        // 'color_producto.slug as slug', 'tipos.nombre as tipo', 'imagenes.url', 'colores.nombre as color',
+        // DB::raw('SUM(producto_venta.cantidad) as cantidad'))
+        // ->where('imagenes.imageable_type', 'App\ColorProducto')
+        // ->where('color_producto.activo', 'Si')
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->groupBy('color_producto.id')
+        // // ->groupBy('imagenes.imageable_id')
+        // ->orderBy('cantidad', 'DESC')  
+        // ->paginate(12); //obtener productos más vendidos
 
+        $productos = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        ->join('producto_referencia', 'color_producto.id', 'producto_referencia.color_producto_id')
+        ->join('producto_venta', 'producto_referencia.id', 'producto_venta.producto_referencia_id')
+        // ->where('activo', 'Si')
+        ->activo()
+        ->where('producto_referencia.stock', '>', '0')
+        ->select('color_producto.*', DB::raw('SUM(producto_venta.cantidad) as cantidad'))
+        ->groupBy('color_producto.id')
+        ->orderBy('cantidad', 'DESC')
+        ->paginate(12);
+        
     
         return [
             'pagination' => [
@@ -329,19 +379,33 @@ class HomeController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
 
-        $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
-        ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        ->select('productos.*', 'color_producto.slug as slug', 'color_producto.id as cop', 'color_producto.visitas', 'tipos.nombre as tipo', 'imagenes.url', 'colores.nombre as color')
-        ->where('color_producto.visitas', '>', '0')
-        ->where('color_producto.activo', 'Si')
-        ->where('producto_referencia.stock', '>', '0')
-        ->where('imagenes.imageable_type', 'App\ColorProducto')
-        ->groupBy('color_producto.id')
-        ->orderBy('color_producto.visitas', 'DESC')
-        ->paginate(12); // productos más vistos
+        // $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
+        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
+        // ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
+        // ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
+        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
+        // ->select('productos.*', 'color_producto.slug as slug', 'color_producto.id as cop',
+        // 'color_producto.visitas', 'tipos.nombre as tipo', 'imagenes.url', 'colores.nombre as color')
+        // ->where('color_producto.visitas', '>', '0')
+        // ->where('color_producto.activo', 'Si')
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->where('imagenes.imageable_type', 'App\ColorProducto')
+        // ->groupBy('color_producto.id')
+        // ->orderBy('color_producto.visitas', 'DESC')
+        // ->paginate(12); // productos más vistos
+
+        $disponibles = ProductoReferencia::disponibles();
+
+        $productos = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->join('producto_referencia', 'color_producto.id', 'producto_referencia.color_producto_id')
+        // ->where('visitas', '>', '0')
+        ->visitas()
+        ->activo()
+        ->whereIn('id', $disponibles)
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->groupBy('color_producto.id')
+        ->orderBy('visitas', 'DESC')
+        ->paginate(12);
         
         return [
             'pagination' => [
@@ -364,18 +428,31 @@ class HomeController extends Controller
 
         $criterio = $request->criterio;
 
-        $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
-        ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        ->select('color_producto.id as cop','productos.*','color_producto.slug as slug', 'imagenes.url', 'tipos.nombre as tipo','colores.nombre as color')
-        ->where('imagenes.imageable_type', 'App\ColorProducto')
-        ->where('color_producto.activo', 'Si')
-        ->where('producto_referencia.stock', '>', '0')
-        ->groupBy('color_producto.id')
+        // $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
+        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
+        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
+        // ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
+        // ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
+        // ->select('color_producto.id as cop','productos.*','color_producto.slug as slug', 'imagenes.url',
+        // 'tipos.nombre as tipo','colores.nombre as color')
+        // ->where('imagenes.imageable_type', 'App\ColorProducto')
+        // ->where('color_producto.activo', 'Si')
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->groupBy('color_producto.id')
+        // ->orderBy('productos.'.$criterio)
+        // ->paginate(12); //ordenar productos por nombre o precio
+
+        $disponibles = ProductoReferencia::disponibles();
+
+        $productos = ColorProducto::join('productos', 'productos.id', 'color_producto.producto_id')
+        ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->where('activo', 'Si')
+        ->activo()
+        ->whereIn('color_producto.id', $disponibles)
+        ->select('color_producto.*')
         ->orderBy('productos.'.$criterio)
-        ->paginate(12); //ordenar productos por nombre o precio
+        ->paginate(12);
+
 
         return [
             'pagination' => [
@@ -398,18 +475,31 @@ class HomeController extends Controller
         $tipo = $request->tipo;
         
     
-        $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
-        ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        ->select('color_producto.id as cop','productos.*','color_producto.slug as slug', 'imagenes.url', 'tipos.nombre as tipo','colores.nombre as color')
-        ->where('imagenes.imageable_type', 'App\ColorProducto')
-        ->where('color_producto.activo', 'Si')
-        ->where('tipos.id', $tipo)
-        ->where('producto_referencia.stock', '>', '0')
-        ->groupBy('color_producto.id')
-        ->paginate(12); // obtener productos por tipo
+        // $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
+        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
+        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
+        // ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
+        // ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
+        // ->select('color_producto.id as cop','productos.*','color_producto.slug as slug', 'imagenes.url',
+        // 'tipos.nombre as tipo','colores.nombre as color')
+        // ->where('imagenes.imageable_type', 'App\ColorProducto')
+        // ->where('color_producto.activo', 'Si')
+        // ->where('tipos.id', $tipo)
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->groupBy('color_producto.id')
+        // ->paginate(12); // obtener productos por tipo
+
+        $disponibles = ProductoReferencia::disponibles();
+
+        $productos = ColorProducto::whereHas('producto', function (Builder $query) 
+        use ($tipo) {
+            $query->where('tipo_id', $tipo);
+        })
+        ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->where('activo', 'Si')
+        ->activo()
+        ->whereIn('id', $disponibles)
+        ->paginate(12);
 
         return [
             'pagination' => [
@@ -431,20 +521,92 @@ class HomeController extends Controller
 
         $genero = $request->genero;
 
-        $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
-        ->join('subcategorias', 'tipos.subcategoria_id', '=', 'subcategorias.id')
-        ->join('categorias', 'subcategorias.categoria_id', '=', 'categorias.id')
-        ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        ->select('color_producto.id as cop','productos.*','color_producto.slug as slug', 'imagenes.url', 'tipos.nombre as tipo','colores.nombre as color')
-        ->where('imagenes.imageable_type', 'App\ColorProducto')
-        ->where('color_producto.activo', 'Si')
-        ->where('categorias.nombre', $genero)
-        ->where('producto_referencia.stock', '>', '0')
-        ->groupBy('color_producto.id')
-        ->paginate(12); // obtener productos por género
+        // $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
+        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
+        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
+        // ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
+        // ->join('subcategorias', 'tipos.subcategoria_id', '=', 'subcategorias.id')
+        // ->join('categorias', 'subcategorias.categoria_id', '=', 'categorias.id')
+        // ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
+        // ->select('color_producto.id as cop','productos.*','color_producto.slug as slug', 'imagenes.url',
+        // 'tipos.nombre as tipo','colores.nombre as color')
+        // ->where('imagenes.imageable_type', 'App\ColorProducto')
+        // ->where('color_producto.activo', 'Si')
+        // ->where('categorias.nombre', $genero)
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->groupBy('color_producto.id')
+        // ->paginate(12); // obtener productos por género
+
+        $disponibles = ProductoReferencia::disponibles();
+
+        $productos = ColorProducto::whereHas('producto.tipo.subcategoria.categoria',
+         function (Builder $query) use ($genero) {
+            $query->where('nombre', $genero);
+        })
+        ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->where('activo', 'Si')
+        ->activo()
+        ->whereIn('id', $disponibles)
+        ->paginate(12);
+        
+        return [
+            'pagination' => [
+                'total'        => $productos->total(),
+                'current_page' => $productos->currentPage(),
+                'per_page'     => $productos->perPage(),
+                'last_page'    => $productos->lastPage(),
+                'from'         => $productos->firstItem(),
+                'to'           => $productos->lastItem(),
+            ],
+            'productos' => $productos
+        ];
+
+    }
+
+    public function getProductsByKeyword(Request $request)
+    {
+        // if (!$request->ajax()) return redirect('/');
+
+        $keyword = $request->keyword;
+
+        // $productos = Producto::orWhere('productos.nombre', 'like',"%$keyword%")
+        // ->orWhere('categorias.nombre', 'like',"%$keyword%")
+        // ->orWhere('subcategorias.nombre', 'like',"%$keyword%")
+        // ->orWhere('tipos.nombre', 'like',"%$keyword%")
+        // ->join('color_producto','productos.id', '=', 'color_producto.producto_id')
+        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
+        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
+        // ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
+        // ->join('subcategorias', 'tipos.subcategoria_id', '=', 'subcategorias.id')
+        // ->join('categorias', 'subcategorias.categoria_id', '=', 'categorias.id')
+        // ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
+        // ->select('color_producto.id as cop','productos.*','color_producto.slug as slug', 'imagenes.url',
+        // 'tipos.nombre as tipo','colores.nombre as color')
+        // ->where('imagenes.imageable_type', 'App\ColorProducto')
+        // ->where('color_producto.activo', 'Si')
+        // ->where('producto_referencia.stock', '>', '0')
+        // ->groupBy('color_producto.id')
+        // ->paginate(12); // obtener productos por keyword
+
+        $disponibles = ProductoReferencia::disponibles();
+
+        $productos = ColorProducto::orWhereHas('producto',
+        function (Builder $query) use ($keyword) {
+           $query->where('nombre','like',"%$keyword%");
+        })
+        ->orWhereHas('producto.tipo.subcategoria.categoria',
+        function (Builder $query) use ($keyword) {
+           $query->where('nombre','like',"%$keyword%");
+        })
+        ->orWhereHas('producto.tipo',
+        function (Builder $query) use ($keyword) {
+           $query->where('nombre','like',"%$keyword%");
+        })
+        ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        // ->where('activo', 'Si')
+        ->activo()
+        ->whereIn('id', $disponibles)
+        ->paginate(12);
         
         return [
             'pagination' => [

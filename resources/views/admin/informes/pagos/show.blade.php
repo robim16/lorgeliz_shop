@@ -34,7 +34,13 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                            <a class=" m-2 float-right btn btn-warning" href="" v-on:click.prevent="pdfInformePagos()"> <i class="fa fa-print"></i></a>
+                            {{-- <a class="m-2 float-right btn btn-warning" href="" v-on:click.prevent="pdfInformePagos()">
+                                <i class="fa fa-print"></i>
+                            </a> --}}
+                            <div id="app">
+                                <pagos-mes></pagos-mes>
+                            </div>
+                            
                             <table class="table table-head-fixed">
                                 <thead>
                                     <tr>
@@ -51,7 +57,7 @@
                                     @foreach ($pagos as $pago)
                                     <tr>
                                         <td>{{ $pago->id }}</td>
-                                        <td>{{ date('d/m/Y', strtotime($pago->fecha)) }}</td>
+                                        <td>{{ date('d/m/Y h:i:s A', strtotime($pago->fecha)) }}</td>
                                         <td>{{ $pago->ref_epayco }}</td>
                                         <td><a href="{{ route('venta.show',$pago->venta_id)}}">
                                             {{ $pago->venta_id }}</a>
@@ -112,7 +118,7 @@
     <script>
         window.data = {
         datos: {
-            "ventames": ""
+            "mes": "{{$pago->fecha}}"
         }
     }
     </script>

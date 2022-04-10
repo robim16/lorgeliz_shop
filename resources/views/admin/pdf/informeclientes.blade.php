@@ -97,7 +97,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($clientes as $cliente)
+                {{-- @foreach ($clientes as $cliente)
                 <tr>
                     <td>{{$cliente->user}}</td>
                     <td>{{$cliente->nombres}}</td>
@@ -111,7 +111,20 @@
                     <td>{{$cliente->email}}</td>
                     <td>{{$cliente->cantidad}}</td>
                 </tr>
-                @endforeach                                
+                @endforeach                                 --}}
+
+                @foreach ($clientes as $item)
+                <tr>
+                    <td>{{$item->cliente->user->id}}</td>
+                    <td>{{$item->cliente->user->nombres}} {{$item->cliente->user->apellidos}}</td>
+                    <td>
+                        <img src="{{ url('storage/' .$item->cliente->user->imagene->url) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
+                    </td>
+                    <td>{{$item->cliente->user->telefono}}</td>
+                    <td>{{$item->cliente->user->email}}</td>
+                    <td>{{$item->cantidad}}</td>
+                </tr>
+                @endforeach    
             </tbody>
         </table>
     </div>

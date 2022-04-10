@@ -29,7 +29,7 @@
                                         <button type="submit" class="btn btn-success"><i class="fas fa-search"></i></button>
                                     </div>
                                     <div class="input-group-append">
-                                        <a href="" class="btn btn-success mx-1" v-on:click.prevent="pdfInventarios()">
+                                        <a href="" class="btn btn-success mx-1" @click.prevent="pdfInventarios">
                                             <i class="fas fa-print"></i>
                                         </a>
                                     </div>
@@ -40,7 +40,7 @@
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
                         <button type="button" id="new" class="m-2 float-right btn btn-primary" data-toggle="modal"
-		                data-target="#modalNota">Agregar <i class="far fa-plus-square"></i></button>
+		                data-target="#modalStock" @click.prevent="reset">Nuevo <i class="far fa-plus-square"></i></button>
                         <table class="table table-head-fixed">
                             <thead>
                                 <tr>
@@ -50,11 +50,12 @@
                                     <th scope="col">Talla</th>
                                     <th scope="col">Color</th>
                                     <th scope="col">Cantidad</th>
+                                    <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
 
-                                @foreach ($productos as $producto)
+                                {{-- @foreach ($productos as $producto)
 
                                 <tr>
                                     <td>{{ $producto->id }}</td>
@@ -69,6 +70,24 @@
                                     <td>{{ $producto->talla }}</td>
                                     <td>{{ $producto->color }}</td>
                                     <td>{{ $producto->stock }}</td>
+                                    <td><a href="" class="btn btn-success" data-toggle="modal" data-target="#modalStock" v-on:click.prevent="selectProducto({{$producto}})"> <i class="far fa-plus-square"></i></a></td>
+                                </tr>
+                                    
+                                @endforeach --}}
+
+                                @foreach ($productos as $producto)
+
+                                <tr>
+                                    <td>{{ $producto->colorProducto->producto->id }}</td>
+                                    <td>{{ $producto->colorProducto->producto->nombre }}</td>
+                                    <td> <a href="{{ route('productos.show', $producto->colorProducto->slug) }}"> 
+                                            <img src="{{ url('storage/' . $producto->colorProducto->imagenes[0]->url) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
+                                        </a>
+                                    </td>
+                                    <td>{{ $producto->talla->nombre }}</td>
+                                    <td>{{ $producto->colorProducto->color->nombre }}</td>
+                                    <td>{{ $producto->stock }}</td>
+                                    <td><a href="" class="btn btn-success" data-toggle="modal" data-target="#modalStock" @click.prevent="selectProducto({{$producto}})"> <i class="far fa-plus-square"></i></a></td>
                                 </tr>
                                     
                                 @endforeach
@@ -85,112 +104,120 @@
         <!-- /.row -->
     </div>
 
+
+    <div class="modal fade" id="modalStock" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header modal-primary">
+                    <h5 class="modal-title" id="appModalLabel">Agregar productos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                <form id='formStock' class="form-horizontal" action="{{ route('stock.store') }}" method="POST">
+                        @csrf
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="text-input">Producto</label>
+                            <div class="col-md-9">
+                                <select name="producto_id" id="producto_id" class="form-control" v-model="producto" @change="getTallas()">
+                                    <option value="">Seleccione uno</option>
+                                    @foreach(\App\Producto::pluck('nombre', 'id') as $id => $producto)
+                                        <option value="{{ $id }}">
+                                            {{ $producto }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                @if($errors->has('producto_id'))
+                                <small class="form-text text-danger">
+                                    {{ $errors->first('producto_id') }}
+                                </small>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="text-input">Talla</label>
+                            <div class="col-md-9">
+                                {{--<select name="talla_id" id="talla_id" class="form-control">
+                                    
+                                </select>--}}
+                                <select name="talla_id" id="talla_id" class="form-control" v-model="talla" @change="getColores()">
+                                    <option value="0">Seleccione una talla</option>
+                                    <option v-for="talla in arrayTallas" :key="talla.talla_id" :value="talla.talla_id" v-text="talla.nombre"></option>
+                                </select>
+
+                                @if($errors->has('talla_id'))
+                                <small class="form-text text-danger">
+                                    {{ $errors->first('talla_id') }}
+                                </small>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="text-input">Color</label>
+                            <div class="col-md-9">
+                                {{--<select name="color_id" id="color_id" class="form-control">
+                                    <option value="">Seleccione uno</option>
+                                    @foreach(\App\Color::pluck('nombre', 'id') as $id => $color)
+                                        <option value="{{ $id }}">
+                                            {{ $color }}
+                                        </option>
+                                    @endforeach
+                                </select>--}}
+
+                                <select name="color_id" id="color_id" class="form-control" v-model="color">
+                                    <option value="0">Seleccione un color</option>
+                                    <option v-for="color in arrayColores" :key="color.color_id" :value="color.color_id" v-text="color.nombre"></option>
+                                </select>
+
+                                @if($errors->has('color_id'))
+                                <small class="form-text text-danger">
+                                    {{ $errors->first('color_id') }}
+                                </small>
+                                @endif
+
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="text-input">Cantidad</label>
+                            <div class="col-md-9">
+                                <input type="number" id="cantidad" name="cantidad" class="form-control" placeholder="Cantidad"
+                                value="{{ old('cantidad') }}">
+                            </div>
+
+                            @if($errors->has('cantidad'))
+                            <small class="form-text text-danger">
+                                {{ $errors->first('cantidad') }}
+                            </small>
+                            @endif
+                        </div>
+
+                        <button type="submit" class="btn btn-primary float-left" id="aceptar">Enviar <i
+                                class="far fa-paper-plane"></i></button>
+                        <button type="reset" class="btn btn-danger float-right" id="rechazar">Cancelar</button>
+                        
+                    </form>
+
+                </div>
+
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<div class="modal fade" id="modalNota" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header modal-primary">
-				<h5 class="modal-title" id="appModalLabel">Agregar productos</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-
-			<div class="modal-body">
-
-            <form id='formStock' class="form-horizontal" action="{{ route('stock.store') }}" method="POST">
-                    @csrf
-                    <div class="form-group row">
-                        <label class="col-md-3 form-control-label" for="text-input">Producto</label>
-                        <div class="col-md-9">
-                            <select name="producto_id" id="producto_id" class="form-control">
-                                <option value="">Seleccione uno</option>
-                                @foreach(\App\Producto::pluck('nombre', 'id') as $id => $producto)
-                                    <option value="{{ $id }}">
-                                        {{ $producto }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            @if($errors->has('producto_id'))
-                            <small class="form-text text-danger">
-                                {{ $errors->first('producto_id') }}
-                            </small>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-md-3 form-control-label" for="text-input">Talla</label>
-                        <div class="col-md-9">
-                            <select name="talla_id" id="talla_id" class="form-control">
-                                
-                            </select>
-
-                            @if($errors->has('talla_id'))
-                            <small class="form-text text-danger">
-                                {{ $errors->first('talla_id') }}
-                            </small>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-md-3 form-control-label" for="text-input">Color</label>
-                        <div class="col-md-9">
-                            <select name="color_id" id="color_id" class="form-control">
-                                <option value="">Seleccione uno</option>
-                                @foreach(\App\Color::pluck('nombre', 'id') as $id => $color)
-                                    <option value="{{ $id }}">
-                                        {{ $color }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            @if($errors->has('color_id'))
-                            <small class="form-text text-danger">
-                                {{ $errors->first('color_id') }}
-                            </small>
-                            @endif
-
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-md-3 form-control-label" for="text-input">Cantidad</label>
-                        <div class="col-md-9">
-                            <input type="number" id="cantidad" name="cantidad" class="form-control" placeholder="Cantidad"
-                             value="{{ old('cantidad') }}">
-                        </div>
-
-                        @if($errors->has('cantidad'))
-                        <small class="form-text text-danger">
-                            {{ $errors->first('cantidad') }}
-                        </small>
-                        @endif
-                    </div>
-
-                    <button type="submit" class="btn btn-primary float-left" id="aceptar">Enviar <i
-                            class="far fa-paper-plane"></i></button>
-                    <button type="reset" class="btn btn-danger float-right" id="rechazar">Cancelar</button>
-					
-				</form>
-
-			</div>
-
-			<div class="modal-footer">
-
-			</div>
-		</div>
-	</div>
-</div>
-
 @endsection
 
 @section('scripts')
 
-<script>
+{{--<script>
 	$(document).ready(function () {
 		
 		$.ajaxSetup({
@@ -220,7 +247,7 @@
 						
 						$.each(response.data, function (key, value) {
 							$('#talla_id').append("<option value='" 
-								+ value.id + "'>" + value.nombre + "</option>");
+								+ value.talla_id + "'>" + value.nombre + "</option>");
 						});
 
 					}
@@ -231,7 +258,7 @@
 
 		});
 
-        /*$(document).on('change', '#talla_id', function(e) { 
+        $(document).on('change', '#talla_id', function(e) { 
 			e.preventDefault();
 
 			var producto = parseInt($('#producto_id').val());
@@ -250,7 +277,7 @@
 						
 						$.each(response.data, function (key, value) {
 							$('#color_id').append("<option value='" 
-								+ value.id + "'>" + value.nombre + "</option>");
+								+ value.color_id + "'>" + value.nombre + "</option>");
 						});
 
 					}
@@ -259,10 +286,10 @@
 
 			}
 
-		});*/
+		});
 
 	});
-</script>
+</script>--}}
 
     
 @endsection

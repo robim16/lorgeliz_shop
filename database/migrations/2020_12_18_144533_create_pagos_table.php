@@ -20,7 +20,7 @@ class CreatePagosTable extends Migration
             $table->decimal('monto', 12, 0);
             $table->unsignedInteger('venta_id');
             $table->foreign('venta_id')->references('id')->on('ventas');
-            $table->enum('estado',['1','2','3','4','5']);
+            $table->enum('estado',['Aceptado','Rechazado','Pendiente','Fallido','Anulado']);
             $table->timestamps();
         });
     }

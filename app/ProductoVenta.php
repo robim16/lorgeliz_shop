@@ -2,9 +2,10 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ProductoVenta extends Model
+class ProductoVenta extends Pivot
 {
     protected $table = 'producto_venta';
     protected $fillable = [
@@ -14,4 +15,13 @@ class ProductoVenta extends Model
     ];
 
     public $timestamps = false;
+
+    public function productoReferencia (){
+        return $this->belongsTo(ProductoReferencia::class, 'producto_referencia_id');
+    }
+
+    public function venta (){
+        return $this->belongsTo(Venta::class);
+    }
+
 }

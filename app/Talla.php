@@ -12,8 +12,12 @@ class Talla extends Model
         return $this->belongsToMany(Tipo::class);
     }
 
-    public function productoReferencias() {
-        return $this->hasMany(ProductoReferencia::class);
+    //public function productoReferencias() {
+        //return $this->hasMany(ProductoReferencia::class);
+    //}
+
+    public function colorProductos() {
+        return $this->belongsToMany(ColorProducto::class);
     }
 
 }

@@ -97,16 +97,27 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($ventas as $venta)
+                {{-- @foreach ($ventas as $venta)
                 <tr>
                     <td>{{$venta->id}}</td>
-                    <td>{{$venta->fecha}}</td>
+                    <td>{{ date('d/m/Y h:i:s A', strtotime($venta->fecha))}}</td>
                     <td>{{$venta->prefijo}}{{$venta->consecutivo}}</td>
                     <td>{{$venta->nombres}}</td>
-                    <td>{{ floatval($venta->valor)}}</td>
+                    <td>${{ floatval($venta->valor)}}</td>
                     <td>{{$venta->cantidad}}</td>
                 </tr>
-                @endforeach                                
+                @endforeach                                 --}}
+
+                @foreach ($ventas as $item)
+                <tr>
+                    <td>{{$item->venta->id}}</td>
+                    <td>{{ date('d/m/Y h:i:s A', strtotime($item->venta->fecha))}}</td>
+                    <td>{{$item->venta->factura->prefijo}}{{$item->venta->factura->consecutivo}}</td>
+                    <td>{{$item->venta->cliente->user->nombres}} {{$item->venta->cliente->user->apellidos}}</td>
+                    <td>${{ floatval($item->venta->valor)}}</td>
+                    <td>{{$item->cantidad}}</td>
+                </tr>
+                @endforeach               
             </tbody>
         </table>
     </div>

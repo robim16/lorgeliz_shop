@@ -22,6 +22,13 @@ mix.js('resources/js/app.js', 'public/js')
       'public/asset/styles/comun.css'
   ], 'public/css/all.css');  
 
+   // mix.styles([
+   //    'public/adminlte/plugins/fontawesome-free/css/all.min.css',
+   //    'public/adminlte/dist/css/adminlte.min.css',
+   //    'public/adminlte/plugins/select2/css/select2.min.css',
+   //    'public/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css'
+   // ], 'public/css/styles.css');  
+
    mix.scripts([
       'public/asset/js/jquery-3.2.1.min.js',
       'public/asset/plugins/greensock/TweenMax.min.js',
@@ -37,6 +44,14 @@ mix.js('resources/js/app.js', 'public/js')
       'public/asset/plugins/sweetalert/sweetalert.min.js',
       'public/asset/js/custom.js'
    ], 'public/js/all.js');  
+
+   // mix.scripts([
+   //    // 'public/adminlte/plugins/jquery/jquery.min.js',
+   //    // 'public/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js',
+   //    'public/adminlte/dist/js/adminlte.min.js',
+   //    'public/adminlte/dist/js/demo.js',
+   //    'public/adminlte/plugins/select2/js/select2.full.min.js'
+   // ], 'public/js/plugins.js');  
 
    mix.js('resources/js/app_admin.js', 'public/js');
 

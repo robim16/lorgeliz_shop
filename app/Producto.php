@@ -18,20 +18,20 @@ class Producto extends Model
         return $this->belongsTo(Tipo::class);
     }
 
-    public function devoluciones (){
-        return $this->hasMany(Devolucione::class);
-    }
+    //public function devoluciones (){
+        //return $this->hasMany(Devolucione::class);
+    //}
 
-    public function carritos (){
-        return $this->belongsToMany(Carrito::class);
-    }
+    //public function compras (){
+        //return $this->belongsToMany(Compra::class);
+    //}
 
-    public function compras (){
-        return $this->belongsToMany(Compra::class);
-    }
+    //public function ventas (){
+        //return $this->belongsToMany(Venta::class);
+    //}
 
-    public function ventas (){
-        return $this->belongsToMany(Venta::class);
+    public function colors() {
+        return $this->belongsToMany(Color::class)->withPivot('id');
     }
 
    // public function imagenes (){
@@ -42,7 +42,7 @@ class Producto extends Model
      //   return $this->hasMany(ProductoReferencia::class);
     //}
 
-    public function colorproductos() {
-        return $this->hasMany(ColorProducto::class);
-    }
+    //public function colorproductos() {
+        //return $this->hasMany(ColorProducto::class);
+    //}
 }

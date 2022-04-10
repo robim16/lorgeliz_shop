@@ -91,6 +91,8 @@
                     <th>Id</th>
                     <th>Nombres</th>
                     <th>Apellidos</th>
+                    <th>Departamento</th>
+                    <th>Municipio</th>
                     <th>Dirección</th>
                     <th>Teléfono</th>
                     <th>Email</th>
@@ -102,6 +104,8 @@
                     <td>{{$cliente->id}}</td>
                     <td>{{$cliente->nombres}}</td>
                     <td>{{$cliente->apellidos}}</td>
+                    <td>{{$cliente->departamento}}</td>
+                    <td>{{$cliente->municipio}}</td>
                     <td>{{$cliente->direccion}}</td>
                     <td>{{$cliente->telefono}}</td>
                     <td>{{$cliente->email}}</td>

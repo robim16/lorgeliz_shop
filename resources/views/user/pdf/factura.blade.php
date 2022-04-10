@@ -119,19 +119,21 @@
 
     </style>
     <body>
-        @foreach ($users as $user)
+        {{-- @foreach ($users as $user) --}}
         <header>
             <div id="logo">
                 <img src="{{ url('storage/imagenes/logo/lorgeliz2.jpeg') }}" alt="lorgeliz" id="imagen">
             </div>
             <div id="datos">
                 <p id="encabezado">
-                    <b>Lorgeliz Tienda</b><br>José Gálvez 1368, Montería - Córdoba, Colombia<br>Telefono:(+57)   3138645929<br>Email: jcarlos.ad7@gmail.com
+                    <b>Lorgeliz Tienda</b><br>José Gálvez 1368, Montería - Córdoba, Colombia<br>Telefono:(+57)   3138645929<br>Email: lorgeliztienda@gmail.com
                 </p>
             </div>
             <div id="fact">
             <p>Factura<br>
-                {{$user->prefijo}}-{{$user->consecutivo}}</p>
+                {{-- {{$user->factura->prefijo}}-{{$user->factura->consecutivo}}</p> --}}
+                {{$productos[0]->venta->factura->prefijo}}-{{$productos[0]->venta->factura->consecutivo}}
+            </p>
             </div>
         </header>
         <br>
@@ -145,17 +147,29 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th><p id="cliente">Sr(a). {{ $user->nombres}} {{ $user->apellidos}}<br>
-                            {{ "identificacion"}}: {{$user->identificacion}}<br>
-                            Dirección: {{$user->direccion}}<br>
-                            Teléfono: {{$user->telefono}}<br>
-                            Email: {{$user->email}}</</p></th>
+                            {{-- <th><p id="cliente">Sr(a). {{ $user->cliente->user->nombres}} {{ $user->cliente->user->apellidos}}<br>
+                            {{ "identificacion"}}: {{$user->cliente->user->identificacion}}<br>
+                            Departamento: {{$user->cliente->user->departamento}}<br>
+                            Municipio: {{$user->cliente->user->municipio}}<br>
+                            Dirección: {{$user->cliente->user->direccion}}<br>
+                            Teléfono: {{$user->cliente->user->telefono}}<br>
+                            Email: {{$user->cliente->user->email}}</</p></th> --}}
+
+                            <th>
+                                <p id="cliente">Sr(a). {{ $productos[0]->venta->cliente->user->nombres}} {{ $productos[0]->venta->cliente->user->apellidos}}<br>
+                                {{ "identificacion"}}: {{$productos[0]->venta->cliente->user->identificacion}}<br>
+                                Departamento: {{$productos[0]->venta->cliente->user->departamento}}<br>
+                                Municipio: {{$productos[0]->venta->cliente->user->municipio}}<br>
+                                Dirección: {{$productos[0]->venta->cliente->user->direccion}}<br>
+                                Teléfono: {{$productos[0]->venta->cliente->user->telefono}}<br>
+                                Email: {{$productos[0]->venta->cliente->user->email}}</</p>
+                            </th>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </section>
-        @endforeach
+        {{-- @endforeach --}}
         <br>
         <section>
             <div>
@@ -169,10 +183,10 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{ $user->venta}}</td>
-                            <td>{{ date('d/m/Y h:i:s A', strtotime($user->fecha)) }}</td>
+                            <td>{{ $productos[0]->venta->id}}</td>
+                            <td>{{ date('d/m/Y h:i:s A', strtotime($productos[0]->venta->fecha)) }}</td>
                             <td>
-                                @if ($user->saldo == 0)
+                                @if ($productos[0]->venta->saldo == 0)
                                 {{"CANCELADA"}}
                                 @else
                                 {{"PENDIENTE"}}
@@ -202,12 +216,13 @@
                         @foreach ($productos as $producto)
                         <tr>
                             <td>{{ $producto->cantidad }}</td>
-                            <td>{{ $producto->nombre }}</td>
-                            <td>{{ $producto->talla }}</td>
-                            <td>{{ $producto->color }}</td>
-                            <td>${{ floatval($producto->precio_actual) }}</td>
-                            <td>{{ $producto->porcentaje_descuento }}</td>
-                            <td>${{ $producto->cantidad*$producto->precio_actual-$producto->porcentaje_descuento }}</td>
+                            <td>{{ $producto->productoReferencia->colorProducto->producto->nombre }}</td>
+                            <td>{{ $producto->productoReferencia->talla->nombre }}</td>
+                            <td>{{ $producto->productoReferencia->colorProducto->color->nombre }}</td>
+                            <td>${{ floatval($producto->productoReferencia->colorProducto->producto->precio_actual) }}</td>
+                            <td>{{ $producto->productoReferencia->colorProducto->producto->porcentaje_descuento }}</td>
+                            <td>${{ $producto->cantidad*$producto->productoReferencia->colorProducto->producto->precio_actual
+                            -$producto->productoReferencia->colorProducto->producto->porcentaje_descuento }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -220,7 +235,7 @@
                             <th></th>
                             <th></th>
                             <th>SUBTOTAL</th>
-                            <td>${{ floatval($producto->valor)}}</td>
+                            <td>${{ floatval($producto->venta->valor)}}</td>
                         </tr>
                         <tr>
                             <th></th>
@@ -238,7 +253,7 @@
                             <th></th>
                             <th></th>       
                             <th>TOTAL</th>      
-                            <td>${{ floatval($producto->valor)}}</td>
+                            <td>${{ floatval($producto->venta->valor)}}</td>
                         </tr>
                        {{-- @endforeach--}}
                     </tfoot>

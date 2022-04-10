@@ -23,7 +23,7 @@
                         
                         <div class="input-group input-group-sm" style="width: 290px;">
                             <div class="input-group-append">
-                                <a href="" class="btn btn-success mx-2" v-on:click.prevent="pdfListadoVentas()">
+                                <a href="" class="btn btn-success mx-2" @click.prevent="pdfListadoVentas">
                                     <i class="fas fa-print"></i>
                                 </a>
                             </div>
@@ -70,7 +70,7 @@
                         <tr>
                             <td> {{ $venta->id }} </td>
                             <td> {{ date('d/m/Y h:i:s A', strtotime($venta->fecha)) }} </td>
-                            <td> <a href="{{ route('cliente.show', $venta->cliente)}}" title="ver cliente" style="color: black">{{ $venta->nombres }} {{ $venta->apellidos }}</a></td>
+                            <td> <a href="{{ route('cliente.show', $venta->cliente)}}" title="ver cliente" style="color: black">{{ $venta->cliente->user->nombres }} {{ $venta->cliente->user->apellidos }}</a></td>
                             <td> ${{ floatval($venta->valor) }}</td>
                             <td>
                                 @if ($venta->estado == 1)
@@ -90,7 +90,7 @@
                                 @endif
                             </td>
                             <td> <a class="btn btn-primary" href="{{ route('venta.show', $venta->id)}}" title="ver venta"><i class="fas fa-eye"></i></a></td>
-                            <td><a href="{{ route('pedidos.show-id', $venta->pedido->id)}}" class="btn btn-success" title="ver pedido"><i class="fas fa-shopping-cart"></i></a></td>
+                            <td><a href="{{ route('admin.pedidos.show', $venta->pedido->id)}}" class="btn btn-success" title="ver pedido"><i class="fas fa-shopping-cart"></i></a></td>
                             <td><form action="{{ route('venta.anular', $venta->id)}}" method="post">
                                 @csrf
                                 @method('PUT')

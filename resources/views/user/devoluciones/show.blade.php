@@ -21,7 +21,7 @@
 
                             <div class="card-tools">
                                 <div class="input-group-append">
-                                    <a class="btn btn-success" href="" v-on:click.prevent="" title="imprimir"><i class="fa fa-print"></i></a>
+                                    <a class="btn btn-success" href="" @click.prevent="" title="imprimir"><i class="fa fa-print"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -42,10 +42,31 @@
 
                                 <tbody>
                                     <tr>
-                                        <td>{{ $productos[0]->id }}</td>
+                                        {{-- <td>{{ $productos[0]->id }}</td>
                                         <td>{{ date('d/m/Y h:i A', strtotime($productos[0]->fecha)) }}</td>
                                         <td><a href="{{ route('pedidos.show', $productos[0]->pedido)}}" class=""
                                                 title="ver pedido">{{ $productos[0]->pedido }}</a>
+                                        </td>
+                                        <td><span class="badge badge-success">
+                                            @if ($productos[0]->estado == 1 )
+                                            {{ "pendiente" }}
+                                            @endif
+                                            @if ($productos[0]->estado == 2)
+                                            {{ "en proceso" }}
+                                            @endif
+                                            @if ($productos[0]->estado == 3)
+                                            {{ "rechazada" }}
+                                            @endif
+                                            @if ($productos[0]->estado == 4)
+                                            {{ "completada" }}
+                                            @endif
+                                            </span>
+                                        </td> --}}
+
+                                        <td>{{ $productos[0]->id }}</td>
+                                        <td>{{ date('d/m/Y h:i A', strtotime($productos[0]->fecha)) }}</td>
+                                        <td><a href="{{ route('pedidos.show', $productos[0]->venta->pedido->id)}}" class=""
+                                                title="ver pedido">{{ $productos[0]->venta->pedido->id }}</a>
                                         </td>
                                         <td><span class="badge badge-success">
                                             @if ($productos[0]->estado == 1 )
@@ -104,14 +125,14 @@
                                     @foreach ($productos as $producto)
 
                                     <tr>
-                                        <td>{{ $producto->nombre }}</td>
+                                        <td>{{ $producto->productoReferencia->colorProducto->producto->nombre }}</td>
                                         <td>
-                                            <a href="{{ route('producto.show', $producto->slug) }}">
-                                            <img src="{{ url('storage/' . $producto->imagen) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
+                                            <a href="{{ route('productos.show', $producto->productoReferencia->colorProducto->slug) }}">
+                                            <img src="{{ url('storage/' . $producto->productoReferencia->colorProducto->imagenes[0]->url) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
                                             </a>
                                         </td>
-                                        <td>{{ $producto->talla }}</td>
-                                        <td>{{ $producto->color  }}</td>
+                                        <td>{{ $producto->productoReferencia->talla->nombre }}</td>
+                                        <td>{{ $producto->productoReferencia->colorProducto->color->nombre  }}</td>
                                         <td>{{ $producto->cantidad }}</td>
                                     </tr>
                                         

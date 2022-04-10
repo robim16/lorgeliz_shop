@@ -8,7 +8,7 @@
 @section('content')
 
 <div class="super_container_inner">
-<div id="">
+	<div>
 	{{--<div class="super_container_inner">--}}
 		<div class="super_overlay"></div>
 
@@ -57,28 +57,28 @@
 									<div>
 										<!-- Country -->
 										<select name="checkout_country" id="checkout_country" class="dropdown_item_select checkout_input" require="required">
-											<option>País</option>
+											{{-- <option>País</option> --}}
 											<option>Colombia</option>
 										</select>
 									</div>
 									<div>
 										<!-- Province -->
 										<select name="checkout_province" id="checkout_province" class="dropdown_item_select checkout_input" require="required">
-											<option>Departamento</option>
-											<option>Córdoba</option>
+											<option value="{{ $carrito->cliente->user->departamento}}" selected>{{ $carrito->cliente->user->departamento }}</option>
+											{{-- <option>Córdoba</option>
 											<option>Province</option>
 											<option>Province</option>
-											<option>Province</option>
+											<option>Province</option> --}}
 										</select>
 									</div>
 									<div>
 										<!-- City / Town -->
 										<select name="checkout_city" id="checkout_city" class="dropdown_item_select checkout_input" require="required">
-											<option>Ciudad</option>
-											<option>Montería</option>
+											<option value="{{ $carrito->cliente->user->municipio }}" selected> {{ $carrito->cliente->user->municipio}}</option>
+											{{-- <option>Montería</option>
 											<option>City</option>
 											<option>City</option>
-											<option>City</option>
+											<option>City</option> --}}
 										</select>
 									</div>
 									<div>
@@ -150,13 +150,7 @@
 								<div class="payment_options">
 									<div class="checkout_title">Método de Pago</div>
 									<ul>
-										{{--<li class="shipping_option d-flex flex-row align-items-center justify-content-start">
-											<label class="radio_container">
-												<input type="radio" id="radio_1" name="payment_radio" class="payment_radio">
-												<span class="radio_mark"></span>
-												<span class="radio_text">Paypal</span>
-											</label>
-										</li>--}}
+										
 										<li class="shipping_option d-flex flex-row align-items-center justify-content-start">
 											<label class="radio_container">
 												<input type="radio" id="radio_2" name="payment_radio" class="payment_radio">
@@ -172,14 +166,14 @@
 											</label>
 										</li>
 									</ul>
-								</div>
+								</div> 
 								<div class="cart_text">
 									<p>Puedes pagar contra entrega o a tráves de epayco. Aceptamos todas las tarjetas, efecty, pse, daviplata y otros medios</p>
 								</div>
 								<div class="checkout_button trans_200">
 									<a href="" id="btnCheckout">realizar pedido</a>
-									{{--<a href="" v-on:click.prevent="registrarventa()">realizar pedido</a>--}}
 								</div>
+								{{-- <checkout></checkout> --}}
 							</div>
 						</div>
 					</div>
@@ -187,7 +181,7 @@
 			</div>
         </div>
     
-</div>
+	</div>
 	
 @endsection
 
@@ -195,16 +189,82 @@
 <script src="{{ asset('asset/js/checkout.js') }}"></script>
 
 <script>
+	
+    function loadJSON(callback) {
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.open("GET", "/lorgeliz_tienda_copia/public/colombia-json-master/colombia-json-master/colombia.json", true); // Reemplaza colombia-json.json con el nombre que le hayas puesto
+        xobj.onreadystatechange = function () {
+            if (xobj.readyState == 4 && xobj.status == "200") {
+                callback(xobj.responseText); //el callback recibe por parámetro el response de la petición
+            }
+        };
+        xobj.send(null);
+    }
+
+
+   function init() {
+        return new Promise(async (resolve, reject) => {
+            await loadJSON(function (response) {
+
+                // Parse JSON string into object
+                const JSONFinal =  JSON.parse(response);
+                const departamentos = JSONFinal.map(d => d.departamento);
+
+                $.each(departamentos, function (key, value) {
+                $('#checkout_province').append("<option value='" 
+                    + value + "'>" + value + "</option>");
+            	});
+
+                resolve(JSONFinal);
+            });
+           
+        });
+    }
+
+    function setMunicipios(JSONFinal) {
+		
+        const departamento = $('#checkout_province').val();
+        const filtrados = JSONFinal.filter(d => d.departamento === departamento);
+        const municipios = filtrados[0].ciudades;
+        $('#checkout_city').append('<option value="0">Seleccione uno</option>')
+		$.each(municipios, function (key, value) {
+			$('#checkout_city').append("<option value='" 
+				+ value + "'>" + value + "</option>");
+		});
+    }
+
+</script>
+
+<script>
 	window.data = {
         datos: {
-            "carrito": "{{$carrito->id}}",
-            "total": "{{$carrito->total}}"
+			"amount": "{{$carrito->total}}",
+			"name_billing": "{{$carrito->cliente->user->nombres}} {{$carrito->cliente->user->apellidos}}",
+			"address_billing": "{{$carrito->cliente->user->direccion}}",
+			"mobilephone_billing": "{{$carrito->cliente->user->telefono}}",
+			"number_doc_billing": "{{$carrito->cliente->user->identificacion}}",
         }
     }
 </script>
 
 <script> 
 $(document).ready(function () {
+
+	var JSONFinal = '';
+
+	init().
+	then((data)=>{
+		JSONFinal = data;
+		setMunicipios(JSONFinal);
+	});
+
+	$(document).on('change', '#checkout_province', function(e) { 
+		e.preventDefault();
+		
+		$('#checkout_city').html('');
+		setMunicipios(JSONFinal);
+	});
 
 	$("#btnCheckout").click(function (e) { 
 		e.preventDefault();
@@ -217,10 +277,12 @@ $(document).ready(function () {
 
 		$.ajax({
 			type: "GET",
-			url: "{{ route('stock.verificar') }}",
+			url: "{{route('stock.verificar')}}",
+			// url:'/lorgeliz_tienda_copia/public/api/stock/verify',
 			data:{},
 			dataType: 'json',
 			success: function (response) {
+				
 				if (response.data == 'success') {
 					
 					if($("#radio_2").is(':checked',true))
@@ -233,13 +295,14 @@ $(document).ready(function () {
 							dataType: 'json',
 							success: function (response) {
 								if (response.data == 'success') {
+
 									var pedido = response.pedido;
 									swal(
 										'Pedido recibido!',
 										'Hemos recibido tu pedido. En breve empezaremos a alistarlo y nos pondremos en contacto contigo!',
 										'success'
 									)
-									window.location.href = `/lorgeliz_tienda/public/pedidos/` + pedido;
+									window.location.href = `/lorgeliz_tienda_copia/public/pedidos/` + pedido;
 								}
 							}
 
@@ -273,8 +336,8 @@ $(document).ready(function () {
 						//extra1: "extra1",
 						//extra2: "extra2",
 						//extra3: "extra3",
-						confirmation: "http://localhost/lorgeliz_tienda/public/ventas/epayco/confirm",
-						response: "http://localhost/lorgeliz_tienda/public/payments/epayco/response",
+						confirmation: "http://localhost/lorgeliz_tienda_copia/public/ventas/epayco/confirm",
+						response: "http://localhost/lorgeliz_tienda_copia/public/payments/epayco/response",
 						p_confirm_method: "POST",
 
 						//Atributos cliente
@@ -295,7 +358,7 @@ $(document).ready(function () {
 						'error'
 					)
 					setTimeout(() => {
-						window.location.href = `/lorgeliz_tienda/public/cart`;
+						window.location.href = `/lorgeliz_tienda_copia/public/cart`;
 					}, 4000);
 				}
 			}

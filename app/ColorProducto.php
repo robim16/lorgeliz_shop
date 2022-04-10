@@ -2,10 +2,13 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ColorProducto extends Model
+class ColorProducto extends Pivot
 {
+    //protected $with = ['producto'];
+
     protected $table = 'color_producto';
     protected $fillable = [
         'producto_id', 
@@ -45,11 +48,23 @@ class ColorProducto extends Model
         return $this->belongsTo(Color::class);
     }
 
-    public function productoReferencias (){
-        return $this->hasMany(ProductoReferencia::class);
-    }
+    //public function productoReferencias (){
+        //return $this->hasMany(ProductoReferencia::class);
+    //}
 
     public function imagenes (){
         return $this->morphMany('App\Imagene','imageable');
+    }
+
+    public function tallas (){
+        return $this->belongsToMany(Talla::class, 'producto_referencia');
+    }
+
+    public function scopeActivo($query){
+        return $query->where('activo', 'Si');
+    }
+
+    public function scopeVisitas($query){
+        return $query->where('visitas', '>', '0');
     }
 }

@@ -16,7 +16,7 @@ class User extends Authenticatable
 
         parent::boot();
 
-        static::created(function(User $user) {
+       /* static::created(function(User $user) {
 			
 			$slug = \Str::slug($user->nombres. " " . $user->apellidos);
 			
@@ -54,10 +54,10 @@ class User extends Authenticatable
             
             }
 			
-		});
+		});*/
 
-//implementar con dropbox
-		static::updating(function(User $user) {
+        //implementar con dropbox
+		static::saved(function(User $user) {
 			
 			if( ! \App::runningInConsole() ) {
 
@@ -65,39 +65,46 @@ class User extends Authenticatable
     
                     $imagen = request()->file('imagen');
                     $nombre = time().'_'.$imagen->getClientOriginalName();
-                    $image = Image::make($imagen)->encode('jpg', 75);
-                    $image->resize(128, 128, function ($constraint){
-                        $constraint->upsize();
-                    });
+                    //$image = Image::make($imagen)->encode('jpg', 75);
+                    //$image->resize(128, 128, function ($constraint){
+                        //$constraint->upsize();
+                    //});
                     
-                    Storage::disk('dropbox')->put("users/$nombre", $image->stream()->__toString());
-                    $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
-                    $response = $dropbox->createSharedLinkWithSettings("users/$nombre", ["requested_visibility" => "public"]);
-                    $path = str_replace('dl=0', 'raw=1', $response['url']);
-                    $imageName = $response['name'];
-                    //$path = Storage::disk('public')->putFileAs("imagenes/users/" . $user->id, $imagen, $nombre);
+                    //Storage::disk('dropbox')->put("users/$nombre", $image->stream()->__toString());
+                    //$dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
+                    //$response = $dropbox->createSharedLinkWithSettings("users/$nombre", ["requested_visibility" => "public"]);
+                    //$path = str_replace('dl=0', 'raw=1', $response['url']);
+                    //$imageName = $response['name'];
+                    $path = Storage::disk('public')->putFileAs("imagenes/users/" . $user->id, $imagen, $nombre);
     
                     $img = new Imagene();
-                    $img->nombre = $imageName;
+                    //$img->nombre = $imageName;
+                    $img->nombre = $nombre;
                     $img->url = $path;
                     $img->imageable_type = 'App\User';
                     $img->imageable_id = $user->id;
 
                     $img->save();
 
-                    $imagen = Imagene::where('imageable_type','App\User')
-                    ->where('imageable_id', auth()->user()->id)->firstOrFail();
+                    if ($user->cliente) {
+                        $imagen = Imagene::where('imageable_type','App\User')
+                        ->where('imageable_id', auth()->user()->id)->first();
 
-                    $delete = $this->dropbox->delete($imagen->nombre);
+                        if ($imagen != '') {
+                            //$delete = $this->dropbox->delete($imagen->nombre);
+                            Storage::disk('public')->delete($imagen->url);
+                            $imagen->delete();
+                        }
 
-                    //Storage::delete($imagen->url);
-                    
-                    $imagen->delete();
+                    } else {
+                        Cliente::create([
+                            'user_id' => $user->id,
+                        ]);
+                    }
                    
                 }
 			}
 		});
-
     }
     
     use Notifiable;
@@ -143,5 +150,9 @@ class User extends Authenticatable
 
     public function imagene (){
         return $this->morphOne('App\Imagene','imageable');
+    }
+
+    public function chats (){
+        return $this->hasMany(Chat::class, 'from_id');
     }
 }

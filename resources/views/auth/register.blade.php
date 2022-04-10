@@ -52,6 +52,37 @@
 							</div>
 						</div>
 
+						<div class="form-group row">
+							<label for="departamento" class="col-md-4 col-form-label text-md-right">{{ __('Departamento') }}</label>
+
+							<div class="col-md-6">
+								<select name="departamento" id="departamento" class="form-control @error('departamento') is-invalid @enderror" required autocomplete="departamento">
+									<option value="0">Seleccione uno</option>
+								</select>
+								
+								@error('departamento')
+								<span class="invalid-feedback" role="alert">
+									<strong>{{ $message }}</strong>
+								</span>
+								@enderror
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="municipio" class="col-md-4 col-form-label text-md-right">{{ __('Municipio') }}</label>
+
+							<div class="col-md-6">
+								<select name="municipio" id="municipio" class="form-control @error('municipio') is-invalid @enderror" required autocomplete="municipio">
+									<option value="0">Seleccione uno</option>
+								</select>
+								
+								@error('municipio')
+								<span class="invalid-feedback" role="alert">
+									<strong>{{ $message }}</strong>
+								</span>
+								@enderror
+							</div>
+						</div>
 
 						<div class="form-group row">
 							<label for="direccion" class="col-md-4 col-form-label text-md-right">{{ __('Dirección') }}</label>
@@ -161,4 +192,60 @@
 	</div>
 </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    function loadJSON(callback) {
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.open("GET", "/lorgeliz_tienda_copia/public/colombia-json-master/colombia-json-master/colombia.json", true); // Reemplaza colombia-json.json con el nombre que le hayas puesto
+        xobj.onreadystatechange = function () {
+            if (xobj.readyState == 4 && xobj.status == "200") {
+                callback(xobj.responseText);
+            }
+        };
+        xobj.send(null);
+    }
+
+    var JSONFinal = '';
+
+    function init() {
+        loadJSON(function (response) {
+
+            // Parse JSON string into object
+            JSONFinal =  JSON.parse(response);
+            const departamentos = JSONFinal.map(d => d.departamento);
+            
+            $.each(departamentos, function (key, value) {
+                $('#departamento').append("<option value='" 
+                    + value + "'>" + value + "</option>");
+            });
+        });
+    }
+</script>
+<script>
+	$(document).ready(function () {
+		
+        init();
+
+        $(document).on('change', '#departamento', function(e) { 
+			e.preventDefault();
+
+            $('#municipio').html('');
+
+            const departamento = $('#departamento').val();
+            const filtrados = JSONFinal.filter(d => d.departamento === departamento);
+            const municipios = filtrados[0].ciudades;
+
+            $('#municipio').append('<option value="0">Seleccione uno</option>')
+            $.each(municipios, function (key, value) {
+                $('#municipio').append("<option value='" 
+                    + value + "'>" + value + "</option>");
+            });
+		});
+       
+	});
+</script>
+	
 @endsection

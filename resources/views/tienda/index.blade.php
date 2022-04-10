@@ -12,23 +12,29 @@
 
 @section('content')
 
-<div class="super_container_inner" id="inicio">
+{{--<div class="super_container_inner" id="inicio">--}}
+    <div class="super_container_inner" id="">
     <div class="super_overlay"></div>
 
+
     <!-- Home -->
+    
+    {{--<div class="background_image" style="background-image:url({{ $producto->imagen }})">--}}
+    {{--<img src="{{ $producto->imagen }}" alt="">--}}
+
     <div class="home">
-        <!-- Home Slider -->
+        <slider :productos="{{$productoSlider}}"></slider>
+    </div>
+
+    {{-- <div class="home">
         <div class="home_slider_container">
             <div class="owl-carousel owl-theme home_slider">
-
                 
-                <!-- Slide -->
                @foreach ($productoSlider as $producto)
                 <div class="owl-item">
-                    {{--<div class="background_image" style="background-image:url({{ url('storage/' . $producto->imagen) }})">--}}
-                        <div class="background_image" style="background-image:url({{ $producto->imagen }})">
-                        {{--<img src="{{ $imagen }}" alt="">--}}
-                    </div>
+                    <div class="background_image" style="background-image:url({{ url('storage/' . $producto->imagenes[0]->url) }})">
+                       
+                   </div>
                     <div class="container fill_height">
                         <div class="row fill_height">
                             <div class="col fill_height">
@@ -46,17 +52,16 @@
                                                             class="product_tag d-flex flex-column align-items-center justify-content-center">
                                                             <div>
                                                                 <div>desde</div>
-                                                                <div style="font-size: 25px">${{ floatval($producto->precio_actual)}}<span></span>
+                                                                <div style="font-size: 25px">${{ floatval($producto->producto->precio_actual)}}<span></span>
                                                                 </div>
-                                                                <del class="price-oldslider">@if ($producto->precio_anterior > $producto->precio_actual)
-                                                                ${{ floatval($producto->precio_anterior)}} 
+                                                                <del class="price-oldslider">@if ($producto->producto->precio_anterior > $producto->producto->precio_actual)
+                                                                ${{ floatval($producto->producto->precio_anterior)}} 
                                                                 @endif<span></span></del>
                                                             </div>
                                                         </div>
                                                         <div class="product_image">
-                                                            <a href="{{route('producto.show', $producto->slug)}}">
-                                                                {{--<img src="{{ url('storage/' . $producto->imagen) }}" alt="">--}}
-                                                                <img src="{{ $producto->imagen }}" alt="">
+                                                            <a href="{{route('productos.show', $producto->slug)}}">
+                                                                <img src="{{ url('storage/' . $producto->imagenes[0]->url) }}" alt="">
                                                             </a>
                                                         </div>
                                                         <div class="product_content">
@@ -91,77 +96,11 @@
                 </div>
                 @endforeach
 
-                
-                {{--<div  v-for="producto in productoSlider" :key="producto.cop" class="owl-item">
-                    <div class="background_image" v-bind:style="{ 'background-image': 'url(' + 'storage/' + producto.imagen + ')'}">
-                    </div>
-                    <div class="container fill_height">
-                        <div class="row fill_height">
-                            <div class="col fill_height">
-                                <div class="home_container d-flex flex-column align-items-center justify-content-start">
-                                    <div class="home_content">
-                                        <div class="home_title">Nuevos Artículos</div>
-                                        <div class="home_subtitle">Summer Wear</div>
-                                        <div class="home_items">
-                                            <div class="row">
-                                                <div class="col-sm-3 offset-lg-1">
-                                                </div>
-                                                <div class="col-lg-4 col-md-6 col-sm-8 offset-sm-2 offset-md-0">
-                                                    <div class="product home_item_large">
-                                                        <div
-                                                            class="product_tag d-flex flex-column align-items-center justify-content-center">
-                                                            <div>
-                                                                <div>desde</div>
-                                                                <div style="font-size: 25px">@{{ producto.precio_actual}}<span></span>
-                                                                </div>
-                                                                <del class="price-oldslider" v-text="producto.precio_anterior > producto.precio_actual ? producto.precio_anterior : ''">
-                                                                <span></span></del>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product_image"><a
-                                                                :href="'product/' + producto.slug">
-                                                                <img :src="'storage/' + producto.imagen" alt="">
-                                                            </a>
-                                                        </div>
-                                                        <div class="product_content">
-                                                            <div class="product_buttons">
-                                                                <div
-                                                                    class="text-right d-flex flex-row align-items-start justify-content-start">
-                                                                    <div
-                                                                        class="product_button product_cart text-center d-flex flex-column align-items-center justify-content-center">
-                                                                        <div>
-                                                                            <div><img
-                                                                                    src="{{ asset('asset/images/cart.svg')}}"
-                                                                                    alt="">
-                                                                                <div>+</div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>--}}
-                
-
             </div>
             <div class="home_slider_nav home_slider_nav_prev"><i class="fa fa-chevron-left" aria-hidden="true"></i>
             </div>
             <div class="home_slider_nav home_slider_nav_next"><i class="fa fa-chevron-right" aria-hidden="true"></i>
             </div>
-
-            <!-- Home Slider Dots -->
 
             <div class="home_slider_dots_container">
                 <div class="container">
@@ -182,9 +121,8 @@
             </div>
 
         </div>
-    </div>
-
-
+    </div> --}}
+    
     <!-- Products -->
 
     {{--<div class="products">
@@ -210,7 +148,7 @@
                 <div class="col-xl-4 col-md-6">
                     <div class="product">
                         <div class="product_image">
-                            <a href="{{route('producto.show', $nuevo->slug)}}">
+                            <a href="{{route('productos.show', $nuevo->slug)}}">
                             <img src="{{ url('storage/' . $nuevo->imagen) }}" alt="">
                             
                             </a>
@@ -219,7 +157,7 @@
                             <div class="product_info d-flex flex-row align-items-start justify-content-start">
                                 <div>
                                     <div>
-                                    <div class="product_name"><a href="{{ route('producto.show', $nuevo->slug)}}">{{    $nuevo->nombre}}-{{$nuevo->color}}</a>
+                                    <div class="product_name"><a href="{{ route('productos.show', $nuevo->slug)}}">{{    $nuevo->nombre}}-{{$nuevo->color}}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -257,7 +195,7 @@
         </div>
     </div>--}}
 
-    <div class="products">
+    {{--<div class="products">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 offset-lg-3">
@@ -280,10 +218,10 @@
                 <div v-for="nuevo in productoNuevo" :key="nuevo.cop" class="col-xl-4 col-md-6">
                     <div class="product">
                         <div class="product_image">
-                            <a :href="'product/' + nuevo.slug">
-							{{--<img :src="'storage/' + nuevo.imagen" alt="">--}}
-                            <img :src="nuevo.imagen" alt="">
-						</a>
+                        <a :href="'product/' + nuevo.slug">
+							<img :src="'storage/' + nuevo.imagen" alt="">
+                            {{--<img :src="nuevo.imagen" alt="">--}}
+						{{--</a>
                         </div>
                         <div class="product_content">
                             <div class="product_info d-flex flex-row align-items-start justify-content-start">
@@ -324,36 +262,37 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>--}}
+    
+    <product-new></product-new>
 
     <!-- Lo mas visto -->
 
-    <div class="lomasvendidocontenedor">
+    {{-- <div class="lomasvendidocontenedor">
         <div class="section_title text-center">Lo más Visto</div>
         <br>
         <div class="lomasvendido owl-carousel owl-theme">
 
-            <!-- item-->
             @foreach ($producto_mas_visto as $producto)
-                <div class="owl-item">
+            <div class="owl-item">
                 <div class="product">
                     <div class="product_image">
-                        <a href="{{route('producto.show', $producto->slug)}}">
-                        {{--<img src="{{ url('storage/' . $producto->imagen) }}" alt="">--}}
-                        <img src="{{ $producto->imagen }}" alt="">
+                        <a href="{{route('productos.show', $producto->slug)}}">
+                        <img src="{{ url('storage/' . $producto->imagenes[0]->url) }}" alt="">
+                        
                         </a>
                     </div>
                     <div class="product_content">
                         <div class="product_info d-flex flex-row align-items-start justify-content-start">
                             <div>
                                 <div>
-                                    <div class="product_name"><a href="{{ route('producto.show', $producto->slug)}}">{{ $producto->nombre}}-{{$producto->color}}</a></div>
+                                    <div class="product_name"><a href="{{ route('productos.show', $producto->slug)}}">{{ $producto->producto->nombre}}-{{$producto->color->nombre}}</a></div>
 
                                 </div>
                             </div>
                             <div class="ml-auto text-right">
-                                <div class="product_category">En <a href="categorias?categoria=&subcategoria={{$producto->tipo_id}}">{{$producto->tipo}}</a></div>
-                                <div class="product_price text-right">${{ floatval($producto->precio_actual)}}<span></span></div>
+                                <div class="product_category">En <a href="" @click.prevent="setSubcategoria({{$producto->producto->tipo->id}})">{{$producto->producto->tipo->nombre}}</a></div>
+                                <div class="product_price text-right">${{ floatval($producto->producto->precio_actual)}}<span></span></div>
                             </div>
                         </div>
                         <div class="product_buttons">
@@ -375,6 +314,11 @@
             @endforeach
             
         </div>
+    </div>  --}}
+    <div class="lomasvendidocontenedor">
+        <div class="section_title text-center">Lo más Visto</div>
+        <br>
+        <popular :productos="{{$producto_mas_visto}}"></popular>
     </div>
 </div>
 
@@ -384,39 +328,99 @@
 
 <br>
 
-<!-- Lo mas vendido -->
+    <!-- Lo mas vendido -->
 
-<div class="lomasvendidocontenedor">
-    <div class="section_title text-center">Lo más Vendido</div>
-    <br>
-    <div class="lomasvendido owl-carousel owl-theme">
+    {{-- <div class="lomasvendidocontenedor">
+        <div class="section_title text-center">Lo más Vendido</div>
+        <br>
+        <div class="lomasvendido owl-carousel owl-theme">
 
-        <!-- item-->
-        @foreach ($productos_vendidos as $producto)
-            <div class="owl-item">
+            @foreach ($productos_vendidos as $producto)
+                <div class="owl-item">
+                    <div class="product">
+                        <div class="product_image">
+                            <a href="{{route('productos.show', $producto->slug)}}">
+                            
+                            <img src="{{ url('storage/' . $producto->imagenes[0]->url) }}" alt="">
+                        
+                            </a>
+                        </div>
+                        <div class="product_content">
+                            <div class="product_info d-flex flex-row align-items-start justify-content-start">
+                                <div>
+                                    <div>
+                                        <div class="product_name"><a href="{{ route('productos.show', $producto->slug)}}">{{ $producto->producto->nombre}}-{{$producto->color->nombre}}</a></div>
+                                    </div>
+                                </div>
+                                <div class="ml-auto text-right">
+                                    <div class="product_category">En <a href="" @click.prevent="setSubcategoria({{$producto->producto->tipo->id}})">{{$producto->producto->tipo->nombre}}</a></div>
+                                    <div class="product_price text-right">${{ floatval($producto->producto->precio_actual)}}<span></span></div>
+                                </div>
+                            </div>
+                            <div class="product_buttons">
+                                <div class="text-right d-flex flex-row align-items-start justify-content-start">
+                                    <div
+                                        class="product_button product_cart text-center d-flex flex-column align-items-center justify-content-center">
+                                        <div>
+                                            <div><a href="{{ route('producto.show', $producto->slug)}}"><img src="{{ asset('asset/images/cart.svg') }}" class="svg" alt=""></a>
+                                                <div>+</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            @endforeach
+            
+        </div>
+    </div> --}}
+    <div class="lomasvendidocontenedor">
+        <div class="section_title text-center">Lo más Vendido</div>
+        <br>
+        <sale :productos="{{$productos_vendidos}}"></sale>
+    </div>
+</div>
+
+
+<br>
+
+<br>
+
+<br>
+
+    <!-- En oferta -->
+
+    {{-- <div class="lomasvendidocontenedor">
+        <div class="section_title text-center">En oferta</div>
+        <br>
+        <div class="lomasvendido owl-carousel owl-theme">
+        
+            @foreach ($productosoferta as $oferta)
+                <div class="owl-item">
                 <div class="product">
+                <span class="badge-new"><b> Nuevo</b></span>
+                <span class="badge-offer"><b> - {{ $oferta->producto->porcentaje_descuento}}%</b></span>
                     <div class="product_image">
-                        <a href="{{route('producto.show', $producto->slug)}}">
-                        {{--@foreach(\App\Imagene::where('imageable_type',
-                        'App\ColorProducto')
-                        ->where('imageable_id', $producto->cop)
-                        ->pluck('url', 'id')
-                        ->take(1) as $id => $imagen)--}}
-                        {{--<img src="{{ url('storage/' . $producto->imagen) }}" alt="">--}}
-                        {{--@endforeach--}}
-                        <img src="{{ $producto->imagen }}" alt="">
+                        <a href="{{route('productos.show', $oferta->slug)}}">
+                        <img src="{{ url('storage/' . $oferta->imagenes[0]->url) }}" alt="">
+                        
                         </a>
                     </div>
                     <div class="product_content">
-                        <div class="product_info d-flex flex-row align-items-start justify-content-start">
+                        <div class="product_info">
                             <div>
                                 <div>
-                                    <div class="product_name"><a href="{{ route('producto.show', $producto->slug)}}">{{ $producto->nombre}}-{{$producto->color}}</a></div>
+                                <div class="product_name product_namesinwidth text-center"><a href="{{ route('productos.show', $oferta->slug)}}">{{ $oferta->producto->nombre}}-{{$oferta->color->nombre}}</a></div>
+
                                 </div>
                             </div>
-                            <div class="ml-auto text-right">
-                                <div class="product_category">En <a href="categorias?categoria=&subcategoria={{$producto->tipo_id}}">{{$producto->tipo}}</a></div>
-                                <div class="product_price text-right">${{ floatval($producto->precio_actual)}}<span></span></div>
+                            <div class="ml-auto">
+                                <div class="product_price text-center">${{ floatval($oferta->producto->precio_actual)}}<span></span>
+                                    <del class="price-old">${{ floatval($oferta->producto->precio_anterior)}}</del>
+                                </div>
                             </div>
                         </div>
                         <div class="product_buttons">
@@ -424,7 +428,9 @@
                                 <div
                                     class="product_button product_cart text-center d-flex flex-column align-items-center justify-content-center">
                                     <div>
-                                        <div><a href="{{ route('producto.show', $producto->slug)}}"><img src="{{ asset('asset/images/cart.svg') }}" class="svg" alt=""></a>
+                                        <div><a href="{{ route('producto.show', $oferta->slug)}}">
+                                                <img src="{{ asset('asset/images/cart.svg') }}" class="svg" alt="">
+                                            </a>
                                             <div>+</div>
                                         </div>
                                     </div>
@@ -434,71 +440,14 @@
                     </div>
                 </div>
             </div>
-
-        @endforeach
-        
-    </div>
-</div>
-</div>
-
-<br>
-
-<br>
-
-<br>
-
-<!-- En oferta -->
-
-<div class="lomasvendidocontenedor">
-    <div class="section_title text-center">En oferta</div>
-    <br>
-    <div class="lomasvendido owl-carousel owl-theme">
-        <!-- item-->
-        @foreach ($productosoferta as $oferta)
-            <div class="owl-item">
-            <div class="product">
-            <span class="badge-new"><b> Nuevo</b></span>
-            <span class="badge-offer"><b> - {{ $oferta->porcentaje_descuento}}%</b></span>
-                <div class="product_image">
-                    <a href="{{route('producto.show', $oferta->slug)}}">
-                    {{--<img src="{{ url('storage/' . $oferta->imagen) }}" alt="">--}}
-                    <img src="{{ $oferta->imagen }}" alt="">
-                    </a>
-                </div>
-                <div class="product_content">
-                    <div class="product_info">
-                        <div>
-                            <div>
-                            <div class="product_name product_namesinwidth text-center"><a href="{{ route('producto.show', $oferta->slug)}}">{{ $oferta->nombre}}-{{$oferta->color}}</a></div>
-
-                            </div>
-                        </div>
-                        <div class="ml-auto">
-                            <div class="product_price text-center">${{ floatval($oferta->precio_actual)}}<span></span>
-                                <del class="price-old">${{ floatval($oferta->precio_anterior)}}</del>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product_buttons">
-                        <div class="text-right d-flex flex-row align-items-start justify-content-start">
-                            <div
-                                class="product_button product_cart text-center d-flex flex-column align-items-center justify-content-center">
-                                <div>
-                                    <div><a href="{{ route('producto.show', $oferta->slug)}}">
-                                            <img src="{{ asset('asset/images/cart.svg') }}" class="svg" alt="">
-                                        </a>
-                                        <div>+</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
-        @endforeach
+    </div> --}}
+    <div class="lomasvendidocontenedor">
+        <div class="section_title text-center">En oferta</div>
+        <br>
+        <offers :productos="{{$productosoferta}}"></offers>
     </div>
-</div>
 </div>
 
 <br>

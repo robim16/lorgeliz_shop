@@ -20,4 +20,10 @@ class Devolucione extends Model
     public function venta (){
         return $this->belongsTo(Venta::class);
     }
+
+    // public static function activarDevolucion($venta,$producto){
+    //     return Devolucione::where('venta_id',$venta)
+    //     ->where('producto_referencia_id',$producto)
+    //     ->first();
+    // }
 }

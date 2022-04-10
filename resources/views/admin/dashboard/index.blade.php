@@ -102,6 +102,23 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-6">
+                    <div class="card card-chart">
+                        <div class="card-header">
+                            <h4>Devoluciones</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="ct-chart">
+                                <canvas id="devolucionchart">                                                
+                                </canvas>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <p>Devoluciones en los últimos meses.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -116,7 +133,6 @@
 <script src="{{ asset('asset/plugins/chart.js/Chart.min.js') }}"></script>
 
 <script>
-
     $(document).ready(function () {
 
 
@@ -155,6 +171,13 @@
         let varTotalPagos = [];
         let varMesPago = [];
 
+        let varDevolucion = null;
+        let charDevolucion = null;
+
+        let devoluciones = [];
+        let varTotalDevoluciones = [];
+        let varMesDevolucion = [];
+
         $.ajaxSetup({
 
         headers: {
@@ -174,6 +197,7 @@
                 let clientes = response.clientes;
                 let productos = response.productos;
                 let pagos = response.pagos;
+                let devoluciones = response.devoluciones;
 
                 let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
@@ -202,12 +226,18 @@
                    varTotalPagos.push(x.total);
                 });
 
+                devoluciones.map(function(x){
+                   varMesDevolucion.push(meses[x.mes-1]);
+                   varTotalDevoluciones.push(x.total);
+                });
+
 
                varVenta=document.getElementById('ventas').getContext('2d');
                varPedido=document.getElementById('pedidoschart').getContext('2d');
                varCliente=document.getElementById('clientes').getContext('2d');
                varProducto=document.getElementById('productoschart').getContext('2d');
                varPago=document.getElementById('pagoschart').getContext('2d');
+               varDevolucion=document.getElementById('devolucionchart').getContext('2d');
 
                charVenta = new Chart(varVenta, {
                     type: 'line',
@@ -308,6 +338,29 @@
                         datasets: [{
                             label: 'Pagos',
                             data: varTotalPagos,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 0.2)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }]
+                        }
+                    }
+                });
+
+                charDevolucion = new Chart(varDevolucion, {
+                    type: 'line',
+                    data: {
+                        labels: varMesDevolucion,
+                        datasets: [{
+                            label: 'Devoluciones',
+                            data: varTotalDevoluciones,
                             backgroundColor: 'rgba(255, 99, 132, 0.2)',
                             borderColor: 'rgba(255, 99, 132, 0.2)',
                             borderWidth: 1

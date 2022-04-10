@@ -9,15 +9,15 @@
         aria-expanded="false"
         >
         
-        {{--<img src="{{  auth()->user() ? url('storage/' . auth()->user()->imagene->url) : asset('asset/images/user.svg') }}" alt="user image" class="rounded-circle" style="width: 34px">--}}
-        <img src="{{  auth()->user() ? auth()->user()->imagene ? url(auth()->user()->imagene->url) : asset('asset/images/user.svg') : asset('asset/images/user.svg') }}" alt="user image" class="rounded-circle" style="width: 34px">
+        <img src="{{ auth()->user() ?  auth()->user()->imagene ? url('storage/' . auth()->user()->imagene->url) : asset('asset/images/user.svg') : asset('asset/images/user.svg') }}" alt="user image" class="rounded-circle" style="width: 34px">
+        
         <span class="caret"></span>
         
       </a>
       
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
     
-      <a class="dropdown-item" href="{{ route('users.cuenta') }}">
+      <a class="dropdown-item" href="{{ auth()->user() ? route('users.show', auth()->user()->slug) : route('login') }}">
         {{ __("Mi cuenta") }}
       </a>
     

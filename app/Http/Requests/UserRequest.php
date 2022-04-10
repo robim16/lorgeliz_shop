@@ -34,6 +34,8 @@ class UserRequest extends FormRequest
                 'nombres'        => 'required|min:1|max:150',
                 'apellidos'      => 'required|min:1|max:150',
                 'direccion'      => 'required|min:1|max:150',
+                'departamento'   => 'required',
+                'municipio'      => 'required',
                 'telefono'       => 'required|min:1|max:150',
                 'imagen'         => 'sometimes|image|mimes:jpg,jpeg,png',
             ];

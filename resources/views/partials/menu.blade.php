@@ -12,9 +12,9 @@
 	
 	<div class="menu_nav" id="">
 		<ul>
-			<li><a href="categorias?categoria=mujeres">Mujeres</a></li>
-			<li><a href="categorias?categoria=hombres">Hombres</a></li>
-			<li><a href="categorias?categoria=niños">Niños</a></li>	
+			<li><a href="" @click.prevent="setCategoria('mujeres')">Mujeres</a></li>
+			<li><a href="" @click.prevent="setCategoria('hombres')">Hombres</a></li>
+			<li><a href="" @click.prevent="setCategoria('niños')">Niños</a></li>	
 		</ul>
 	</div>
 

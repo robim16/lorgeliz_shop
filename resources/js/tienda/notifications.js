@@ -1,5 +1,5 @@
 
-const app = new Vue({
+const notification = new Vue({
     el: '#clientNotification',
     data: {
         notifications: [], 
@@ -10,15 +10,15 @@ const app = new Vue({
     },
     methods:{
         readNotification(id,ruta){
-            let url = '/lorgeliz_tienda/public/notification/client/read/'+id;
+            let url = '/lorgeliz_tienda_copia/public/notification/'+id;
             axios.put(url).then(response => {
                 window.location.href = ruta;
             });   
         }
     },
     created() {
-        axios.get('/lorgeliz_tienda/public/notification/client').then(response => {
-          this.notifications=response.data;
+        axios.get('/lorgeliz_tienda_copia/public/notification').then(response => {
+          this.notifications = response.data;
         }).catch(function(error){
            console.log(error)
         });
@@ -26,7 +26,7 @@ const app = new Vue({
         var clienteId = $('meta[name="clienteId"]').attr('content');
 
         Echo.private('App.Cliente.' + clienteId).notification((notification) => {
-            $this.notifications.unshift(notification);
+            this.notifications.unshift(notification);
         });
     }
 

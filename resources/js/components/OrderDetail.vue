@@ -1,0 +1,226 @@
+<template>
+    <main>
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+
+                        <div
+                            v-if="arrayProductos.length == 0"
+                            class="col-md-2 offset-5"
+                        >
+                            <a href="#">
+                                <img :src="'../img/preloader.gif'" />
+                            </a>
+                        </div>
+
+                        <div class="card" v-else>
+                            <div class="card-header">
+                                <h3 class="card-title mb-2">Productos adquiridos con mi pedido</h3>
+
+                                <div class="card-tools">
+                                    <form>
+                                        <div class="input-group input-group-sm" style="width: 180px;">
+
+                                            <div class="input-group-append">
+                                                <a href="" class="btn btn-info mx-1"
+                                                    v-on:click.prevent="imprimir(arrayProductos[0].venta.pedido.id)"
+                                                    title="imprimir pedido"><i class="fas fa-print"></i></a>
+                                            </div>
+
+                                            <input type="text" name="busqueda" class="form-control float-right"
+                                                placeholder="buscar" value="">
+
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-success">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+
+                            <!-- /.card-header -->
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Producto</th>
+                                            <th scope="col">Imagen</th>
+                                            <th scope="col">Talla</th>
+                                            <th scope="col">Color</th>
+                                            <th scope="col">Cantidad</th>
+                                            <th scope="col">Precio unitario</th>
+                                            <th scope="col">Subtotal</th>
+                                            <th scope="col">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr v-for="(producto, index) in arrayProductos" :key="producto.referencia">
+                                            <td>
+                                                <a :href="'../productos/' + producto.producto_referencia.color_producto.slug">{{ producto.producto_referencia.color_producto.producto.nombre }}</a>
+                                            </td>
+                                            <td>
+                                                <a :href="'../productos/' + producto.producto_referencia.color_producto.slug">
+                                                    <img :src="'../storage/' + producto.producto_referencia.color_producto.imagenes[0].url" alt=""
+                                                        style="height: 50px; width: 50px;" class="rounded-circle">
+                                                </a>
+                                            </td>
+                                            <td>{{ producto.producto_referencia.talla.nombre }}</td>
+                                            <td>{{ producto.producto_referencia.color_producto.color.nombre }}</td>
+                                            <td>{{ producto.cantidad }}</td>
+                                            <td>{{ '$'+ producto.producto_referencia.color_producto.producto.precio_actual }}</td>
+                                            <td>{{ '$'+ producto.producto_referencia.color_producto.producto.precio_actual * producto.cantidad }}</td>
+                                            <td>
+                                                <a href="" class="btn btn-success" title="solicitar cambio"
+                                                    v-if="prodDevolucion[index] === true"
+                                                    @click.prevent="store(producto.producto_referencia.id,
+                                                    producto.venta.id,
+                                                    producto.cantidad
+                                                    )">
+                                                    <i class="fas fa-recycle"></i>
+                                                    
+                                                </a>
+                                                <span v-else>{{"cambio solicitado"}}</span>
+                                            </td>
+                                        
+                                        </tr>
+
+                                    </tbody>
+
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="6" class="text-right">Total pedido:</td>
+                                            <td colspan="2" class="text-left">{{'$'+ valor}}</td>
+                                        </tr>
+
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+        </div>
+    </main>
+  
+</template>
+
+<script>
+export default {
+    props: {
+        id: {
+            type: Number,
+            required: true
+        }
+    },
+
+    data (){
+        return {
+            devolucion:'',
+            arrayProductos:[],
+            valor:0,
+            prodDevolucion:[]
+
+        }
+    },
+    
+    computed: {
+        
+    }, 
+    methods: {
+        getProductos(){
+            let url = '/lorgeliz_tienda_copia/public/pedidos/productos/' + this.id;
+            // let url = `/lorgeliz_tienda_copia/public/api/orders/${this.id}/productos`;
+
+            axios.get(url).then(response => {
+                this.arrayProductos = response.data.productos;
+                this.valor = this.arrayProductos[0].venta.valor;
+
+                this.arrayProductos.forEach(producto => {
+                    this.activarDevolucion(producto.producto_referencia.id, producto.venta.id)
+                    .then(res => {
+                        this.prodDevolucion.push(res);
+                    }).catch(error => {
+                        console.log(error);
+                    });
+                })
+            }); 
+        
+        },
+
+        
+       async activarDevolucion(producto, venta){
+           return new Promise(async(resolve)=>{
+                // let url = '/lorgeliz_tienda_copia/public/devoluciones/verificar?venta=' + venta + '&producto=' + producto;
+                 
+                let url = '/lorgeliz_tienda_copia/public/api/devoluciones/verify?venta=' + venta + '&producto=' + producto;
+                var res = ''
+                await axios.get(url).then(response => {
+                    // console.log(response.data)
+                    let dev = Object.values(response.data)
+                    if (dev.length == 0) {
+                        res = true;
+                    }
+                    else{
+                        res = false;
+                    } 
+                }).catch(error => {
+                    console.log(error);
+                });
+                resolve(res)
+               
+            });
+        },
+
+        store(producto, venta, cantidad){
+            let url = '/lorgeliz_tienda_copia/public/devoluciones';
+
+            axios.post(url, {
+                'producto': producto,
+                'venta': venta,
+                'cantidad': cantidad
+            })
+            .then(function (response) {
+                let devolucion = response.data.data;
+
+                if (devolucion > 0) {
+
+                    swal(
+                        'Solicitud rechazada!',
+                        'Solicitaste el cambio de este producto antes!',
+                        'error'
+                    )
+
+                } else {
+                    swal(
+                        'Producto enviado para cambio!',
+                        'Haz solicitado el cambio de este producto!',
+                        'success'
+                    )
+                }
+
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }, 
+
+        imprimir(id) {
+            window.open('/lorgeliz_tienda_copia/public/pedidos/show/pdf/' + id + ',' + '_blank');
+        },
+
+    },
+    created() {
+        this.getProductos();
+    }
+
+}
+</script>
+

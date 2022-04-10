@@ -37,5 +37,6 @@ class UserCart implements ShouldBroadcast
     public function broadcastOn()
     {
         return new PrivateChannel('cart-updated.' . auth()->id());
+        // return ['private-cart-updated.'.auth()->id(), 'cart-updated'];
     }
 }

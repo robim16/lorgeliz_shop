@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 use App\CarritoProducto;
 use App\Carrito;
+use App\Events\ProductoAgotado;
+// use App\Events\SalesEvent;
 use App\Factura;
 use App\Pago;
 use App\Pedido;
@@ -34,34 +36,6 @@ class VentaController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except('epaycoConfirm');
-    }
-
-    public function index(Request $request)
-    {
-        $busqueda = $request->busqueda;
-        
-        $estado = $request->estado;
-
-        if (!$estado) {
-
-           $ventas = Venta::join('clientes','ventas.cliente_id', '=','clientes.id')
-           ->join('users','clientes.user_id', '=','users.id')
-           ->select('ventas.id','ventas.fecha','ventas.valor','ventas.estado','users.nombres','users.apellidos','clientes.id as cliente')
-           ->orderBy('ventas.id', 'DESC')
-           ->orWhere('ventas.valor', 'like',"%$busqueda%")
-           ->orWhere('users.nombres', 'like',"%$busqueda%") //buscar ventas por valor a clientes
-           ->paginate(5);
-
-        } else {
-            $ventas = Venta::join('clientes','ventas.cliente_id', '=','clientes.id')
-            ->join('users','clientes.user_id', '=','users.id')
-            ->select('ventas.id','ventas.fecha','ventas.valor', 'ventas.estado','users.nombres','users.apellidos','clientes.id as cliente')
-            ->orderBy('ventas.id', 'DESC')
-            ->orWhere('ventas.estado', $estado) //buscar ventas por estado
-            ->paginate(5);
-        }
-
-        return view('admin.ventas.index', compact('ventas'));
     }
 
     public function epayco_register(Request $request)
@@ -153,69 +127,10 @@ class VentaController extends Controller
         }
     }
 
-    public function show($id)
+    public function store(Request $request)
     {
+        if(!$request->ajax()) return back();
 
-        $venta = Venta::join('clientes','ventas.cliente_id', '=','clientes.id')
-        ->join('facturas','ventas.factura_id', '=','facturas.id')
-        ->join('users','clientes.user_id', '=','users.id')
-        ->select('ventas.id','ventas.fecha','ventas.valor','ventas.saldo','ventas.estado','users.nombres', 'users.apellidos','facturas.prefijo','facturas.consecutivo','clientes.id as cliente')
-        ->where('ventas.id', $id)->firstOrFail();
-
-        return view('admin.ventas.show', compact('venta'));
-    }
-
-    public function anular(Venta $venta)
-    {
-        $venta->estado = 3;
-        $venta->save();
-
-        $pago = Pago::where('venta_id', $venta->id)->first();
-
-        if ($pago) {
-            $pago->estado = 5; // se anula el pago
-            $pago->save();
-        }
-
-        $productoVenta = ProductoVenta::where('venta_id', $venta->id)->get();
-        foreach ($productoVenta as $key => $producto) {
-           $prod = $producto->producto_referencia_id;
-           $cantidad = $producto->cantidad; // se obtiene la cantidad del producto vendida
-
-           $prof = ProductoReferencia::where('id', $prod)->first();
-           $stock = $prof->stock;
-
-           $prof->stock = $stock + $cantidad; // se restituye al stock la cantidad vendida
-
-           $prof->save();
-        }
-
-        session()->flash('message', ['success', ("Se ha anulado la venta exitosamente")]);
-
-        return back();
-    }
-
-    public function registrarPago(Venta $venta)
-    {
-        $venta->estado = 1;
-        $venta->saldo = 0;
-        $venta->save();
-
-        $total = $venta->valor;
-        $venta_id = $venta->id;
-        $x_ref_payco = 0;
-        $x_cod_response = 1;
-
-        $payment =  new PaymentController();
-        $payment->store($x_ref_payco, $total, $venta_id, $x_cod_response);// se envían las variables al método store de pagos
-
-        session()->flash('message', ['success', ("Se ha registrado el pago exitosamente")]);
-
-        return back();
-    }
-
-    public function store()
-    {
         try {
             $x_ref_payco = ($this->x_ref_payco) ? $this->x_ref_payco : 0; // si no viene la ref. se pone 0
             $x_cod_response = ($this->x_cod_response) ? $this->x_cod_response : 3;
@@ -228,7 +143,7 @@ class VentaController extends Controller
                 $facturas = Factura::all('id');
                 $consecutivo = $facturas->last();// se obtiene le ultimo id de facturas
                 
-                $id =  $consecutivo->id + 1;
+                $id = $consecutivo->id + 1;// $consecutivo++
     
                 $factura = new Factura();
                 $factura->consecutivo = $id;
@@ -266,16 +181,16 @@ class VentaController extends Controller
                 }
 
     
-                $admin = User::where('role_id', 2)->get();
+                $admin = User::where('role_id', 2)->first();
     
                 $details = [
                     'title' => 'Se ha efectuado una nueva venta',
-                    'user' => $admin[0]->nombres,
+                    'user' => $admin->nombres,
                     'valor' => $venta->valor,
                     'url' => url('/admin/ventas/'. $venta->id),
                 ];
                 
-                //Mail::to($admin[0]->email)->send(new AdminVentaMail($details));
+                //Mail::to($admin->email)->send(new AdminVentaMail($details));
 
                 $numVentas = DB::table('ventas')->where('id', $venta->id)->count();
 
@@ -287,62 +202,57 @@ class VentaController extends Controller
                     ]
                 ];
 
-                foreach ($admin as $user) {
-                    User::findOrFail($user->id)->notify(new NotificationAdmin($arrayData));
-                }
+                // foreach ($admin as $user) {
+                //     User::findOrFail($user->id)->notify(new NotificationAdmin($arrayData));
+                // }
+
+                // User::findOrFail($admin->id)->notify(new NotificationAdmin($arrayData));
 
                 DB::commit();
 
+                $products = array();
+                $products['data'] = array();
+
+                // $carritos = CarritoProducto::join('producto_referencia', 
+                // 'carrito_producto.producto_referencia_id', 'producto_referencia.id')
+                // ->where('carrito_id', $car->id)
+                // ->get(); // con map(1)
+
+
+                // $prods = ProductoVenta::join('producto_referencia', 'producto_venta.producto_referencia_id',
+                // 'producto_referencia.id')
+                // ->where('venta_id', $venta->id)
+                // ->select('color_producto_id')
+                // ->groupBy('color_producto_id')
+                // ->get();(2)
+
+            
+                // $stocks = ProductoReferencia::whereIn('color_producto_id',$prods)
+                // ->select('color_producto_id as productos', DB::raw('SUM(stock) as stock'))
+                // ->groupBy('color_producto_id')
+                // ->get();(2)
+
+                $stocks = ProductoReferencia::select('color_producto_id as id',
+                DB::raw('SUM(stock) as stock'))
+                ->groupBy('color_producto_id')
+                ->get();
+                
+                
+                $agotados = $stocks->filter(function ($value) {
+                    return $value->stock == 0;
+                });
+                
+                // broadcast(new ProductoAgotado($agotados));
+
+                // broadcast(new SalesEvent());
+
                 $response = ['data' => 'success', 'pedido' => $venta->pedido->id];
-                return response()->json($response);
+                return response()->json($response);//$response
             }
 
         } catch (Exception $e) {
             DB::rollBack();
         }
-    }
-
-    public function listadoVentasPdf()
-    {
-        $ventas = Venta::join('clientes','ventas.cliente_id', '=','clientes.id')
-        ->join('users','clientes.user_id', '=','users.id')
-        ->select('ventas.id','ventas.fecha','ventas.valor', 'ventas.estado','users.nombres','clientes.id as cliente')
-        ->orderBy('ventas.id', 'DESC')
-        ->get();
-
-        $count = 0;
-        foreach ($ventas as $venta) {
-            $count = $count + 1;
-        }
-
-        $pdf = \PDF::loadView('admin.pdf.listadoventas',['ventas'=>$ventas, 'count'=>$count])
-        ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('listadoventas.pdf');
-
-    }
-
-    public function facturaVentaAdmin(Request $request, $id)
-    {
-
-        $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        ->join('tallas','producto_referencia.talla_id', '=', 'tallas.id')
-        ->join('producto_venta','producto_referencia.id', '=', 'producto_venta.producto_referencia_id')
-        ->join('ventas','ventas.id', '=', 'producto_venta.venta_id')
-        ->select('productos.*', 'producto_venta.cantidad', 'colores.nombre as color', 'tallas.nombre as talla', 'producto_referencia.id as referencia','color_producto.id as cop', 'color_producto.slug as slug', 'ventas.valor') 
-        ->where('ventas.id', '=', $id)->get();
-        
-        $users = Venta::join('clientes','ventas.cliente_id', '=', 'clientes.id')
-        ->join('users','clientes.user_id', '=', 'users.id')
-        ->join('facturas', 'ventas.factura_id', '=', 'facturas.id')
-        ->select('users.nombres', 'users.identificacion','users.direccion','users.telefono','users.email', 'ventas.id as venta', 'ventas.fecha','ventas.saldo', 'facturas.prefijo', 'facturas.consecutivo')
-        ->where('ventas.id', '=', $id)->get();
-
-        $pdf = \PDF::loadView('admin.pdf.venta',['productos'=>$productos,'users'=>$users]);
-        return $pdf->download('factura-'.$users[0]->consecutivo.'.pdf');
-
     }
 
 }
