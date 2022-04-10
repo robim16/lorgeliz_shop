@@ -563,12 +563,12 @@
 <script>
     $(function () {
         //Initialize Select2 Elements
-        $('#category_id').select2()
+        // $('#category_id').select2()
 
         //Initialize Select2 Elements
-        $('.select2bs4').select2({
-            theme: 'bootstrap4'
-        });
+        // $('.select2bs4').select2({
+        //     theme: 'bootstrap4'
+        // });
 
         //uso de lightbox
         $(document).on('click', '[data-toggle="lightbox"]', function (event) {

@@ -26,6 +26,7 @@
     {{--<link rel="stylesheet" type="text/css" href="{{ asset('asset/styles/bootstrap-4.1.2/bootstrap.min.css') }}">--}}
     <link rel="stylesheet" type="text/css"
         href="{{asset('asset/plugins/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+    {{-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> --}}
 
     {{--<link rel="stylesheet" type="text/css" href="{{asset('asset/styles/comun.css') }}">--}}
 
@@ -37,31 +38,26 @@
 </head>
 
 <body>
-    <div id="">
-
+    <div id="app">
         <!-- Menu -->
-        
         @include('partials.menu')
-       
-
         <div class="super_container">
             @include('partials.header')
-
-                @yield('content')
-
-            <!-- Footer -->
-
-            @include('partials.footer')
-            </div>
-
+            
+                    @yield('content')
+                
+                    <!-- Footer -->
+                    @include('partials.footer')
+            
+                    </div>
+            
+            {{--@include('partials.footer')--}}
         </div>
-
-	</div>
-
+    </div>
 	<!-- Scripts -->
 	
-    {{--<script src="{{ asset('asset/js/jquery-3.2.1.min.js') }}"></script>--}}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ asset('asset/js/jquery-3.2.1.min.js') }}"></script>
+    {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>--}}
     {{--<script src="{{ asset('asset/js/bootbox.min.js') }}"></script>--}}
 	<script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/all.js') }}" defer></script>
@@ -78,8 +74,7 @@
 	{{--<script src="{{ asset('asset/plugins/easing/easing.js') }}"></script>--}}
     {{--<script src="{{ asset('asset/plugins/parallax-js-master/parallax.min.js') }}"></script>--}}
     {{--<script src="{{ asset('asset/plugins/sweetalert/sweetalert.min.js') }}"></script>--}}
-    
-	@yield('scripts')
+    @yield('scripts')
 </body>
 
 </html>

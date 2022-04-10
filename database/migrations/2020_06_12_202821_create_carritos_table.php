@@ -16,7 +16,7 @@ class CreateCarritosTable extends Migration
         Schema::create('carritos', function (Blueprint $table) {
             $table->increments('id');
             $table->dateTime('fecha');
-            $table->decimal('total', 12, 2);
+            $table->decimal('total', 12, 0);
             $table->unsignedInteger('cliente_id');
             $table->foreign('cliente_id')->references('id')->on('clientes');
             $table->string('estado');

@@ -23,7 +23,7 @@
                                 <form>
                                     <div class="input-group input-group-sm" style="width: 160px;">
                                         <div class="input-group-append">
-                                            <a href="" class="btn btn-success mx-1" v-on:click.prevent="pdfListadoVentas()">
+                                            <a href="" class="btn btn-success mx-1" @click.prevent="pdfListadoDevoluciones">
                                                 <i class="fas fa-print"></i>
                                             </a>
                                         </div>
@@ -59,11 +59,11 @@
                                     <tr>
                                         <td>{{ $devolucion->id}}</td>
                                         <td>{{ date('d/m/Y h:i:s A', strtotime($devolucion->fecha)) }}</td>
-                                        <td><a href="{{ route('venta.show', $devolucion->venta)}}"
-                                                class="">{{ $devolucion->venta }}</a>
+                                        <td><a href="{{ route('venta.show', $devolucion->venta->id)}}"
+                                                class="">{{ $devolucion->venta->id }}</a>
                                         </td>
-                                        <td><a href="{{ route('cliente.show', $devolucion->cliente)}}"
-                                            class="">{{ $devolucion->nombres}} {{$devolucion->apellidos}}</a>
+                                        <td><a href="{{ route('cliente.show', $devolucion->venta->cliente->id)}}"
+                                            class="">{{ $devolucion->venta->cliente->user->nombres}} {{$devolucion->venta->cliente->user->apellidos}}</a>
                                         </td>
                                         <td><span class="badge badge-success">
                                             @if ($devolucion->estado == 1 )
@@ -80,12 +80,14 @@
                                             @endif
                                             </span>
                                         </td>
-                                        <td><a href="{{ route('devolucion.show', $devolucion->id) }}"
+                                        <td><a href="{{ route('admin.devolucion.show', $devolucion->id) }}"
                                             class="btn btn-primary" title="ver solicitud"><i class="fas fa-eye"></i></a>
                                         </td>
-                                        <td><a href="" class="btn btn-success" title="actualizar estado"                   data-toggle="modal"
+                                        <td><a href="" class="btn btn-success" title="actualizar estado"
+                                        data-toggle="modal"
                                         data-target="#modalEstado"
-                                        data-id="{{$devolucion['id']}}"><i class="fas fa-pen"></i></a>
+                                        data-id="{{$devolucion['id']}}"
+                                        data-status="{{$devolucion['estado']}}"><i class="fas fa-pen"></i></a>
                                         </td>
                                     </tr>
                                         
@@ -130,25 +132,25 @@
                                     <option value="">Seleccione uno</option>
                                     @foreach($estados as $estado)
                                         @if ($estado == 1)
-                                            <option value="{{ $estado }}">
+                                            <option value="{{ $estado }}" class="option">
                                                 {{ "pendiente" }}
                                             </option>
                                         @endif
 
                                         @if ($estado == 2)
-                                            <option value="{{ $estado }}">
+                                            <option value="{{ $estado }}" class="option">
                                                 {{ "en proceso"}}
                                             </option>
                                         @endif
 
                                         @if ($estado == 3)
-                                            <option value="{{ $estado }}">
+                                            <option value="{{ $estado }}" class="option">
                                                 {{ "rechazada"}}
                                             </option>
                                         @endif
 
                                         @if ($estado == 4)
-                                            <option value="{{ $estado }}">
+                                            <option value="{{ $estado }}" class="option">
                                                {{ "completada"}}
                                             </option>
                                         @endif
@@ -190,6 +192,15 @@ $(document).ready(function () {
 
         const id = jQuery(this).data('id');
         $('#devolucion_id').val(id);
+
+        const status = jQuery(this).data('status');
+
+        $(".option").each(function() {
+            const st = $(this).val();
+            if (st == status) {
+            $(this).prop('selected',true);
+            }
+        });
     });
 });
 

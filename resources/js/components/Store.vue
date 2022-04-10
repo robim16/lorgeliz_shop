@@ -7,7 +7,7 @@
             <div v-for="producto in productoSlider" :key="producto.cop" class="owl-carousel owl-theme home_slider">
 			
 				<div class="owl-item">
-					<div class="background_image" v-bind:style="{ 'background-image': 'url(' + 'storage/' + producto.imagen + ')'}">
+					<div class="background_image" :style="{ 'background-image': 'url(' + 'storage/' + producto.imagen + ')'}">
 					</div>
 					<div class="container fill_height">
 						<div class="row fill_height">
@@ -110,9 +110,9 @@
                 <div class="col">
                     <div class="page_nav">
                         <ul class="d-flex flex-row align-items-start justify-content-center">
-                            <li class="active"><a href="categorias?categoria=mujeres">Mujeres</a></li>
-                            <li><a href="categorias?categoria=hombres">Hombres</a></li>
-                            <li><a href="categorias?categoria=niños">Niños</a></li>
+                            <li class="active"><a href="">Mujeres</a></li>
+                            <li><a href="">Hombres</a></li>
+                            <li><a href="">Niños</a></li>
                         </ul>
                     </div>
                 </div>
@@ -229,13 +229,14 @@
 				productoNuevo: [],
 				productoPopular: [],
 				productoVendido: [],
-				productoOferta: []
+				productoOferta: [],
+                cantidad: 0
             }
 		},
 		
         methods : {
             getProductos(){
-				let url = '/lorgeliz_tienda/public/index';
+				let url = '/lorgeliz_tienda_copia/public/index';
 
 				axios.get(url).then(response => {
 					this.productoSlider = response.data.slider;

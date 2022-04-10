@@ -50,7 +50,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
-            <a class="m-2 float-right btn btn-primary" href="{{ route('product.create')}}">Crear</a>
+            <a class="m-2 float-right btn btn-primary" href="{{ route('product.create')}}"> <i class="fas fa-plus"></i> Crear</a>
                 <table class="table1 table-head-fixed">
                     <thead>
                         <tr>
@@ -69,13 +69,12 @@
                         @foreach ($productos as $producto)
                         <tr>
                             <td> {{$producto->id }} </td>
-                            <td>@if ($producto->colorproductos->count() > 0)
+                            <td>@if ($producto->colors->count() > 0)
                                     @foreach(\App\Imagene::where('imageable_type', 'App\ColorProducto')
-                                        ->where('imageable_id', $producto->colorproductos[0]->id)->pluck('url', 'id')->take(1) as $id => $imagen)    
+                                        ->where('imageable_id', $producto->colors[0]->pivot->id)->pluck('url', 'id')->take(1) as $id => $imagen)    
                                         <img src="{{ url('storage/' . $imagen) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
                                     @endforeach
                                 @endif
-                                
                             </td>
                             <td> {{$producto->nombre }} </td>
                             <td> {!! Str::limit($producto->descripcion_corta, 30) !!} </td>
@@ -83,7 +82,7 @@
                             {{--<td> {{$producto->color}}</td>--}}
                             <td> {{$producto->slider_principal }} </td>
 
-                            @if ($producto->colorproductos->count() > 0)
+                            @if ($producto->colors->count() > 0)
 
                                 <td> <a class="btn btn-default" href="{{ route('product.show', $producto->id) }}" title="ver producto"><i class="fas fa-eye"></i></a>
                                 </td>

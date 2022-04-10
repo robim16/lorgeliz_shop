@@ -5,6 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <!-- CSRF Token -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Id for Channel Notification -->
   <meta name="clienteId" content="{{ Auth::check() ? Auth::user()->cliente->id : '' }}">
 
@@ -19,7 +21,7 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
 <body class="hold-transition layout-top-nav">
-<div class="wrapper">
+<div class="wrapper" id="app">
 
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
@@ -38,7 +40,7 @@
         <!-- Left navbar links -->
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a href="{{ route('users.cuenta')}}" class="nav-link">Mi cuenta</a>
+            <a href="{{ route('users.show', auth()->user()->slug)}}" class="nav-link">Mi cuenta</a>
           </li>
           <li class="nav-item">
           <a href="{{ route('pedidos.index')}}" class="nav-link">Mis pedidos</a>
@@ -99,29 +101,31 @@
 
       <!-- Right navbar links -->
       <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+        <messages></messages>
         <!-- Messages Dropdown Menu -->
-        <li class="nav-item dropdown">
+        {{-- <li id="message" class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
             <i class="fas fa-comments"></i>
-            <span class="badge badge-danger navbar-badge">3</span>
+            <span class="badge badge-danger navbar-badge">@{{messages.length}}</span>
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <a href="#" class="dropdown-item">
+            <a href="#" class="dropdown-item" v-for="item in messages" :key="item.id"  v-on:click.prevent="read_at(item.id)"> --}}
               <!-- Message Start -->
-              <div class="media">
-                <img src="{{ asset('adminlte/dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              {{-- <div class="media">
+                {{-- <img src="{{ asset('adminlte/dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle"> --}}
+                {{-- <img :src="'storage/' + item.url" alt="User Avatar" class="img-size-50 mr-3 img-circle">
                 <div class="media-body">
                   <h3 class="dropdown-item-title">
-                    Brad Diesel
+                    @{{item.nombres}} @{{item.apellidos}}
                     <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
                   </h3>
-                  <p class="text-sm">Call me whenever you can...</p>
+                  <p class="text-sm">@{{item.mensaje}}...</p>
                   <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
                 </div>
-              </div>
+              </div> --}}
               <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
+            {{-- </a> --}}
+            {{-- <div class="dropdown-divider"></div>
             <a href="#" class="dropdown-item">
               <!-- Message Start -->
               <div class="media">
@@ -152,13 +156,13 @@
                 </div>
               </div>
               <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+            </a> --}}
+            {{-- <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item dropdown-footer">Ver Todos Los Mensajes</a>
           </div>
-        </li>
+        </li> --}}
         <!-- Notifications Dropdown Menu -->
-        <div id="clientNotification">
+        {{-- <div id="clientNotification">
           <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
               <i class="far fa-bell"></i>
@@ -167,17 +171,14 @@
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
               <span class="dropdown-header">@{{notifications.length}}</span>
               <div class="dropdown-divider"></div>
-              {{--<a href="#" class="dropdown-item">
-                <i class="fas fa-envelope mr-2"></i> 4 new messages
-                <span class="float-right text-muted text-sm">3 mins</span>
-              </a>--}}
+              
               <div v-if="notifications.length">
                 <a href="" class="dropdown-item" v-for="item in notifications" :key="item.id"         
                 v-on:click.prevent="readNotification(item.id, item.data.datos.notificacion.url)">
                   <i class="fas fa-envelope mr-2" v-show="item.data.datos.notificacion.msj"></i>
-                  @{{item.data.datos.notificacion.msj}}
+                  @{{item.data.datos.notificacion.msj}} --}}
                   {{--<span class="float-right text-muted text-sm">3 mins</span>--}}
-                </a>
+                {{-- </a>
               </div>
               <div v-else>
                 <a href="" class="ml-5" style="color: black"><span>no tienes notificaciones</span></a>
@@ -186,7 +187,8 @@
               <a href="#" class="dropdown-item dropdown-footer">Todas Las Notificaciones</a>
             </div>
           </li>
-        </div>
+        </div> --}}
+        <notifications></notifications>
         
         <li class="nav-item dropdown">
           <a id="navbarDropdown"
@@ -196,12 +198,12 @@
           aria-haspopup="true"
           aria-expanded="false"
           >
-          {{--<img src="{{  auth()->user() ? url('storage/' . auth()->user()->imagene->url) : asset('asset/images/user.svg') }}" alt="https://www.flaticon.com/authors/freepik" class="rounded-circle" style="width: 34px">--}}
-          <img src="{{  auth()->user() ? auth()->user()->imagene->url : asset('asset/images/user.svg') }}" alt="" class="rounded-circle" style="width: 34px">
+          <img src="{{  auth()->user() ? auth()->user()->imagene ? url('storage/' . auth()->user()->imagene->url) : asset('asset/images/user.svg') : asset('asset/images/user.svg') }}" alt="" class="rounded-circle" style="width: 34px">
+          {{--<img src="{{  auth()->user() ? auth()->user()->imagene->url : asset('asset/images/user.svg') }}" alt="" class="rounded-circle" style="width: 34px">--}}
           <span class="caret"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="{{ route('users.cuenta') }}">
+        <a class="dropdown-item" href="{{ route('users.show', auth()->user()->slug) }}">
           {{ __("Mi cuenta") }}
         </a>
           @auth
@@ -217,6 +219,7 @@
         </li>  
 
       </ul>
+      <chat-alert></chat-alert>
     </div>
     
   </nav>
@@ -233,7 +236,7 @@
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="{{route('users.cuenta')}}">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('users.show', auth()->user()->slug)}}">Inicio</a></li>
             @yield('breadcumb')
           </ol>
         </div><!-- /.col -->
@@ -255,6 +258,12 @@
 
     @yield('content')
 
+    {{-- <div id="app" class=""> --}}
+      <div class="row">
+        <chat-store></chat-store>
+      </div>
+    {{-- </div> --}}
+
    </div>
   <!-- /.content-wrapper -->
 
@@ -269,7 +278,7 @@
 <!-- jQuery -->
 <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap 4 -->
-<script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+{{-- <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script> --}}
 <!-- AdminLTE App -->
 <script src="{{ asset('adminlte/dist/js/adminlte.min.js') }}"></script>
 <script src="{{ asset('asset/plugins/sweetalert/sweetalert.min.js') }}"></script>

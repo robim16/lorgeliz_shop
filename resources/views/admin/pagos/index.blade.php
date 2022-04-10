@@ -1,15 +1,12 @@
 @extends('layouts.admin')
 
-
 @section('titulo', 'Listado de Pagos')
 
 @section('breadcrumb')
 <li class="breadcrumb-item active">@yield('titulo')</li>
 @endsection
 
-
 @section('content')
-
 
 <div id="payments" class="row">
 
@@ -21,9 +18,9 @@
                 <div class="card-tools">
 
                     <form>
-                        <div class="input-group input-group-sm" style="width: 160px;">
+                        <div class="input-group input-group-sm" style="width: 170px;">
                             <div class="input-group-append">
-                                <a href="" class="btn btn-success mx-1" v-on:click.prevent="pdfListPagos()">
+                                <a href="" class="btn btn-success mx-1" @click.prevent="pdfListPagos">
                                     <i class="fas fa-print"></i>
                                 </a>
                             </div>
@@ -49,8 +46,7 @@
                             <th>Ref. epayco</th>
                             <th>Valor</th>
                             <th>Estado</th>
-                            <th>Acciones</th>
-                            <th colspan="7"></th>
+                            <th scope="col" colspan="3">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,34 +60,40 @@
                             <td> {{ $pago->ref_epayco ? : "no aplica"}}</td>
                             <td> ${{ floatval($pago->monto) }}</td>
                             <td>
-                                @if ($pago->estado == 1)
+                                @if ($pago->estado == "Aceptado")
                                 <span class="badge badge-success">
                                 {{ "Aceptado" }}
                                 </span>
                                 @endif
-                                @if ($pago->estado == 2)
+                                @if ($pago->estado == "Rechazado")
                                 <span class="badge badge-danger">
                                 {{ "Rechazado" }}
                                 </span>
                                 @endif
-                                @if ($pago->estado == 3)
+                                @if ($pago->estado == "Pendiente")
                                 <span class="badge badge-warning">
                                 {{ "Pendiente" }}
                                 </span>
                                 @endif
-                                @if ($pago->estado == 4)
+                                @if ($pago->estado == "Fallido")
                                 <span class="badge badge-danger">
                                 {{ "Fallido" }}
                                 </span>
                                 @endif
-                                @if ($pago->estado == 5)
+                                @if ($pago->estado =="Anulado")
                                 <span class="badge badge-danger">
                                 {{ "Anulado" }}
                                 </span>
                                 @endif
                             </td>
                             <td> <a class="btn btn-primary" href="{{ route('venta.show', $pago->venta_id)}}" title="ver venta"><i class="fas fa-eye"></i></a></td>
-                            <td><a href="" class="btn btn-success" title="imprimir" v-on:click.prevent="imprimirPago({{ $pago->id }})"><i class="fas fa-print"></i></a></td>
+                            <td><a href="" class="btn btn-success" title="imprimir" @click.prevent="imprimirPago({{ $pago->id }})"><i class="fas fa-print"></i></a></td>
+                            @if ($pago->ref_epayco)
+                                @if ($pago->estado == "Pendiente")
+                                <td><a href="" class="btn btn-warning" title="consultar" @click.prevent="getResponse('{{ $pago->ref_epayco }}')"><i class="fas fa-search"></i></a></td>
+                                @endif
+                            @endif
+                            
                         </tr>
                         @endforeach
 
@@ -103,7 +105,69 @@
         </div>
         <!-- /.card -->
     </div>
+
+    <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-primary modal-lg pt-5" role="document">
+            <div class="modal-content pt-3">
+                <div class="modal-header">
+                    <h4 class="modal-title">Respuesta de epayco</h4>
+                    <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Monto</th>
+                                    <th>Respuesta</th>
+                                    <th>Motivo</th>
+                                    <th>Cod. Respuesta</th>
+                                    <th>Transacción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td v-text="x_transaction_date"></td>
+                                    <td v-text="x_amount"></td>
+                                    <td v-text="x_response"></td>
+                                    <td v-text="x_response_reason_text"></td>
+                                    <td v-text="x_cod_response"></td>
+                                    <td v-text="x_transaction_id"></td>
+                                </tr>                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
 </div>
 <!-- /.row -->
 
 @endsection
+
+<style>
+    
+    .modal-content{
+        width: 100% !important;
+        position: absolute !important;
+    }
+    .mostrar{
+        display: list-item !important;
+        opacity: 1 !important;
+        position: absolute !important;
+        background-color: #3c29297a !important;
+    }
+    
+</style>
+
+

@@ -580,7 +580,7 @@
 
 <script src="{{ asset('adminlte/ckeditor/ckeditor.js') }}"></script>
 
-<script>
+{{-- <script>
     $(function () {
         //Initialize Select2 Elements
         $('#category_id').select2()
@@ -591,7 +591,7 @@
         });
     });
 
-</script>
+</script> --}}
 
 @endsection
 

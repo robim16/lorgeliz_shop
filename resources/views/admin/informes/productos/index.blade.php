@@ -31,7 +31,7 @@
                                             <button type="submit" class="btn btn-success">
                                                 <i class="fas fa-search"></i>
                                             </button>
-                                            <a href="" class="btn btn-warning mx-1" v-on:click.prevent="pdfInformeProductos()"><i class="fas fa-print"></i></a>
+                                            <a href="" class="btn btn-warning mx-1" @click.prevent="pdfInformeProductos"><i class="fas fa-print"></i></a>
                                         </div>
                                     </div>
                                 </form>
@@ -53,7 +53,7 @@
                                 <tbody>
 
 
-                                    @foreach ($productos as $producto)
+                                    {{-- @foreach ($productos as $producto)
                                     <tr>
 
                                     <td>{{ $producto->codigo }}</td>
@@ -67,6 +67,21 @@
                                         </td>
                                         <td>{{ $producto->color }}</td>
                                         <td>{{ $producto->talla }}</td>
+                                        <td>{{ $producto->cantidad }}</td>
+                                    </tr>
+                                    @endforeach --}}
+
+                                    @foreach ($productos as $producto)
+                                    <tr>
+
+                                    <td>{{ $producto->productoReferencia->colorProducto->producto->id }}</td>
+                                        <td>{{ $producto->productoReferencia->colorProducto->producto->nombre }}</td>
+                                        <td> <a href="">
+                                                <img src="{{ url('storage/' .$producto->productoReferencia->colorProducto->imagenes[0]->url) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
+                                            </a>
+                                        </td>
+                                        <td>{{ $producto->productoReferencia->colorProducto->color->nombre }}</td>
+                                        <td>{{ $producto->productoReferencia->talla->nombre }}</td>
                                         <td>{{ $producto->cantidad }}</td>
                                     </tr>
                                     @endforeach

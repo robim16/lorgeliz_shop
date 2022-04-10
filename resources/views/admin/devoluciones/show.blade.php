@@ -40,12 +40,35 @@
     
                                 <tbody>
                                     <tr>
-                                        <td>{{ date('d/m/Y h:i:s A', strtotime($producto_devolucion[0]->fecha)) }}</td>
+                                        {{-- <td>{{ date('d/m/Y h:i:s A', strtotime($producto_devolucion[0]->fecha)) }}</td>
                                         <td><a href="{{ route('venta.show', $producto_devolucion[0]->venta)}}"
                                                 class="">{{ $producto_devolucion[0]->venta }}</a>
                                         </td>
                                         <td><a href="{{ route('cliente.show', $producto_devolucion[0]->cliente)}}"
                                             class="">{{ $producto_devolucion[0]->nombres}} {{$producto_devolucion[0]->apellidos}}</a>
+                                        </td>
+                                        <td><span class="badge badge-success">
+                                            @if ($producto_devolucion[0]->estado == 1 )
+                                            {{ "pendiente" }}
+                                            @endif
+                                            @if ($producto_devolucion[0]->estado == 2)
+                                            {{ "en proceso" }}
+                                            @endif
+                                            @if ($producto_devolucion[0]->estado == 3)
+                                            {{ "rechazada" }}
+                                            @endif
+                                            @if ($producto_devolucion[0]->estado == 4)
+                                            {{ "completada" }}
+                                            @endif
+                                            </span>
+                                        </td> --}}
+
+                                        <td>{{ date('d/m/Y h:i:s A', strtotime($producto_devolucion[0]->fecha)) }}</td>
+                                        <td><a href="{{ route('venta.show', $producto_devolucion[0]->venta_id)}}"
+                                                class="">{{ $producto_devolucion[0]->venta_id }}</a>
+                                        </td>
+                                        <td><a href="{{ route('cliente.show', $producto_devolucion[0]->venta->cliente->id)}}"
+                                            class="">{{ $producto_devolucion[0]->venta->cliente->user->nombres}} {{$producto_devolucion[0]->venta->cliente->user->apellidos}}</a>
                                         </td>
                                         <td><span class="badge badge-success">
                                             @if ($producto_devolucion[0]->estado == 1 )
@@ -105,19 +128,15 @@
                                     @foreach ($producto_devolucion as $producto)
 
                                     <tr>
-                                        <td>{{ $producto->id }}</td>
-                                        <td>{{ $producto->nombre }}</td>
+                                        <td>{{ $producto->productoReferencia->colorProducto->producto->id }}</td>
+                                        <td>{{ $producto->productoReferencia->colorProducto->producto->nombre }}</td>
                                         <td>
-                                            <a href="{{ route('producto.show', $producto->slug) }}">
-                                                {{--@foreach(\App\Imagene::where('imageable_type', 'App\ColorProducto')
-                                                ->where('imageable_id', $producto->cop)->pluck('url', 'id')->take(1) as $id => $imagen)    
-                                                <img src="{{ url('storage/' . $imagen) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
-                                                @endforeach--}}
-                                                <img src="{{ url('storage/' . $producto->imagen) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
+                                            <a href="{{ route('productos.show', $producto->productoReferencia->colorProducto->slug) }}">
+                                                <img src="{{ url('storage/' . $producto->productoReferencia->colorProducto->imagenes[0]->url) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
                                             </a>
                                         </td>
-                                        <td>{{ $producto->talla }}</td>
-                                        <td>{{ $producto->color  }}</td>
+                                        <td>{{ $producto->productoReferencia->talla->nombre }}</td>
+                                        <td>{{ $producto->productoReferencia->colorProducto->color->nombre }}</td>
                                         <td>{{ $producto->cantidad }}</td>
                                     </tr>
                                         

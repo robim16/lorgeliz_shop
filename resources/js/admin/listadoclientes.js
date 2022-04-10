@@ -8,7 +8,7 @@ const listsales = new Vue({
     
     methods: {
         pdfListadoClientes(){
-            window.open('/lorgeliz_tienda/public/admin/clientes/listado');
+            window.open('/lorgeliz_tienda_copia/public/admin/clientes/listado');
         },
         
     },

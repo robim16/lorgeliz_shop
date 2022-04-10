@@ -30,7 +30,7 @@
                                             <button type="submit" class="btn btn-success">
                                                 <i class="fas fa-search"></i>
                                             </button>
-                                            <a href="" class="btn btn-warning mx-1" v-on:click.prevent="pdfInformeClientes()"><i class="fas fa-print"></i></a>
+                                            <a href="" class="btn btn-warning mx-1" @click.prevent="pdfInformeClientes"><i class="fas fa-print"></i></a>
                                         </div>
                                     </div>
                                 </form>
@@ -53,7 +53,7 @@
                                 <tbody>
 
 
-                                    @foreach ($clientes as $cliente)
+                                    {{-- @foreach ($clientes as $cliente)
                                     <tr>
 
                                         <td>{{ $cliente->user }}</td>
@@ -70,6 +70,25 @@
                                         <td>{{ $cliente->email }}</td>
                                         <td>{{ $cliente->cantidad }}</td>
                                         <td><a href="{{ route('cliente.show', $cliente->id_cliente)}}" class="btn btn-primary" title="compras del cliente">
+                                            <i class="fas fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                    @endforeach --}}
+
+                                    @foreach ($clientes as $data)
+                                    <tr>
+
+                                        <td>{{ $data->cliente->user->id }}</td>
+                                        <td><a href="{{ route('cliente.show', $data->cliente->id)}}" class="text-primary">
+                                            {{ $data->cliente->user->nombres }} {{ $data->cliente->user->apellidos }}</a>
+                                        </td>
+                                        <td> 
+                                            <img src="{{ url('storage/' . $data->cliente->user->imagene->url) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
+                                        </td>
+                                        <td>{{ $data->cliente->user->telefono }}</td>
+                                        <td>{{ $data->cliente->user->email }}</td>
+                                        <td>{{ $data->cantidad }}</td>
+                                        <td><a href="{{ route('cliente.show', $data->cliente->id)}}" class="btn btn-primary" title="compras del cliente">
                                             <i class="fas fa-eye"></i></a>
                                         </td>
                                     </tr>

@@ -71,7 +71,8 @@ const product = new Vue({
     methods: {
         eliminarimagen(imagen) { 
                   
-            let url = '/lorgeliz_tienda/public/admin/productos/eliminarimagen/'+imagen;
+            // let url = '/lorgeliz_tienda_copia/public/admin/productos/eliminarimagen/'+imagen;
+            let url = `/lorgeliz_tienda_copia/public/api/admin/imagenes/${imagen}/delete`;
             axios.delete(url).then(response => {
                 //console.log(response.data);
             });    

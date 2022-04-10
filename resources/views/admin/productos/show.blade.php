@@ -439,9 +439,9 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            @foreach ($producto->colorproductos as $product)
+                            @foreach ($producto->colors as $product)
                                 @foreach (\App\Imagene::where('imageable_type', 'App\ColorProducto')
-                                ->where('imageable_id', $product->id)->pluck('url', 'id')->take(1) as $id => $imagen)
+                                ->where('imageable_id', $product->pivot->id)->pluck('url', 'id')->take(1) as $id => $imagen)
                                 <div id="idimagen-{{$id}}" class="col-sm-2">
                                     <a href="{{ url('storage/' . $imagen)}}" data-toggle="lightbox" data-title="Id:{{ $id }}"
                                         data-gallery="gallery">
@@ -565,12 +565,12 @@
 <script>
     $(function () {
         //Initialize Select2 Elements
-        $('#category_id').select2()
+        // $('#category_id').select2()
 
-        //Initialize Select2 Elements
-        $('.select2bs4').select2({
-            theme: 'bootstrap4'
-        });
+        // //Initialize Select2 Elements
+        // $('.select2bs4').select2({
+        //     theme: 'bootstrap4'
+        // });
 
         //uso de lightbox
         $(document).on('click', '[data-toggle="lightbox"]', function (event) {

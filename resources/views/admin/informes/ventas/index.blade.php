@@ -27,7 +27,7 @@
                                             <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
                                         </div>
                                         <div class="input-group-append">
-                                            <a href="" class="btn btn-success mx-1" v-on:click.prevent="pdfInformeVentas()"><i class="fas fa-print"></i></a>
+                                            <a href="" class="btn btn-success mx-1" @click.prevent="pdfInformeVentas"><i class="fas fa-print"></i></a>
                                         </div>
                                     </div>
                                 </form>

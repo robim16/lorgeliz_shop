@@ -12,7 +12,7 @@
 
 @section('content')
 
-<div id="venta_cliente">
+<div id="">
     <div class="content">
         <div class="container">
             @if (count($pedidos) > 0)
@@ -54,32 +54,34 @@
                                     @foreach ($pedidos as $pedido)
 
                                     <tr>
-                                        <td>{{ $pedido->id }}</td>
-                                        <td>{{ date('d/m/Y h:i:s A', strtotime($pedido->fecha)) }}</td>
-                                        <td>{{ $pedido->prefijo }}{{ $pedido->consecutivo }}</td>
+                                        <td>{{ $pedido->pedido->id }}</td>
+                                        <td>{{ date('d/m/Y h:i:s A', strtotime($pedido->pedido->fecha)) }}</td>
+                                        <td>{{ $pedido->factura->prefijo }}{{ $pedido->factura->consecutivo }}</td>
                                         <td><span class="badge badge-success">
-                                            @if ($pedido->estado == 1 )
+                                            @if ($pedido->pedido->estado == 1 )
                                             {{ "pendiente" }}
                                             @endif
-                                            @if ($pedido->estado == 2)
+                                            @if ($pedido->pedido->estado == 2)
                                             {{ "en proceso"}}
                                             @endif
-                                            @if ($pedido->estado == 3)
+                                            @if ($pedido->pedido->estado == 3)
                                             {{ "enviado"}}
                                             @endif
-                                            @if ($pedido->estado == 4)
+                                            @if ($pedido->pedido->estado == 4)
                                             {{ "entregado"}}
                                             @endif
                                             </span>
                                         </td>
                                         <td>${{ floatval($pedido->valor) }}</td>
-                                        <td><a href="{{ route('pedidos.show', $pedido->id)}}"
+                                        <td><a href="{{ route('pedidos.show', $pedido->pedido->id)}}"
                                         class="btn btn-primary" title="ver pedido">
                                         <i class="fas fa-eye"></i></a>
                                         </td>
-                                        <td><a href=""
+                                        <td>
+                                            <factura :id="{{$pedido->pedido->id}}"></factura>
+                                            {{-- <a href=""
                                             class="btn btn-success" title="descargar factura" v-on:click.prevent="pdfVenta({{$pedido->id}})">
-                                            <i class="fas fa-download"></i></a>
+                                            <i class="fas fa-download"></i></a> --}}
                                         </td>
 
                                     </tr>

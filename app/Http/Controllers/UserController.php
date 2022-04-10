@@ -30,8 +30,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::where('id', auth()->user()->id)->first();
-        return view('user.show', compact('user'));
+       
     }
 
     /**
@@ -61,9 +60,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        //
+        $user = User::where('slug', $slug)
+        ->where('id', auth()->user()->id)
+        ->first();
+        
+        return view('user.show', compact('user'));
     }
 
     /**
@@ -84,14 +87,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request)
+    public function update(UserRequest $request, $id)
     {
-        
+        $user = User::where('id', $id)->first();
 
-        $user = auth()->user();
+        // $user = auth()->user();
         $user->username = request('usuario');
         $user->nombres = request('nombres');
         $user->apellidos = request('apellidos');
+        $user->departamento = request('departamento');
+        $user->municipio = request('municipio');
         $user->direccion = request('direccion');
         $user->telefono = request('telefono');
 

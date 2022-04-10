@@ -20,7 +20,7 @@
                     <form>
                         <div class="input-group input-group-sm" style="width: 160px;">
                             <div class="input-group-append">
-                                <a href="" class="btn btn-success mx-1" v-on:click.prevent="pdfListadoClientes()">
+                                <a href="" class="btn btn-success mx-1" @click.prevent="pdfListadoClientes">
                                     <i class="fas fa-print"></i>
                                 </a>
                             </div>
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0" style="height: 300px;">
+            <div class="card-body table-responsive p-0" style="">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -43,6 +43,8 @@
                             <th>Nombres</th>
                             <th>Apellidos</th>
                             <th>Cédula</th>
+                            <th>Departamento</th>
+                            <th>municipio</th>
                             <th>Dirección</th>
                             <th>Telefóno</th>
                             <th>Email</th>
@@ -54,17 +56,19 @@
                         @foreach ($clientes as $cliente)
 
                         <tr>
-                            <td> {{$cliente->id }} </td>
-                            <td> {{$cliente->nombres }} </td>
+                            <td> {{$cliente->cliente->id }} </td>
+                            <td> {{$cliente->nombres }} </td> 
                             <td> {{$cliente->apellidos }} </td>
                             <td> {{$cliente->identificacion }} </td>
-                            <td> {{$cliente->direccion }} </td>
+                            <td> {{$cliente->departamento }} </td>
+                            <td> {{$cliente->municipio }} </td>
+                            <td> {{$cliente->direccion }}</td>
                             <td> {{$cliente->telefono }} </td>
                             <td> {{$cliente->email }} </td>
 
-                            <td> <a class="btn btn-primary" href="{{ route('cliente.show', $cliente->id)}}" title="ver cliente"><i class="fas fa-eye"></i></a></td>
+                            <td> <a class="btn btn-primary" href="{{ route('cliente.show', $cliente->cliente->id)}}" title="ver cliente"><i class="fas fa-eye"></i></a></td>
                             <td><a href="" class="btn btn-success" title="enviar mensaje" data-toggle="modal"
-                                data-target="#modalMensaje" data-id="{{$cliente['id']}}"><i class="fa fa-envelope-square"></i></a>
+                                data-target="#modalMensaje" data-id="{{$cliente->cliente['id']}}"><i class="fa fa-envelope-square"></i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -95,7 +99,7 @@
                     <div class="form-group row">
                         <label class="col-md-3 form-control-label" for="text-input">Mensaje:</label>
                         <div class="col-md-9">
-                            <textarea class="form-control" name="message" id="message"></textarea>
+                            <textarea class="form-control" name="mensaje" id="mensaje"></textarea>
                             <input type="hidden" name="cliente_id" id="cliente_id" value="">
                         </div>
                     </div>

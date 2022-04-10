@@ -18,7 +18,7 @@ const product = new Vue({
     methods: {
       setVisitas(){
 
-        let url = '/lorgeliz_tienda/public/productos/visitas/update/'+this.producto;
+        let url = '/lorgeliz_tienda_copia/public/productos/visitas/update/'+this.producto;
 
         axios.put(url).then(response => {
           
@@ -45,7 +45,7 @@ const product = new Vue({
 
       getTallas(){
 
-        let url = '/lorgeliz_tienda/public/tallas/productos/'+this.producto;
+        let url = '/lorgeliz_tienda_copia/public/tallas/productos/'+this.producto;
 
         axios.get(url).then(response => {
           this.arrayTallas = response.data.tallas;
@@ -54,7 +54,7 @@ const product = new Vue({
       }, 
 
       getCarrito(){
-        let url = '/lorgeliz_tienda/public/cart/buscarCarrito';
+        let url = '/lorgeliz_tienda_copia/public/cart/buscarCarrito';
 
         if ((this.cantidad != '' && this.cantidad != 0) && this.talla != '') {
           axios.get(url).then(response => {
@@ -63,7 +63,7 @@ const product = new Vue({
             if (this.arrayCarrito[0] != null){
               this.carrito = this.arrayCarrito[0].id;
   
-              let url = '/lorgeliz_tienda/public/cart/update';
+              let url = '/lorgeliz_tienda_copia/public/cart/update';
   
               for (let i = 0; i < this.arrayTallas.length; i++) {
                 if (this.arrayTallas[i].id == this.talla) {
@@ -126,7 +126,7 @@ const product = new Vue({
           
             } else{
   
-              let url = '/lorgeliz_tienda/public/cart/store';
+              let url = '/lorgeliz_tienda_copia/public/cart/store';
   
               for (let i = 0; i < this.arrayTallas.length; i++) {
                if (this.arrayTallas[i].id == this.talla) {

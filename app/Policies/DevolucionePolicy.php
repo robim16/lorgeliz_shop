@@ -41,9 +41,9 @@ class DevolucionePolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function create(User $user, Venta $venta, ProductoReferencia $producto)
+    public function create(User $user,  Devolucione $devolucione, Venta $venta, ProductoReferencia $producto)
     {
-        return $venta->cliente->user_id == $user->id && $venta->devolucione->producto_referencia_id != $producto->id;
+        // return $venta->devolucione->productoReferencia->contains('id',  $producto);
     }
 
     /**

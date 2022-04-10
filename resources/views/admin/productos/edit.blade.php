@@ -638,12 +638,12 @@
     }
     $(function () {
         //Initialize Select2 Elements
-        $('#category_id').select2()
+        // $('#category_id').select2()
 
-        //Initialize Select2 Elements
-        $('.select2bs4').select2({
-            theme: 'bootstrap4'
-        });
+        // //Initialize Select2 Elements
+        // $('.select2bs4').select2({
+        //     theme: 'bootstrap4'
+        // });
 
         //uso de lightbox
         $(document).on('click', '[data-toggle="lightbox"]', function (event) {
@@ -675,7 +675,7 @@
 
 				$.ajax({
 					type: "GET",
-					url: "{{ route('subcategory.get') }}",
+                    url: '/lorgeliz_tienda_copia/public/api/admin/subcategorias',
 					data:{categoria:categoria},
 					dataType: 'json',
 					success: function (response) {
@@ -705,7 +705,8 @@
 
 				$.ajax({
 					type: "GET",
-					url: "{{ route('tipo.get') }}",
+					// url: "route('tipo.get')",
+                    url: "/lorgeliz_tienda_copia/public/api/admin/tipos",
 					data:{subcategoria:subcategoria},
 					dataType: 'json',
 					success: function (response) {

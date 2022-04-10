@@ -65,7 +65,6 @@
                         </tr>
                         @endforeach
 
-
                     </tbody>
                 </table>
                 {{ $categorias->appends($_GET)->links() }}

@@ -42,7 +42,7 @@
 									<li class="item_filter_btn" v-on:click.prevent="getproductos(1)">Todos</li>
 									<li class="item_filter_btn" v-on:click.prevent="hotProducts(1)">Populares</li>
 									<li class="item_filter_btn" v-on:click.prevent="getProductByState(1,1)">Nuevos</li>
-									<li class="item_filter_btn" v-on:click.prevent="saleProductos(1)">Más Vendidos</li>
+									<li class="item_filter_btn" v-on:click.prevent="saleProductos(1)" v-text="smallScreen != true ? 'Más Vendidos' : '+ Vendidos' "></li>
 								</ul>
 							</div>
 						</div>
@@ -61,28 +61,28 @@
 			<div style="padding-bottom: 0px">
 				<div class="row products_row products_container grid">
 						
-					<div v-for="producto in arrayProductos" :key="producto.cop" class="col-xl-4 col-md-6 grid-item">
+					<div v-for="producto in arrayProductos" :key="producto.id" class="col-xl-4 col-md-6 grid-item">
 						
 						<div class="product">
-							<span class="badge-new" v-show="producto.estado==1"><b v-text="'Nuevo'"></b></span>
-							<span class="badge-offer"><b v-text="'-' + producto.porcentaje_descuento +'%'" v-show="producto.porcentaje_descuento>0"></b></span>
+							<span class="badge-new" v-show="producto.producto.estado==1"><b v-text="'Nuevo'"></b></span>
+							<span class="badge-offer"><b v-text="'-' + producto.producto.porcentaje_descuento +'%'" v-show="producto.producto.porcentaje_descuento>0"></b></span>
 							<div class="product_image">
-								<a :href="'product/' + producto.slug">
-									<!--<img :src="'storage/' + producto.url" alt="producto">!-->
-									<img :src="producto.url" alt="producto">
+								<a :href="'productos/' + producto.slug">
+									<img :src="'storage/' + producto.imagenes[0].url" alt="producto">
+									<!--<img :src="producto.url" alt="producto">!-->
 								</a>
 							</div>
 							<div class="product_content">
 								<div class="product_info d-flex flex-row align-items-start justify-content-start">
 									<div>
 										<div>
-										<div class="product_name"><a :href="'product/' + producto.slug" v-text="producto.nombre + '-' + producto.color"></a></div>
+										<div class="product_name"><a :href="'productos/' + producto.slug" v-text="producto.producto.nombre + '-' + producto.color.nombre"></a></div>
 										</div>
 									</div>
 									<div class="ml-auto text-right">
-										<div class="product_category">En <a href="" v-text="producto.tipo"  v-on:click.prevent="getProductByTipo(1,producto.tipo_id)"></a></div>
-										<div class="product_price text-right" v-text="'$'+producto.precio_actual"><span></span></div>
-										<del class="price-old text-right" v-show="producto.precio_actual<producto.precio_anterior" v-text="'$'+producto.precio_anterior" style="font-size: 17px"></del>
+										<div class="product_category">En <a href="" v-text="producto.producto.tipo.nombre"  v-on:click.prevent="getProductByTipo(1,producto.producto.tipo_id)"></a></div>
+										<div class="product_price text-right" v-text="'$'+producto.producto.precio_actual"><span></span></div>
+										<del class="price-old text-right" v-show="producto.producto.precio_actual<producto.producto.precio_anterior" v-text="'$'+producto.producto.precio_anterior" style="font-size: 17px"></del>
 									</div>
 								</div>
 								<div class="product_buttons">
@@ -127,7 +127,13 @@
 
 <script>
     export default {
-		props : ['categoria','subcategoria'],
+		// props : ['keyword'],
+		props: {
+            keyword:{
+                required:true,
+                type:String
+            }
+        },
         data (){
             return {
                 active: '',
@@ -147,9 +153,10 @@
                 value: 0,
                 tipo: '',
                 estado: 0,
-                //categoria: '',
-                //subcategoria: ''
-
+                categoria: '',
+                subcategoria: '',
+				smallScreen: false
+				// keyword: ''
             }
 		},
 		computed:{
@@ -179,12 +186,26 @@
 				}
 				return pagesArray;
 			},
+
+			//esta función se utiliza para realizar búsquedas cuando se hace dentro de la página de categorias
+			buscar: function() {
+				if (this.keyword != '') {
+					this.getProductByKeyword(1,this.keyword);
+					// return true
+				}
+				else{
+					this.getproductos(1);
+				}
+				return this.keyword;
+			}
+
     	}, 
         methods : {
             getproductos(page){
 
 				this.listar = 7;
-				let url = '/lorgeliz_tienda/public/categorias/productos?page=' + page;
+				// let url = '/lorgeliz_tienda_copia/public/categorias/productos?page=' + page;
+				let url = '/lorgeliz_tienda_copia/public/api/categorias/default?page=' + page;
 
 				axios.get(url).then(response => {
 					var respuesta = response.data;
@@ -200,40 +221,45 @@
 				this.listar = 6; 
 				this.estado = estado;
 
-				let url = '/lorgeliz_tienda/public/categorias/productos/estado?page=' + page + '&estado='  + this.estado;
-				axios.get(url).then(response => {
-					var respuesta = response.data;
-					this.arrayProductos = respuesta.productos.data;
-					this.pagination = respuesta.pagination;
-				}); 
+				let url = '/lorgeliz_tienda_copia/public/api/categorias/productos/estado?page=' + page + '&estado='  + this.estado;
 
+				// axios.get(url).then(response => {
+				// 	var respuesta = response.data;
+				// 	this.arrayProductos = respuesta.productos.data;
+				// 	this.pagination = respuesta.pagination;
+				// }); 
+
+				this.getData(url);
 			},
 
 			saleProductos(page){
 				
 				this.listar = 5;
 
-				let url = '/lorgeliz_tienda/public/categorias/productos/vendidos?page=' + page;
+				let url = '/lorgeliz_tienda_copia/public/api/categorias/productos/vendidos?page=' + page;
 
-				axios.get(url).then(response => {
-					var respuesta = response.data;
-					this.arrayProductos = respuesta.productos.data;
-					this.pagination = respuesta.pagination;
-				}); 
+				// axios.get(url).then(response => {
+				// 	var respuesta = response.data;
+				// 	this.arrayProductos = respuesta.productos.data;
+				// 	this.pagination = respuesta.pagination;
+				// }); 
 
+				this.getData(url);
 			},
 
 			hotProducts(page){
 
 				this.listar = 4;
 
-				let url = '/lorgeliz_tienda/public/categorias/productos/vistos?page=' + page;
+				let url = '/lorgeliz_tienda_copia/public/api/categorias/productos/vistos?page=' + page;
 
-				axios.get(url).then(response => {
-					var respuesta = response.data;
-					this.arrayProductos = respuesta.productos.data;
-					this.pagination = respuesta.pagination;
-				}); 
+				// axios.get(url).then(response => {
+				// 	var respuesta = response.data;
+				// 	this.arrayProductos = respuesta.productos.data;
+				// 	this.pagination = respuesta.pagination;
+				// }); 
+
+				this.getData(url);
 			},
 
 			getProductsByOrder(page,orden){
@@ -248,13 +274,15 @@
 					this.criterio='nombre'; 
 				}
 
-				let url = '/lorgeliz_tienda/public/categorias/productos/orden?page=' + page + '&criterio=' + this.criterio ;
+				let url = '/lorgeliz_tienda_copia/public/api/categorias/productos/orden?page=' + page + '&criterio=' + this.criterio ;
 
-				axios.get(url).then(response => {
-					var respuesta = response.data;
-					this.arrayProductos = respuesta.productos.data;
-					this.pagination = respuesta.pagination;
-				}); 
+				// axios.get(url).then(response => {
+				// 	var respuesta = response.data;
+				// 	this.arrayProductos = respuesta.productos.data;
+				// 	this.pagination = respuesta.pagination;
+				// }); 
+
+				this.getData(url);
 			},
 
 			getProductByTipo(page,tipo){
@@ -262,13 +290,15 @@
 				this.listar = 2;
 				this.tipo = tipo;
 
-				let url = '/lorgeliz_tienda/public/categorias/productos/tipo?page=' + page + '&tipo=' + this.tipo;
+				let url = '/lorgeliz_tienda_copia/public/api/categorias/productos/tipo?page=' + page + '&tipo=' + this.tipo;
 
-				axios.get(url).then(response => {
-					var respuesta = response.data;
-					this.arrayProductos = respuesta.productos.data;
-					this.pagination = respuesta.pagination;
-				}); 
+				// axios.get(url).then(response => {
+				// 	var respuesta = response.data;
+				// 	this.arrayProductos = respuesta.productos.data;
+				// 	this.pagination = respuesta.pagination;
+				// }); 
+
+				this.getData(url);
 			},
 
 			getProductByGenre(page,value){
@@ -281,20 +311,44 @@
 				}
 				
 				if (this.value==2) {
-						this.genero = 'mujeres';
+					this.genero = 'mujeres';
 				}
 
 				if (this.value==3) {
 					this.genero = 'niños';
 				}
 				
-				let url = '/lorgeliz_tienda/public/categorias/productos/genero?page=' + page + '&genero=' + this.genero;
+				let url = '/lorgeliz_tienda_copia/public/api/categorias/productos/genero?page=' + page + '&genero=' + this.genero;
 			
+				// axios.get(url).then(response => {
+				// 	var respuesta = response.data;
+				// 	this.arrayProductos = respuesta.productos.data;
+				// 	this.pagination = respuesta.pagination;
+				// });
+				
+				this.getData(url);
+			},
+
+			getProductByKeyword(page,keyword){
+				this.listar = 8;
+				let url = '/lorgeliz_tienda_copia/public/api/categorias/productos/keyword?page=' + page + '&keyword=' + keyword;
+
+				// axios.get(url).then(response => {
+				// 	var respuesta = response.data;
+				// 	this.arrayProductos = respuesta.productos.data;
+				// 	this.pagination = respuesta.pagination;
+				// }); 
+				this.getData(url);
+			},
+
+			getData(url){
 				axios.get(url).then(response => {
 					var respuesta = response.data;
 					this.arrayProductos = respuesta.productos.data;
 					this.pagination = respuesta.pagination;
-				}); 
+				}).catch(error => {
+                    console.log(error);
+                });
 			},
 
 			cambiarPagina(page){
@@ -330,37 +384,187 @@
 				if (this.listar == 7) {
 					this.getproductos(page);
 				}
+
+				if (this.listar == 8) {
+					this.getproductByKeyword(page, this.keyword);
+				}
 			},
+
+			screenSize(){
+				const windowSize = window.innerWidth;
+				if (windowSize <= 411) {
+					this.smallScreen = true;
+					return
+				} else {
+					this.smallScreen = false
+				}
+			}
         },
-        mounted() {
+
+		beforeCreate() {
 			
-		   if (this.categoria == "hombres" && this.subcategoria == '') {
+		},
+
+        created() {
+
+			this.screenSize()
+			console.log(this.smallScreen)
+
+			if (localStorage.getItem('category')) {
+				this.categoria = JSON.parse(localStorage.getItem('category'));
+			}
+			
+			if (localStorage.getItem('subcategory')) {
+				this.subcategoria = JSON.parse(localStorage.getItem('subcategory'));
+			}
+
+			if (localStorage.getItem('keyword')) {
+				this.keyword = JSON.parse(localStorage.getItem('keyword'));
+			}
+
+		   	if (this.categoria == "hombres" && this.subcategoria == '') {
             	this.getProductByGenre(1,1);
+				localStorage.removeItem('category');
 			} 
 			
 			if (this.categoria == "mujeres" && this.subcategoria == '') {
 				this.getProductByGenre(1,2);
+				localStorage.removeItem('category');
 			} 
 
 			if (this.categoria == "niños" && this.subcategoria == '') {
 				this.getProductByGenre(1,3);
+				localStorage.removeItem('category');
 			} 
 
 			if (this.categoria == "nuevos" && this.subcategoria == '') {
             	this.getProductByState(1,1);
+				localStorage.removeItem('category');
        		} 
 
 			if (this.categoria == "ofertas" && this.subcategoria == '') {
 				this.getProductByState(1,2);
+				localStorage.removeItem('category');
 			} 
 			
-			if (this.categoria == '' && this.subcategoria == '') {
+			if (this.categoria == '' && this.subcategoria == '' && this.keyword == '') {
 				this.getproductos(1);
 			} 
 
 			if (this.subcategoria != '') {
-				this.getProductByTipo(1,this.subcategoria)
+				this.getProductByTipo(1,this.subcategoria);
+				localStorage.removeItem('subcategory');
 			}
-        }
+
+			if (this.keyword != '') {
+				this.getProductByKeyword(1,this.keyword);
+				localStorage.removeItem('keyword');
+			}
+        },
+
+		mounted() {
+
+            
+           	window.Echo.channel('producto-agotado').listen('ProductoAgotado', (e) => {
+
+                // let products = [];
+
+                products = e.data;
+
+                Object.values(products).map(product => {
+                    const index = this.arrayProductos.findIndex(p => p.id == product.id);
+
+                    if (index > -1) {
+                        this.arrayProductos.splice(index, 1);
+                    }
+                })
+                
+            });
+
+			window.Echo.channel('add-product').listen('AddProductEvent', (e) => {
+
+               	let product = e.data.product;
+
+				const index = this.arrayProductos.findIndex(p => p.id == product.id);
+
+				if (index == -1) {
+					if (this.listar === 7) {
+						this.getProductos(this.pagination.current_page);
+					}
+
+					if (this.listar === 1) {
+						this.getProductByGenre(this.pagination.current_page, this.value);
+					}
+
+					if (this.listar == 2) {
+						this.getProductByTipo(this.pagination.current_page, this.tipo);
+					}
+
+					if (this.listar == 3) {
+						this.getProductsByOrder(this.pagination.current_page, this.orden);
+					}
+
+					if (this.listar == 4) {
+						this.hotProducts(this.pagination.current_page);
+					}
+					
+					if (this.listar == 5) {
+						this.saleProductos(this.pagination.current_page);
+					}
+
+					if (this.listar == 6) {
+						if (product.producto.estado === this.estado) {
+							this.getProductByState(this.pagination.current_page, this.estado);
+						}
+					}
+
+					if (this.listar == 8) {
+						this.getproductByKeyword(this.pagination.current_page, this.keyword);
+					}
+			
+				}
+               
+            });
+
+			window.Echo.channel('change-status').listen('ProductStatusEvent', (e) => {
+                let productos = e.data;
+                let i = 0;
+                
+				if (this.listar === 6) {
+					
+					productos.map(item => {
+						let index = this.arrayProductos.findIndex(p => p.id == item.id);
+	
+						if (index > -1) {
+							if (!item.producto.estado === this.estado) {
+								this.arrayProductos.splice(index, 1);
+							}
+						}
+						else{
+							if (item.producto.estado === this.estado) {
+								i++;
+							}
+						}
+					})
+	
+					if (i > 0) {
+						this.getProductByState(this.pagination.current_page, this.estado);
+					}
+				}
+            });
+
+			window.Echo.channel('new-visit').listen('VisitEvent', (e) => {
+               	if (this.listar == 4) {
+					this.hotProducts(this.pagination.current_page);
+				}
+            });
+
+			window.Echo.channel('new-sale').listen('SalesEvent', (e) => {
+               	if (this.listar == 5) {
+					this.saleProductos(this.pagination.current_page);
+				}
+            });
+        },
+
     }
 </script>

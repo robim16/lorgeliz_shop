@@ -34,7 +34,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                            <a class=" m-2 float-right btn btn-warning" href="" v-on:click.prevent="pdfInformeVentas()"> <i class="fa fa-print"></i></a>
+                            <a class=" m-2 float-right btn btn-warning" href="" @click.prevent="pdfInformeVentas"> <i class="fa fa-print"></i></a>
                             <table class="table table-head-fixed">
                                 <thead>
                                     <tr>
@@ -48,10 +48,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($ventas as $venta)
+                                    {{-- @foreach ($ventas as $venta)
                                     <tr>
                                         <td>{{ $venta->id }}</td>
-                                        <td>{{ date('d/m/Y', strtotime($venta->fecha)) }}</td>
+                                        <td>{{ date('d/m/Y h:i:s A', strtotime($venta->fecha)) }}</td>
                                         <td>{{ $venta->prefijo }}{{ $venta->consecutivo }}</td>
                                         <td> <a href="{{ route('cliente.show', $venta->cliente)}}">
                                             {{ $venta->nombres }}</a>
@@ -59,6 +59,24 @@
                                         <td>${{ floatval($venta->valor) }}</td>
                                         <td>{{ $venta->cantidad }}</td>
                                         <td><a href="{{ route('venta.show',$venta->id)}}" class="btn btn-primary"
+                                                title="ver venta">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @endforeach --}}
+
+                                    @foreach ($ventas as $item)
+                                    <tr>
+                                        <td>{{ $item->venta->id }}</td>
+                                        <td>{{ date('d/m/Y h:i:s A', strtotime($item->venta->fecha)) }}</td>
+                                        <td>{{ $item->venta->factura->prefijo }}{{ $item->venta->factura->consecutivo }}</td>
+                                        <td> <a href="{{ route('cliente.show', $item->venta->cliente->id)}}">
+                                            {{ $item->venta->cliente->user->nombres }} {{ $item->venta->cliente->user->apellidos }}</a>
+                                        </td>
+                                        <td>${{ floatval($item->venta->valor) }}</td>
+                                        <td>{{ $item->cantidad }}</td>
+                                        <td><a href="{{ route('venta.show',$item->venta->id)}}" class="btn btn-primary"
                                                 title="ver venta">
                                                 <i class="fas fa-eye"></i>
                                             </a>
@@ -86,7 +104,7 @@
     <script>
         window.data = {
         datos: {
-            "ventames": "{{$venta->fecha}}"
+            "ventames": "{{$item->venta->fecha}}"
         }
     }
     </script>

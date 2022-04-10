@@ -26,7 +26,7 @@ class ContactoController extends Controller
 
     public function sendMail(Request $request)
     {
-        $admin = User::where('role_id', 2)->get();
+        $admin = User::where('role_id', 2)->first();
         $user = auth()->user();
     
         $details = [
@@ -36,7 +36,9 @@ class ContactoController extends Controller
             'url' => url('/admin/clientes/'. $user->cliente->id),
         ];
 
-        return new ClientToAdminMail($details);
+        Mail::to($admin->email)->send(new ClientToAdminMail($details));
+
+        // return new ClientToAdminMail($details);
     }
 
 }

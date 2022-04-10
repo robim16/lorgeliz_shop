@@ -7,8 +7,8 @@ const listsales = new Vue({
     }, 
     
     methods: {
-        pdfListadoVentas(){
-            window.open('/lorgeliz_tienda/public/admin/devoluciones/listado');
+        pdfListadoDevoluciones(){
+            window.open('/lorgeliz_tienda_copia/public/admin/devoluciones/listado');
         },
         
     },

@@ -1,6 +1,6 @@
 
 
-const product = new Vue({
+const factura = new Vue({
     el: '#venta_cliente',
     data: {
         
@@ -8,7 +8,7 @@ const product = new Vue({
     
     methods: {
         pdfVenta(id){
-            window.open('/lorgeliz_tienda/public/pedidos/factura/'+ id + ',' + '_blank');
+            window.open('/lorgeliz_tienda_copia/public/pedidos/factura/'+ id + ',' + '_blank');
             
         },
         

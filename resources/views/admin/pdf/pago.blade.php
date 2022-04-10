@@ -97,32 +97,32 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($pagos as $pago)
+                {{-- @foreach ($pagos as $pago) --}}
                 <tr>
                     <td> {{ $pago->id }} </td>
-                    <td> {{ date('d/m/Y', strtotime($pago->fecha)) }}</td>
+                    <td> {{ date('d/m/Y h:i:s A', strtotime($pago->fecha)) }}</td>
                     <td> {{ $pago->venta_id }}</td>
                     <td> {{ $pago->ref_epayco ? : "no aplica"}}</td>
                     <td> ${{ floatval($pago->monto) }}</td>
                     <td>
-                        @if ($pago->estado == 1)
+                        @if ($pago->estado == "Aceptado")
                         {{ "Aceptado" }}
                         @endif
-                        @if ($pago->estado == 2)
+                        @if ($pago->estado == "Rechazado")
                         {{ "Rechazado" }}
                         @endif
-                        @if ($pago->estado == 3)
+                        @if ($pago->estado ==  "Pendiente")
                         {{ "Pendiente" }}
                         @endif
-                        @if ($pago->estado == 4)
+                        @if ($pago->estado == "Fallido")
                         {{ "Fallido" }}
                         @endif
-                        @if ($pago->estado == 5)
+                        @if ($pago->estado == "Anulado")
                         {{ "Anulado" }}
                         @endif
                     </td>
                 </tr>
-                @endforeach                                
+                {{-- @endforeach                                 --}}
             </tbody>
         </table>
     </div>  

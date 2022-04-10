@@ -97,7 +97,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($productos as $producto)
+                {{-- @foreach ($productos as $producto)
                 <tr>
                     <td>{{ $producto->id }}</td>
                     <td>{{ $producto->nombre }}</td>
@@ -111,7 +111,20 @@
                     <td>{{ $producto->color }}</td>
                     <td>{{ $producto->stock }}</td>
                 </tr>
-                @endforeach                                
+                @endforeach                                 --}}
+
+                @foreach ($productos as $producto)
+                <tr>
+                    <td>{{ $producto->colorProducto->producto->id }}</td>
+                    <td>{{ $producto->colorProducto->producto->nombre }}</td>
+                    <td> 
+                        <img src="{{ url('storage/' . $producto->colorProducto->imagenes[0]->url) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
+                    </td>
+                    <td>{{ $producto->talla->nombre }}</td>
+                    <td>{{ $producto->colorProducto->color->nombre }}</td>
+                    <td>{{ $producto->stock }}</td>
+                </tr>
+                @endforeach        
             </tbody>
         </table>
     </div>

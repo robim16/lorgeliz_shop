@@ -99,8 +99,9 @@
                 @foreach ($pedidos as $pedido)
                 <tr>
                     <td> {{ $pedido->id }} </td>
-                    <td> {{ date('d/m/Y', strtotime($pedido->fecha)) }}</td>
-                    <td> {{ $pedido->nombres }} {{ $pedido->apellidos }}</td>
+                    <td> {{ date('d/m/Y h:i:s A', strtotime($pedido->fecha)) }}</td>
+                    {{-- <td> {{ $pedido->nombres }} {{ $pedido->apellidos }}</td> --}}
+                    <td> {{ $pedido->venta->cliente->user->nombres }} {{ $pedido->venta->cliente->user->apellidos }}</td>
                     <td>
                         @if ($pedido->estado == 1)
                         {{ "Pendiente" }}
@@ -115,7 +116,7 @@
                         {{ "Entregado" }}
                         @endif
                     </td>
-                    <td> ${{ floatval($pedido->valor) }}</td>
+                    <td> ${{ floatval($pedido->venta->valor) }}</td>
                 </tr>
                 @endforeach                                
             </tbody>

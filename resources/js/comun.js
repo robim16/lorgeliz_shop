@@ -1,34 +1,89 @@
 
 window.Vue = require('vue');
 
-
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('category', require('./components/Category.vue').default);
+Vue.component('user-cart', require('./components/UserCart.vue').default);
+Vue.component('product', require('./components/Product.vue').default);
+Vue.component('store', require('./components/Store.vue').default);
+Vue.component('slider', require('./components/Slider.vue').default);
+Vue.component('sale', require('./components/Sales.vue').default);
+Vue.component('offers', require('./components/Offers.vue').default);
+Vue.component('popular', require('./components/Popular.vue').default);
+Vue.component('product-new', require('./components/ProductsNew.vue').default);
+Vue.component('cart', require('./components/Cart.vue').default);
+Vue.component('chat-store', require('./components/Chat.vue').default);
+Vue.component('chat-alert', require('./components/ChatAlert.vue').default);
+Vue.component('notifications', require('./components/Notifications.vue').default);
+Vue.component('messages', require('./components/Messages.vue').default);
+Vue.component('factura', require('./components/Factura.vue').default);
+Vue.component('order-detail', require('./components/OrderDetail.vue').default);
+Vue.component('checkout', require('./components/Checkout.vue').default);
+
+// admin components
+Vue.component('chat', require('./components/admin/Chat.vue').default);
+Vue.component('chat-list', require('./components/admin/ChatList.vue').default);
+Vue.component('messenger', require('./components/admin/Messenger.vue').default);
+Vue.component('pagos', require('./components/admin/Pagos.vue').default);
+Vue.component('pagos-mes', require('./components/admin/PagosMes.vue').default);
 
 
 if (document.getElementById('app')) {
     const app = new Vue({
         el: '#app',
+        data: {
+            keyword: '',
+            location: ''
+        }, 
+        methods:{
+            setCategoria(categoria){
+                localStorage.setItem('category', JSON.stringify(categoria));
+                window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
+            },
+
+            setSubcategoria(subcategoria){
+                localStorage.setItem('subcategory', JSON.stringify(subcategoria));
+                window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
+            },
+
+            search(){
+                this.location = window.location.pathname;
+
+                if (this.location != '/lorgeliz_tienda_copia/public/categorias') {
+                    localStorage.setItem('keyword', JSON.stringify(this.keyword));
+                    window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
+                } 
+            }
+        }
+
     });
 }
 
 if (document.getElementById('product_cart')) {
     require('./tienda/product');
 }
-if (document.getElementById('inicio')) {
-    require('./tienda/index');
-}
 
-if (document.getElementById('menu')) {
-    require('./tienda/getCategory');
-}
+// if (document.getElementById('chat')) {
+//     require('./tienda/chat');
+// }
+
+// if (document.getElementById('inicio')) {
+//     require('./tienda/index');
+// }
 
 if (document.getElementById('clientNotification')) {
     require('./tienda/notifications');
 }
 
+if (document.getElementById('message')) {
+    require('./tienda/messages');
+}
+
 if (document.getElementById('notification')) {
     require('./admin/notifications');
+}
+
+if (document.getElementById('chatNotification')) {
+    require('./admin/inbox');
 }
 
 if (document.getElementById('imprimir_pedidos')) {
@@ -45,10 +100,6 @@ if (document.getElementById('venta_cliente')) {
 
 if (document.getElementById('carrito')) {
     require('./tienda/cart');
-}
-
-if (document.getElementById('checkout')) {
-    require('./tienda/checkout');
 }
 
 if (document.getElementById('pedidos')) {

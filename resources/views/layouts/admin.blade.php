@@ -18,8 +18,9 @@
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- overlayScrollbars -->
   @yield('estilos')
+  {{-- <link href="{{ asset('css/styles.css') }}" rel="stylesheet"> --}}
   <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/bootstrap-select.min.css') }}">
+  {{-- <link rel="stylesheet" href="{{ asset('css/bootstrap-select.min.css') }}"> --}}
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -56,29 +57,29 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Messages Dropdown Menu -->
-      <li class="nav-item dropdown">
+      <li class="nav-item dropdown" id="chatNotification">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-comments"></i>
-          <span class="badge badge-danger navbar-badge">3</span>
+          <span class="badge badge-danger navbar-badge">@{{notifications.length}}</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item">
+          <a v-for="item in notifications" :key="item.id" href="#" class="dropdown-item" @click.prevent="initChat(item.user.id, item.id)">
             <!-- Message Start -->
             <div class="media">
-              <img src="{{ asset('adminlte/dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <img :src="location === '/lorgeliz_tienda_copia/public/admin' ? 'storage/' + item.user.imagene.url : '../storage/' + item.user.imagene.url" alt="User Avatar" class="img-size-50 mr-3 img-circle">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
-                  Brad Diesel
+                 @{{item.user.nombres}} @{{item.user.apellidos}}
                   <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
                 </h3>
-                <p class="text-sm">Call me whenever you can...</p>
+                <p class="text-sm">@{{item.mensaje}}.</p>
                 <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
               </div>
             </div>
             <!-- Message End -->
           </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
+          {{-- <div class="dropdown-divider"></div> --}}
+          {{-- <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
               <img src="{{ asset('adminlte/dist/img/user8-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3">
@@ -93,8 +94,8 @@
             </div>
             <!-- Message End -->
           </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
+          <div class="dropdown-divider"></div> --}}
+          {{-- <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
               <img src="{{ asset('adminlte/dist/img/user3-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3">
@@ -108,9 +109,9 @@
               </div>
             </div>
             <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+          </a> --}}
+          {{-- <div class="dropdown-divider"></div> --}}
+          <a href="#" class="dropdown-item dropdown-footer">Ver Todos los Mensajes</a>
         </div>
       </li>
       <!-- Notifications Dropdown Menu -->
@@ -153,6 +154,7 @@
         </a>
       </li>
     </ul>
+    <chat-alert :role_id="{{  auth()->user()->role->id }}"></chat-alert>
   </nav>
   <!-- /.navbar -->
 
@@ -172,11 +174,11 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          {{--<img src="{{ url('storage/' . auth()->user()->imagene->url) }}" class="img-circle elevation-2" alt="User Image">--}}
-          <img src="{{ auth()->user()->imagene->url }}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ auth()->user()->imagene ? url('storage/' . auth()->user()->imagene->url) : ''}}" class="img-circle elevation-2" alt="User Image">
+          {{--<img src="{{ auth()->user()->imagene->url }}" class="img-circle elevation-2" alt="User Image">--}}
         </div>
         <div class="info d-flex">
-        <a href="{{ route('users.cuenta')}}" class="d-block mr-2">{{ auth()->user()->nombres}}</a>
+        <a href="{{ 'users.show', auth()->user()->slug}}" class="d-block mr-2">{{ auth()->user()->nombres}}</a>
         <a href="{{ route('logout')}}" title="cerrar sesión" onclick="event.preventDefault();
         document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i></a>
          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -383,7 +385,7 @@
              </a>
              <ul class="nav nav-treeview">
                  <li class="nav-item">
-                     <a href="{{ route('pedidos.clientes')}}" class="nav-link">
+                     <a href="{{ route('admin.pedidos.index')}}" class="nav-link">
                          <i class="far fa-circle nav-icon"></i>
                          <p>Listado de Pedidos</p>
                      </a>
@@ -421,7 +423,7 @@
           </a>
           <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('devolucion.lista') }}" class="nav-link">
+                <a href="{{ route('admin.devolucion.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Listado de devoluciones</p>
                 </a>
@@ -510,6 +512,24 @@
                 </li>
             </ul>
         </li>
+         <!-- Informes -->
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-list-alt"></i>
+              <p>
+                  Chats
+                  <i class="right fas fa-angle-left"></i>
+              </p>
+          </a>
+          <ul class="nav nav-treeview">
+              <li class="nav-item">
+                  <a href="{{ route('chats.admin') }}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Ver chats</p>
+                  </a>
+              </li>
+          </ul>
+        </li>
       </nav>
       <!-- /.sidebar-menu -->
     </div>
@@ -530,6 +550,7 @@
               <li class="breadcrumb-item"><a href="{{route('admin')}}">Inicio</a></li>
               @yield('breadcrumb')
             </ol>
+            
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -574,15 +595,18 @@
 
 <!-- jQuery -->
 <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
-<!-- Bootstrap 4 -->
-<script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+{{-- <!-- Bootstrap 4 -->
+<script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script> --}}
 <!-- AdminLTE App -->
 <script src="{{ asset('adminlte/dist/js/adminlte.min.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('adminlte/dist/js/demo.js') }}"></script>
-<script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
+{{-- <script src="{{ asset('js/bootstrap-select.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script> --}}
 
+{{-- <script src="{{ asset('js/plugins.js') }}" defer></script> --}}
 <script src="{{ asset('js/app_admin.js') }}" defer></script>
+
 {{--<script src="{{ asset('js/app.js') }}" defer></script>--}}
 
 @yield('scripts')

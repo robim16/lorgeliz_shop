@@ -15,14 +15,14 @@
     <div class="container">
         <div class="row mb-4">
             <div class="pt-1 mx-auto d-flex">
-                <img src="{{ url('storage/' . auth()->user()->imagene->url) }}" alt="{{ auth()->user()->nombres }}"
+                <img src="{{ auth()->user()->imagene ? url('storage/' . auth()->user()->imagene->url) : '' }}" alt="{{ auth()->user()->nombres }}"
                     class="rounded-circle image-responsive">
                 <h2 style="text-align: center" class="pt-4 pb-4"> {{ auth()->user()->nombres}}</h2>
             </div>
         </div>
 
         <div class="pl-5 pr-5">
-        <form method="POST" action="{{ route('users.update')}}" novalidate enctype="multipart/form-data">
+        <form method="POST" action="{{ route('users.update', $user->id)}}" novalidate enctype="multipart/form-data">
                 @method('PUT')
 
                 @csrf
@@ -41,7 +41,7 @@
                                     <div class="col-md-6">
                                         <input id="email" type="email" readonly
                                             class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                                    name="email" value="{{ $user->email}}" required autofocus />
+                                            name="email" value="{{ $user->email}}" required autofocus />
 
                                         @if($errors->has('email'))
                                         <span class="invalid-feedback">
@@ -95,7 +95,7 @@
                                     <div class="col-md-6">
                                         <input id="usuario" type="text"
                                             class="form-control{{ $errors->has('usuario') ? ' is-invalid' : '' }}"
-                                    name="usuario" value="{{$user->username}}" required />
+                                            name="usuario" value="{{ old('usuario') ?: $user->username }}" required />
 
                                         @if($errors->has('usuario'))
                                         <span class="invalid-feedback">
@@ -112,7 +112,7 @@
                                     <div class="col-md-6">
                                         <input id="nombres" type="text"
                                             class="form-control{{ $errors->has('nombres') ? ' is-invalid' : '' }}"
-                                    name="nombres" value="{{ $user->nombres}}" required />
+                                            name="nombres" value="{{ old('nombres') ?: $user->nombres }}" required />
 
                                         @if($errors->has('nombres'))
                                         <span class="invalid-feedback">
@@ -129,11 +129,51 @@
                                     <div class="col-md-6">
                                         <input id="apellidos" type="text"
                                             class="form-control{{ $errors->has('apellidos') ? ' is-invalid' : '' }}"
-                                    name="apellidos" value="{{ $user->apellidos}}" required />
+                                            name="apellidos" value="{{ old('apellidos') ?: $user->apellidos }}" required />
 
                                         @if($errors->has('apellidos'))
                                         <span class="invalid-feedback">
                                             <strong>{{ $errors->first('apellidos') }}</strong>
+                                        </span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="departamento" class="col-md-4 col-form-label text-md-right">
+                                        {{ __("Departamento") }}
+                                    </label>
+                                    <div class="col-md-6">
+                                        <select id="departamento" 
+                                            class="form-control"
+                                            name="departamento">
+                                            {{-- <option value="0">Seleccione uno</option> --}}
+                                            <option value="{{ old('departamento') ?: $user->departamento }}">{{ old('departamento') ?: $user->departamento }}</option>
+                                        </select>
+
+                                        @if($errors->has('departamento'))
+                                        <span class="invalid-feedback">
+                                            <strong>{{ $errors->first('departamento') }}</strong>
+                                        </span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="municipio" class="col-md-4 col-form-label text-md-right">
+                                        {{ __("Municipio") }}
+                                    </label>
+                                    <div class="col-md-6">
+                                        <select id="municipio" 
+                                            class="form-control"
+                                            name="municipio">
+                                            {{-- <option value="0">Seleccione uno</option> --}}
+                                            <option value="{{ old('municipio') ?: $user->municipio }}">{{ old('municipio') ?: $user->municipio }}</option>
+                                        </select>
+
+                                        @if($errors->has('municipio'))
+                                        <span class="invalid-feedback">
+                                            <strong>{{ $errors->first('municipio') }}</strong>
                                         </span>
                                         @endif
                                     </div>
@@ -145,8 +185,8 @@
                                     </label>
                                     <div class="col-md-6">
                                         <input id="direccion" type="text"
-                                            class="form-control{{ $errors->has('apellidos') ? ' is-invalid' : '' }}"
-                                    name="direccion" value="{{ $user->direccion}}" required />
+                                            class="form-control{{ $errors->has('direccion') ? ' is-invalid' : '' }}"
+                                            name="direccion" value="{{ old('direccion') ?: $user->direccion}}" required />
 
                                         @if($errors->has('direccion'))
                                         <span class="invalid-feedback">
@@ -163,7 +203,7 @@
                                     <div class="col-md-6">
                                         <input id="telefono" type="text"
                                             class="form-control{{ $errors->has('telefono') ? ' is-invalid' : '' }}"
-                                            name="telefono" value="{{ $user->telefono}}" required />
+                                            name="telefono" value="{{  old('telefono') ?: $user->telefono }}" required />
 
                                         @if($errors->has('telefono'))
                                         <span class="invalid-feedback">
@@ -209,4 +249,73 @@
 <!-- /.content -->
 
 
+@endsection
+
+@section('scripts')
+<script>
+    function loadJSON(callback) {
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.open("GET", "/lorgeliz_tienda_copia/public/colombia-json-master/colombia-json-master/colombia.json", true); // Reemplaza colombia-json.json con el nombre que le hayas puesto
+        xobj.onreadystatechange = function () {
+            if (xobj.readyState == 4 && xobj.status == "200") {
+                callback(xobj.responseText); //el callback recibe por parámetro el response de la petición
+            }
+        };
+        xobj.send(null);
+    }
+
+    // var JSONFinal = '';
+
+   function init() {
+        return new Promise(async (resolve, reject) => {
+            await loadJSON(function (response) {
+
+                // Parse JSON string into object
+                const JSONFinal =  JSON.parse(response);
+                const departamentos = JSONFinal.map(d => d.departamento);
+
+                $.each(departamentos, function (key, value) {
+                    $('#departamento').append("<option value='" 
+                        + value + "'>" + value + "</option>");
+                });
+
+                resolve(JSONFinal);
+            });
+           
+        });
+    }
+
+    function setMunicipios(JSONFinal) {
+        const departamento = $('#departamento').val();
+        const filtrados = JSONFinal.filter(d => d.departamento === departamento);
+        const municipios = filtrados[0].ciudades;
+
+        $('#municipio').append('<option value="">Seleccione uno</option>')
+        $.each(municipios, function (key, value) {
+            $('#municipio').append("<option value='" 
+                + value + "'>" + value + "</option>");
+        });
+    }
+
+</script>
+<script>
+	$(document).ready(function () {
+       
+        var JSONFinal = '';
+        init().
+        then((data)=>{
+            JSONFinal = data;
+            setMunicipios(JSONFinal);
+        });
+
+        $(document).on('change', '#departamento', function(e) { 
+			e.preventDefault();
+           
+            $('#municipio').html('');
+            setMunicipios(JSONFinal);
+		});
+
+	});
+</script>
 @endsection

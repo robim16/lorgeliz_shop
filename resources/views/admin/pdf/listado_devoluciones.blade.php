@@ -99,9 +99,11 @@
                 @foreach ($devoluciones as $devolucion)
                 <tr>
                     <td>{{$devolucion->id}}</td>
-                    <td>{{ date('d/m/Y', strtotime($devolucion->fecha)) }}</td>
-                    <td>{{$devolucion->pedido}}</td>
-                    <td>{{$devolucion->nombres}} {{$devolucion->apellidos}}</td>
+                    <td>{{ date('d/m/Y h:i:s A', strtotime($devolucion->fecha)) }}</td>
+                    {{-- <td>{{$devolucion->pedido}}</td> --}}
+                    <td>{{$devolucion->venta->pedido->id}}</td>
+                    {{-- <td>{{$devolucion->nombres}} {{$devolucion->apellidos}}</td> --}}
+                    <td>{{$devolucion->venta->cliente->user->nombres}} {{$devolucion->venta->cliente->user->apellidos}}</td>
                     <td> @if ($devolucion->estado == 1 )
                         {{ "pendiente" }}
                         @endif
