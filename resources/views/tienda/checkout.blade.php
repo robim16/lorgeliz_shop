@@ -173,7 +173,7 @@
 								<div class="checkout_button trans_200">
 									<a href="" id="btnCheckout">realizar pedido</a>
 								</div>
-								{{-- <checkout></checkout> --}}
+								{{-- <checkout :ruta="ruta"></checkout> --}}
 							</div>
 						</div>
 					</div>
@@ -189,11 +189,15 @@
 <script src="{{ asset('asset/js/checkout.js') }}"></script>
 
 <script>
-	
+
+	let ruta = 'http://lorenzogeliztienda.com'
+	// let url = "/lorgeliz_tienda_copia/public/colombia-json-master/colombia-json-master/colombia.json"
+	let url = `${ruta}/colombia-json-master/colombia-json-master/colombia.json`
+
     function loadJSON(callback) {
         var xobj = new XMLHttpRequest();
         xobj.overrideMimeType("application/json");
-        xobj.open("GET", "/lorgeliz_tienda_copia/public/colombia-json-master/colombia-json-master/colombia.json", true); // Reemplaza colombia-json.json con el nombre que le hayas puesto
+        xobj.open("GET", url, true); // Reemplaza colombia-json.json con el nombre que le hayas puesto
         xobj.onreadystatechange = function () {
             if (xobj.readyState == 4 && xobj.status == "200") {
                 callback(xobj.responseText); //el callback recibe por parámetro el response de la petición
@@ -254,7 +258,7 @@ $(document).ready(function () {
 	var JSONFinal = '';
 
 	init().
-	then((data)=>{
+	then((data) => {
 		JSONFinal = data;
 		setMunicipios(JSONFinal);
 	});
@@ -302,7 +306,10 @@ $(document).ready(function () {
 										'Hemos recibido tu pedido. En breve empezaremos a alistarlo y nos pondremos en contacto contigo!',
 										'success'
 									)
-									window.location.href = `/lorgeliz_tienda_copia/public/pedidos/` + pedido;
+									// window.location.href = `/lorgeliz_tienda_copia/public/pedidos/` + pedido;
+
+									let ruta = 'http://lorenzogeliztienda.com'
+									window.location.href = `${ruta}/pedidos/${pedido}`;
 								}
 							}
 
@@ -315,6 +322,8 @@ $(document).ready(function () {
 							key: '12d3b45147fae13431996471aa5966af',
 							test: true
 						})  
+
+						let ruta = 'http://lorenzogeliztienda.com'
 
 						var data={
 						//Parametros compra (obligatorio)
@@ -336,8 +345,10 @@ $(document).ready(function () {
 						//extra1: "extra1",
 						//extra2: "extra2",
 						//extra3: "extra3",
-						confirmation: "http://localhost/lorgeliz_tienda_copia/public/ventas/epayco/confirm",
-						response: "http://localhost/lorgeliz_tienda_copia/public/payments/epayco/response",
+						// confirmation: "http://localhost/lorgeliz_tienda_copia/public/ventas/epayco/confirm",
+						// response: "http://localhost/lorgeliz_tienda_copia/public/payments/epayco/response",
+						confirmation: `${ruta}/ventas/epayco/confirm/`,
+						response: `${ruta}/payments/epayco/response`,
 						p_confirm_method: "POST",
 
 						//Atributos cliente
@@ -358,7 +369,10 @@ $(document).ready(function () {
 						'error'
 					)
 					setTimeout(() => {
-						window.location.href = `/lorgeliz_tienda_copia/public/cart`;
+						// window.location.href = `/lorgeliz_tienda_copia/public/cart`;
+
+						let ruta = 'http://lorenzogeliztienda.com'
+						window.location.href = `${ruta}/cart`
 					}, 4000);
 				}
 			}

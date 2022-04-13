@@ -30,6 +30,12 @@
 
 <script>
 export default {
+    props: {
+        ruta:{
+            required: true,
+            type: String
+        }
+    },
     data() {
         return {
             option: 0, 
@@ -43,8 +49,10 @@ export default {
             country: "co",
             lang: "es",	
             external: "false",
-            confirmation: "http://localhost/lorgeliz_tienda_copia/public/ventas/epayco/confirm",
-            response: "http://localhost/lorgeliz_tienda_copia/public/payments/epayco/response",
+            // confirmation: "http://localhost/lorgeliz_tienda_copia/public/ventas/epayco/confirm",
+            // response: "http://localhost/lorgeliz_tienda_copia/public/payments/epayco/response",
+            confirmation: this.ruta + "/ventas/epayco/confirm",
+            response: this.ruta + "/payments/epayco/response",
             p_confirm_method: "POST",
             name_billing: "",
             address_billing: "",
@@ -61,11 +69,20 @@ export default {
         },
 
         verifyAndSale(){
-            axios.get('/lorgeliz_tienda_copia/public/stock/verificar')
+
+            // let url = '/lorgeliz_tienda_copia/public/stock/verificar'
+            let url = `${this.ruta}/stock/verificar`
+
+            axios.get(url)
             .then(response => {
                 if (response.data.data == 'success') {
                     if (this.option == 1) {
-                        axios.post('/lorgeliz_tienda_copia/public/ventas')
+
+                        // let url = '/lorgeliz_tienda_copia/public/ventas';
+
+                        let url = `${this.ruta}/ventas`;
+
+                        axios.post(url)
                         .then(response => {
                             if (response.data.data == 'success') {
                                 // var pedido = response.pedido;
@@ -122,7 +139,9 @@ export default {
 						'error'
 					)
 					setTimeout(() => {
-						window.location.href = `/lorgeliz_tienda_copia/public/cart`;
+						// window.location.href = `/lorgeliz_tienda_copia/public/cart`;
+
+                        window.location.href = `${this.ruta}/cart`;
 					}, 4000);
 				}
             })

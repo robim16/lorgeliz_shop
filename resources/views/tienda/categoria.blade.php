@@ -34,7 +34,7 @@
 	</div>
 
 	<div id="">
-		<category :keyword="keyword"></category>
+		<category :keyword="keyword" :ruta="ruta"></category>
 	</div>
 	<!-- Products -->
 
