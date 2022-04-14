@@ -8,6 +8,11 @@
             user_id: {
                 type: Number,
                 required: true
+            },
+
+            ruta:{
+                required: true,
+                type: String
             }
         },
         data (){
@@ -18,7 +23,9 @@
 
         methods : {
             carritoUser(){
-                let url = '/lorgeliz_tienda_copia/public/cart/products';
+                // let url = '/lorgeliz_tienda_copia/public/cart/products';
+
+                let url = `${this.ruta}/cart/products`;
 
                 axios.get(url).then(response => {
                     this.productos = response.data.cantidad;
@@ -29,7 +36,8 @@
 
         mounted() {
             
-            let url = '/lorgeliz_tienda_copia/public/cart/products';
+            // let url = '/lorgeliz_tienda_copia/public/cart/products';
+            let url = `${this.ruta}/cart/products`;
 
             axios.get(url).then(response => {
                 this.productos = response.data.cantidad;

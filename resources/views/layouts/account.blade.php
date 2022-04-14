@@ -260,7 +260,7 @@
 
     {{-- <div id="app" class=""> --}}
       <div class="row">
-        <chat-store></chat-store>
+        <chat-store :ruta="ruta"></chat-store>
       </div>
     {{-- </div> --}}
 

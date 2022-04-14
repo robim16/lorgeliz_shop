@@ -101,6 +101,11 @@
             productos:{
                 required: true,
                 type: Array
+            },
+
+            ruta:{
+                required: true,
+                type: String
             }
         },
         data (){
@@ -111,8 +116,8 @@
 		
         methods : {
             getProductos(){
-				let url = '/lorgeliz_tienda_copia/public/index';
-
+				// let url = '/lorgeliz_tienda_copia/public/index';
+                let url = `${this.ruta}/index`
 				axios.get(url).then(response => {
 					this.productoSlider = response.data.slider
 				}).catch(error => {
