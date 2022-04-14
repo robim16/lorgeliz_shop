@@ -70,6 +70,13 @@
 
 <script>
     export default {
+        props: {
+            ruta:{
+                required: true,
+                type: String
+            }
+        },
+
         data (){
             return {
                productoNuevo: [],
@@ -80,25 +87,27 @@
          methods : {
             getProductos(){
 				this.cantidad++;
-                let url = '/lorgeliz_tienda_copia/public/index?cantidad=' + this.cantidad;
+                // let url = '/lorgeliz_tienda_copia/public/index?cantidad=' + this.cantidad;
 
+                let url = `${this.ruta}/index?cantidad=${this.cantidad}`;
 
 				axios.get(url).then(response => {
 					this.productoNuevo = response.data.nuevos;
 				}).catch(error => {
                     console.log(error);
                 });
-            
         	},
 
             setCategoria(categoria){
                 localStorage.setItem('category', JSON.stringify(categoria));
-                window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
+                // window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
+                window.location.href = `${this.ruta}/categorias`;
             },
 
             setSubcategoria(subcategoria){
                 localStorage.setItem('subcategory', JSON.stringify(subcategoria));
-                window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
+                // window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
+                window.location.href = `${this.ruta}/categorias`;
             }
         },
         mounted() {

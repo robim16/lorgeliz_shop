@@ -7,20 +7,20 @@
                     <form>
                         <div class="input-group input-group-sm" style="width: 200px;">
                             <div class="input-group-append">
-                                <a href="" class="btn btn-success mx-1" v-on:click.prevent="">
+                                <a href="" class="btn btn-success mx-1" @click.prevent="">
                                     <i class="fas fa-print"></i>
                                 </a>
                             </div>
 
                              <div class="input-group-append">
-                                <a href="" class="btn btn-primary mx-1" v-on:click.prevent="abrirModal()" title="nuevo chat"><i class="fas fa-plus"></i></a>
+                                <a href="" class="btn btn-primary mx-1" @click.prevent="abrirModal()" title="nuevo chat"><i class="fas fa-plus"></i></a>
                             </div>
 
                             <input v-model="buscar" type="text" name="buscar" class="form-control float-right" placeholder="Buscar"
                             value="">
 
                             <div class="input-group-append">
-                                <button v-on:click.prevent="chatList(1)" type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                                <button @click.prevent="chatList(1)" type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
                             </div>
                         </div>
                     </form>
@@ -82,7 +82,13 @@
 
 <script>
     export default {
-        // props: ['role_id'],
+        props: {
+            ruta:{
+                required: true,
+                type: String
+            }
+        },
+
         data (){
             return {
                 active: '',
@@ -137,7 +143,10 @@
                 //     this.buscar = this.cliente;
 			    // }
 			
-                let url ='/lorgeliz_tienda_copia/public/admin/chats/get?page=' + page + '&buscar='+ this.buscar;
+                let url ='/lorgeliz_tienda_copia/public/admin/chats/get?page='
+                    + page + '&buscar='+ this.buscar;
+                
+                let url = ``
                 // let url ='/lorgeliz_tienda_copia/public/api/admin/chats?page=' + page + '&buscar='+ this.buscar;
                 axios.get(url).then(response =>{
                     var respuesta = response.data;

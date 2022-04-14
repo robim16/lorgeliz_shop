@@ -2448,6 +2448,10 @@ __webpack_require__.r(__webpack_exports__);
     user_id: {
       type: Number,
       required: true
+    },
+    ruta: {
+      required: true,
+      type: String
     }
   },
   data: function data() {
@@ -2466,7 +2470,8 @@ __webpack_require__.r(__webpack_exports__);
     loadCart: function loadCart() {
       var _this = this;
 
-      var url = '/lorgeliz_tienda_copia/public/cart/user';
+      // let url = '/lorgeliz_tienda_copia/public/cart/user';
+      var url = "".concat(this.ruta, "/cart/user");
       axios.get(url).then(function (response) {
         _this.arrayProductos = response.data.productos;
 
@@ -2487,9 +2492,10 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.producto = producto;
-      this.operacion = operacion;
-      var url = '/lorgeliz_tienda_copia/public/cart/setCantidad'; // let me = this;
+      this.operacion = operacion; // let url = '/lorgeliz_tienda_copia/public/cart/setCantidad';
+      // let me = this;
 
+      var url = "".concat(this.ruta, "/cart/setCantidad");
       axios.post(url, {
         'producto': this.producto,
         'operacion': this.operacion
@@ -2509,9 +2515,10 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       this.producto = producto; // let url = '/lorgeliz_tienda_copia/public/cart/remove/'+this.producto;
+      // let url = `/lorgeliz_tienda_copia/public/cart/${this.producto}/remove`;
+      // let me = this;
 
-      var url = "/lorgeliz_tienda_copia/public/cart/".concat(this.producto, "/remove"); // let me = this;
-
+      var url = "".concat(this.ruta, "/cart/").concat(this.producto, "/remove");
       axios["delete"](url).then(function (response) {
         if (response.data.data == 'success') {
           _this3.loadCart();
@@ -2525,7 +2532,8 @@ __webpack_require__.r(__webpack_exports__);
 
       // let url = '/lorgeliz_tienda_copia/public/cart/delete/'+this.carrito;
       // let me = this;
-      var url = "/lorgeliz_tienda_copia/public/cart/".concat(this.carrito, "/delete");
+      // let url = `/lorgeliz_tienda_copia/public/cart/${this.carrito}/delete`;
+      var url = "".concat(this.ruta, "/cart/").concat(this.carrito, "/delete");
       axios["delete"](url).then(function (response) {
         if (response.data.data == 'success') {
           swal('Haz limpiado tu carrito!', 'Tu carrito de compras está vacío!', 'success');
@@ -2702,6 +2710,10 @@ __webpack_require__.r(__webpack_exports__);
     keyword: {
       required: true,
       type: String
+    },
+    ruta: {
+      required: true,
+      type: String
     }
   },
   data: function data() {
@@ -2776,8 +2788,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.listar = 7; // let url = '/lorgeliz_tienda_copia/public/categorias/productos?page=' + page;
+      // let url = '/lorgeliz_tienda_copia/public/api/categorias/default?page=' + page;
 
-      var url = '/lorgeliz_tienda_copia/public/api/categorias/default?page=' + page;
+      var url = "".concat(this.ruta, "/api/categorias/default?page=").concat(page);
       axios.get(url).then(function (response) {
         var respuesta = response.data;
         _this.arrayProductos = respuesta.productos.data;
@@ -2787,8 +2800,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     getProductByState: function getProductByState(page, estado) {
       this.listar = 6;
-      this.estado = estado;
-      var url = '/lorgeliz_tienda_copia/public/api/categorias/productos/estado?page=' + page + '&estado=' + this.estado; // axios.get(url).then(response => {
+      this.estado = estado; // let url = '/lorgeliz_tienda_copia/public/api/categorias/productos/estado?page=' + page 
+      // 	+ '&estado='  + this.estado;
+
+      var url = "".concat(this.ruta, "/api/categorias/productos/estado?page=").concat(page, "&estado=").concat(this.estado); // axios.get(url).then(response => {
       // 	var respuesta = response.data;
       // 	this.arrayProductos = respuesta.productos.data;
       // 	this.pagination = respuesta.pagination;
@@ -2797,8 +2812,9 @@ __webpack_require__.r(__webpack_exports__);
       this.getData(url);
     },
     saleProductos: function saleProductos(page) {
-      this.listar = 5;
-      var url = '/lorgeliz_tienda_copia/public/api/categorias/productos/vendidos?page=' + page; // axios.get(url).then(response => {
+      this.listar = 5; // let url = '/lorgeliz_tienda_copia/public/api/categorias/productos/vendidos?page=' + page;
+
+      var url = "".concat(this.ruta, "/api/categorias/productos/vendidos?page=").concat(page); // axios.get(url).then(response => {
       // 	var respuesta = response.data;
       // 	this.arrayProductos = respuesta.productos.data;
       // 	this.pagination = respuesta.pagination;
@@ -2807,8 +2823,9 @@ __webpack_require__.r(__webpack_exports__);
       this.getData(url);
     },
     hotProducts: function hotProducts(page) {
-      this.listar = 4;
-      var url = '/lorgeliz_tienda_copia/public/api/categorias/productos/vistos?page=' + page; // axios.get(url).then(response => {
+      this.listar = 4; // let url = '/lorgeliz_tienda_copia/public/api/categorias/productos/vistos?page=' + page;
+
+      var url = "".concat(this.ruta, "/api/categorias/productos/vistos?page=").concat(page); // axios.get(url).then(response => {
       // 	var respuesta = response.data;
       // 	this.arrayProductos = respuesta.productos.data;
       // 	this.pagination = respuesta.pagination;
@@ -2824,9 +2841,11 @@ __webpack_require__.r(__webpack_exports__);
         this.criterio = 'precio_actual';
       } else {
         this.criterio = 'nombre';
-      }
+      } // let url = '/lorgeliz_tienda_copia/public/api/categorias/productos/orden?page=' + page
+      // 	+ '&criterio=' + this.criterio;
 
-      var url = '/lorgeliz_tienda_copia/public/api/categorias/productos/orden?page=' + page + '&criterio=' + this.criterio; // axios.get(url).then(response => {
+
+      var url = "".concat(this.ruta, "/api/categorias/productos/orden?page=").concat(page, "&criterio=").concat(this.criterio); // axios.get(url).then(response => {
       // 	var respuesta = response.data;
       // 	this.arrayProductos = respuesta.productos.data;
       // 	this.pagination = respuesta.pagination;
@@ -2836,8 +2855,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     getProductByTipo: function getProductByTipo(page, tipo) {
       this.listar = 2;
-      this.tipo = tipo;
-      var url = '/lorgeliz_tienda_copia/public/api/categorias/productos/tipo?page=' + page + '&tipo=' + this.tipo; // axios.get(url).then(response => {
+      this.tipo = tipo; // let url = '/lorgeliz_tienda_copia/public/api/categorias/productos/tipo?page=' + page
+      //  + '&tipo=' + this.tipo;
+
+      var url = "".concat(this.ruta, "/api/categorias/productos/tipo?page=").concat(page, "&tipo=").concat(this.tipo); // axios.get(url).then(response => {
       // 	var respuesta = response.data;
       // 	this.arrayProductos = respuesta.productos.data;
       // 	this.pagination = respuesta.pagination;
@@ -2859,9 +2880,11 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.value == 3) {
         this.genero = 'niños';
-      }
+      } // let url = '/lorgeliz_tienda_copia/public/api/categorias/productos/genero?page=' + page
+      //  + '&genero=' + this.genero;
 
-      var url = '/lorgeliz_tienda_copia/public/api/categorias/productos/genero?page=' + page + '&genero=' + this.genero; // axios.get(url).then(response => {
+
+      var url = "".concat(this.ruta, "/api/categorias/productos/genero?page=").concat(page, "&genero=").concat(this.genero); // axios.get(url).then(response => {
       // 	var respuesta = response.data;
       // 	this.arrayProductos = respuesta.productos.data;
       // 	this.pagination = respuesta.pagination;
@@ -2870,8 +2893,10 @@ __webpack_require__.r(__webpack_exports__);
       this.getData(url);
     },
     getProductByKeyword: function getProductByKeyword(page, keyword) {
-      this.listar = 8;
-      var url = '/lorgeliz_tienda_copia/public/api/categorias/productos/keyword?page=' + page + '&keyword=' + keyword; // axios.get(url).then(response => {
+      this.listar = 8; // let url = '/lorgeliz_tienda_copia/public/api/categorias/productos/keyword?page=' + page
+      //  + '&keyword=' + keyword;
+
+      var url = "".concat(this.ruta, "/api/categorias/productos/keyword?page=").concat(page, "&keyword=").concat(keyword); // axios.get(url).then(response => {
       // 	var respuesta = response.data;
       // 	this.arrayProductos = respuesta.productos.data;
       // 	this.pagination = respuesta.pagination;
@@ -3197,10 +3222,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   // props: ['role_id'],
-  props: {// role_id:{
+  props: {
+    // role_id:{
     //     required:true,
     //     type:Number
     // }
+    ruta: {
+      required: true,
+      type: String
+    }
   },
   data: function data() {
     return {
@@ -3216,7 +3246,8 @@ __webpack_require__.r(__webpack_exports__);
     loadMessages: function loadMessages() {
       var _this = this;
 
-      var url = '/lorgeliz_tienda_copia/public/chats';
+      // let url ='/lorgeliz_tienda_copia/public/chats';
+      var url = "".concat(this.ruta, "/chats");
       axios.get(url).then(function (response) {
         _this.arrayMensajes = response.data.chats;
         _this.user = response.data.user;
@@ -3228,9 +3259,10 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       if (this.mensaje != '') {
-        this.error = false;
-        var url = '/lorgeliz_tienda_copia/public/chats'; // let me = this;
+        this.error = false; // let url = '/lorgeliz_tienda_copia/public/chats';
+        // let me = this;
 
+        var url = "".concat(this.ruta, "/chats");
         axios.post(url, {
           'mensaje': this.mensaje
         }).then(function (response) {
@@ -3366,6 +3398,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    ruta: {
+      required: true,
+      type: String
+    }
+  },
   data: function data() {
     return {
       option: 0,
@@ -3379,8 +3417,10 @@ __webpack_require__.r(__webpack_exports__);
       country: "co",
       lang: "es",
       external: "false",
-      confirmation: "http://localhost/lorgeliz_tienda_copia/public/ventas/epayco/confirm",
-      response: "http://localhost/lorgeliz_tienda_copia/public/payments/epayco/response",
+      // confirmation: "http://localhost/lorgeliz_tienda_copia/public/ventas/epayco/confirm",
+      // response: "http://localhost/lorgeliz_tienda_copia/public/payments/epayco/response",
+      confirmation: this.ruta + "/ventas/epayco/confirm",
+      response: this.ruta + "/payments/epayco/response",
       p_confirm_method: "POST",
       name_billing: "",
       address_billing: "",
@@ -3398,10 +3438,15 @@ __webpack_require__.r(__webpack_exports__);
     verifyAndSale: function verifyAndSale() {
       var _this = this;
 
-      axios.get('/lorgeliz_tienda_copia/public/stock/verificar').then(function (response) {
+      // let url = '/lorgeliz_tienda_copia/public/stock/verificar'
+      var url = "".concat(this.ruta, "/stock/verificar");
+      axios.get(url).then(function (response) {
         if (response.data.data == 'success') {
           if (_this.option == 1) {
-            axios.post('/lorgeliz_tienda_copia/public/ventas').then(function (response) {
+            // let url = '/lorgeliz_tienda_copia/public/ventas';
+            var _url = "".concat(_this.ruta, "/ventas");
+
+            axios.post(_url).then(function (response) {
               if (response.data.data == 'success') {
                 // var pedido = response.pedido;
                 swal('Pedido recibido!', 'Hemos recibido tu pedido. En breve empezaremos a alistarlo y nos pondremos en contacto contigo!', 'success'); // window.location.href = `/lorgeliz_tienda_copia/public/pedidos/` + pedido;
@@ -3439,7 +3484,8 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           swal('Uno de tus productos está agotado!', 'Te informamos que uno de los productos que pusiste en el carrito se agotó!', 'error');
           setTimeout(function () {
-            window.location.href = "/lorgeliz_tienda_copia/public/cart";
+            // window.location.href = `/lorgeliz_tienda_copia/public/cart`;
+            window.location.href = "".concat(_this.ruta, "/cart");
           }, 4000);
         }
       })["catch"](function (error) {
@@ -3539,6 +3585,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    ruta: {
+      required: true,
+      type: String
+    }
+  },
   data: function data() {
     return {
       messages: []
@@ -3548,8 +3600,9 @@ __webpack_require__.r(__webpack_exports__);
     read_at: function read_at(id) {
       var _this = this;
 
-      var url = '/lorgeliz_tienda_copia/public/chats/' + id; // let me = this;
-
+      // let url = '/lorgeliz_tienda_copia/public/chats/'+id;
+      // let me = this;
+      var url = "".concat(this.ruta, "/chats/").concat(id);
       axios.put(url).then(function (response) {
         _this.loadMessages();
       })["catch"](function (error) {
@@ -3560,7 +3613,9 @@ __webpack_require__.r(__webpack_exports__);
     loadMessages: function loadMessages() {
       var _this2 = this;
 
-      axios.get('/lorgeliz_tienda_copia/public/chats/messages').then(function (response) {
+      // let url = '/lorgeliz_tienda_copia/public/chats/messages';
+      var url = "".concat(this.ruta, "/chats/messages");
+      axios.get(url).then(function (response) {
         _this2.messages = response.data.chats;
       })["catch"](function (error) {
         console.log(error);
@@ -3621,6 +3676,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    ruta: {
+      required: true,
+      type: String
+    }
+  },
   data: function data() {
     return {
       notifications: []
@@ -3628,7 +3689,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     readNotification: function readNotification(id, ruta) {
-      var url = '/lorgeliz_tienda_copia/public/notification/' + id;
+      // let url = '/lorgeliz_tienda_copia/public/notification/'+id;
+      var url = "".concat(this.ruta, "/notification/").concat(id);
       axios.put(url).then(function (response) {
         window.location.href = ruta;
       })["catch"](function (error) {
@@ -3639,7 +3701,9 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    axios.get('/lorgeliz_tienda_copia/public/notification').then(function (response) {
+    // let url = '/lorgeliz_tienda_copia/public/notification';
+    var url = "".concat(this.ruta, "/notification");
+    axios.get(url).then(function (response) {
       _this.notifications = response.data;
     })["catch"](function (error) {
       console.log(error);
@@ -5360,6 +5424,10 @@ __webpack_require__.r(__webpack_exports__);
     user: {
       required: true,
       type: Number
+    },
+    ruta: {
+      required: true,
+      type: String
     }
   },
   data: function data() {

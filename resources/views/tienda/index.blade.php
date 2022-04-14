@@ -23,7 +23,7 @@
     {{--<img src="{{ $producto->imagen }}" alt="">--}}
 
     <div class="home">
-        <slider :productos="{{$productoSlider}}"></slider>
+        <slider :productos="{{$productoSlider}}" :ruta="ruta"></slider>
     </div>
 
     {{-- <div class="home">
@@ -264,7 +264,7 @@
         </div>
     </div>--}}
     
-    <product-new></product-new>
+    <product-new :ruta="ruta"></product-new>
 
     <!-- Lo mas visto -->
 
@@ -318,7 +318,7 @@
     <div class="lomasvendidocontenedor">
         <div class="section_title text-center">Lo más Visto</div>
         <br>
-        <popular :productos="{{$producto_mas_visto}}"></popular>
+        <popular :productos="{{$producto_mas_visto}}" :ruta="ruta"></popular>
     </div>
 </div>
 
@@ -380,7 +380,7 @@
     <div class="lomasvendidocontenedor">
         <div class="section_title text-center">Lo más Vendido</div>
         <br>
-        <sale :productos="{{$productos_vendidos}}"></sale>
+        <sale :productos="{{$productos_vendidos}}" :ruta="ruta"></sale>
     </div>
 </div>
 
@@ -446,7 +446,7 @@
     <div class="lomasvendidocontenedor">
         <div class="section_title text-center">En oferta</div>
         <br>
-        <offers :productos="{{$productosoferta}}"></offers>
+        <offers :productos="{{$productosoferta}}" :ruta="ruta"></offers>
     </div>
 </div>
 

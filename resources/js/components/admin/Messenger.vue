@@ -97,6 +97,10 @@ export default {
         cliente:{
             required:true,
             type:Number
+        },
+        ruta:{
+            required: true,
+            type: String
         }
     },
     data(){
@@ -112,16 +116,18 @@ export default {
 
                 this.error = false;
                 let url = '/lorgeliz_tienda_copia/public/admin/chats';
-                let me = this;
+                // let me = this;
+
+                let url = `${this.ruta}/admin/chats`;
 
                 axios.post(url,{
                     'mensaje': this.mensaje,
                     'cliente': this.cliente
-                }).then(function (response) {
-                    me.mensaje = '';
+                }).then(response => {
+                    // me.mensaje = '';
                     if (response.data.data == 'success') {
                         // me.loadMessages();
-                        me.mensajes.push(response.data.msg)
+                        this.mensajes.push(response.data.msg)
                     }
                 }).catch(function (error) {
                     console.log(error);

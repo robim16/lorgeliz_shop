@@ -1,7 +1,7 @@
 <template>
 
     <div class="row">
-        <chat-list @chat="enable" @modal="abrirModal"></chat-list>
+        <chat-list @chat="enable" @modal="abrirModal" :ruta="ruta"></chat-list>
         <!-- escucha el evento emitido por el componente hijo y ejecuta la función indicada -->
         <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-primary modal-lg pt-5" role="document">
@@ -161,7 +161,7 @@
 
         <div v-if="arrayMensajes.length > 0 || getCliente != null" class="col-md-3 ml-auto mr-5">
             <div v-for="(mensajes,index) in arrayMensajes" :key="mensajes.id">
-                <messenger :mensajes="mensajes" :user="user" :cliente="activos[index]"></messenger>
+                <messenger :mensajes="mensajes" :user="user" :cliente="activos[index]" :ruta="ruta"></messenger>
             </div>
         </div>
         
@@ -179,6 +179,11 @@ import Messenger from './Messenger.vue';
             user:{
                 required:true,
                 type:Number
+            },
+
+            ruta:{
+                required: true,
+                type: String
             }
         },
         data (){
@@ -273,7 +278,9 @@ import Messenger from './Messenger.vue';
             loadMessages(cliente){
         
                 // let url ='/lorgeliz_tienda_copia/public/admin/chats/'+this.cliente;
-                let url ='/lorgeliz_tienda_copia/public/admin/chats/'+ cliente;
+                // let url ='/lorgeliz_tienda_copia/public/admin/chats/'+ cliente;
+
+                let url = `${this.ruta}/admin/chats/${cliente}`;
                 axios.get(url).then(response => {
                     this.arrayMensajes.push(response.data.chats); 
                     // this.arrayMensajes = response.data.chats;
@@ -336,7 +343,10 @@ import Messenger from './Messenger.vue';
 
             listarClientes(page, buscar, criterio){
                 // let url ='/lorgeliz_tienda_copia/public/admin/clientes/chat?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
-                let url ='/lorgeliz_tienda_copia/public/api/admin/clientes?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
+                // let url ='/lorgeliz_tienda_copia/public/api/admin/clientes?page=' + page + '&buscar='+
+                //     buscar + '&criterio='+ criterio;
+
+                let url = `${this.ruta}/admin/clientes?page=${page}&buscar=${buscar}&criterio=${criterio}`;
 
                 axios.get(url).then(response =>{
                     var respuesta = response.data;
@@ -365,7 +375,7 @@ import Messenger from './Messenger.vue';
             window.Echo.channel('chat-added').listen('ChatEvent', (e) => {
                 let chats = e.data.chats;
                 // this.arrayMensajes = [];
-                console.log(chats);
+                // console.log(chats);
 
                 const index = this.activos.indexOf(e.data.cliente);
 
