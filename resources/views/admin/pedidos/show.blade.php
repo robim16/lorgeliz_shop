@@ -35,6 +35,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col"># Pedido</th>
+                                        <th scope="col">Estado</th>
                                         <th scope="col">Cliente</th>
                                         <th scope="col">Fecha</th>
                                         <th scope="col">Departamento</th>
@@ -62,6 +63,28 @@
 
                                        
                                         <td>{{ $productos[0]->venta->pedido->id }}</td>
+                                        <td>
+                                            @if ($productos[0]->venta->pedido->estado == 1)
+                                                {{ "pendiente" }}
+                                            @endif
+        
+                                            @if ($productos[0]->venta->pedido->estado == 2)
+                                                {{ "en proceso"}}
+                                            @endif
+        
+                                            @if ($productos[0]->venta->pedido->estado == 3)
+                                                {{ "enviado"}}
+                                            @endif
+        
+                                            @if ($productos[0]->venta->pedido->estado == 4)
+                                                {{ "entregado"}}
+                                            @endif
+
+                                            @if ($productos[0]->venta->pedido->estado == 5)
+                                                {{ "anulado"}}
+                                            @endif
+
+                                        </td>
                                         <td><a href="{{ route('cliente.show', $productos[0]->venta->cliente->id)}}"
                                             title="ver cliente">{{$productos[0]->venta->cliente->user->nombres }} {{ $productos[0]->venta->cliente->user->apellidos }}</a></td>
                                         <td>{{ date('d/m/Y h:i:s A', strtotime($productos[0]->venta->pedido->fecha)) }}</td>

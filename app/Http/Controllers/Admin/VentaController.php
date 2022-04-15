@@ -89,32 +89,40 @@ class VentaController extends Controller
 
     public function anular(Venta $venta)
     {
-        $venta->estado = 3;
-        $venta->save();
+        try {
+            
+            $venta->estado = 3;
+            $venta->save();
+    
+            $pago = Pago::where('venta_id', $venta->id)->first();
+    
+            if ($pago) {
+                $pago->estado = 5; // se anula el pago
+                $pago->save();
+            }
+    
+            $venta->pedido->update(['estado' => 5]);
 
-        $pago = Pago::where('venta_id', $venta->id)->first();
+            $productoVenta = ProductoVenta::where('venta_id', $venta->id)->get();
+            foreach ($productoVenta as $key => $producto) {
+               $prod = $producto->producto_referencia_id;
+               $cantidad = $producto->cantidad; // se obtiene la cantidad del producto vendida
+    
+               $prof = ProductoReferencia::where('id', $prod)->first();
+               $stock = $prof->stock;
+    
+               $prof->stock = $stock + $cantidad; // se restituye al stock la cantidad vendida
+    
+               $prof->save();
+            }
+    
+            session()->flash('message', ['success', ("Se ha anulado la venta exitosamente")]);
+    
+            return back();
 
-        if ($pago) {
-            $pago->estado = 5; // se anula el pago
-            $pago->save();
+        } catch (\Exception $ex) {
+            DB::rollBack();
         }
-
-        $productoVenta = ProductoVenta::where('venta_id', $venta->id)->get();
-        foreach ($productoVenta as $key => $producto) {
-           $prod = $producto->producto_referencia_id;
-           $cantidad = $producto->cantidad; // se obtiene la cantidad del producto vendida
-
-           $prof = ProductoReferencia::where('id', $prod)->first();
-           $stock = $prof->stock;
-
-           $prof->stock = $stock + $cantidad; // se restituye al stock la cantidad vendida
-
-           $prof->save();
-        }
-
-        session()->flash('message', ['success', ("Se ha anulado la venta exitosamente")]);
-
-        return back();
     }
 
     public function registrarPago(Request $request, Venta $venta)
