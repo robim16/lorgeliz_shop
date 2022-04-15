@@ -65,6 +65,7 @@ class VentaController extends Controller
         })
         ->orderBy('id', 'DESC')
         ->paginate(5);
+        
 
         return view('admin.ventas.index', compact('ventas'));
     }
@@ -84,7 +85,15 @@ class VentaController extends Controller
         ->where('id', $id)
         ->firstOrFail();
 
-        return view('admin.ventas.show', compact('venta'));
+        $pagos = $venta->pagos()->selectRaw('SUM(monto) as total')->get();
+
+        $valor_devolucion = 0;
+        foreach ($venta->devoluciones as $devolucion) {
+            $valor_devolucion += $devolucion->productoReferencia->colorProducto->producto->precio_actual;
+        };
+
+
+        return view('admin.ventas.show', compact('venta', 'pagos', 'valor_devolucion'));
     }
 
     public function anular(Venta $venta)
@@ -94,11 +103,13 @@ class VentaController extends Controller
             $venta->estado = 3;
             $venta->save();
     
-            $pago = Pago::where('venta_id', $venta->id)->first();
+            $pagos = Pago::where('venta_id', $venta->id)->get();
     
-            if ($pago) {
-                $pago->estado = 5; // se anula el pago
-                $pago->save();
+            if (count($pagos) > 0) {
+                foreach ($pagos as $pago) {
+                    $pago->estado = 5; // se anula el pago
+                    $pago->save();
+                }
             }
     
             $venta->pedido->update(['estado' => 5]);

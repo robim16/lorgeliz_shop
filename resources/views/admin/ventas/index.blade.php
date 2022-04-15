@@ -59,8 +59,9 @@
                             <th>Cliente</th>
                             <th>Valor</th>
                             <th>Estado</th>
+                            <th>Tiene devoluciones?</th>
                             <th>Acciones</th>
-                            <th colspan="8"></th>
+                            <th colspan="3"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,6 +88,13 @@
                                 <span class="badge badge-danger">
                                 {{ "Anulada" }}
                                 </span>
+                                @endif
+                            </td>
+                            <td>
+                                @if ($venta->devoluciones)
+                                    {{"Sí"}}
+                                @else
+                                    {{"No"}}
                                 @endif
                             </td>
                             <td> <a class="btn btn-primary" href="{{ route('venta.show', $venta->id)}}" title="ver venta"><i class="fas fa-eye"></i></a></td>
