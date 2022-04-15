@@ -13,8 +13,8 @@ class Venta extends Model
         return $this->hasOne(Pedido::class);
     }
 
-    public function devolucione (){
-        return $this->hasOne(Devolucione::class);
+    public function devoluciones (){
+        return $this->hasMany(Devolucione::class);
     }
 
     //public function productos (){
@@ -33,8 +33,8 @@ class Venta extends Model
         return $this->belongsTo(Factura::class);
     }
 
-    public function pago (){
-        return $this->hasOne(Pago::class);
+    public function pagos (){
+        return $this->hasMany(Pago::class);
     }
 
     public static function boot () {

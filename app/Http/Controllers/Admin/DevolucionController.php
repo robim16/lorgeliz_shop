@@ -162,12 +162,11 @@ class DevolucionController extends Controller
 
                 $totalproducto = $precio * $cantidad; // calculamos subtotal
 
-                $venta = Venta::where('id', $producto->venta_id)
-                ->first();
+                $venta = Venta::where('id', $producto->venta_id)->first();
 
-                $valor = $venta->valor;
+                $valor = $venta->saldo;
 
-                $venta->valor = $valor - $totalproducto; // a la venta se resta el subtotal del producto
+                $venta->saldo = $valor - $totalproducto; // a la venta se resta el subtotal del producto
 
                 $venta->save();
 

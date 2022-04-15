@@ -43,6 +43,8 @@
                             <th>Cliente</th>
                             <th>Factura</th>
                             <th>Valor</th>
+                            <th>Pagos</th>
+                            <th>Devoluciones</th>
                             <th>Saldo</th>
                             <th>Estado</th>
                             <th>Acciones</th>
@@ -91,6 +93,8 @@
                             <td><a href="{{ route('cliente.show', $venta->cliente->id)}}">{{ $venta->cliente->user->nombres }} {{ $venta->cliente->user->apellidos}}</a></td>
                             <td>{{ ($venta->factura->prefijo) }}{{ ($venta->factura->consecutivo) }}</td>
                             <td>${{ floatval($venta->valor) }}</td>
+                            <td>${{ $pagos[0]->total ? floatval($pagos[0]->total) : 0 }}</td>
+                            <td>${{ floatval($valor_devolucion)}}</td>
                             <td>${{ floatval($venta->saldo) }}</td>
                             <td>
                                 @if ($venta->estado == 1)
