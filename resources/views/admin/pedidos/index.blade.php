@@ -116,6 +116,9 @@
                                             @if ($pedido->estado == 4)
                                             {{ "entregado"}}
                                             @endif
+                                            @if ($pedido->estado == 5)
+                                            {{ "anulado"}}
+                                            @endif
                                             </span>
                                         </td>
                                         <td>${{ floatval($pedido->venta->valor) }}</td>
@@ -125,15 +128,20 @@
                                         class="btn btn-primary" title="ver pedido">
                                          <i class="fas fa-eye"></i></a>
                                         </td>
-                                        <td><a href=""
-                                            class="btn btn-warning" title="cambiar estado"
-                                            data-toggle="modal"
-                                            data-target="#modalEstado"
-                                            data-id="{{$pedido['id']}}"
-                                            data-status="{{$pedido['estado']}}">
-                                            <i class="fas fa-pen"></i></a>
-                                        </td>
-                                        <td><a class="btn btn-success" href="" v-on:click.prevent="imprimir({{ $pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
+
+                                        @if ($pedido->estado != 5)
+                                            
+                                            <td><a href=""
+                                                class="btn btn-warning" title="cambiar estado"
+                                                data-toggle="modal"
+                                                data-target="#modalEstado"
+                                                data-id="{{$pedido['id']}}"
+                                                data-status="{{$pedido['estado']}}">
+                                                <i class="fas fa-pen"></i></a>
+                                            </td>
+                                        @endif
+
+                                        <td><a class="btn btn-success" href="" @click.prevent="imprimir({{ $pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
                                         </td>
                                     </tr>
                                     
@@ -246,6 +254,7 @@
                 $(this).prop('selected',true);
                }
             });
+
         });
     });
     
