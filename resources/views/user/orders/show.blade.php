@@ -119,7 +119,7 @@
     </div>
 </div> --}}
 
-<order-detail :id="{{ $id }}"></order-detail>
+<order-detail :id="{{ $id }}" :ruta="ruta"></order-detail>
 
 
 @endsection

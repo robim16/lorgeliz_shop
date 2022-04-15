@@ -119,6 +119,11 @@ export default {
         id: {
             type: Number,
             required: true
+        },
+
+        ruta:{
+            required: true,
+            type: String
         }
     },
 
@@ -137,8 +142,10 @@ export default {
     }, 
     methods: {
         getProductos(){
-            let url = '/lorgeliz_tienda_copia/public/pedidos/productos/' + this.id;
+            // let url = '/lorgeliz_tienda_copia/public/pedidos/productos/' + this.id;
             // let url = `/lorgeliz_tienda_copia/public/api/orders/${this.id}/productos`;
+
+            let url = `${this.ruta}/pedidos/productos/${this.id}`
 
             axios.get(url).then(response => {
                 this.arrayProductos = response.data.productos;
@@ -161,7 +168,10 @@ export default {
            return new Promise(async(resolve)=>{
                 // let url = '/lorgeliz_tienda_copia/public/devoluciones/verificar?venta=' + venta + '&producto=' + producto;
                  
-                let url = '/lorgeliz_tienda_copia/public/api/devoluciones/verify?venta=' + venta + '&producto=' + producto;
+                // let url = '/lorgeliz_tienda_copia/public/api/devoluciones/verify?venta='
+                //  + venta + '&producto=' + producto;
+
+                let url = `${this.ruta}/api/devoluciones/verify?venta=${venta}&producto=${producto}`
                 var res = ''
                 await axios.get(url).then(response => {
                     // console.log(response.data)
@@ -181,7 +191,9 @@ export default {
         },
 
         store(producto, venta, cantidad){
-            let url = '/lorgeliz_tienda_copia/public/devoluciones';
+            // let url = '/lorgeliz_tienda_copia/public/devoluciones';
+
+           let url = `${this.ruta}/devoluciones`
 
             axios.post(url, {
                 'producto': producto,
@@ -213,7 +225,9 @@ export default {
         }, 
 
         imprimir(id) {
-            window.open('/lorgeliz_tienda_copia/public/pedidos/show/pdf/' + id + ',' + '_blank');
+            // window.open('/lorgeliz_tienda_copia/public/pedidos/show/pdf/' + id + ',' + '_blank');
+
+            window.open(`${this.ruta}/pedidos/show/pdf/${id}, _blank`);
         },
 
     },
