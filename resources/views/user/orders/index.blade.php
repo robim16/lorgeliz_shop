@@ -78,7 +78,7 @@
                                         <i class="fas fa-eye"></i></a>
                                         </td>
                                         <td>
-                                            <factura :id="{{$pedido->pedido->id}}"></factura>
+                                            <factura :id="{{$pedido->pedido->id}}" :ruta="ruta"></factura>
                                             {{-- <a href=""
                                             class="btn btn-success" title="descargar factura" v-on:click.prevent="pdfVenta({{$pedido->id}})">
                                             <i class="fas fa-download"></i></a> --}}

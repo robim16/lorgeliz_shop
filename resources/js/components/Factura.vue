@@ -15,6 +15,11 @@ export default {
         id:{
             required:true,
             type:Number
+        },
+
+        ruta:{
+            required: true,
+            type: String
         }
     },
     data (){
@@ -24,7 +29,9 @@ export default {
     },
     methods: {
         imprimirFactura(id){
-            window.open('/lorgeliz_tienda_copia/public/pedidos/factura/'+ id + ',' + '_blank');
+            let url = '/lorgeliz_tienda_copia/public/pedidos/factura/'+ id + ',' + '_blank';
+
+            window.open(`${this.ruta}/pedidos/factura/${id}, _blank`);
         },
     }
 
