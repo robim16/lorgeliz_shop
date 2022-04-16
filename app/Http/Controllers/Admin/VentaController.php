@@ -112,7 +112,7 @@ class VentaController extends Controller
                 }
             }
     
-            $venta->pedido->update(['estado' => 5]);
+            $venta->pedido()->update(['estado' => 5]);
 
             $productoVenta = ProductoVenta::where('venta_id', $venta->id)->get();
             foreach ($productoVenta as $key => $producto) {

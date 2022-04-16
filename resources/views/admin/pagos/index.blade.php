@@ -60,27 +60,27 @@
                             <td> {{ $pago->ref_epayco ? : "no aplica"}}</td>
                             <td> ${{ floatval($pago->monto) }}</td>
                             <td>
-                                @if ($pago->estado == "Aceptado")
+                                @if ($pago->estado == 1)
                                 <span class="badge badge-success">
                                 {{ "Aceptado" }}
                                 </span>
                                 @endif
-                                @if ($pago->estado == "Rechazado")
+                                @if ($pago->estado == 2)
                                 <span class="badge badge-danger">
                                 {{ "Rechazado" }}
                                 </span>
                                 @endif
-                                @if ($pago->estado == "Pendiente")
+                                @if ($pago->estado == 3)
                                 <span class="badge badge-warning">
                                 {{ "Pendiente" }}
                                 </span>
                                 @endif
-                                @if ($pago->estado == "Fallido")
+                                @if ($pago->estado == 4)
                                 <span class="badge badge-danger">
                                 {{ "Fallido" }}
                                 </span>
                                 @endif
-                                @if ($pago->estado =="Anulado")
+                                @if ($pago->estado == 5)
                                 <span class="badge badge-danger">
                                 {{ "Anulado" }}
                                 </span>
@@ -89,7 +89,7 @@
                             <td> <a class="btn btn-primary" href="{{ route('venta.show', $pago->venta_id)}}" title="ver venta"><i class="fas fa-eye"></i></a></td>
                             <td><a href="" class="btn btn-success" title="imprimir" @click.prevent="imprimirPago({{ $pago->id }})"><i class="fas fa-print"></i></a></td>
                             @if ($pago->ref_epayco)
-                                @if ($pago->estado == "Pendiente")
+                                @if ($pago->estado == 3)
                                 <td><a href="" class="btn btn-warning" title="consultar" @click.prevent="getResponse('{{ $pago->ref_epayco }}')"><i class="fas fa-search"></i></a></td>
                                 @endif
                             @endif

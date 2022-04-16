@@ -91,7 +91,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($venta->devoluciones)
+                                @if (count($venta->devoluciones) > 0)
                                     {{"Sí"}}
                                 @else
                                     {{"No"}}
@@ -99,12 +99,20 @@
                             </td>
                             <td> <a class="btn btn-primary" href="{{ route('venta.show', $venta->id)}}" title="ver venta"><i class="fas fa-eye"></i></a></td>
                             <td><a href="{{ route('admin.pedidos.show', $venta->pedido->id)}}" class="btn btn-success" title="ver pedido"><i class="fas fa-shopping-cart"></i></a></td>
-                            <td><form action="{{ route('venta.anular', $venta->id)}}" method="post">
-                                @csrf
-                                @method('PUT')
-                                <button type="submit" class="btn btn-danger" title="anular venta"><i class="fas fa-trash"></i></button>
-                                </form>
-                            </td>
+                            
+                            @if ($venta->estado != 3)
+                                
+                                <td><form action="{{ route('venta.anular', $venta->id)}}" method="post">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-danger" title="anular venta"><i class="fas fa-trash"></i></button>
+                                    </form>
+                                </td>
+                            
+                            @else
+                                <td></td>
+
+                            @endif
                         </tr>
                         @endforeach
 
