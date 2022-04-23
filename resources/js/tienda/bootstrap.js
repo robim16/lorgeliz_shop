@@ -49,7 +49,8 @@ if (token) {
 
  //descomentar
 window.Echo = new Echo({
-    authEndpoint : 'http://localhost/lorgeliz_tienda_copia/public/broadcasting/auth',
+    // authEndpoint : 'http://localhost/lorgeliz_tienda_copia/public/broadcasting/auth',
+    authEndpoint : 'http://lorenzogeliztienda.com/broadcasting/auth',
     broadcaster: 'pusher',
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,

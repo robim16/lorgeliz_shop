@@ -178,7 +178,8 @@ $(document).ready(function () {
         $.ajax({
             type: "GET",
             // url: "{{ route('talla.tipos') }}",
-            url:'/lorgeliz_tienda_copia/public/api/admin/tallas/tipos/get',
+            // url:'/lorgeliz_tienda_copia/public/api/admin/tallas/tipos/get',
+            url:'http://lorenzogeliztienda.com/api/admin/tallas/tipos/get',
             data:{id:id},
             dataType: 'json',
             success: function (response) {

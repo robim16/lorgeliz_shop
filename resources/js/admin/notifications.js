@@ -25,7 +25,8 @@ const app = new Vue({
     },
     methods:{
         readNotification(id,ruta){
-            let url = '/lorgeliz_tienda_copia/public/admin/notification/'+id;
+            // let url = '/lorgeliz_tienda_copia/public/admin/notification/'+id;
+            let url = 'http://lorenzogeliztienda.com/admin/notification/' + id
             axios.put(url).then(response => {
                 window.location.href = ruta;
             });   
@@ -33,9 +34,11 @@ const app = new Vue({
     },
     created() {
 
-        let url = '/lorgeliz_tienda_copia/public/api/admin/notifications';
-        // '/lorgeliz_tienda_copia/public/admin/notification'
-        axios.get('/lorgeliz_tienda_copia/public/admin/notification').then(response => {
+        // let url = '/lorgeliz_tienda_copia/public/api/admin/notifications';
+
+        // let url = '/lorgeliz_tienda_copia/public/admin/notification'
+        let url = 'http://lorenzogeliztienda.com/admin/notification'
+        axios.get(url).then(response => {
           this.notifications = response.data;
         }).catch(error => {
             console.log(error)

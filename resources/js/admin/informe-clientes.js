@@ -8,7 +8,10 @@ const product = new Vue({
     
     methods: {
         pdfInformeClientes(){
-            window.open('/lorgeliz_tienda_copia/public/admin/informes/pdf/clientes');
+            // let url = '/lorgeliz_tienda_copia/public/admin/informes/pdf/clientes';
+           let url = 'http://lorenzogeliztienda.com/admin/informes/pdf/clientes'
+
+            window.open(url);
             
         },
         

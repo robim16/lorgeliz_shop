@@ -75,19 +75,19 @@
                             <td> ${{ floatval($venta->valor) }}</td>
                             <td>
                                 @if ($venta->estado == 1)
-                                <span class="badge badge-success">
-                                {{ "Pagada" }}
-                                </span>
+                                    <span class="badge badge-success">
+                                    {{ "Pagada" }}
+                                    </span>
                                 @endif
                                 @if ($venta->estado == 2)
-                                <span class="badge badge-warning">
-                                {{ "Con saldo" }} 
-                                </span>
+                                    <span class="badge badge-warning">
+                                    {{ "Con saldo" }} 
+                                    </span>
                                 @endif
                                 @if ($venta->estado == 3)
-                                <span class="badge badge-danger">
-                                {{ "Anulada" }}
-                                </span>
+                                    <span class="badge badge-danger">
+                                    {{ "Anulada" }}
+                                    </span>
                                 @endif
                             </td>
                             <td>

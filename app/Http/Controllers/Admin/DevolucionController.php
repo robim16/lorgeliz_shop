@@ -164,9 +164,41 @@ class DevolucionController extends Controller
 
                 $venta = Venta::where('id', $producto->venta_id)->first();
 
-                $valor = $venta->saldo;
+                $pagos = $venta->pagos()->selectRaw('SUM(monto) as total')->get();
 
-                $venta->saldo = $valor - $totalproducto; // a la venta se resta el subtotal del producto
+
+                // if ($totalproducto == $venta->valor) {
+
+                //     $venta->saldo = 0;
+                    
+                //     if ($pagos[0]->total > 0) {
+
+                //         //anular pagos
+                //     }
+                // }
+                // else{
+
+                    if ($pagos[0]->total == 0) {
+                       
+                        $venta->saldo = $venta->saldo - $totalproducto; // a la venta se resta el subtotal del producto y los pagos
+                    } else {
+                        if ($totalproducto <= $venta->saldo) {
+                            $saldo = $venta->saldo - $totalproducto;
+
+                            $venta->saldo = $saldo;
+
+                            $deducciones = $pagos[0]->total + $totalproducto;
+
+                            if ($saldo == 0 && $deducciones > $venta->total) {
+                                //anular pagos
+                            }
+                        }
+                        else{
+                            $venta->saldo = 0;//$venta->valor
+                            //anular pagos
+                        }
+                    }
+                // }
 
                 $venta->save();
 

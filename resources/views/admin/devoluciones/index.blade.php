@@ -96,7 +96,7 @@
                                 </tbody>
 
                             </table>
-                           {{ $devoluciones->appends($_GET)->links() }} 
+                            {{ $devoluciones->appends($_GET)->links() }} 
                         </div>
                         <!-- /.card-body -->
                     </div>

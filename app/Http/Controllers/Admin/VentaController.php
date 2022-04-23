@@ -85,15 +85,25 @@ class VentaController extends Controller
         ->where('id', $id)
         ->firstOrFail();
 
-        $pagos = $venta->pagos()->selectRaw('SUM(monto) as total')->get();
+        $pagos = $venta->pagos()->select('*', DB::raw('SUM(monto) as total'))
+        ->orderBy('pagos.fecha', 'DESC')
+        ->paginate(5);
+
+
+        $devoluciones = $venta->devoluciones()->paginate(5);
 
         $valor_devolucion = 0;
-        foreach ($venta->devoluciones as $devolucion) {
+
+        foreach ($devoluciones as $devolucion) {
             $valor_devolucion += $devolucion->productoReferencia->colorProducto->producto->precio_actual;
         };
 
+        $devolucion =  new DevolucionController();
 
-        return view('admin.ventas.show', compact('venta', 'pagos', 'valor_devolucion'));
+        $estados = $devolucion->estados_devolucion();
+
+        return view('admin.ventas.show', compact('venta', 'pagos', 'valor_devolucion',
+        'devoluciones', 'estados'));
     }
 
     public function anular(Venta $venta)
