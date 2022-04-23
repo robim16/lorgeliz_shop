@@ -8,7 +8,9 @@ const listsales = new Vue({
     
     methods: {
         pdfListadoDevoluciones(){
-            window.open('/lorgeliz_tienda_copia/public/admin/devoluciones/listado');
+            // let url = '/lorgeliz_tienda_copia/public/admin/devoluciones/listado';
+            let url = 'http://lorenzogeliztienda.com/admin/devoluciones/listado'
+            window.open();
         },
         
     },
