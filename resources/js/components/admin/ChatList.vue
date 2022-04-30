@@ -143,10 +143,10 @@
                 //     this.buscar = this.cliente;
 			    // }
 			
-                let url ='/lorgeliz_tienda_copia/public/admin/chats/get?page='
-                    + page + '&buscar='+ this.buscar;
+                // let url ='/lorgeliz_tienda_copia/public/admin/chats/get?page='
+                //     + page + '&buscar='+ this.buscar;
                 
-                let url = ``
+                let url = `${this.ruta}/admin/chats/get?page=${page}&buscar=${this.buscar}`
                 // let url ='/lorgeliz_tienda_copia/public/api/admin/chats?page=' + page + '&buscar='+ this.buscar;
                 axios.get(url).then(response =>{
                     var respuesta = response.data;

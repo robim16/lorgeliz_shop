@@ -251,11 +251,21 @@
                             <td>{{ $producto->productoReferencia->colorProducto->producto->nombre }}</td>
                             <td>{{ $producto->productoReferencia->talla->nombre }}</td>
                             <td>{{ $producto->productoReferencia->colorProducto->color->nombre }}</td>
-                            <td>${{ floatval($producto->productoReferencia->colorProducto->producto->precio_actual) }}</td>
-                            <td>{{ $producto->productoReferencia->colorProducto->producto->porcentaje_descuento }}</td>
-                            <td>${{ $producto->cantidad*
+                            {{-- <td>${{ floatval($producto->productoReferencia->colorProducto->producto->precio_actual) }}</td> --}}
+                            <td>${{ floatval($producto->precio_venta) }}</td>
+                            {{-- <td>{{ $producto->productoReferencia->colorProducto->producto->porcentaje_descuento }}</td> --}}
+                            <td>{{ $producto->porcentaje_descuento }}</td>
+
+                            {{-- @php
+                                $descuento += ($producto->porcentaje_descuento * $producto->precio_venta)/100
+                            @endphp --}}
+
+                            {{-- <td>${{ $producto->cantidad*
                                 $producto->productoReferencia->colorProducto->producto->precio_actual
                                 -$producto->productoReferencia->colorProducto->producto->porcentaje_descuento }}
+                            </td> --}}
+                            <td>${{ floatval($producto->cantidad *
+                                $producto->precio_venta-$producto->porcentaje_descuento) }}
                             </td>
                         </tr>
                         @endforeach
@@ -272,6 +282,15 @@
                             {{-- <td>${{ floatval($producto->valor)}}</td> --}}
                             <td>${{ floatval($producto->venta->valor)}}</td>
                         </tr>
+                        {{-- <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Descuento</th>
+                            <td>$0{{$v->total*$v->impuesto}}</td>
+                        </tr> --}}
                         <tr>
                             <th></th>
                             <th></th>

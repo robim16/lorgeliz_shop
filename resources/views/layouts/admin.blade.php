@@ -499,6 +499,12 @@
                   </a>
                 </li>
                 <li class="nav-item">
+                  <a href="{{ route('informes.saldos')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Informe de saldos</p>
+                  </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('informes.productos') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Productos más vendidos</p>

@@ -73,8 +73,10 @@
                                             <td>{{ producto.producto_referencia.talla.nombre }}</td>
                                             <td>{{ producto.producto_referencia.color_producto.color.nombre }}</td>
                                             <td>{{ producto.cantidad }}</td>
-                                            <td>{{ '$'+ producto.producto_referencia.color_producto.producto.precio_actual }}</td>
-                                            <td>{{ '$'+ producto.producto_referencia.color_producto.producto.precio_actual * producto.cantidad }}</td>
+                                            <!-- <td>{{ '$'+ producto.producto_referencia.color_producto.producto.precio_actual }}</td> -->
+                                            <td>{{ '$'+ producto.precio_venta }}</td>
+                                            <!-- <td>{{ '$'+ producto.producto_referencia.color_producto.producto.precio_actual * producto.cantidad }}</td> -->
+                                            <td>{{ '$'+ producto.precio_venta * $producto.cantidad }}</td>
                                             <td>
                                                 <a href="" class="btn btn-success" title="solicitar cambio"
                                                     v-if="prodDevolucion[index] === true"

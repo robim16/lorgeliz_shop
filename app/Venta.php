@@ -37,6 +37,10 @@ class Venta extends Model
         return $this->hasMany(Pago::class);
     }
 
+    public function productoVentas(){
+        return $this->hasMany(ProductoVenta::class, 'venta_id');
+    }
+
     public static function boot () {
         parent::boot();
             
@@ -61,6 +65,8 @@ class Venta extends Model
                 $productoVenta->producto_referencia_id = $carrito->producto_referencia_id;
                 $productoVenta->venta_id = $venta->id;
                 $productoVenta->cantidad = $carrito->cantidad;
+                $productoVenta->precio_venta =  $carrito->productoReferencia->colorProducto->producto->precio_actual;
+                $productoVenta->porcentaje_descuento = $carrito->productoReferencia->colorProducto->producto->porcentaje_descuento;
 
                 $productoVenta->save();
             }
