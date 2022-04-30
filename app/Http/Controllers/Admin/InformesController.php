@@ -410,4 +410,17 @@ class InformesController extends Controller
         ->setPaper('a4', 'landscape');
         return $pdf->download('ventas_mes.pdf');
     }
+
+    public function informe_saldos_clientes()
+    {
+        $saldos_pendientes = Venta::with('cliente')
+        ->where('saldo', '>', '0')
+        ->where('estado', '=', '2')
+        ->select('cliente_id', DB::raw('COUNT(id) as facturas'),
+        DB::raw('SUM(saldo) as saldos'))
+        ->groupBy('cliente_id')
+        ->paginate(5);
+
+        return view('admin.informes.saldos.index',compact('saldos_pendientes'));
+    }
 }

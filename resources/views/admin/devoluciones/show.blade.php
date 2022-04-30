@@ -121,6 +121,8 @@
                                         <th scope="col">Talla</th>
                                         <th scope="col">Color</th>
                                         <th scope="col">Cantidad</th>
+                                        <th scope="col">Precio de venta</th>
+                                        <th scope="col">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -138,10 +140,24 @@
                                         <td>{{ $producto->productoReferencia->talla->nombre }}</td>
                                         <td>{{ $producto->productoReferencia->colorProducto->color->nombre }}</td>
                                         <td>{{ $producto->cantidad }}</td>
+
+                                        @php
+                                           $pventa = $producto->venta->productoVentas;
+                                            $precio = 0;
+                                            
+                                            foreach ($pventa as $key => $pv) {
+                                                if ($pv) {
+                                                    $pv->producto_referencia_id == $producto->productoReferencia->id;
+                                                    $precio = $pv->precio_venta;
+                                                }
+                                            } 
+                                            
+                                        @endphp
+                                        <td>${{floatval($precio)}}</td>
+                                        <td>${{floatval($precio * $producto->cantidad)}}</td>
                                     </tr>
                                         
                                     @endforeach
-                                    
                                     
                                 </tbody>
 

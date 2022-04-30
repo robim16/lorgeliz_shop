@@ -219,10 +219,15 @@
                             <td>{{ $producto->productoReferencia->colorProducto->producto->nombre }}</td>
                             <td>{{ $producto->productoReferencia->talla->nombre }}</td>
                             <td>{{ $producto->productoReferencia->colorProducto->color->nombre }}</td>
-                            <td>${{ floatval($producto->productoReferencia->colorProducto->producto->precio_actual) }}</td>
-                            <td>{{ $producto->productoReferencia->colorProducto->producto->porcentaje_descuento }}</td>
-                            <td>${{ $producto->cantidad*$producto->productoReferencia->colorProducto->producto->precio_actual
-                            -$producto->productoReferencia->colorProducto->producto->porcentaje_descuento }}</td>
+                            {{-- <td>${{ floatval($producto->productoReferencia->colorProducto->producto->precio_actual) }}</td> --}}
+                            <td>${{ floatval($producto->precio_venta) }}</td>
+                            {{-- <td>{{ $producto->productoReferencia->colorProducto->producto->porcentaje_descuento }}</td> --}}
+                            <td>{{ $producto->porcentaje_descuento }}</td>
+                            {{-- <td>${{ $producto->cantidad*$producto->productoReferencia->colorProducto->producto->precio_actual
+                            -$producto->productoReferencia->colorProducto->producto->porcentaje_descuento }}</td> --}}
+                            <td>${{ floatval($producto->cantidad *
+                                $producto->precio_venta-$producto->porcentaje_descuento) }}
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

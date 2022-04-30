@@ -147,6 +147,7 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
         Route::get('/ventas/listado/{mes}', 'Admin\InformesController@mostrarVentas')->name('listado.ventas');
         Route::get('/productos', 'Admin\InformesController@ventaProductos')->name('informes.productos');
         Route::get('/clientes', 'Admin\InformesController@informeClientes')->name('informes.clientes');
+        Route::get('/saldos', 'Admin\InformesController@informe_saldos_clientes')->name('informes.saldos');
         Route::get('/pagos', 'Admin\InformesController@informePagos')->name('informes.pagos');
         Route::get('/pagos/listado/{mes}', 'Admin\InformesController@mostrarPagos')->name('listado.pagos');
         Route::get('/pdf/ventas', 'Admin\InformesController@pdfInformeVentas')->name('informes.ventaspdf');
@@ -171,6 +172,7 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
         // Route::get('/payment/{id}', 'Admin\PaymentController@printPay')->name('payments.pdf');
         Route::get('/list', 'Admin\PaymentController@pdfPagosReporte')->name('payments.list');
        // Route::get('/epayco/response', 'PaymentController@response')->name('response');
+        Route::post('/cancel/{pago}', 'Admin\PaymentController@anular')->name('payments.cancel');
     });
 
     Route::group(['prefix' => '/productos'], function () {

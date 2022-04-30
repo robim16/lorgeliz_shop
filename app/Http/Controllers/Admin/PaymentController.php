@@ -76,4 +76,27 @@ class PaymentController extends Controller
         
         return $pdf->download('listadopagos.pdf');
     }
+
+    public function anular(Pago $pago)
+    {
+        $monto = $pago->monto;
+
+        $venta = $pago->venta;
+
+        $saldo_venta = $venta->saldo;
+
+        $venta->saldo = $saldo_venta + $monto;
+
+        $venta->estado = 2;
+        
+        $venta->save();
+
+        $pago->estado = 5;
+
+        $pago->save();
+
+        session()->flash('message', ['success', ("Se ha anulado el pago exitosamente")]);
+
+        return back();
+    }
 }

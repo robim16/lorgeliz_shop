@@ -31,7 +31,7 @@ export default {
         imprimirFactura(id){
             let url = '/lorgeliz_tienda_copia/public/pedidos/factura/'+ id + ',' + '_blank';
 
-            window.open(`${this.ruta}/pedidos/factura/${id}, _blank`);
+            window.open(`${this.ruta}/pedidos/factura/${id},_blank`);
         },
     }
 

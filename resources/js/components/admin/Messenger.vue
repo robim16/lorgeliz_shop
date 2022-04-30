@@ -115,7 +115,7 @@ export default {
             if (this.mensaje != '') {
 
                 this.error = false;
-                let url = '/lorgeliz_tienda_copia/public/admin/chats';
+                // let url = '/lorgeliz_tienda_copia/public/admin/chats';
                 // let me = this;
 
                 let url = `${this.ruta}/admin/chats`;

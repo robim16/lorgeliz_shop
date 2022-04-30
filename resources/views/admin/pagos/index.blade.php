@@ -93,6 +93,14 @@
                                 <td><a href="" class="btn btn-warning" title="consultar" @click.prevent="getResponse('{{ $pago->ref_epayco }}')"><i class="fas fa-search"></i></a></td>
                                 @endif
                             @endif
+
+                            <td>  
+                                <form action="{{ route('payments.cancel', $pago->id)}}" method="post">
+                                    @csrf
+                                    @method('POST')
+                                    <button type="submit" class="btn btn-danger" title="anular"><i class="fa fa-ban"></i> </button>
+                                </form>
+                            </td>
                             
                         </tr>
                         @endforeach

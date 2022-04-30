@@ -200,7 +200,6 @@
                                     <td>{{ ($venta->factura->prefijo) }}{{ ($venta->factura->consecutivo) }}</td>
                                     <td>${{ floatval($venta->valor) }}</td>
                                     <td>${{ $pagos[0] ? floatval($pagos[0]->total) : 0 }}</td>
-                                    {{$pagos[0]}}
                                     <td>${{ floatval($valor_devolucion)}}</td>
                                     <td>${{ floatval($venta->saldo) }}</td>
                                     <td>
