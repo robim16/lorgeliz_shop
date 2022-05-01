@@ -60,7 +60,7 @@
                                     </thead>
                                     <tbody>
 
-                                        <tr v-for="(producto, index) in arrayProductos" :key="producto.referencia">
+                                        <tr v-for="producto in arrayProductos" :key="producto.referencia">
                                             <td>
                                                 <a :href="'../productos/' + producto.producto_referencia.color_producto.slug">{{ producto.producto_referencia.color_producto.producto.nombre }}</a>
                                             </td>
@@ -76,8 +76,8 @@
                                             <!-- <td>{{ '$'+ producto.producto_referencia.color_producto.producto.precio_actual }}</td> -->
                                             <td>{{ '$'+ producto.precio_venta }}</td>
                                             <!-- <td>{{ '$'+ producto.producto_referencia.color_producto.producto.precio_actual * producto.cantidad }}</td> -->
-                                            <td>{{ '$'+ producto.precio_venta * $producto.cantidad }}</td>
-                                            <td>
+                                            <td>{{ '$'+ producto.precio_venta * producto.cantidad }}</td>
+                                            <!-- <td>
                                                 <a href="" class="btn btn-success" title="solicitar cambio"
                                                     v-if="prodDevolucion[index] === true"
                                                     @click.prevent="store(producto.producto_referencia.id,
@@ -86,6 +86,17 @@
                                                     )">
                                                     <i class="fas fa-recycle"></i>
                                                     
+                                                </a>
+                                                <span v-else>{{"cambio solicitado"}}</span>
+                                            </td> -->
+
+                                            <td>
+                                                <a href="" class="btn btn-success" title="solicitar cambio"
+                                                    @click.prevent="store(producto.producto_referencia.id,
+                                                    producto.venta.id,
+                                                    producto.cantidad
+                                                    )" v-if="Object.values(producto.producto_referencia.devoluciones).length == 0">
+                                                    <i class="fas fa-recycle"></i>
                                                 </a>
                                                 <span v-else>{{"cambio solicitado"}}</span>
                                             </td>
@@ -144,7 +155,7 @@ export default {
     }, 
     methods: {
         getProductos(){
-            // let url = '/lorgeliz_tienda_copia/public/pedidos/productos/' + this.id;
+            let url = '/lorgeliz_tienda_copia/public/pedidos/productos/' + this.id;
             // let url = `/lorgeliz_tienda_copia/public/api/orders/${this.id}/productos`;
 
             let url = `${this.ruta}/pedidos/productos/${this.id}`
@@ -153,14 +164,14 @@ export default {
                 this.arrayProductos = response.data.productos;
                 this.valor = this.arrayProductos[0].venta.valor;
 
-                this.arrayProductos.forEach(producto => {
-                    this.activarDevolucion(producto.producto_referencia.id, producto.venta.id)
-                    .then(res => {
-                        this.prodDevolucion.push(res);
-                    }).catch(error => {
-                        console.log(error);
-                    });
-                })
+                // this.arrayProductos.forEach(producto => {
+                //     this.activarDevolucion(producto.producto_referencia.id, producto.venta.id)
+                //     .then(res => {
+                //         this.prodDevolucion.push(res);
+                //     }).catch(error => {
+                //         console.log(error);
+                //     });
+                // })
             }); 
         
         },

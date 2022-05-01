@@ -3541,7 +3541,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     imprimirFactura: function imprimirFactura(id) {
       var url = '/lorgeliz_tienda_copia/public/pedidos/factura/' + id + ',' + '_blank';
-      window.open("".concat(this.ruta, "/pedidos/factura/").concat(id, ", _blank"));
+      window.open("".concat(this.ruta, "/pedidos/factura/").concat(id, ",_blank"));
     }
   }
 });
@@ -3999,6 +3999,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     id: {
@@ -4023,20 +4036,19 @@ __webpack_require__.r(__webpack_exports__);
     getProductos: function getProductos() {
       var _this = this;
 
-      // let url = '/lorgeliz_tienda_copia/public/pedidos/productos/' + this.id;
-      // let url = `/lorgeliz_tienda_copia/public/api/orders/${this.id}/productos`;
-      var url = "".concat(this.ruta, "/pedidos/productos/").concat(this.id);
+      var url = '/lorgeliz_tienda_copia/public/pedidos/productos/' + this.id; // let url = `/lorgeliz_tienda_copia/public/api/orders/${this.id}/productos`;
+      // let url = `${this.ruta}/pedidos/productos/${this.id}`
+
       axios.get(url).then(function (response) {
         _this.arrayProductos = response.data.productos;
-        _this.valor = _this.arrayProductos[0].venta.valor;
-
-        _this.arrayProductos.forEach(function (producto) {
-          _this.activarDevolucion(producto.producto_referencia.id, producto.venta.id).then(function (res) {
-            _this.prodDevolucion.push(res);
-          })["catch"](function (error) {
-            console.log(error);
-          });
-        });
+        _this.valor = _this.arrayProductos[0].venta.valor; // this.arrayProductos.forEach(producto => {
+        //     this.activarDevolucion(producto.producto_referencia.id, producto.venta.id)
+        //     .then(res => {
+        //         this.prodDevolucion.push(res);
+        //     }).catch(error => {
+        //         console.log(error);
+        //     });
+        // })
       });
     },
     activarDevolucion: function activarDevolucion(producto, venta) {
@@ -51501,7 +51513,7 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "tbody",
-                        _vm._l(_vm.arrayProductos, function(producto, index) {
+                        _vm._l(_vm.arrayProductos, function(producto) {
                           return _c("tr", { key: producto.referencia }, [
                             _c("td", [
                               _c(
@@ -51575,28 +51587,22 @@ var render = function() {
                             _c("td", [_vm._v(_vm._s(producto.cantidad))]),
                             _vm._v(" "),
                             _c("td", [
-                              _vm._v(
-                                _vm._s(
-                                  "$" +
-                                    producto.producto_referencia.color_producto
-                                      .producto.precio_actual
-                                )
-                              )
+                              _vm._v(_vm._s("$" + producto.precio_venta))
                             ]),
                             _vm._v(" "),
                             _c("td", [
                               _vm._v(
                                 _vm._s(
                                   "$" +
-                                    producto.producto_referencia.color_producto
-                                      .producto.precio_actual *
-                                      producto.cantidad
+                                    producto.precio_venta * producto.cantidad
                                 )
                               )
                             ]),
                             _vm._v(" "),
                             _c("td", [
-                              _vm.prodDevolucion[index] === true
+                              Object.values(
+                                producto.producto_referencia.devoluciones
+                              ).length == 0
                                 ? _c(
                                     "a",
                                     {

@@ -31,7 +31,7 @@ class ProductoReferencia extends Pivot
     }
 
     public function devoluciones (){
-        return $this->hasMany(Devolucione::class);
+        return $this->hasMany(Devolucione::class, 'producto_referencia_id');
     }
 
     public function carritos (){
