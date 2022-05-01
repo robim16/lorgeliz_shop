@@ -221,7 +221,7 @@
                                     </td>
                                     @if ($venta->estado == 2 & $venta->saldo > 0)
                                     <td>
-                                        <a class="btn btn-primary" href="" title="registrar pago" data-toggle="modal"
+                                        <a class="btn btn-primary btn-sm" href="" title="registrar pago" data-toggle="modal"
                                             data-target="#modal" id="pay">
                                             <i class="fas fa-money-bill-wave"></i>
                                         </a>
@@ -242,20 +242,20 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="7" class="text-right">Total venta:</td>
-                                    <td colspan="4" class="text-left">${{ floatval($venta->valor) }}</td>
+                                    <td colspan="5" class="text-left">${{ floatval($venta->valor) }}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="7" class="text-right">Total pagos:</td>
-                                    <td colspan="4" class="text-left">${{ $pagos[0] ? floatval($pagos[0]->total) : 0 }}</td>
+                                    <td colspan="5" class="text-left">${{ $pagos[0] ? floatval($pagos[0]->total) : 0 }}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="7" class="text-right">Total devoluciones:</td>
-                                    <td colspan="4" class="text-left">${{ floatval($valor_devolucion) ? floatval($valor_devolucion) : 0 }}</td>
+                                    <td colspan="5" class="text-left">${{ floatval($valor_devolucion) ? floatval($valor_devolucion) : 0 }}</td>
                                 </tr>
 
                                 <tr>
                                     <td colspan="7" class="text-right">Saldo:</td>
-                                    <td colspan="4" class="text-left">${{ floatval($venta->saldo) ? floatval($venta->saldo) : 0 }}</td>
+                                    <td colspan="5" class="text-left">${{ floatval($venta->saldo) ? floatval($venta->saldo) : 0 }}</td>
                                 </tr>
 
 
@@ -279,51 +279,49 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            
                                 @foreach ($pagos as $pago)
-        
-                                <tr>
-                                    <td> {{ $pago->id }} </td>
-                                    <td> {{ date('d/m/Y h:i:s A', strtotime($pago->fecha)) }}</td>
-                                    <td> <a href="{{ route('venta.show', $pago->venta_id)}}" title="ver venta">{{$pago->venta_id}}</a></td>
-                                    <td> {{ $pago->ref_epayco ? : "no aplica"}}</td>
-                                    <td> ${{ floatval($pago->monto) }}</td>
-                                    <td>
-                                        @if ($pago->estado == 1)
-                                        <span class="badge badge-success">
-                                        {{ "Aceptado" }}
-                                        </span>
+                                    <tr>
+                                        <td> {{ $pago->id }} </td>
+                                        <td> {{ date('d/m/Y h:i:s A', strtotime($pago->fecha)) }}</td>
+                                        <td> <a href="{{ route('venta.show', $pago->venta_id)}}" title="ver venta">{{$pago->venta_id}}</a></td>
+                                        <td> {{ $pago->ref_epayco ? : "no aplica"}}</td>
+                                        <td> ${{ floatval($pago->monto) }}</td>
+                                        <td>
+                                            @if ($pago->estado == 1)
+                                            <span class="badge badge-success">
+                                            {{ "Aceptado" }}
+                                            </span>
+                                            @endif
+                                            @if ($pago->estado == 2)
+                                            <span class="badge badge-danger">
+                                            {{ "Rechazado" }}
+                                            </span>
+                                            @endif
+                                            @if ($pago->estado == 3)
+                                            <span class="badge badge-warning">
+                                            {{ "Pendiente" }}
+                                            </span>
+                                            @endif
+                                            @if ($pago->estado == 4)
+                                            <span class="badge badge-danger">
+                                            {{ "Fallido" }}
+                                            </span>
+                                            @endif
+                                            @if ($pago->estado == 5)
+                                            <span class="badge badge-danger">
+                                            {{ "Anulado" }}
+                                            </span>
+                                            @endif
+                                        </td>
+                                        <td> <a class="btn btn-primary" href="{{ route('venta.show', $pago->venta_id)}}" title="ver venta"><i class="fas fa-eye"></i></a></td>
+                                        <td><a href="" class="btn btn-success" title="imprimir" @click.prevent="imprimirPago({{ $pago->id }})"><i class="fas fa-print"></i></a></td>
+                                        @if ($pago->ref_epayco)
+                                            @if ($pago->estado == 3)
+                                            <td><a href="" class="btn btn-warning" title="consultar" @click.prevent="getResponse('{{ $pago->ref_epayco }}')"><i class="fas fa-search"></i></a></td>
+                                            @endif
                                         @endif
-                                        @if ($pago->estado == 2)
-                                        <span class="badge badge-danger">
-                                        {{ "Rechazado" }}
-                                        </span>
-                                        @endif
-                                        @if ($pago->estado == 3)
-                                        <span class="badge badge-warning">
-                                        {{ "Pendiente" }}
-                                        </span>
-                                        @endif
-                                        @if ($pago->estado == 4)
-                                        <span class="badge badge-danger">
-                                        {{ "Fallido" }}
-                                        </span>
-                                        @endif
-                                        @if ($pago->estado == 5)
-                                        <span class="badge badge-danger">
-                                        {{ "Anulado" }}
-                                        </span>
-                                        @endif
-                                    </td>
-                                    <td> <a class="btn btn-primary" href="{{ route('venta.show', $pago->venta_id)}}" title="ver venta"><i class="fas fa-eye"></i></a></td>
-                                    <td><a href="" class="btn btn-success" title="imprimir" @click.prevent="imprimirPago({{ $pago->id }})"><i class="fas fa-print"></i></a></td>
-                                    @if ($pago->ref_epayco)
-                                        @if ($pago->estado == 3)
-                                        <td><a href="" class="btn btn-warning" title="consultar" @click.prevent="getResponse('{{ $pago->ref_epayco }}')"><i class="fas fa-search"></i></a></td>
-                                        @endif
-                                    @endif
-                                    
-                                </tr>
+                                        
+                                    </tr>
                                 @endforeach
         
                             </tbody>

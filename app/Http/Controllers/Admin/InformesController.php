@@ -423,4 +423,16 @@ class InformesController extends Controller
 
         return view('admin.informes.saldos.index',compact('saldos_pendientes'));
     }
+
+    public function facturasPendientesCliente(Cliente $cliente)
+    {
+        $saldos_pendientes = Venta::with('cliente')
+        ->where('saldo', '>', '0')
+        ->where('estado', '=', '2')
+        ->where('cliente_id', $cliente->id)
+        ->orderBy('fecha', 'DESC')
+        ->paginate(5);
+
+        return view('admin.informes.saldos.show',compact('saldos_pendientes'));
+    }
 }

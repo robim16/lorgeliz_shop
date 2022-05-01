@@ -60,7 +60,7 @@
                                             </td>
                                             <td>{{ $saldo_pendiente->facturas }}</td>
                                             <td>${{ floatval($saldo_pendiente->saldos) }}</td>
-                                            <td><a href="" class="btn btn-primary" title="ver"><i class="fa fa-eye"></i></a></td>
+                                            <td><a href="{{ route('informes.saldos.cliente', $saldo_pendiente->cliente->id)}}" class="btn btn-primary" title="ver"><i class="fa fa-eye"></i></a></td>
                                         </tr>
                                     @endforeach
                                         

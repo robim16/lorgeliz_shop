@@ -105,7 +105,7 @@ class OrdersController extends Controller
     }
 
     //envía la data al componente orderDetail
-    public function productos(Request $request, $id) {
+    public function productos(Pedido $pedido) {
 
         // $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
         // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
@@ -125,15 +125,16 @@ class OrdersController extends Controller
         // ->get();
 
         $productos = ProductoVenta::whereHas('venta.pedido',
-        function (Builder $query) use ($id) {
-           $query->where('id', $id);
+        function (Builder $query) use ($pedido) {
+           $query->where('id', $pedido->id);
         })
         ->whereHas('venta',
-        function (Builder $query) use ($id) {
+        function (Builder $query) {
            $query->where('cliente_id', auth()->user()->cliente->id);
         })
         ->with(['productoReferencia.colorProducto.color', 'productoReferencia.colorProducto.producto',
-        'productoReferencia.talla','venta.pedido', 'productoReferencia.colorProducto.imagenes'])
+        'productoReferencia.talla','venta.pedido', 'productoReferencia.colorProducto.imagenes',
+        'productoReferencia.devoluciones'])
         ->get();
 
         return ['productos' => $productos];

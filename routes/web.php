@@ -76,7 +76,7 @@ Route::group(['prefix' => '/pedidos'], function () {
     // Route::get('/', 'OrdersController@index')->name('pedidos.index');
     Route::get('/show/pdf/{id}', 'OrdersController@showPdf')->name('pedidos.show.pdf');
     Route::get('/factura/{id}', 'OrdersController@facturas')->name('pedidos.factura');
-    Route::get('/productos/{id}', 'OrdersController@productos');
+    Route::get('/productos/{pedido}', 'OrdersController@productos');
 });
 
 Route::resource('/pedidos', 'OrdersController');
@@ -148,6 +148,7 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
         Route::get('/productos', 'Admin\InformesController@ventaProductos')->name('informes.productos');
         Route::get('/clientes', 'Admin\InformesController@informeClientes')->name('informes.clientes');
         Route::get('/saldos', 'Admin\InformesController@informe_saldos_clientes')->name('informes.saldos');
+        Route::get('/saldos/{cliente}', 'Admin\InformesController@facturasPendientesCliente')->name('informes.saldos.cliente');
         Route::get('/pagos', 'Admin\InformesController@informePagos')->name('informes.pagos');
         Route::get('/pagos/listado/{mes}', 'Admin\InformesController@mostrarPagos')->name('listado.pagos');
         Route::get('/pdf/ventas', 'Admin\InformesController@pdfInformeVentas')->name('informes.ventaspdf');
