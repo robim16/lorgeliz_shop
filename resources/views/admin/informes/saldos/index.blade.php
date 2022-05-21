@@ -10,7 +10,7 @@
 
 @section('content')
 
-<div id="informeproducto">
+<div id="informesaldos">
     <div class="content">
         <div class="container">
             <div class="row">
@@ -30,7 +30,7 @@
                                             <button type="submit" class="btn btn-success">
                                                 <i class="fas fa-search"></i>
                                             </button>
-                                            <a href="" class="btn btn-warning mx-1"><i class="fas fa-print"></i></a>
+                                            <a href="" class="btn btn-warning mx-1" @click.prevent="pdfInformeSaldos"><i class="fas fa-print"></i></a>
                                         </div>
                                     </div>
                                 </form>

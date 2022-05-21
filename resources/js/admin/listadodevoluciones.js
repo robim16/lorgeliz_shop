@@ -10,7 +10,7 @@ const listsales = new Vue({
         pdfListadoDevoluciones(){
             // let url = '/lorgeliz_tienda_copia/public/admin/devoluciones/listado';
             let url = 'http://lorenzogeliztienda.com/admin/devoluciones/listado'
-            window.open();
+            window.open(url);
         },
         
     },

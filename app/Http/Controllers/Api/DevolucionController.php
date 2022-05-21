@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class DevolucionController extends Controller
-{
+{   //cae en desuso al cargar las devoluciones en order show
     public function verify(Request $request){
 
         if (!$request->ajax()) return redirect('/');

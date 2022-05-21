@@ -155,7 +155,7 @@ export default {
     }, 
     methods: {
         getProductos(){
-            let url = '/lorgeliz_tienda_copia/public/pedidos/productos/' + this.id;
+            // let url = '/lorgeliz_tienda_copia/public/pedidos/productos/' + this.id;
             // let url = `/lorgeliz_tienda_copia/public/api/orders/${this.id}/productos`;
 
             let url = `${this.ruta}/pedidos/productos/${this.id}`
@@ -177,31 +177,31 @@ export default {
         },
 
         
-       async activarDevolucion(producto, venta){
-           return new Promise(async(resolve)=>{
-                // let url = '/lorgeliz_tienda_copia/public/devoluciones/verificar?venta=' + venta + '&producto=' + producto;
+        // async activarDevolucion(producto, venta){
+        //    return new Promise(async(resolve)=>{
+        //         // let url = '/lorgeliz_tienda_copia/public/devoluciones/verificar?venta=' + venta + '&producto=' + producto;
                  
-                // let url = '/lorgeliz_tienda_copia/public/api/devoluciones/verify?venta='
-                //  + venta + '&producto=' + producto;
+        //         // let url = '/lorgeliz_tienda_copia/public/api/devoluciones/verify?venta='
+        //         //  + venta + '&producto=' + producto;
 
-                let url = `${this.ruta}/api/devoluciones/verify?venta=${venta}&producto=${producto}`
-                var res = ''
-                await axios.get(url).then(response => {
-                    // console.log(response.data)
-                    let dev = Object.values(response.data)
-                    if (dev.length == 0) {
-                        res = true;
-                    }
-                    else{
-                        res = false;
-                    } 
-                }).catch(error => {
-                    console.log(error);
-                });
-                resolve(res)
+        //         let url = `${this.ruta}/api/devoluciones/verify?venta=${venta}&producto=${producto}`
+        //         var res = ''
+        //         await axios.get(url).then(response => {
+        //             // console.log(response.data)
+        //             let dev = Object.values(response.data)
+        //             if (dev.length == 0) {
+        //                 res = true;
+        //             }
+        //             else{
+        //                 res = false;
+        //             } 
+        //         }).catch(error => {
+        //             console.log(error);
+        //         });
+        //         resolve(res)
                
-            });
-        },
+        //     });
+        // },
 
         store(producto, venta, cantidad){
             // let url = '/lorgeliz_tienda_copia/public/devoluciones';

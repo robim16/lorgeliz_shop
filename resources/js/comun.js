@@ -120,6 +120,10 @@ if (document.getElementById('informeproducto')) {
     require('./admin/informe-productos');
 }
 
+if (document.getElementById('informesaldos')) {
+    require('./admin/informe_saldos');
+}
+
 if (document.getElementById('informecliente')) {
     require('./admin/informe-clientes');
 }
