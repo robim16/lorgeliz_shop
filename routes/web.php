@@ -157,6 +157,7 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
         Route::get('/pdf/clientes', 'Admin\InformesController@pdfInformeClientes')->name('informes.clientespdf');
         Route::get('/pdf/ventas/mes', 'Admin\InformesController@pdfVentaShow')->name('informes.ventashowpdf');
         Route::get('/pdf/pagos/mes', 'Admin\InformesController@pdfPagosShow')->name('informes.pagoshowpdf');
+        Route::get('/pdf/saldos', 'Admin\InformesController@informeSaldosClientesPdf')->name('informes.saldospdf');
     });
 
     Route::group(['prefix' => '/devoluciones'], function () {

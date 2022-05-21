@@ -10,7 +10,7 @@ const listsales = new Vue({
         pdfListadoClientes(){
             // let url = '/lorgeliz_tienda_copia/public/admin/clientes/listado'
             let url = 'http://lorenzogeliztienda.com/admin/clientes/listado';
-            window.open();
+            window.open(url);
         },
         
     },
