@@ -51,14 +51,21 @@
 			</div>
 			<div
 				v-if="arrayProductos.length == 0"
-				class="col-md-2 offset-5"
+				class="col"
 			>
-				<a href="#">
+				<a href="#" v-if="fetch == false" class="col-md-2 offset-5">
 					<img src="img/preloader.gif" />
 				</a>
+
+				<div class="alert alert-primary alert-dismissible fade show" role="alert" v-else>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<p>No se ha encontrado ningún resultado que coincida con tu búsqueda</p>
+				</div>
     		</div>
 
-			<div style="padding-bottom: 0px">
+			<div style="padding-bottom: 0px" v-else>
 				<div class="row products_row products_container grid">
 						
 					<div v-for="producto in arrayProductos" :key="producto.id" class="col-xl-4 col-md-6 grid-item">
@@ -160,8 +167,8 @@
                 estado: 0,
                 categoria: '',
                 subcategoria: '',
-				smallScreen: false
-				// keyword: ''
+				smallScreen: false,
+				fetch: false
             }
 		},
 		computed:{
@@ -368,10 +375,18 @@
 			},
 
 			getData(url){
+				this.fetch = false;
+
 				axios.get(url).then(response => {
+					this.fetch = true;
+
 					var respuesta = response.data;
-					this.arrayProductos = respuesta.productos.data;
-					this.pagination = respuesta.pagination;
+					
+					if (respuesta.productos.data.length > 0) {
+						
+						this.arrayProductos = respuesta.productos.data;
+						this.pagination = respuesta.pagination;
+					}
 				}).catch(error => {
                     console.log(error);
                 });
