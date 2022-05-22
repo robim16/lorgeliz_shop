@@ -134,7 +134,10 @@ class OrdersController extends Controller
         })
         ->with(['productoReferencia.colorProducto.color', 'productoReferencia.colorProducto.producto',
         'productoReferencia.talla','venta.pedido', 'productoReferencia.colorProducto.imagenes',
-        'productoReferencia.devoluciones'])
+            'productoReferencia.devoluciones'=>function($query) use($pedido){
+                $query->where('venta_id', $pedido->venta_id);
+            }
+        ])
         ->get();
 
         return ['productos' => $productos];
