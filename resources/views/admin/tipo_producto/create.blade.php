@@ -135,7 +135,8 @@
 
 				$.ajax({
 					type: "GET",
-					url: "{{ route('subcategory.get') }}",
+					// url: "route('subcategory.get')",
+                    url: 'http://lorenzogeliztienda.com/api/admin/subcategorias',
 					data:{categoria:categoria},
 					dataType: 'json',
 					success: function (response) {
