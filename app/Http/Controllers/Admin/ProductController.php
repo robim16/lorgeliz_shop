@@ -87,8 +87,7 @@ class ProductController extends Controller
     {
         try {
             
-            $color = Color::where('id', $request->color)->first(); //se obtiene el color del producto
-            
+
             DB::beginTransaction();
 
             $producto = new Producto();
@@ -114,7 +113,7 @@ class ProductController extends Controller
             
     
             $producto->save();
-    
+
     
             $url_imagenes = [];
     
@@ -126,9 +125,9 @@ class ProductController extends Controller
     
                     $nombre = time().'_'.$imagen->getClientOriginalName();
     
-                    //$path = Storage::disk('public')->putFileAs("imagenes/productos/producto" . $producto->id, $imagen, $nombre);
+                    // $path = Storage::disk('public')->putFileAs("imagenes/productos/producto" . $producto->id, $imagen, $nombre);
     
-                    //$url_imagenes[]['url'] = $path;
+                    // $url_imagenes[]['url'] = $path;
     
     
                     $image = Image::make($imagen)->encode('jpg', 75);
@@ -146,21 +145,40 @@ class ProductController extends Controller
     
             }
     
-            $colorproducto = new ColorProducto(); //creamos el color
-            $colorproducto->producto_id = $producto->id;
-            $colorproducto->color_id = $request->color;
+            // $colorproducto = new ColorProducto(); //creamos el color
+            // $colorproducto->producto_id = $producto->id;
+            // $colorproducto->color_id = $request->color;
     
+            // if ($request->activo) {
+            //     $colorproducto->activo = 'Si';    
+            // }
+            // else {
+            //     $colorproducto->activo = 'No';    
+            // }
+    
+            // $colorproducto->save();
+
+            
             if ($request->activo) {
-                $colorproducto->activo = 'Si';    
+                $activo = 'Si';    
             }
             else {
-                $colorproducto->activo = 'No';    
+                $activo = 'No';    
             }
-    
-            $colorproducto->save();
-    
-    
-            $colorproducto->imagenes()->createMany($url_imagenes);
+
+            $colorproducto = ColorProducto::create([
+                'producto_id'=>$producto->id,
+                'color_id' => $request->color,
+                'activo' => $activo 
+            ]);
+
+            $color_producto = ColorProducto::where('slug', $colorproducto->slug)
+                ->where('color_id', $colorproducto->color_id)
+                ->where('producto_id', $colorproducto->producto_id)
+                ->first();
+            
+
+            $color_producto->imagenes()->createMany($url_imagenes);
 
             DB::commit();
 
@@ -186,7 +204,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $producto = Producto::join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
+        $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
         //->join('colores', 'color_producto.color_id', '=', 'colores.id') 
         ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo')
         ->where('productos.id',$id)
@@ -199,7 +217,7 @@ class ProductController extends Controller
 
     public function showColor($slug)
     {
-        $producto = Producto::join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
+        $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
         ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo',
         'color_producto.color_id as color', 'color_producto.slug')
         ->where('color_producto.slug',$slug)
@@ -218,7 +236,7 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $producto = Producto::join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
+        $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
         //->join('colores', 'color_producto.color_id', '=', 'colores.id') 
         ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo')
         ->where('productos.id',$id)
@@ -231,7 +249,7 @@ class ProductController extends Controller
 
     public function editColor($slug)
     {
-        $producto = Producto::join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
+        $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
         ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo',
         'color_producto.color_id as color', 'color_producto.slug')
         ->where('color_producto.slug',$slug)
@@ -464,7 +482,7 @@ class ProductController extends Controller
 
     public function createColor($id)
     {
-        $producto = Producto::where('productos.id',$id)->firstOrFail();
+        $producto = Producto::where('id',$id)->firstOrFail();
         
         $estados = $this->estado_productos();
         return view('admin.productos.createcolor',compact('producto', 'estados'));
@@ -473,6 +491,17 @@ class ProductController extends Controller
     public function storeColor(Request $request)
     {
         $producto = $request->producto;
+
+        $color_producto = ColorProducto::where('color_id', $request->color)
+        ->where('producto_id', $producto)
+        ->first();
+
+        if ($color_producto) {
+
+            session()->flash('message', ['success', ("Este producto ya ha sido creado anteriormente")]);
+            return redirect()->back();
+        }
+
 
         $url_imagenes = [];
 
@@ -503,15 +532,23 @@ class ProductController extends Controller
 
         }
 
+       
         $colorproducto = new ColorProducto();
         $colorproducto->producto_id = $producto;
         $colorproducto->color_id = $request->color;
         $colorproducto->activo= 'Si'; 
 
         $colorproducto->save();
+        
+       
+        $color_producto = ColorProducto::where('slug', $colorproducto->slug)
+            ->where('color_id', $colorproducto->color_id)
+            ->where('producto_id', $colorproducto->producto_id)
+            ->first();
+        
 
+        $color_producto->imagenes()->createMany($url_imagenes);
 
-        $colorproducto->imagenes()->createMany($url_imagenes);
         
         session()->flash('message', ['success', ("Se ha creado el producto exitosamente")]);
 
