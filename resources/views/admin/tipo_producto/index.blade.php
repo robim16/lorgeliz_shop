@@ -177,7 +177,7 @@ $(document).ready(function () {
         //obtiene las tallas del tipo de producto
         $.ajax({
             type: "GET",
-            // url: "{{ route('talla.tipos') }}",
+            // url: "route('talla.tipos'",
             // url:'/lorgeliz_tienda_copia/public/api/admin/tallas/tipos/get',
             url:'http://lorenzogeliztienda.com/api/admin/tallas/tipos/get',
             data:{id:id},
@@ -187,7 +187,7 @@ $(document).ready(function () {
                 // if (response.data[0] != null) {
                 if (response.length > 0) {
                    
-                    $.each(response.data, function (key, value) {
+                    $.each(response, function (key, value) {
                         //muestra seleccionadas las tallas que ya existen del tipo de producto
                         $(".option").each(function() {
                             const tipo = parseInt($(this).val());
