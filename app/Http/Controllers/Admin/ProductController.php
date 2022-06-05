@@ -11,6 +11,7 @@ use App\ProductoVenta;
 use App\Events\ProductStatusEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -87,7 +88,6 @@ class ProductController extends Controller
     {
         try {
             
-
             DB::beginTransaction();
 
             $producto = new Producto();
@@ -270,134 +270,157 @@ class ProductController extends Controller
     //public function update(Request $request, Producto $producto)
     public function update(ProductRequest $request, $id)
     {
-        //$color = Color::where('id', $request->color)->first();
-
-        //$producto->nombre = $request->nombre." ".$color['nombre'];
-        $producto = Producto::where('id', $id)->firstOrFail();
-
-        $producto->nombre = $request->nombre;
-        $producto->tipo_id = $request->tipo_id;
-        $producto->marca = $request->marca;
-        $producto->precio_anterior = $request->precioanterior;
-        $producto->precio_actual = $request->precioactual;
-        $producto->porcentaje_descuento = $request->porcentajededescuento;
-        $producto->descripcion_corta = $request->descripcion_corta;
-        $producto->descripcion_larga = $request->descripcion_larga;
-        $producto->especificaciones = $request->especificaciones;
-        $producto->estado = $request->estado;
-
-        if ($request->sliderprincipal) {
-            $producto->slider_principal= 'Si';    
-        }
-        else {
-            $producto->slider_principal= 'No';    
-        }
-        
-
-        $producto->save();
-
-        /*$url_imagenes = [];
-
-        if ($request->hasFile('imagenes')) {
-
-            $imagenes = $request->file('imagenes');
-
-            foreach ($imagenes as $imagen) {
-
-                $nombre = time().'_'.$imagen->getClientOriginalName();
-
-                $path = Storage::disk('public')->putFileAs("imagenes/productos/producto" . $producto->id, $imagen, $nombre);
-
-                $url_imagenes[]['url'] = $path;
-
-
-            }
-
-        }
-
-        $colorproducto = ColorProducto::where('producto_id', $producto->id)
-        ->where('color_id', $request->color)
-        ->firstOrFail();
-
-        if ($request->activo) {
-            $colorproducto->activo= 'Si';    
-        }
-        else {
-            $colorproducto->activo= 'No';    
-        }
-
-        $colorproducto->save();
-
-        $colorproducto->imagenes()->createMany($url_imagenes);*/
-
-        $colores = ColorProducto::whereIn('id', ProductoReferencia::disponibles())
-        ->with('producto:id,slider_principal,estado')
-        ->where('producto_id', $producto->id)
-        ->get();
-
-        
-        $data = array();
-        $data['producto'] = array();
-
-        $data['producto'] = $colores;
-
-        broadcast(new ProductStatusEvent($data))->toOthers();
        
-        
-        session()->flash('message', ['success', ("Se ha actualizado el producto exitosamente")]);
+        try {
+            
+            DB::beginTransaction();
 
-        return redirect()->route('product.index');
+            $producto = Producto::where('id', $id)->firstOrFail();
+    
+            $producto->nombre = $request->nombre;
+            $producto->tipo_id = $request->tipo_id;
+            $producto->marca = $request->marca;
+            $producto->precio_anterior = $request->precioanterior;
+            $producto->precio_actual = $request->precioactual;
+            $producto->porcentaje_descuento = $request->porcentajededescuento;
+            $producto->descripcion_corta = $request->descripcion_corta;
+            $producto->descripcion_larga = $request->descripcion_larga;
+            $producto->especificaciones = $request->especificaciones;
+            $producto->estado = $request->estado;
+    
+            if ($request->sliderprincipal) {
+                $producto->slider_principal= 'Si';    
+            }
+            else {
+                $producto->slider_principal= 'No';    
+            }
+            
+    
+            $producto->save();
+
+            DB::commit();
+    
+            /*$url_imagenes = [];
+    
+            if ($request->hasFile('imagenes')) {
+    
+                $imagenes = $request->file('imagenes');
+    
+                foreach ($imagenes as $imagen) {
+    
+                    $nombre = time().'_'.$imagen->getClientOriginalName();
+    
+                    $path = Storage::disk('public')->putFileAs("imagenes/productos/producto" . $producto->id, $imagen, $nombre);
+    
+                    $url_imagenes[]['url'] = $path;
+    
+    
+                }
+    
+            }
+    
+            $colorproducto = ColorProducto::where('producto_id', $producto->id)
+            ->where('color_id', $request->color)
+            ->firstOrFail();
+    
+            if ($request->activo) {
+                $colorproducto->activo= 'Si';    
+            }
+            else {
+                $colorproducto->activo= 'No';    
+            }
+    
+            $colorproducto->save();
+    
+            $colorproducto->imagenes()->createMany($url_imagenes);*/
+    
+            $colores = ColorProducto::whereIn('id', ProductoReferencia::disponibles())
+            ->with('producto:id,slider_principal,estado')
+            ->where('producto_id', $producto->id)
+            ->get();
+    
+            
+            $data = array();
+            $data['producto'] = array();
+    
+            $data['producto'] = $colores;
+    
+            broadcast(new ProductStatusEvent($data))->toOthers();
+           
+            
+            session()->flash('message', ['success', ("Se ha actualizado el producto exitosamente")]);
+    
+            return redirect()->route('product.index');
+
+        } catch (Exception $e) {
+
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
+
+            DB::rollBack();
+        }
     }
 
     public function updateColor(Request $request, $slug)
     {
 
-        $producto = ColorProducto::where('slug',$slug)->firstOrFail();
-        $id = $producto->producto_id;
+        try {
+            
+            DB::beginTransaction();
 
-        if ($request->activo) {
-            $producto->activo = 'Si';    
-        }
-        else {
-            $producto->activo = 'No';    // se edita el campo activo del color
-        }
-
-        $producto->color_id = $request->color;
-
-        $url_imagenes = [];
-
-        if ($request->hasFile('imagenes')) {
-
-            $imagenes = $request->file('imagenes');
-            foreach ($imagenes as $imagen) {
-
-                $nombre = time().'_'.$imagen->getClientOriginalName();
-
-                //$path = Storage::disk('public')->putFileAs("imagenes/productos/producto" . $producto->producto_id, $imagen, $nombre);
-
-                //$url_imagenes[]['url'] = $path;
-
-                $image = Image::make($imagen)->encode('jpg', 75);
-                $image->resize(530, 591, function ($constraint){
-                    $constraint->upsize();
-                });
-                
-                Storage::disk('dropbox')->put("imagenes/productos/producto".$nombre, $image->stream()->__toString());
-                $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
-                $response = $dropbox->createSharedLinkWithSettings("imagenes/productos/producto" . $nombre, ["requested_visibility" => "public"]);
-
-                $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
+            $producto = ColorProducto::where('slug',$slug)->firstOrFail();
+            $id = $producto->producto_id;
+    
+            if ($request->activo) {
+                $producto->activo = 'Si';    
             }
+            else {
+                $producto->activo = 'No';    // se edita el campo activo del color
+            }
+    
+            $producto->color_id = $request->color;
+    
+            $url_imagenes = [];
+    
+            if ($request->hasFile('imagenes')) {
+    
+                $imagenes = $request->file('imagenes');
+                foreach ($imagenes as $imagen) {
+    
+                    $nombre = time().'_'.$imagen->getClientOriginalName();
+    
+                    //$path = Storage::disk('public')->putFileAs("imagenes/productos/producto" . $producto->producto_id, $imagen, $nombre);
+    
+                    //$url_imagenes[]['url'] = $path;
+    
+                    $image = Image::make($imagen)->encode('jpg', 75);
+                    $image->resize(530, 591, function ($constraint){
+                        $constraint->upsize();
+                    });
+                    
+                    Storage::disk('dropbox')->put("imagenes/productos/producto".$nombre, $image->stream()->__toString());
+                    $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
+                    $response = $dropbox->createSharedLinkWithSettings("imagenes/productos/producto" . $nombre, ["requested_visibility" => "public"]);
+    
+                    $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
+                }
+    
+            }   
+    
+            $producto->save();
+    
+            $producto->imagenes()->createMany($url_imagenes);
 
-        }   
+            DB::commit();
+    
+            session()->flash('message', ['success', ("Se ha actualizado el producto exitosamente")]);
+    
+            return redirect()->route('product.colors', $id);
 
-        $producto->save();
+        } catch (Exception $e) {
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
 
-        $producto->imagenes()->createMany($url_imagenes);
-
-        session()->flash('message', ['success', ("Se ha actualizado el producto exitosamente")]);
-
-        return redirect()->route('product.colors', $id);
+            DB::rollBack();
+        }
     }
 
     /**
@@ -490,69 +513,81 @@ class ProductController extends Controller
 
     public function storeColor(Request $request)
     {
-        $producto = $request->producto;
 
-        $color_producto = ColorProducto::where('color_id', $request->color)
-        ->where('producto_id', $producto)
-        ->first();
-
-        if ($color_producto) {
-
-            session()->flash('message', ['success', ("Este producto ya ha sido creado anteriormente")]);
-            return redirect()->back();
-        }
-
-
-        $url_imagenes = [];
-
-        if ($request->hasFile('imagenes')) {
-
-            $imagenes = $request->file('imagenes');
-
-            foreach ($imagenes as $imagen) {
-
-                $nombre = time().'_'.$imagen->getClientOriginalName();
-
-                //$path = Storage::disk('public')->putFileAs("imagenes/productos/producto" . $producto, $imagen, $nombre);
-
-                //$url_imagenes[]['url'] = $path;
-
-                $image = Image::make($imagen)->encode('jpg', 75);
-                $image->resize(530, 591, function ($constraint){
-                    $constraint->upsize();
-                });
-                
-                Storage::disk('dropbox')->put("imagenes/productos/producto".$nombre, $image->stream()->__toString());
-                $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
-                $response = $dropbox->createSharedLinkWithSettings("imagenes/productos/producto" . $nombre, ["requested_visibility" => "public"]);
-
-                $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
-
-            }
-
-        }
-
-       
-        $colorproducto = new ColorProducto();
-        $colorproducto->producto_id = $producto;
-        $colorproducto->color_id = $request->color;
-        $colorproducto->activo= 'Si'; 
-
-        $colorproducto->save();
-        
-       
-        $color_producto = ColorProducto::where('slug', $colorproducto->slug)
-            ->where('color_id', $colorproducto->color_id)
-            ->where('producto_id', $colorproducto->producto_id)
+        try {
+           
+            DB::beginTransaction();
+            
+            $producto = $request->producto;
+    
+            $color_producto = ColorProducto::where('color_id', $request->color)
+            ->where('producto_id', $producto)
             ->first();
-        
+    
+            if ($color_producto) {
+    
+                session()->flash('message', ['success', ("Este producto ya ha sido creado anteriormente")]);
+                return redirect()->back();
+            }
+    
+    
+            $url_imagenes = [];
+    
+            if ($request->hasFile('imagenes')) {
+    
+                $imagenes = $request->file('imagenes');
+    
+                foreach ($imagenes as $imagen) {
+    
+                    $nombre = time().'_'.$imagen->getClientOriginalName();
+    
+                    //$path = Storage::disk('public')->putFileAs("imagenes/productos/producto" . $producto, $imagen, $nombre);
+    
+                    //$url_imagenes[]['url'] = $path;
+    
+                    $image = Image::make($imagen)->encode('jpg', 75);
+                    $image->resize(530, 591, function ($constraint){
+                        $constraint->upsize();
+                    });
+                    
+                    Storage::disk('dropbox')->put("imagenes/productos/producto".$nombre, $image->stream()->__toString());
+                    $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
+                    $response = $dropbox->createSharedLinkWithSettings("imagenes/productos/producto" . $nombre, ["requested_visibility" => "public"]);
+    
+                    $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
+    
+                }
+    
+            }
+    
+           
+            $colorproducto = new ColorProducto();
+            $colorproducto->producto_id = $producto;
+            $colorproducto->color_id = $request->color;
+            $colorproducto->activo= 'Si'; 
+    
+            $colorproducto->save();
+            
+           
+            $color_producto = ColorProducto::where('slug', $colorproducto->slug)
+                ->where('color_id', $colorproducto->color_id)
+                ->where('producto_id', $colorproducto->producto_id)
+                ->first();
+            
+    
+            $color_producto->imagenes()->createMany($url_imagenes);
+    
+            DB::commit();
+            
+            session()->flash('message', ['success', ("Se ha creado el producto exitosamente")]);
+    
+            return redirect()->route('product.colors', $producto);
 
-        $color_producto->imagenes()->createMany($url_imagenes);
+        }  catch (Exception $e) {
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
 
-        
-        session()->flash('message', ['success', ("Se ha creado el producto exitosamente")]);
-
-        return redirect()->route('product.colors', $producto);
+            DB::rollBack();
+        }
 
     }
 
