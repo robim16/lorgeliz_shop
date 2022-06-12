@@ -83,7 +83,13 @@ class StockController extends Controller
         }
         else{
 
-            $referencia->stock = $referencia->stock + $request->cantidad; //sino, se actualiza el stock
+            if ($request->operacion == 1) {
+               
+                $referencia->stock = $referencia->stock + $request->cantidad; //sino, se actualiza el stock
+            }
+            else{
+                $referencia->stock = $referencia->stock - $request->cantidad;
+            }
 
             $referencia->save();
         }
