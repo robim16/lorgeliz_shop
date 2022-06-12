@@ -8,7 +8,8 @@ const inventarios = new Vue({
        color: 0,
        cantidad: '',
        arrayTallas: [],
-       arrayColores: []
+       arrayColores: [],
+       operacion: ''
     }, 
     
     methods: {
@@ -18,10 +19,13 @@ const inventarios = new Vue({
             window.open(url);
         },
         
-        selectProducto(data =[]){//recibe una instancia de producto
+        selectProducto(data =[], param){
+            //recibe una instancia de producto
             // this.producto =  data['id'];//se accede a las propiedades como un array
 
             this.producto =  data['color_producto']['producto_id'];
+            
+            this.operacion = param;
 
             this.getTallas();
             this.getColores();

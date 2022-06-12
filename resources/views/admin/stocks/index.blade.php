@@ -90,11 +90,11 @@
                                             <td>{{ $producto->stock }}</td>
                                             <td>
                                                 <a href="" class="btn btn-success" data-toggle="modal" data-target="#modalStock" title="aumentar inventario"
-                                                @click.prevent="selectProducto({{$producto}})">
+                                                @click.prevent="selectProducto({{$producto}}, 1)">
                                                  <i class="bi bi-bag-plus-fill"></i></a>
                                                  
                                                 <a href="" class="btn btn-danger" data-toggle="modal" data-target="#modalStock" title="disminuir inventario"
-                                                @click.prevent="selectProducto({{$producto}})">
+                                                @click.prevent="selectProducto({{$producto}}, 0)">
                                                  <i class="bi bi-dash-circle-fill"></i></a>
                                             </td>
                                         </tr>
@@ -117,7 +117,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header modal-primary">
-                        <h5 class="modal-title" id="appModalLabel">Agregar productos</h5>
+                        <h5 class="modal-title" id="appModalLabel" v-text="operacion == 1 ? 'Aumentar inventario' : 'Disminuir inventario'"></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -130,6 +130,7 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Producto</label>
                                 <div class="col-md-9">
+                                    <input type="hidden" name="operacion" v-model="operacion">
                                     <select name="producto_id" id="producto_id" class="form-control" v-model="producto"
                                         @change="getTallas()">
                                         <option value="">Seleccione uno</option>
@@ -210,8 +211,8 @@
                                 @endif
                             </div>
 
-                            <button type="submit" class="btn btn-primary float-left" id="aceptar">Enviar <i
-                                    class="far fa-paper-plane"></i></button>
+                            <button type="submit" class="btn btn-primary float-left" id="aceptar">Guardar <i
+                                    class="bi bi-hdd"></i></button>
                             <button type="reset" class="btn btn-danger float-right" id="rechazar">Cancelar</button>
 
                         </form>
