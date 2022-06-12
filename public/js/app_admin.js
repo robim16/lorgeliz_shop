@@ -4576,7 +4576,7 @@ __webpack_require__.r(__webpack_exports__);
     window.Echo.channel('add-product').listen('AddProductEvent', function (e) {
       var product = e.data;
 
-      if (product.producto.estado == 1) {
+      if (product.data.producto.estado == 1) {
         var index = _this2.productoNuevo.findIndex(function (p) {
           return p.id == product.id;
         });
@@ -4715,7 +4715,9 @@ __webpack_require__.r(__webpack_exports__);
 
     this.productoSales = this.productos;
     window.Echo.channel('add-product').listen('AddProductEvent', function (e) {
-      var product = e.data.product;
+      // let product = e.data.product;
+      var product = e.data;
+      console.log(product);
 
       var index = _this2.productoSales.findIndex(function (p) {
         return p.id == product.id;
@@ -4888,9 +4890,9 @@ __webpack_require__.r(__webpack_exports__);
     this.productoSlider = this.productos; // this.getProductos();
 
     window.Echo.channel('add-product').listen('AddProductEvent', function (e) {
-      var product = e.data;
+      var product = e.data; //    console.log(product.data.producto.slider_principal)
 
-      if (product.producto.slider_principal == 'Si') {
+      if (product.data.producto.slider_principal == 'Si') {
         var element = _this2.productoSlider.findIndex(function (p) {
           return p.id == product;
         });

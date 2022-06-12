@@ -26,6 +26,8 @@
     {{--<link rel="stylesheet" type="text/css" href="{{ asset('asset/styles/bootstrap-4.1.2/bootstrap.min.css') }}">--}}
     <link rel="stylesheet" type="text/css"
         href="{{asset('asset/plugins/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+        
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css" integrity="sha384-eoTu3+HydHRBIjnCVwsFyCpUDZHZSFKEJD0mc3ZqSBSb6YhZzRHeiomAUWCstIWo" crossorigin="anonymous">
     {{-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> --}}
 
     {{--<link rel="stylesheet" type="text/css" href="{{asset('asset/styles/comun.css') }}">--}}

@@ -289,6 +289,7 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
 
     Route::resource('/product', 'Admin\ProductController');
 
+    
     // ruta api. Route::get('/subcategory/getSubcategoria', 'Admin\SubcategoryController@getSubcategoria')->name('subcategory.get');
     Route::resource('/subcategory', 'Admin\SubcategoryController');
 

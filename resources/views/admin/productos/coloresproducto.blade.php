@@ -50,7 +50,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
-            <a class=" m-2 float-right btn btn-primary" href="{{ route('product.color', $productos[0]->id)}}"><i class="fas fa-plus"></i> Crear</a>
+            <a class=" m-2 float-right btn btn-primary" href="{{ route('product.color', $productos[0]->producto_id)}}"><i class="fas fa-plus"></i> Crear</a>
                 <table class="table1 table-head-fixed">
                     <thead>
                         <tr>

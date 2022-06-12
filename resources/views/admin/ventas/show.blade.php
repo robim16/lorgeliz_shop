@@ -223,7 +223,7 @@
                                     <td>
                                         <a class="btn btn-primary btn-sm" href="" title="registrar pago" data-toggle="modal"
                                             data-target="#modal" id="pay">
-                                            <i class="fas fa-money-bill-wave"></i>
+                                            <i class="bi bi-currency-dollar"></i>
                                         </a>
                                     </td>
                                     @endif
