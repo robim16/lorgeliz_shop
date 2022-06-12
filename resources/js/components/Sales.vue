@@ -80,7 +80,10 @@
             this.productoSales = this.productos;
 			
             window.Echo.channel('add-product').listen('AddProductEvent', (e) => {
-               let product = e.data.product;
+
+                // let product = e.data.product;
+                let product = e.data;
+                console.log(product);
 
                 const index = this.productoSales.findIndex(p => p.id == product.id);
 

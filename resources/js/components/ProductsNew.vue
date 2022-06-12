@@ -116,7 +116,7 @@
             window.Echo.channel('add-product').listen('AddProductEvent', (e) => {
                let product = e.data;
                 
-                if (product.producto.estado == 1) {
+                if (product.data.producto.estado == 1) {
 
                     const index = this.productoNuevo.findIndex(p => p.id == product.id);
 

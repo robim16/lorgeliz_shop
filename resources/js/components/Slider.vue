@@ -132,8 +132,9 @@
 
             window.Echo.channel('add-product').listen('AddProductEvent', (e) => {
                let product = e.data;
+            //    console.log(product.data.producto.slider_principal)
                 
-                if (product.producto.slider_principal == 'Si') {
+                if (product.data.producto.slider_principal == 'Si') {
 
                     let element = this.productoSlider.findIndex(p => p.id == product);
 
