@@ -198,7 +198,8 @@
           aria-haspopup="true"
           aria-expanded="false"
           >
-          <img src="{{  auth()->user() ? auth()->user()->imagene ? url('storage/' . auth()->user()->imagene->url) : asset('asset/images/user.svg') : asset('asset/images/user.svg') }}" alt="" class="rounded-circle" style="width: 34px">
+          <img src="{{  auth()->user() ? auth()->user()->imagene ? url('storage/' . auth()->user()->imagene->url) : asset('asset/images/user.svg') : asset('asset/images/user.svg') }}" 
+            alt="" class="rounded-circle" style="width: 34px">
           {{--<img src="{{  auth()->user() ? auth()->user()->imagene->url : asset('asset/images/user.svg') }}" alt="" class="rounded-circle" style="width: 34px">--}}
           <span class="caret"></span>
         </a>

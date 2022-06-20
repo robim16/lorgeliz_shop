@@ -4033,9 +4033,9 @@ __webpack_require__.r(__webpack_exports__);
     getProductos: function getProductos() {
       var _this = this;
 
-      var url = '/lorgeliz_tienda_copia/public/pedidos/productos/' + this.id; // let url = `/lorgeliz_tienda_copia/public/api/orders/${this.id}/productos`;
-      // let url = `${this.ruta}/pedidos/productos/${this.id}`
-
+      // let url = '/lorgeliz_tienda_copia/public/pedidos/productos/' + this.id;
+      // let url = `/lorgeliz_tienda_copia/public/api/orders/${this.id}/productos`;
+      var url = "".concat(this.ruta, "/pedidos/productos/").concat(this.id);
       axios.get(url).then(function (response) {
         _this.arrayProductos = response.data.productos;
         _this.valor = _this.arrayProductos[0].venta.valor; // this.arrayProductos.forEach(producto => {
@@ -4275,7 +4275,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   props: {
     producto: {
       required: true,
-      type: String
+      type: Number
     },
     ruta: {
       required: true,
@@ -4360,9 +4360,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                       var restantes = actual - unidades;
 
                       if (restantes == 0) {
-                        swal('Producto agotado!', 'No puedes agregar más unidades de este producto a tu carrito!', 'error');
+                        // swal(
+                        // 'Producto agotado!',
+                        // 'No puedes agregar más unidades de este producto a tu carrito!',
+                        // 'error'
+                        // )
+                        bootbox.alert('Producto agotado. No puedes agregar más unidades de este producto a tu carrito!');
                       } else {
-                        swal('Producto con stock limitado!', 'Puedes agregar a tu carrito sólo ' + restantes + ' unidad(es) más de este producto', 'error');
+                        // swal(
+                        //     'Producto con stock limitado!',
+                        //     'Puedes agregar a tu carrito sólo ' + restantes + ' unidad(es) más de este producto',
+                        //     'error'
+                        // )
+                        bootbox.alert('Stock limitado. Puedes agregar a tu carrito sólo ' + restantes + ' unidad(es) más de este producto');
                       }
                     } else {
                       swal('Producto agregado al carrito!', 'Haz agregado este producto a tu carrito', 'success');
@@ -4372,8 +4382,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   });
                 } else {
                   //let datos = 'No se puede agregar el producto al carrito!. La cantidad debe ser máximo ' + this.arrayTallas[i].stock;
-                  //bootbox.alert(datos);
-                  swal('No se puede agregar el producto al carrito!', 'La cantidad debe ser máximo ' + _this2.arrayTallas[i].stock, 'error');
+                  bootbox.alert(datos); // swal(
+                  // 'No se puede agregar el producto al carrito!',
+                  // 'La cantidad debe ser máximo ' + this.arrayTallas[i].stock,
+                  // 'error'
+                  // )   
                 }
               }
             }
@@ -4396,8 +4409,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   });
                 } else {
                   //let datos = 'No se puede agregar el producto al carrito!. La cantidad debe ser máximo ' + this.arrayTallas[i].stock;
-                  //bootbox.alert(datos);
-                  swal('No se puede agregar el producto al carrito!', 'La cantidad debe ser máximo ' + _this2.arrayTallas[_i].stock, 'error');
+                  bootbox.alert(datos); // swal(
+                  // 'No se puede agregar el producto al carrito!',
+                  // 'La cantidad debe ser máximo ' + this.arrayTallas[i].stock,
+                  // 'error'
+                  // )   
                 }
               }
             }
@@ -49033,36 +49049,6 @@ var staticRenderFns = [
                       staticClass: "shipping_radio",
                       attrs: {
                         type: "radio",
-                        id: "radio_1",
-                        name: "shipping_radio"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "radio_mark" }),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "radio_text" }, [
-                      _vm._v("Entrega al día siguiente")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "shipping_price ml-auto" }, [
-                    _vm._v("$4.99")
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "li",
-                {
-                  staticClass:
-                    "shipping_option d-flex flex-row align-items-center justify-content-start"
-                },
-                [
-                  _c("label", { staticClass: "radio_container" }, [
-                    _c("input", {
-                      staticClass: "shipping_radio",
-                      attrs: {
-                        type: "radio",
                         id: "radio_2",
                         name: "shipping_radio"
                       }
@@ -49076,38 +49062,7 @@ var staticRenderFns = [
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "shipping_price ml-auto" }, [
-                    _vm._v("$1.99")
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "li",
-                {
-                  staticClass:
-                    "shipping_option d-flex flex-row align-items-center justify-content-start"
-                },
-                [
-                  _c("label", { staticClass: "radio_container" }, [
-                    _c("input", {
-                      staticClass: "shipping_radio",
-                      attrs: {
-                        type: "radio",
-                        id: "radio_3",
-                        name: "shipping_radio",
-                        checked: ""
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "radio_mark" }),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "radio_text" }, [
-                      _vm._v("Personal Pickup")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "shipping_price ml-auto" }, [
-                    _vm._v("Free")
+                    _vm._v("$8.000")
                   ])
                 ]
               )
@@ -49140,7 +49095,13 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "checkout_button trans_200" }, [
-      _c("a", { attrs: { href: "", id: "pago" } }, [_vm._v("proceder al pago")])
+      _c(
+        "a",
+        {
+          attrs: { href: "http://lorenzogeliztienda.com/checkout", id: "pago" }
+        },
+        [_vm._v("proceder al pago")]
+      )
     ])
   },
   function() {
@@ -73823,7 +73784,8 @@ var inventarios = new Vue({
     color: 0,
     cantidad: '',
     arrayTallas: [],
-    arrayColores: []
+    arrayColores: [],
+    operacion: ''
   },
   methods: {
     pdfInventarios: function pdfInventarios() {
@@ -73833,9 +73795,11 @@ var inventarios = new Vue({
     },
     selectProducto: function selectProducto() {
       var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var param = arguments.length > 1 ? arguments[1] : undefined;
       //recibe una instancia de producto
       // this.producto =  data['id'];//se accede a las propiedades como un array
       this.producto = data['color_producto']['producto_id'];
+      this.operacion = param;
       this.getTallas();
       this.getColores();
       this.talla = data['talla_id']; // this.color = data['color_id'];

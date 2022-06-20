@@ -170,30 +170,30 @@
                                     <div class="shipping">
                                         <div class="cart_extra_title">Método de Envío</div>
                                         <ul>
-                                            <li class="shipping_option d-flex flex-row align-items-center justify-content-start">
+                                            <!-- <li class="shipping_option d-flex flex-row align-items-center justify-content-start">
                                                 <label class="radio_container">
                                                     <input type="radio" id="radio_1" name="shipping_radio" class="shipping_radio">
                                                     <span class="radio_mark"></span>
                                                     <span class="radio_text">Entrega al día siguiente</span>
                                                 </label>
                                                 <div class="shipping_price ml-auto">$4.99</div>
-                                            </li>
+                                            </li> -->
                                             <li class="shipping_option d-flex flex-row align-items-center justify-content-start">
                                                 <label class="radio_container">
                                                     <input type="radio" id="radio_2" name="shipping_radio" class="shipping_radio">
                                                     <span class="radio_mark"></span>
                                                     <span class="radio_text">Envío estandar</span>
                                                 </label>
-                                                <div class="shipping_price ml-auto">$1.99</div>
+                                                <div class="shipping_price ml-auto">$8.000</div>
                                             </li>
-                                            <li class="shipping_option d-flex flex-row align-items-center justify-content-start">
+                                            <!-- <li class="shipping_option d-flex flex-row align-items-center justify-content-start">
                                                 <label class="radio_container">
                                                     <input type="radio" id="radio_3" name="shipping_radio" class="shipping_radio" checked>
                                                     <span class="radio_mark"></span>
                                                     <span class="radio_text">Personal Pickup</span>
                                                 </label>
                                                 <div class="shipping_price ml-auto">Free</div>
-                                            </li>
+                                            </li> -->
                                         </ul>
                                     </div>
                                 </div>
@@ -217,7 +217,7 @@
                                             <div class="cart_extra_total_value ml-auto" id="neto">{{'$' + totalneto }}</div>
                                         </li>
                                     </ul>
-                                    <div class="checkout_button trans_200"><a href="" id="pago">proceder al pago</a></div>
+                                    <div class="checkout_button trans_200"><a href="http://lorenzogeliztienda.com/checkout" id="pago">proceder al pago</a></div>
                                 </div>
                             </div>
                         </div>
