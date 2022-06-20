@@ -141,7 +141,10 @@ class ProductController extends Controller
     
                     // $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
 
-                    $path = Storage::disk('public')->put("productos/$producto->id/$nombre", $image->stream());
+                    Storage::disk('public')->put("imagenes/productos/producto/".$producto->id."/".$nombre, $image->stream());
+                    
+                    $path = "imagenes/productos/producto/".$producto->id."/".$nombre;
+
                     $url_imagenes[]['url'] = $path;
     
                 }

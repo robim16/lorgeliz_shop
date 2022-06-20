@@ -6,7 +6,7 @@
         <div v-for="producto in productoSales" :key="producto.id" class="owl-item">
             <div class="product">
                 <div class="product_image">
-                <a :href="'product/' + producto.slug">
+                <a :href="'productos/' + producto.slug">
                     <img :src="'storage/' + producto.imagenes[0].url" alt="">
                 </a>
                 </div>
@@ -14,7 +14,7 @@
                     <div class="product_info d-flex flex-row align-items-start justify-content-start">
                         <div>
                             <div>
-                                <div class="product_name"><a href="">{{ producto.producto.nombre}}-{{producto.color.nombre}}</a></div>
+                                <div class="product_name"><a :href="'productos/' + producto.slug">{{ producto.producto.nombre}}-{{producto.color.nombre}}</a></div>
                             </div>
                         </div>
                         <div class="ml-auto text-right">
