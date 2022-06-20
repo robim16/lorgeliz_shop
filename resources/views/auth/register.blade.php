@@ -197,10 +197,13 @@
 @section('scripts')
 <script>
     function loadJSON(callback) {
+		let ruta = 'http://lorenzogeliztienda.com'
+        let url = `${ruta}/colombia-json-master/colombia-json-master/colombia.json`
         var xobj = new XMLHttpRequest();
         xobj.overrideMimeType("application/json");
-        xobj.open("GET", "/lorgeliz_tienda_copia/public/colombia-json-master/colombia-json-master/colombia.json", true); // Reemplaza colombia-json.json con el nombre que le hayas puesto
-        xobj.onreadystatechange = function () {
+        // xobj.open("GET", "/lorgeliz_tienda_copia/public/colombia-json-master/colombia-json-master/colombia.json", true); // Reemplaza colombia-json.json con el nombre que le hayas puesto
+		xobj.open("GET", url, true);
+		xobj.onreadystatechange = function () {
             if (xobj.readyState == 4 && xobj.status == "200") {
                 callback(xobj.responseText);
             }

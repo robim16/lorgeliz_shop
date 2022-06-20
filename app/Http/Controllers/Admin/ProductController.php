@@ -135,11 +135,14 @@ class ProductController extends Controller
                         $constraint->upsize();
                     });
                     
-                    Storage::disk('dropbox')->put("imagenes/productos/producto".$nombre, $image->stream()->__toString());
-                    $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
-                    $response = $dropbox->createSharedLinkWithSettings("imagenes/productos/producto" . $nombre, ["requested_visibility" => "public"]);
+                    // Storage::disk('dropbox')->put("imagenes/productos/producto".$nombre, $image->stream()->__toString());
+                    // $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
+                    // $response = $dropbox->createSharedLinkWithSettings("imagenes/productos/producto" . $nombre, ["requested_visibility" => "public"]);
     
-                    $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
+                    // $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
+
+                    $path = Storage::disk('public')->put("productos/$producto->id/$nombre", $image->stream());
+                    $url_imagenes[]['url'] = $path;
     
                 }
     

@@ -39,7 +39,7 @@
         props: {
             producto:{
                 required: true,
-                type: String
+                type: Number
             },
             ruta:{
                 required: true,
@@ -147,18 +147,22 @@
                                                 var restantes = actual - unidades;
                         
                                                 if (restantes == 0) {
-                                                    swal(
-                                                    'Producto agotado!',
-                                                    'No puedes agregar más unidades de este producto a tu carrito!',
-                                                    'error'
-                                                    )
+                                                    // swal(
+                                                    // 'Producto agotado!',
+                                                    // 'No puedes agregar más unidades de este producto a tu carrito!',
+                                                    // 'error'
+                                                    // )
+
+                                                    bootbox.alert('Producto agotado. No puedes agregar más unidades de este producto a tu carrito!');
                                                 }
                                                 else{
-                                                    swal(
-                                                        'Producto con stock limitado!',
-                                                        'Puedes agregar a tu carrito sólo ' + restantes + ' unidad(es) más de este producto',
-                                                        'error'
-                                                    )
+                                                    // swal(
+                                                    //     'Producto con stock limitado!',
+                                                    //     'Puedes agregar a tu carrito sólo ' + restantes + ' unidad(es) más de este producto',
+                                                    //     'error'
+                                                    // )
+                                                    bootbox.alert('Stock limitado. Puedes agregar a tu carrito sólo ' + restantes + ' unidad(es) más de este producto');
+                                                    
                                                 }
                                             }
                                             else{
@@ -177,12 +181,12 @@
                                     } else{
                                         //let datos = 'No se puede agregar el producto al carrito!. La cantidad debe ser máximo ' + this.arrayTallas[i].stock;
 
-                                        //bootbox.alert(datos);
-                                        swal(
-                                        'No se puede agregar el producto al carrito!',
-                                        'La cantidad debe ser máximo ' + this.arrayTallas[i].stock,
-                                        'error'
-                                        )   
+                                        bootbox.alert(datos);
+                                        // swal(
+                                        // 'No se puede agregar el producto al carrito!',
+                                        // 'La cantidad debe ser máximo ' + this.arrayTallas[i].stock,
+                                        // 'error'
+                                        // )   
                                     }
                                 }
                                 
@@ -217,12 +221,12 @@
                                     else{
                                         //let datos = 'No se puede agregar el producto al carrito!. La cantidad debe ser máximo ' + this.arrayTallas[i].stock;
                                         
-                                        //bootbox.alert(datos);
-                                        swal(
-                                        'No se puede agregar el producto al carrito!',
-                                        'La cantidad debe ser máximo ' + this.arrayTallas[i].stock,
-                                        'error'
-                                        )   
+                                        bootbox.alert(datos);
+                                        // swal(
+                                        // 'No se puede agregar el producto al carrito!',
+                                        // 'La cantidad debe ser máximo ' + this.arrayTallas[i].stock,
+                                        // 'error'
+                                        // )   
                                     }
                                 }
                                 
