@@ -10,7 +10,7 @@
                 <span class="badge-new"><b> Nuevo</b></span>
                 <span class="badge-offer"><b> - {{ producto.producto.porcentaje_descuento}}</b></span>
                     <div class="product_image">
-                        <a :href="'product/' + producto.slug">
+                        <a :href="'productos/' + producto.slug">
                             <img :src="'storage/' + producto.imagenes[0].url" alt="">
                         </a>
                     </div>
@@ -18,7 +18,7 @@
                         <div class="product_info">
                             <div>
                                 <div>
-                                <div class="product_name product_namesinwidth text-center"><a href="">{{ producto.producto.nombre}}-{{producto.color.nombre}}</a></div>
+                                <div class="product_name product_namesinwidth text-center"><a :href="'productos/' + producto.slug">{{ producto.producto.nombre}}-{{producto.color.nombre}}</a></div>
 
                                 </div>
                             </div>

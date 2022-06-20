@@ -50562,7 +50562,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "product_image" }, [
-            _c("a", { attrs: { href: "product/" + producto.slug } }, [
+            _c("a", { attrs: { href: "productos/" + producto.slug } }, [
               _c("img", {
                 attrs: { src: "storage/" + producto.imagenes[0].url, alt: "" }
               })
@@ -50580,13 +50580,17 @@ var render = function() {
                         "product_name product_namesinwidth text-center"
                     },
                     [
-                      _c("a", { attrs: { href: "" } }, [
-                        _vm._v(
-                          _vm._s(producto.producto.nombre) +
-                            "-" +
-                            _vm._s(producto.color.nombre)
-                        )
-                      ])
+                      _c(
+                        "a",
+                        { attrs: { href: "productos/" + producto.slug } },
+                        [
+                          _vm._v(
+                            _vm._s(producto.producto.nombre) +
+                              "-" +
+                              _vm._s(producto.color.nombre)
+                          )
+                        ]
+                      )
                     ]
                   )
                 ])
@@ -51538,7 +51542,7 @@ var render = function() {
       return _c("div", { key: producto.id, staticClass: "owl-item" }, [
         _c("div", { staticClass: "product" }, [
           _c("div", { staticClass: "product_image" }, [
-            _c("a", { attrs: { href: "product/" + producto.slug } }, [
+            _c("a", { attrs: { href: "productos/" + producto.slug } }, [
               _c("img", {
                 attrs: { src: "storage/" + producto.imagenes[0].url, alt: "" }
               })
@@ -51556,13 +51560,17 @@ var render = function() {
                 _c("div", [
                   _c("div", [
                     _c("div", { staticClass: "product_name" }, [
-                      _c("a", { attrs: { href: "" } }, [
-                        _vm._v(
-                          _vm._s(producto.producto.nombre) +
-                            "-" +
-                            _vm._s(producto.color.nombre)
-                        )
-                      ])
+                      _c(
+                        "a",
+                        { attrs: { href: "productos/" + producto.slug } },
+                        [
+                          _vm._v(
+                            _vm._s(producto.producto.nombre) +
+                              "-" +
+                              _vm._s(producto.color.nombre)
+                          )
+                        ]
+                      )
                     ])
                   ])
                 ]),
