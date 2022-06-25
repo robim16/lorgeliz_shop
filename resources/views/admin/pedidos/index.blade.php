@@ -125,14 +125,14 @@
                                         <td><a href="{{ route('venta.show', $pedido->venta->id)}}"
                                            title="ver venta">{{ $pedido->venta->id}}</a></td>
                                         <td><a href="{{ route('admin.pedidos.show', $pedido->id)}}"
-                                        class="btn btn-primary" title="ver pedido">
+                                        class="btn btn-primary btn-sm btn-icon" title="ver pedido">
                                          <i class="fas fa-eye"></i></a>
                                         </td>
 
                                         @if ($pedido->estado != 5)
                                             
                                             <td><a href=""
-                                                class="btn btn-warning" title="cambiar estado"
+                                                class="btn btn-warning btn-sm btn-icon" title="cambiar estado"
                                                 data-toggle="modal"
                                                 data-target="#modalEstado"
                                                 data-id="{{$pedido['id']}}"
@@ -141,7 +141,7 @@
                                             </td>
                                         @endif
 
-                                        <td><a class="btn btn-success" href="" @click.prevent="imprimir({{ $pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
+                                        <td><a class="btn btn-success btn-sm btn-icon" href="" @click.prevent="imprimir({{ $pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
                                         </td>
                                     </tr>
                                     

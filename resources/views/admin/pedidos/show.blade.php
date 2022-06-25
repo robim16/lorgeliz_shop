@@ -191,7 +191,7 @@
                                         {{-- <td>${{ floatval($producto->productoReferencia->colorProducto->producto->precio_actual * $producto->cantidad) }}</td> --}}
                                         <td>${{ floatval($producto->precio_venta * $producto->cantidad) }}</td>
                                         <td><a href="{{ route('productos.show', $producto->productoReferencia->colorProducto->slug)}}"
-                                                class="btn btn-primary" title="ver producto">
+                                                class="btn btn-primary btn-sm btn-icon" title="ver producto">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </td>

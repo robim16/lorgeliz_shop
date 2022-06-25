@@ -37,7 +37,7 @@
                                 </div>
                                 <div class="ml-auto text-right">
                                     <div class="product_category">En <a href=""  @click.prevent="setSubcategoria(nuevo.producto.tipo_id)">{{ nuevo.producto.tipo.nombre}}</a></div>
-                                    <div class="product_price text-right">{{'$' + nuevo.producto.precio_actual}}<span></span></div>
+                                    <div class="product_price text-right">{{nuevo.producto.precio_actual | currencyFormat}}<span></span></div>
                                 </div>
                             </div>
                             <div class="product_buttons">
@@ -61,7 +61,7 @@
             </div>
             <div class="row load_more_row">
                 <div class="col">
-                    <div class="button load_more ml-auto mr-auto"><a href="" v-on:click.prevent="getProductos()">cargar más</a></div>
+                    <div class="button load_more ml-auto mr-auto"><a href="" @click.prevent="getProductos">cargar más</a></div>
                 </div>
             </div>
         </div>
@@ -110,6 +110,13 @@
                 window.location.href = `${this.ruta}/categorias`;
             }
         },
+
+        filters: {
+            currencyFormat: function (number) {
+                return new Intl.NumberFormat('es-CO', {style: 'currency',currency: 'COP', minimumFractionDigits: 0}).format(number);
+            }
+        },
+
         mounted() {
 			this.getProductos();
 

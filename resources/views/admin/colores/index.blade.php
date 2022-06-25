@@ -55,9 +55,9 @@
                             <td> {{$color->descripcion }} </td>
 
 
-                            <td> <a class="btn btn-primary" href="{{ route('color.show', $color->slug) }}" title="ver"><i class="fas fa-eye"></i></a></td>
+                            <td> <a class="btn btn-primary btn-sm btn-icon" href="{{ route('color.show', $color->slug) }}" title="ver"><i class="fas fa-eye"></i></a></td>
 
-                            <td> <a class="btn btn-success" href="{{ route('color.edit', $color->slug) }}" title="editar"><i class="fas fa-pen"></i></a>
+                            <td> <a class="btn btn-success btn-sm btn-icon" href="{{ route('color.edit', $color->slug) }}" title="editar"><i class="fas fa-pen"></i></a>
                             </td>
 
                             <td>@include('admin.colores.delete')</td>

@@ -141,8 +141,8 @@ class DevolucionController extends Controller
                 DB::beginTransaction();
 
                 $producto = ProductoVenta::where('producto_referencia_id', $devolucion->producto_referencia_id)
-                ->where('venta_id', $devolucion->venta_id)
-                ->first(); //buscamos el producto
+                    ->where('venta_id', $devolucion->venta_id)
+                    ->first(); //buscamos el producto
 
                 // $producto_data = Producto::join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
                 // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
@@ -151,12 +151,12 @@ class DevolucionController extends Controller
                 // ->first(); // obtenemos el precio
 
                 $producto_data = ProductoReferencia::where('id', $producto->producto_referencia_id)
-                ->first();
+                    ->first();
 
-                $precio = $producto_data->colorProducto->producto->precio_actual;
+                // $precio = $producto_data->colorProducto->producto->precio_actual;
 
 
-                // $precio = $producto_data->precio_actual;
+                $precio = $producto->precio_venta;
 
                 $cantidad = $producto->cantidad; //cantidad del producto vendida
 
@@ -252,12 +252,14 @@ class DevolucionController extends Controller
             ]
         ];
 
-        // Cliente::findOrFail($devolucion->venta->cliente->id)->notify(new NotificationDevolution($arrayData));
+        Cliente::findOrFail($devolucion->venta->cliente->id)->notify(new NotificationDevolution($arrayData));
 
         //return new DevolucionStatusMail($details);
-        //Mail::to($devolucion->venta->cliente->user->email)->send(new DevolucionStatusMail($details));
+
+        Mail::to($devolucion->venta->cliente->user->email)->send(new DevolucionStatusMail($details));
 
         session()->flash('message', ['success', ("Se ha actualizado el estado de la solicitud")]);
+
         return back();
     }
 

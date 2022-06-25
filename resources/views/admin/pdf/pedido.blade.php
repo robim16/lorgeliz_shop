@@ -158,8 +158,10 @@
                     <td>{{ $producto->productoReferencia->talla->nombre }}</td>
                     <td>{{ $producto->productoReferencia->colorProducto->color->nombre }}</td>
                     <td>{{ $producto->cantidad }}</td>
-                    <td>${{ floatval($producto->productoReferencia->colorProducto->producto->precio_actual)}}</td>
-                    <td>${{ floatval( $producto->productoReferencia->colorProducto->producto->precio_actual * $producto->cantidad)}}</td>
+                    {{-- <td>${{ floatval($producto->productoReferencia->colorProducto->producto->precio_actual)}}</td> --}}
+                    <td>${{ floatval($producto->precio_venta)}}</td>
+                    {{-- <td>${{ floatval( $producto->productoReferencia->colorProducto->producto->precio_actual * $producto->cantidad)}}</td> --}}
+                    <td>${{ floatval( $producto->precio_venta * $producto->cantidad)}}</td>
                 </tr>
                 @endforeach                                
             </tbody>

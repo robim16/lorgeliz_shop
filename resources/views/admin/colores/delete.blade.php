@@ -2,7 +2,7 @@
 	{{-- route('category.destroy',  $categoria) --}}
 	@csrf
 	@method('DELETE')
-	<button type="submit" class="btn btn-danger text-white"  title="eliminar color">
+	<button type="submit" class="btn btn-danger text-white btn-sm btn-icon"  title="eliminar color">
 		<i class="fas fa-trash"></i>
 	</button>
 </form>

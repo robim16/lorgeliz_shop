@@ -65,14 +65,15 @@
                             <td> {{$tipo->subcategoria->nombre }} </td>
                             <td> {{$tipo->subcategoria->categoria->nombre }} </td>
                             
-                            <td> <a class="btn btn-primary" href="{{ route('tipo.show', $tipo->slug)}}" title="ver"><i class="fas fa-eye"></i></a></td>
+                            <td> <a class="btn btn-primary btn-sm btn-icon" href="{{ route('tipo.show', $tipo->slug)}}" title="ver"><i class="fas fa-eye"></i></a></td>
 
-                            <td> <a class="btn btn-success" href="{{ route('tipo.edit', $tipo->slug)}}" title="editar"><i class="fas fa-pen"></i></a>
+                            <td> <a class="btn btn-success btn-sm btn-icon" href="{{ route('tipo.edit', $tipo->slug)}}" title="editar"><i class="fas fa-pen"></i></a>
                             </td>
 
                             <td>@include('admin.tipo_producto.delete')</td>
-                            <td> <a class="btn btn-default" href="" title="agregar tallas" data-toggle="modal"
-                                    data-target="#modalTallas" data-id="{{$tipo['id']}}"><i class="fas fa-plus"></i></a></td>
+                            <td> <a class="btn btn-default btn-sm btn-icon" href="" title="agregar tallas" data-toggle="modal"
+                                    data-target="#modalTallas" data-id="{{$tipo['id']}}"><i class="fas fa-plus"></i></a>
+                            </td>
                         </tr>
                         @endforeach
 

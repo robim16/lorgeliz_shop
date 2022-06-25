@@ -66,8 +66,8 @@
                             <td> {{$cliente->telefono }} </td>
                             <td> {{$cliente->email }} </td>
 
-                            <td> <a class="btn btn-primary" href="{{ route('cliente.show', $cliente->cliente->id)}}" title="ver cliente"><i class="fas fa-eye"></i></a></td>
-                            <td><a href="" class="btn btn-success" title="enviar mensaje" data-toggle="modal"
+                            <td> <a class="btn btn-primary btn-sm btn-icon" href="{{ route('cliente.show', $cliente->cliente->id)}}" title="ver cliente"><i class="fas fa-eye"></i></a></td>
+                            <td><a href="" class="btn btn-success btn-sm btn-icon" title="enviar mensaje" data-toggle="modal"
                                 data-target="#modalMensaje" data-id="{{$cliente->cliente['id']}}"><i class="fa fa-envelope-square"></i></a>
                             </td>
                         </tr>

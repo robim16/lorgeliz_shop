@@ -2451,7 +2451,8 @@ __webpack_require__.r(__webpack_exports__);
       total: '',
       totalneto: '',
       carrito: '',
-      empty: false
+      empty: false,
+      envio: 8000
     };
   },
   methods: {
@@ -2532,6 +2533,15 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
       });
+    }
+  },
+  filters: {
+    currencyFormat: function currencyFormat(number) {
+      return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      }).format(number);
     }
   },
   created: function created() {
@@ -3813,6 +3823,15 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   },
+  filters: {
+    currencyFormat: function currencyFormat(number) {
+      return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      }).format(number);
+    }
+  },
   mounted: function mounted() {
     var _this2 = this;
 
@@ -4094,6 +4113,15 @@ __webpack_require__.r(__webpack_exports__);
       window.open("".concat(this.ruta, "/pedidos/show/pdf/").concat(id, ", _blank"));
     }
   },
+  filters: {
+    currencyFormat: function currencyFormat(number) {
+      return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      }).format(number);
+    }
+  },
   created: function created() {
     this.getProductos();
   }
@@ -4185,6 +4213,15 @@ __webpack_require__.r(__webpack_exports__);
       localStorage.setItem('subcategory', JSON.stringify(subcategoria)); // window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
 
       window.location.href = "".concat(this.ruta, "/categorias");
+    }
+  },
+  filters: {
+    currencyFormat: function currencyFormat(number) {
+      return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      }).format(number);
     }
   },
   mounted: function mounted() {
@@ -4585,6 +4622,15 @@ __webpack_require__.r(__webpack_exports__);
       window.location.href = "".concat(this.ruta, "/categorias");
     }
   },
+  filters: {
+    currencyFormat: function currencyFormat(number) {
+      return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      }).format(number);
+    }
+  },
   mounted: function mounted() {
     var _this2 = this;
 
@@ -4724,6 +4770,15 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
       });
+    }
+  },
+  filters: {
+    currencyFormat: function currencyFormat(number) {
+      return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      }).format(number);
     }
   },
   mounted: function mounted() {
@@ -4898,6 +4953,15 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
       });
+    }
+  },
+  filters: {
+    currencyFormat: function currencyFormat(number) {
+      return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      }).format(number);
     }
   },
   mounted: function mounted() {
@@ -48666,9 +48730,10 @@ var render = function() {
                                 _c("div", { attrs: { id: "" } }, [
                                   _vm._v(
                                     _vm._s(
-                                      "$" +
+                                      _vm._f("currencyFormat")(
                                         producto.producto_referencia
                                           .color_producto.producto.precio_actual
+                                      )
                                     )
                                   )
                                 ])
@@ -48746,11 +48811,11 @@ var render = function() {
                                 _c("div", { attrs: { id: "" } }, [
                                   _vm._v(
                                     _vm._s(
-                                      "$" +
+                                      _vm._f("currencyFormat")(
                                         producto.producto_referencia
                                           .color_producto.producto
-                                          .precio_actual *
-                                          producto.cantidad
+                                          .precio_actual * producto.cantidad
+                                      )
                                     )
                                   )
                                 ])
@@ -48867,7 +48932,56 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "row cart_extra_row" }, [
-              _vm._m(1),
+              _c("div", { staticClass: "col-lg-6" }, [
+                _c("div", { staticClass: "cart_extra cart_extra_1" }, [
+                  _c(
+                    "div",
+                    { staticClass: "cart_extra_content cart_extra_coupon" },
+                    [
+                      _c("div", { staticClass: "cart_extra_title" }, [
+                        _vm._v("Código de cupón")
+                      ]),
+                      _vm._v(" "),
+                      _vm._m(1),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "coupon_text" }, [
+                        _vm._v(
+                          "Ingresa tu cupón de compra para obtener un fabuloso descuento!."
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "shipping" }, [
+                        _c("div", { staticClass: "cart_extra_title" }, [
+                          _vm._v("Método de Envío")
+                        ]),
+                        _vm._v(" "),
+                        _c("ul", [
+                          _c(
+                            "li",
+                            {
+                              staticClass:
+                                "shipping_option d-flex flex-row align-items-center justify-content-start"
+                            },
+                            [
+                              _vm._m(2),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "shipping_price ml-auto" },
+                                [
+                                  _vm._v(
+                                    _vm._s(_vm._f("currencyFormat")(_vm.envio))
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ])
+                      ])
+                    ]
+                  )
+                ])
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-lg-6 cart_extra_col" }, [
                 _c("div", { staticClass: "cart_extra cart_extra_2" }, [
@@ -48899,12 +49013,39 @@ var render = function() {
                                 staticClass: "cart_extra_total_value ml-auto",
                                 attrs: { id: "subtotal" }
                               },
-                              [_vm._v(_vm._s("$" + _vm.total))]
+                              [
+                                _vm._v(
+                                  _vm._s(_vm._f("currencyFormat")(_vm.total))
+                                )
+                              ]
                             )
                           ]
                         ),
                         _vm._v(" "),
-                        _vm._m(2),
+                        _c(
+                          "li",
+                          {
+                            staticClass:
+                              "d-flex flex-row align-items-center justify-content-start"
+                          },
+                          [
+                            _c(
+                              "div",
+                              { staticClass: "cart_extra_total_title" },
+                              [_vm._v("Envío")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "cart_extra_total_value ml-auto" },
+                              [
+                                _vm._v(
+                                  _vm._s(_vm._f("currencyFormat")(_vm.envio))
+                                )
+                              ]
+                            )
+                          ]
+                        ),
                         _vm._v(" "),
                         _c(
                           "li",
@@ -48925,7 +49066,15 @@ var render = function() {
                                 staticClass: "cart_extra_total_value ml-auto",
                                 attrs: { id: "neto" }
                               },
-                              [_vm._v(_vm._s("$" + _vm.totalneto))]
+                              [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("currencyFormat")(
+                                      _vm.totalneto + _vm.envio
+                                    )
+                                  )
+                                )
+                              ]
                             )
                           ]
                         )
@@ -48998,97 +49147,38 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-lg-6" }, [
-      _c("div", { staticClass: "cart_extra cart_extra_1" }, [
-        _c("div", { staticClass: "cart_extra_content cart_extra_coupon" }, [
-          _c("div", { staticClass: "cart_extra_title" }, [
-            _vm._v("Código de cupón")
-          ]),
+    return _c("div", { staticClass: "coupon_form_container" }, [
+      _c(
+        "form",
+        {
+          staticClass: "coupon_form",
+          attrs: { action: "#", id: "coupon_form" }
+        },
+        [
+          _c("input", {
+            staticClass: "coupon_input",
+            attrs: { type: "text", required: "required" }
+          }),
           _vm._v(" "),
-          _c("div", { staticClass: "coupon_form_container" }, [
-            _c(
-              "form",
-              {
-                staticClass: "coupon_form",
-                attrs: { action: "#", id: "coupon_form" }
-              },
-              [
-                _c("input", {
-                  staticClass: "coupon_input",
-                  attrs: { type: "text", required: "required" }
-                }),
-                _vm._v(" "),
-                _c("button", { staticClass: "coupon_button" }, [
-                  _vm._v("aplicar")
-                ])
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "coupon_text" }, [
-            _vm._v(
-              "Ingresa tu cupón de compra para obtener un fabuloso descuento!."
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "shipping" }, [
-            _c("div", { staticClass: "cart_extra_title" }, [
-              _vm._v("Método de Envío")
-            ]),
-            _vm._v(" "),
-            _c("ul", [
-              _c(
-                "li",
-                {
-                  staticClass:
-                    "shipping_option d-flex flex-row align-items-center justify-content-start"
-                },
-                [
-                  _c("label", { staticClass: "radio_container" }, [
-                    _c("input", {
-                      staticClass: "shipping_radio",
-                      attrs: {
-                        type: "radio",
-                        id: "radio_2",
-                        name: "shipping_radio"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "radio_mark" }),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "radio_text" }, [
-                      _vm._v("Envío estandar")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "shipping_price ml-auto" }, [
-                    _vm._v("$8.000")
-                  ])
-                ]
-              )
-            ])
-          ])
-        ])
-      ])
+          _c("button", { staticClass: "coupon_button" }, [_vm._v("aplicar")])
+        ]
+      )
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "li",
-      {
-        staticClass: "d-flex flex-row align-items-center justify-content-start"
-      },
-      [
-        _c("div", { staticClass: "cart_extra_total_title" }, [_vm._v("Envío")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "cart_extra_total_value ml-auto" }, [
-          _vm._v("Gratis")
-        ])
-      ]
-    )
+    return _c("label", { staticClass: "radio_container" }, [
+      _c("input", {
+        staticClass: "shipping_radio",
+        attrs: { type: "radio", id: "radio_2", name: "shipping_radio" }
+      }),
+      _vm._v(" "),
+      _c("span", { staticClass: "radio_mark" }),
+      _vm._v(" "),
+      _c("span", { staticClass: "radio_text" }, [_vm._v("Envío estandar")])
+    ])
   },
   function() {
     var _vm = this
@@ -50174,35 +50264,6 @@ var render = function() {
               ])
             ])
           ]
-        ),
-        _vm._v(" "),
-        _c(
-          "li",
-          {
-            staticClass:
-              "shipping_option d-flex flex-row align-items-center justify-content-start"
-          },
-          [
-            _c("label", { staticClass: "radio_container" }, [
-              _c("input", {
-                staticClass: "payment_radio",
-                attrs: { type: "radio", id: "radio_3", name: "payment_radio" },
-                domProps: { checked: _vm.option == 2 },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.setOption(2)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("span", { staticClass: "radio_mark" }),
-              _vm._v(" "),
-              _c("span", { staticClass: "radio_text" }, [
-                _vm._v("Pagar con epayco")
-              ])
-            ])
-          ]
         )
       ])
     ]),
@@ -50598,11 +50659,21 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "ml-auto" }, [
                 _c("div", { staticClass: "product_price text-center" }, [
-                  _vm._v(_vm._s(producto.producto.precio_actual)),
+                  _vm._v(
+                    _vm._s(
+                      _vm._f("currencyFormat")(producto.producto.precio_actual)
+                    )
+                  ),
                   _c("span"),
                   _vm._v(" "),
                   _c("del", { staticClass: "price-old" }, [
-                    _vm._v(_vm._s(producto.producto.precio_anterior))
+                    _vm._v(
+                      _vm._s(
+                        _vm._f("currencyFormat")(
+                          producto.producto.precio_anterior
+                        )
+                      )
+                    )
                   ])
                 ])
               ])
@@ -50826,14 +50897,21 @@ var render = function() {
                             _c("td", [_vm._v(_vm._s(producto.cantidad))]),
                             _vm._v(" "),
                             _c("td", [
-                              _vm._v(_vm._s("$" + producto.precio_venta))
+                              _vm._v(
+                                _vm._s(
+                                  _vm._f("currencyFormat")(
+                                    producto.precio_venta
+                                  )
+                                )
+                              )
                             ]),
                             _vm._v(" "),
                             _c("td", [
                               _vm._v(
                                 _vm._s(
-                                  "$" +
+                                  _vm._f("currencyFormat")(
                                     producto.precio_venta * producto.cantidad
+                                  )
                                 )
                               )
                             ]),
@@ -50889,7 +50967,11 @@ var render = function() {
                               staticClass: "text-left",
                               attrs: { colspan: "2" }
                             },
-                            [_vm._v(_vm._s("$" + _vm.valor))]
+                            [
+                              _vm._v(
+                                _vm._s(_vm._f("currencyFormat")(_vm.valor))
+                              )
+                            ]
                           )
                         ])
                       ])
@@ -51022,7 +51104,13 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "product_price text-right" }, [
-                    _vm._v(_vm._s("$" + producto.producto.precio_actual)),
+                    _vm._v(
+                      _vm._s(
+                        _vm._f("currencyFormat")(
+                          producto.producto.precio_actual
+                        )
+                      )
+                    ),
                     _c("span")
                   ])
                 ])
@@ -51422,7 +51510,13 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "product_price text-right" }, [
-                          _vm._v(_vm._s("$" + nuevo.producto.precio_actual)),
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("currencyFormat")(
+                                nuevo.producto.precio_actual
+                              )
+                            )
+                          ),
                           _c("span")
                         ])
                       ])
@@ -51488,7 +51582,7 @@ var render = function() {
                 on: {
                   click: function($event) {
                     $event.preventDefault()
-                    return _vm.getProductos()
+                    return _vm.getProductos($event)
                   }
                 }
               },
@@ -51596,7 +51690,13 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "product_price text-right" }, [
-                    _vm._v(_vm._s("$" + producto.producto.precio_actual)),
+                    _vm._v(
+                      _vm._s(
+                        _vm._f("currencyFormat")(
+                          producto.producto.precio_actual
+                        )
+                      )
+                    ),
                     _c("span")
                   ])
                 ])
@@ -51736,7 +51836,10 @@ var render = function() {
                                           [
                                             _vm._v(
                                               _vm._s(
-                                                producto.producto.precio_actual
+                                                _vm._f("currencyFormat")(
+                                                  producto.producto
+                                                    .precio_actual
+                                                )
                                               )
                                             ),
                                             _c("span")
@@ -51754,7 +51857,8 @@ var render = function() {
                                                   producto.producto
                                                     .precio_actual
                                                   ? producto.producto
-                                                      .precio_anterior
+                                                      .precio_anterior |
+                                                      _vm.currencyFormat
                                                   : ""
                                               )
                                             }

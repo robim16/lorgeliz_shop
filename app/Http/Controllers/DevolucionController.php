@@ -142,7 +142,9 @@ class DevolucionController extends Controller
             ];
 
             //return new AdminDevolucionMail($details);
-            //Mail::to($admin->email)->send(new AdminDevolucionMail($details));
+            Mail::to($admin->email)->send(new AdminDevolucionMail($details));
+
+            User::findOrFail($admin->id)->notify(new AdminDevolucionMail($details));
 
         } 
 
