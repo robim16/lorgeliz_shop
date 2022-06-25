@@ -23,8 +23,8 @@
                                 </div>
                             </div>
                             <div class="ml-auto">
-                                <div class="product_price text-center">{{ producto.producto.precio_actual}}<span></span>
-                                    <del class="price-old">{{ producto.producto.precio_anterior}}</del>
+                                <div class="product_price text-center">{{ producto.producto.precio_actual | currencyFormat }}<span></span>
+                                    <del class="price-old">{{ producto.producto.precio_anterior | currencyFormat}}</del>
                                 </div>
                             </div>
                         </div>
@@ -84,6 +84,13 @@
             
             },
         },
+
+        filters: {
+            currencyFormat: function (number) {
+                return new Intl.NumberFormat('es-CO', {style: 'currency',currency: 'COP', minimumFractionDigits: 0}).format(number);
+            }
+        },
+
         mounted() {
             this.productoOffers = this.productos;
             

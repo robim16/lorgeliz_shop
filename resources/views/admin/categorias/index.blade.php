@@ -55,9 +55,9 @@
                             <td> {{$categoria->descripcion }} </td>
 
 
-                            <td> <a class="btn btn-primary" href="{{ route('category.show', $categoria->slug) }}"><i class="fas fa-eye"></i></a></td>
+                            <td> <a class="btn btn-primary btn-sm btn-icon" href="{{ route('category.show', $categoria->slug) }}"><i class="fas fa-eye"></i></a></td>
 
-                            <td> <a class="btn btn-success" href="{{ route('category.edit', $categoria->slug) }}"><i class="fas fa-pen"></i></a>
+                            <td> <a class="btn btn-success btn-sm btn-icon" href="{{ route('category.edit', $categoria->slug) }}"><i class="fas fa-pen"></i></a>
                             </td>
 
                             <td>@include('admin.categorias.delete')</td>

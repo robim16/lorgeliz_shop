@@ -22,7 +22,7 @@
                                                         class="product_tag d-flex flex-column align-items-center justify-content-center">
                                                         <div>
                                                             <div class="from">desde</div>
-                                                            <div style="font-size: 25px">{{ producto.producto.precio_actual}}<span></span>
+                                                            <div style="font-size: 25px">{{ producto.producto.precio_actual | currencyFormat}}<span></span>
                                                             </div>
                                                             <del class="price-oldslider" v-text="producto.producto.precio_anterior > producto.producto.precio_actual ? producto.producto.precio_anterior : ''">
                                                             <span></span></del>
@@ -125,7 +125,17 @@
                 });
             
         	},
+
+        
+
         },
+
+        filters: {
+            currencyFormat: function (number) {
+                return new Intl.NumberFormat('es-CO', {style: 'currency',currency: 'COP', minimumFractionDigits: 0}).format(number);
+            }
+        },
+
         mounted() {
             this.productoSlider = this.productos;
 			// this.getProductos();

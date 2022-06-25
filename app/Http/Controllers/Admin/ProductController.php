@@ -141,9 +141,9 @@ class ProductController extends Controller
     
                     // $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
 
-                    Storage::disk('public')->put("imagenes/productos/producto/".$producto->id."/".$nombre, $image->stream());
-                    
                     $path = "imagenes/productos/producto/".$producto->id."/".$nombre;
+
+                    Storage::disk('public')->put($path, $image->stream());
 
                     $url_imagenes[]['url'] = $path;
     
@@ -212,9 +212,9 @@ class ProductController extends Controller
     {
         $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
         //->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo')
-        ->where('productos.id',$id)
-        ->firstOrFail();
+            ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo')
+            ->where('productos.id',$id)
+            ->firstOrFail();
 
         $estados = $this->estado_productos(); 
 
@@ -224,10 +224,10 @@ class ProductController extends Controller
     public function showColor($slug)
     {
         $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
-        ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo',
-        'color_producto.color_id as color', 'color_producto.slug')
-        ->where('color_producto.slug',$slug)
-        ->firstOrFail();
+            ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo',
+            'color_producto.color_id as color', 'color_producto.slug')
+            ->where('color_producto.slug',$slug)
+            ->firstOrFail();
 
         $estados = $this->estado_productos();
 
@@ -244,9 +244,9 @@ class ProductController extends Controller
     {
         $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
         //->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo')
-        ->where('productos.id',$id)
-        ->firstOrFail();
+            ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo')
+            ->where('productos.id',$id)
+            ->firstOrFail();
         
         $estados = $this->estado_productos();
 
@@ -256,10 +256,10 @@ class ProductController extends Controller
     public function editColor($slug)
     {
         $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
-        ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo',
-        'color_producto.color_id as color', 'color_producto.slug')
-        ->where('color_producto.slug',$slug)
-        ->firstOrFail();
+            ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo',
+            'color_producto.color_id as color', 'color_producto.slug')
+            ->where('color_producto.slug',$slug)
+            ->firstOrFail();
 
         $estados = $this->estado_productos();
 
@@ -341,9 +341,9 @@ class ProductController extends Controller
             $colorproducto->imagenes()->createMany($url_imagenes);*/
     
             $colores = ColorProducto::whereIn('id', ProductoReferencia::disponibles())
-            ->with('producto:id,slider_principal,estado')
-            ->where('producto_id', $producto->id)
-            ->get();
+                ->with('producto:id,slider_principal,estado')
+                ->where('producto_id', $producto->id)
+                ->get();
     
             
             $data = array();
@@ -403,11 +403,17 @@ class ProductController extends Controller
                         $constraint->upsize();
                     });
                     
-                    Storage::disk('dropbox')->put("imagenes/productos/producto".$nombre, $image->stream()->__toString());
-                    $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
-                    $response = $dropbox->createSharedLinkWithSettings("imagenes/productos/producto" . $nombre, ["requested_visibility" => "public"]);
+                    // Storage::disk('dropbox')->put("imagenes/productos/producto".$nombre, $image->stream()->__toString());
+                    // $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
+                    // $response = $dropbox->createSharedLinkWithSettings("imagenes/productos/producto" . $nombre, ["requested_visibility" => "public"]);
     
-                    $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
+                    // $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
+
+                    $path = "imagenes/productos/producto/".$producto->id."/".$nombre;
+
+                    Storage::disk('public')->put($path, $image->stream());
+
+                    $url_imagenes[]['url'] = $path;
                 }
     
             }   
@@ -556,11 +562,17 @@ class ProductController extends Controller
                         $constraint->upsize();
                     });
                     
-                    Storage::disk('dropbox')->put("imagenes/productos/producto".$nombre, $image->stream()->__toString());
-                    $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
-                    $response = $dropbox->createSharedLinkWithSettings("imagenes/productos/producto" . $nombre, ["requested_visibility" => "public"]);
+                    // Storage::disk('dropbox')->put("imagenes/productos/producto".$nombre, $image->stream()->__toString());
+                    // $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
+                    // $response = $dropbox->createSharedLinkWithSettings("imagenes/productos/producto" . $nombre, ["requested_visibility" => "public"]);
     
-                    $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
+                    // $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
+
+                    $path = "imagenes/productos/producto/".$producto->id."/".$nombre;
+
+                    Storage::disk('public')->put($path, $image->stream());
+
+                    $url_imagenes[]['url'] = $path;
     
                 }
     

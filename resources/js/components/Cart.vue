@@ -112,7 +112,7 @@
                                                 {{ producto.producto_referencia.talla.nombre}}
                                             </div>
                                             <div class="product_price product_text"><span>Precio: </span>
-                                                <div id="">{{ '$' + producto.producto_referencia.color_producto.producto.precio_actual }}</div>
+                                                <div id="">{{ producto.producto_referencia.color_producto.producto.precio_actual | currencyFormat}}</div>
                                             </div>
                                             <div class="product_quantity_container">
                                                 <div class="product_quantity ml-lg-auto mr-lg-auto text-center">
@@ -128,7 +128,7 @@
                                             
                                             <div class="product_total product_text">
                                                 <span>Total: </span>
-                                                <div id="">{{'$' + producto.producto_referencia.color_producto.producto.precio_actual * producto.cantidad }}</div> 
+                                                <div id="">{{ producto.producto_referencia.color_producto.producto.precio_actual * producto.cantidad | currencyFormat }}</div> 
                                                 
                                             </div>
                                             <a href="" @click.prevent="remove(producto.producto_referencia.id)" class="remove"><i class="fa fa-trash text-danger" style="font-size: 20px" title="quitar del carrito"></i></a>
@@ -184,7 +184,7 @@
                                                     <span class="radio_mark"></span>
                                                     <span class="radio_text">Envío estandar</span>
                                                 </label>
-                                                <div class="shipping_price ml-auto">$8.000</div>
+                                                <div class="shipping_price ml-auto">{{ envio | currencyFormat}}</div>
                                             </li>
                                             <!-- <li class="shipping_option d-flex flex-row align-items-center justify-content-start">
                                                 <label class="radio_container">
@@ -206,15 +206,15 @@
                                     <ul class="cart_extra_total_list">
                                         <li class="d-flex flex-row align-items-center justify-content-start">
                                             <div class="cart_extra_total_title">Subtotal</div>
-                                            <div class="cart_extra_total_value ml-auto" id="subtotal">{{'$' + total }}</div>
+                                            <div class="cart_extra_total_value ml-auto" id="subtotal">{{ total | currencyFormat}}</div>
                                         </li>
                                         <li class="d-flex flex-row align-items-center justify-content-start">
                                             <div class="cart_extra_total_title">Envío</div>
-                                            <div class="cart_extra_total_value ml-auto">Gratis</div>
+                                            <div class="cart_extra_total_value ml-auto">{{ envio | currencyFormat}}</div>
                                         </li>
                                         <li class="d-flex flex-row align-items-center justify-content-start">
                                             <div class="cart_extra_total_title">Total</div>
-                                            <div class="cart_extra_total_value ml-auto" id="neto">{{'$' + totalneto }}</div>
+                                            <div class="cart_extra_total_value ml-auto" id="neto">{{ totalneto + envio | currencyFormat }}</div>
                                         </li>
                                     </ul>
                                     <div class="checkout_button trans_200"><a href="http://lorenzogeliztienda.com/checkout" id="pago">proceder al pago</a></div>
@@ -263,7 +263,8 @@
                 total: '',
                 totalneto: '',
                 carrito: '',
-                empty: false
+                empty: false,
+                envio: 8000
             }
 		},
 
@@ -356,6 +357,12 @@
                 }).catch(error => {
                     console.log(error);
                 });
+            }
+        },
+
+        filters: {
+            currencyFormat: function (number) {
+                return new Intl.NumberFormat('es-CO', {style: 'currency',currency: 'COP', minimumFractionDigits: 0}).format(number);
             }
         },
 

@@ -18,7 +18,7 @@
                         </div>
                         <div class="ml-auto text-right">
                             <div class="product_category">En <a href=""  @click.prevent="setSubcategoria(producto.producto.tipo.id)">{{ producto.producto.tipo.nombre}}</a></div>
-                            <div class="product_price text-right">{{ '$' + producto.producto.precio_actual}}<span></span></div>
+                            <div class="product_price text-right">{{ producto.producto.precio_actual | currencyFormat}}<span></span></div>
                         </div>
                     </div>
                     <div class="product_buttons">
@@ -80,6 +80,13 @@
                 window.location.href = `${this.ruta}/categorias`;
             }
         },
+
+        filters: {
+            currencyFormat: function (number) {
+                return new Intl.NumberFormat('es-CO', {style: 'currency',currency: 'COP', minimumFractionDigits: 0}).format(number);
+            }
+        },
+
         mounted() {
             this.productoPopular = this.productos;
             

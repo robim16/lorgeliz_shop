@@ -75,13 +75,13 @@
                             <td>{{$pedidos[0]->cliente->user->id }} </td>
                             <td>
                                 @if ($pedidos[0]->cliente->user->imagene)
-                                <img style="height: 40px; width: 40px;"
-                                src="{{ url('storage/' . $pedidos[0]->cliente->user->imagene->url) }}"
-                                class="rounded-circle">
+                                    <img style="height: 40px; width: 40px;"
+                                    src="{{ url('storage/' . $pedidos[0]->cliente->user->imagene->url) }}"
+                                    class="rounded-circle">
                                 @else
-                                <img style="height: 40px; width: 40px;"
-                                src=""
-                                class="rounded-circle">
+                                    <img style="height: 40px; width: 40px;"
+                                    src=""
+                                    class="rounded-circle">
                                 @endif
                             </td>
                             <td>{{$pedidos[0]->cliente->user->nombres }} </td>
@@ -147,10 +147,13 @@
                             <td>{{ date('d/m/Y h:i:s A', strtotime($pedido->pedido->fecha)) }}</td>
                             <td>{{ $pedido->factura->prefijo }}{{ $pedido->factura->consecutivo }}</td>
                             <td>${{ floatval($pedido->valor)}}</td>
-                            <td><a href="{{ route('admin.pedidos.show', $pedido->pedido->id)}}" class="btn btn-primary"
-                            title="ver pedido"><i class="fas fa-eye"></i></a>
+                            <td>
+                                <a href="{{ route('admin.pedidos.show', $pedido->pedido->id)}}" class="btn btn-primary btn-sm btn-icon"
+                                    title="ver pedido"><i class="fas fa-eye"></i></a>
                             </td>
-                            <td><a class="btn btn-success" href="" @click.prevent="imprimir({{ $pedido->pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
+                            <td>
+                                <a class="btn btn-success btn-sm btn-icon" href="" @click.prevent="imprimir({{ $pedido->pedido->id}})"
+                                     title="imprimir"><i class="fa fa-print"></i></a>
                             </td>
                         </tr>
 

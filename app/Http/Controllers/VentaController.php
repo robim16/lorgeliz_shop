@@ -190,7 +190,7 @@ class VentaController extends Controller
                     'url' => url('/admin/ventas/'. $venta->id),
                 ];
                 
-                //Mail::to($admin->email)->send(new AdminVentaMail($details));
+                Mail::to($admin->email)->send(new AdminVentaMail($details));
 
                 $numVentas = DB::table('ventas')->where('id', $venta->id)->count();
 
@@ -206,7 +206,7 @@ class VentaController extends Controller
                 //     User::findOrFail($user->id)->notify(new NotificationAdmin($arrayData));
                 // }
 
-                // User::findOrFail($admin->id)->notify(new NotificationAdmin($arrayData));
+                User::findOrFail($admin->id)->notify(new NotificationAdmin($arrayData));
 
                 DB::commit();
 
@@ -233,9 +233,9 @@ class VentaController extends Controller
                 // ->get();(2)
 
                 $stocks = ProductoReferencia::select('color_producto_id as id',
-                DB::raw('SUM(stock) as stock'))
-                ->groupBy('color_producto_id')
-                ->get();
+                    DB::raw('SUM(stock) as stock'))
+                    ->groupBy('color_producto_id')
+                    ->get();
                 
                 
                 $agotados = $stocks->filter(function ($value) {
