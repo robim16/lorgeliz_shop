@@ -91,9 +91,11 @@
                                             @endif
                                         </td>
                                         
-                                        <td><a href="" class="btn btn-info"
-                                            title="imprimir pago">
-                                            <i class="fas fa-print"></i></a>
+                                        <td>
+                                            <a href="" class="btn btn-info btn-sm btn-icon"
+                                                title="imprimir pago">
+                                                <i class="fas fa-print"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach

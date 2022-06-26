@@ -122,11 +122,15 @@
                                             </span>
                                         </td>
                                         <td>${{ floatval($pedido->venta->valor) }}</td>
-                                        <td><a href="{{ route('venta.show', $pedido->venta->id)}}"
-                                           title="ver venta">{{ $pedido->venta->id}}</a></td>
-                                        <td><a href="{{ route('admin.pedidos.show', $pedido->id)}}"
-                                        class="btn btn-primary btn-sm btn-icon" title="ver pedido">
-                                         <i class="fas fa-eye"></i></a>
+                                        <td>
+                                            <a href="{{ route('venta.show', $pedido->venta->id)}}"
+                                           title="ver venta">{{ $pedido->venta->id}}</a>
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.pedidos.show', $pedido->id)}}"
+                                                class="btn btn-primary btn-sm btn-icon" title="ver pedido">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
                                         </td>
 
                                         @if ($pedido->estado != 5)

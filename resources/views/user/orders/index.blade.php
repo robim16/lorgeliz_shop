@@ -73,9 +73,11 @@
                                             </span>
                                         </td>
                                         <td>${{ floatval($pedido->valor) }}</td>
-                                        <td><a href="{{ route('pedidos.show', $pedido->pedido->id)}}"
-                                        class="btn btn-primary" title="ver pedido">
-                                        <i class="fas fa-eye"></i></a>
+                                        <td>
+                                            <a href="{{ route('pedidos.show', $pedido->pedido->id)}}"
+                                                class="btn btn-primary btn-sm btn-icon" title="ver pedido">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
                                         </td>
                                         <td>
                                             <factura :id="{{$pedido->pedido->id}}" :ruta="ruta"></factura>

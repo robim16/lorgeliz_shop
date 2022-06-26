@@ -76,7 +76,8 @@
 
                                     <td>{{ $producto->productoReferencia->colorProducto->producto->id }}</td>
                                         <td>{{ $producto->productoReferencia->colorProducto->producto->nombre }}</td>
-                                        <td> <a href="">
+                                        <td> 
+                                            <a href="">
                                                 <img src="{{ url('storage/' .$producto->productoReferencia->colorProducto->imagenes[0]->url) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
                                             </a>
                                         </td>

@@ -76,7 +76,8 @@
                                         </td>
                                         <td>${{ floatval($item->venta->valor) }}</td>
                                         <td>{{ $item->cantidad }}</td>
-                                        <td><a href="{{ route('venta.show',$item->venta->id)}}" class="btn btn-primary"
+                                        <td>
+                                            <a href="{{ route('venta.show',$item->venta->id)}}" class="btn btn-primary btn-sm btn-icon"
                                                 title="ver venta">
                                                 <i class="fas fa-eye"></i>
                                             </a>

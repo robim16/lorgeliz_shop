@@ -37,10 +37,10 @@
                             <li><a href="" @click.prevent="setSubcategoria({{strtolower($producto->producto->tipo->subcategoria->categoria->nombre)}})">{{ $producto->producto->tipo->subcategoria->categoria->nombre }}</a></li>
                             <li><a href="" @click.prevent="setSubcategoria({{$producto->producto->tipo->id}})">{{ Str::title($producto->producto->tipo->nombre) }}</a></li>
                             @if ($producto->producto->estado == 1)
-                            <li><a href="" @click.prevent="setCategoria('nuevos')">Nuevos Productos</a></li>
+                                <li><a href="" @click.prevent="setCategoria('nuevos')">Nuevos Productos</a></li>
                             @endif 
                             @if ($producto->producto->estado == 2)
-                            <li><a href="" @click.prevent="setCategoria('ofertas')">Ofertas</a></li>
+                                <li><a href="" @click.prevent="setCategoria('ofertas')">Ofertas</a></li>
                             @endif 
                         </ul>
                     </div>
@@ -158,16 +158,28 @@
                                     </div>
                                 </div>
                             </div>--}}
+
+                            
+                            <h4 style="margin-top: 18px">Otros colores disponibles:</h4>
+                            <div class="btn-group">
+                                @foreach ($related_products as $related)
+                                    <div class="mx-1">
+                                        <a href="{{route('productos.show', $related->slug)}}">
+                                            <img src="{{ url('storage/' . $related->imagenes[0]->url) }}" alt="" 
+                                                style="height: 80px; width: 80px;" class="">
+                                        </a>
+                                    </div>
+                                @endforeach
+                            </div>
+                           
                         </div>
                     </div>
                 </div>
+                
             </div>
         </div>
-    
-    
-        <!--
-    tab info
-    -->
+
+        <!--tab info -->
         <div class="tabinfo">
             <div class="container">
     

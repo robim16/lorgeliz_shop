@@ -88,8 +88,10 @@
                                         <td>{{ $data->cliente->user->telefono }}</td>
                                         <td>{{ $data->cliente->user->email }}</td>
                                         <td>{{ $data->cantidad }}</td>
-                                        <td><a href="{{ route('cliente.show', $data->cliente->id)}}" class="btn btn-primary" title="compras del cliente">
-                                            <i class="fas fa-eye"></i></a>
+                                        <td>
+                                            <a href="{{ route('cliente.show', $data->cliente->id)}}" class="btn btn-primary btn-sm btn-icon" title="compras del cliente">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach

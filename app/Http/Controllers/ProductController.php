@@ -37,11 +37,16 @@ class ProductController extends Controller
         // ->firstOrFail();
 
         $producto = ColorProducto::with(['imagenes:imageable_id,url', 'color:id,nombre',
-        'producto.tipo.subcategoria.categoria'])
-        ->where('color_producto.slug',$slug)
-        ->firstOrFail();
+            'producto.tipo.subcategoria.categoria'])
+            ->where('color_producto.slug',$slug)
+            ->firstOrFail();
+
+        $related_products = ColorProducto::with('imagenes:imageable_id,url')
+            ->where('producto_id', $producto->producto_id)
+            ->where('id', '!=', $producto->id)
+            ->get();
         
-        return view('tienda.product', compact('producto'));
+        return view('tienda.product', compact('producto', 'related_products'));
     }
 
     //implementado en api/productController

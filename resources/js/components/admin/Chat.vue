@@ -44,10 +44,16 @@
                                         <td v-text="cliente.cliente.id"></td>
                                         <td v-text="cliente.nombres"></td>
                                         <td v-text="cliente.apellidos"></td>
-                                        <td><img :src="'../storage/' + cliente.imagene.url" class="rounded-circle" :style="'width: 34px'"></td>
+                                        <td>
+                                            <img :src="'../storage/' + cliente.imagene.url" class="rounded-circle" :style="'width: 34px'">
+                                        </td>
                                         <td v-text="cliente.telefono"></td>
                                         <td v-text="cliente.email"></td>
-                                        <td><a href="" class="btn btn-primary" title="chatear" @click.prevent="enable(cliente.id)"><i class="fa fa-check"></i></a></td>
+                                        <td>
+                                            <a href="" class="btn btn-primary btn-sm btn-icon" title="chatear" @click.prevent="enable(cliente.id)">
+                                                <i class="fa fa-check"></i>
+                                            </a>
+                                        </td>
                                     </tr>                                
                                 </tbody>
                             </table>

@@ -11,7 +11,7 @@
            
             <div class="card">
 
-                <div class="card-header bg-dark text-white text-center">
+                <div class="card-header bg-light text-white text-center">
 
                     <h3>Formulario de Contacto</h3>
 
