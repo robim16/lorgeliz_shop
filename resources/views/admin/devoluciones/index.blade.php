@@ -59,11 +59,16 @@
                                     <tr>
                                         <td>{{ $devolucion->id}}</td>
                                         <td>{{ date('d/m/Y h:i:s A', strtotime($devolucion->fecha)) }}</td>
-                                        <td><a href="{{ route('venta.show', $devolucion->venta->id)}}"
-                                                class="">{{ $devolucion->venta->id }}</a>
+                                        <td>
+                                            <a href="{{ route('venta.show', $devolucion->venta->id)}}"
+                                                class="">{{ $devolucion->venta->id }}
+                                            </a>
                                         </td>
-                                        <td><a href="{{ route('cliente.show', $devolucion->venta->cliente->id)}}"
-                                            class="">{{ $devolucion->venta->cliente->user->nombres}} {{$devolucion->venta->cliente->user->apellidos}}</a>
+                                        <td>
+                                            <a href="{{ route('cliente.show', $devolucion->venta->cliente->id)}}"
+                                                class="">{{ $devolucion->venta->cliente->user->nombres}} 
+                                                {{$devolucion->venta->cliente->user->apellidos}}
+                                            </a>
                                         </td>
                                         <td><span class="badge badge-success">
                                             @if ($devolucion->estado == 1 )
@@ -80,14 +85,20 @@
                                             @endif
                                             </span>
                                         </td>
-                                        <td><a href="{{ route('admin.devolucion.show', $devolucion->id) }}"
-                                            class="btn btn-primary" title="ver solicitud"><i class="fas fa-eye"></i></a>
+                                        <td>
+                                            <a href="{{ route('admin.devolucion.show', $devolucion->id) }}"
+                                                class="btn btn-primary btn-sm btn-icon" title="ver solicitud">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
                                         </td>
-                                        <td><a href="" class="btn btn-success" title="actualizar estado"
-                                        data-toggle="modal"
-                                        data-target="#modalEstado"
-                                        data-id="{{$devolucion['id']}}"
-                                        data-status="{{$devolucion['estado']}}"><i class="fas fa-pen"></i></a>
+                                        <td>
+                                            <a href="" class="btn btn-success btn-sm btn-icon" title="actualizar estado"
+                                                data-toggle="modal"
+                                                data-target="#modalEstado"
+                                                data-id="{{$devolucion['id']}}"
+                                                data-status="{{$devolucion['estado']}}">
+                                                <i class="fas fa-pen"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                         

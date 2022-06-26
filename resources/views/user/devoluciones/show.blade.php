@@ -21,7 +21,7 @@
 
                             <div class="card-tools">
                                 <div class="input-group-append">
-                                    <a class="btn btn-success" href="" @click.prevent="" title="imprimir"><i class="fa fa-print"></i></a>
+                                    <a class="btn btn-success btn-sm btn-icon" href="" @click.prevent="" title="imprimir"><i class="fa fa-print"></i></a>
                                 </div>
                             </div>
                         </div>

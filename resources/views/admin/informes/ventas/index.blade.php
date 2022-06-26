@@ -88,9 +88,11 @@
                                         </td>
                                         <td>{{ $venta->cantidad }}</td>
                                         <td>${{ floatval($venta->total) }}</td>
-                                        <td><a href="{{ route('listado.ventas', $venta->mes)}}" class="btn btn-primary"
+                                        <td>
+                                            <a href="{{ route('listado.ventas', $venta->mes)}}" class="btn btn-primary btn-sm btn-icon"
                                                 title="ver ventas">
-                                                <i class="fas fa-eye"></i></a>
+                                                <i class="fas fa-eye"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach

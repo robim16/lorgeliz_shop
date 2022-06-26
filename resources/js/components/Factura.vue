@@ -1,7 +1,7 @@
 
 <template>
     <main>
-        <a href="" class="btn btn-success" title="descargar factura" @click.prevent="imprimirFactura(id)">
+        <a href="" class="btn btn-success btn-sm btn-icon" title="descargar factura" @click.prevent="imprimirFactura(id)">
             <i class="fas fa-download"></i>
         </a>
     </main>

@@ -46,7 +46,7 @@
                             <th>Ref. epayco</th>
                             <th>Valor</th>
                             <th>Estado</th>
-                            <th scope="col" colspan="3">Acciones</th>
+                            <th scope="col" colspan="4">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,41 +56,55 @@
                         <tr>
                             <td> {{ $pago->id }} </td>
                             <td> {{ date('d/m/Y h:i:s A', strtotime($pago->fecha)) }}</td>
-                            <td> <a href="{{ route('venta.show', $pago->venta_id)}}" title="ver venta">{{$pago->venta_id}}</a></td>
+                            <td> 
+                                <a href="{{ route('venta.show', $pago->venta_id)}}" title="ver venta">{{$pago->venta_id}}</a>
+                            </td>
                             <td> {{ $pago->ref_epayco ? : "no aplica"}}</td>
                             <td> ${{ floatval($pago->monto) }}</td>
                             <td>
                                 @if ($pago->estado == 1)
                                 <span class="badge badge-success">
-                                {{ "Aceptado" }}
+                                    {{ "Aceptado" }}
                                 </span>
                                 @endif
                                 @if ($pago->estado == 2)
                                 <span class="badge badge-danger">
-                                {{ "Rechazado" }}
+                                    {{ "Rechazado" }}
                                 </span>
                                 @endif
                                 @if ($pago->estado == 3)
                                 <span class="badge badge-warning">
-                                {{ "Pendiente" }}
+                                    {{ "Pendiente" }}
                                 </span>
                                 @endif
                                 @if ($pago->estado == 4)
                                 <span class="badge badge-danger">
-                                {{ "Fallido" }}
+                                    {{ "Fallido" }}
                                 </span>
                                 @endif
                                 @if ($pago->estado == 5)
                                 <span class="badge badge-danger">
-                                {{ "Anulado" }}
+                                    {{ "Anulado" }}
                                 </span>
                                 @endif
                             </td>
-                            <td> <a class="btn btn-primary" href="{{ route('venta.show', $pago->venta_id)}}" title="ver venta"><i class="fas fa-eye"></i></a></td>
-                            <td><a href="" class="btn btn-success" title="imprimir" @click.prevent="imprimirPago({{ $pago->id }})"><i class="fas fa-print"></i></a></td>
+                            <td> 
+                                <a class="btn btn-primary btn-sm btn-icon" href="{{ route('venta.show', $pago->venta_id)}}" title="ver venta">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="" class="btn btn-success btn-sm btn-icon" title="imprimir" @click.prevent="imprimirPago({{ $pago->id }})">
+                                    <i class="fas fa-print"></i>
+                                </a>
+                            </td>
                             @if ($pago->ref_epayco)
                                 @if ($pago->estado == 3)
-                                <td><a href="" class="btn btn-warning" title="consultar" @click.prevent="getResponse('{{ $pago->ref_epayco }}')"><i class="fas fa-search"></i></a></td>
+                                    <td>
+                                        <a href="" class="btn btn-warning btn-sm btn-icon" title="consultar" @click.prevent="getResponse('{{ $pago->ref_epayco }}')">
+                                            <i class="fas fa-search"></i>
+                                        </a>
+                                    </td>
                                 @endif
                             @endif
 
@@ -98,7 +112,7 @@
                                 <form action="{{ route('payments.cancel', $pago->id)}}" method="post">
                                     @csrf
                                     @method('POST')
-                                    <button type="submit" class="btn btn-danger" title="anular"><i class="fa fa-ban"></i> </button>
+                                    <button type="submit" class="btn btn-danger btn-sm btn-icon" title="anular"><i class="fa fa-ban"></i> </button>
                                 </form>
                             </td>
                             

@@ -72,7 +72,7 @@
                             <td>@if ($producto->colors->count() > 0)
                                     @foreach(\App\Imagene::where('imageable_type', 'App\ColorProducto')
                                         ->where('imageable_id', $producto->colors[0]->pivot->id)->pluck('url', 'id')->take(1) as $id => $imagen)    
-                                        {{-- <img src="{{ url('storage/' . $imagen) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle"> --}}
+                                        <img src="{{ url('storage/' . $imagen) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
                                         
                                     @endforeach
                                 @endif
@@ -85,13 +85,23 @@
 
                             @if ($producto->colors->count() > 0)
 
-                                <td> <a class="btn btn-default" href="{{ route('product.show', $producto->id) }}" title="ver producto"><i class="fas fa-eye"></i></a>
+                                <td> 
+                                    <a class="btn btn-default btn-sm btn-icon" href="{{ route('product.show', $producto->id) }}" title="ver producto">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
                                 </td>
 
-                                <td> <a class="btn btn-info" href="{{ route('product.edit', $producto->id) }}" title="editar"><i class="fas fa-pen"></i></a>
+                                <td> 
+                                    <a class="btn btn-info btn-sm btn-icon" href="{{ route('product.edit', $producto->id) }}" title="editar">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
                                 </td>
 
-                                <td> <a href="{{ route('product.colors', $producto->id) }}" class="btn btn-success" title="ver todos los colores"><i class="bi bi-palette"></i></a></td>
+                                <td> 
+                                    <a href="{{ route('product.colors', $producto->id) }}" class="btn btn-success btn-sm btn-icon" title="ver todos los colores">
+                                        <i class="bi bi-palette"></i>
+                                    </a>
+                                </td>
 
                             @endif
 

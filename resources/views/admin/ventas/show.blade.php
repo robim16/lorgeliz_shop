@@ -313,11 +313,23 @@
                                             </span>
                                             @endif
                                         </td>
-                                        <td> <a class="btn btn-primary" href="{{ route('venta.show', $pago->venta_id)}}" title="ver venta"><i class="fas fa-eye"></i></a></td>
-                                        <td><a href="" class="btn btn-success" title="imprimir" @click.prevent="imprimirPago({{ $pago->id }})"><i class="fas fa-print"></i></a></td>
+                                        <td> 
+                                            <a class="btn btn-primary btn-sm btn-icon" href="{{ route('venta.show', $pago->venta_id)}}" title="ver venta">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="" class="btn btn-success btn-sm btn-icon" title="imprimir" @click.prevent="imprimirPago({{ $pago->id }})">
+                                                <i class="fas fa-print"></i>
+                                            </a>
+                                        </td>
                                         @if ($pago->ref_epayco)
                                             @if ($pago->estado == 3)
-                                            <td><a href="" class="btn btn-warning" title="consultar" @click.prevent="getResponse('{{ $pago->ref_epayco }}')"><i class="fas fa-search"></i></a></td>
+                                                <td>
+                                                    <a href="" class="btn btn-warning btn-sm btn-icon" title="consultar" @click.prevent="getResponse('{{ $pago->ref_epayco }}')">
+                                                        <i class="fas fa-search"></i>
+                                                    </a>
+                                                </td>
                                             @endif
                                         @endif
                                         
@@ -370,14 +382,20 @@
                                         @endif
                                         </span>
                                     </td>
-                                    <td><a href="{{ route('admin.devolucion.show', $devolucion->id) }}"
-                                        class="btn btn-primary" title="ver solicitud"><i class="fas fa-eye"></i></a>
+                                    <td>
+                                        <a href="{{ route('admin.devolucion.show', $devolucion->id) }}"
+                                            class="btn btn-primary btn-sm btn-icon" title="ver solicitud">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
                                     </td>
-                                    <td><a href="" class="btn btn-success" title="actualizar estado"
-                                    data-toggle="modal"
-                                    data-target="#modalEstado"
-                                    data-id="{{$devolucion['id']}}"
-                                    data-status="{{$devolucion['estado']}}"><i class="fas fa-pen"></i></a>
+                                    <td>
+                                        <a href="" class="btn btn-success btn-sm btn-icon" title="actualizar estado"
+                                            data-toggle="modal"
+                                            data-target="#modalEstado"
+                                            data-id="{{$devolucion['id']}}"
+                                            data-status="{{$devolucion['estado']}}">
+                                            <i class="fas fa-pen"></i>
+                                        </a>
                                     </td>
                                 </tr>
                                     

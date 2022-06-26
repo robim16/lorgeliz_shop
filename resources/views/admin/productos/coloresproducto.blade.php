@@ -95,10 +95,16 @@
                             <td> {{$producto->color->nombre}}</td>
                             <td> {{$producto->producto->slider_principal }} </td>
 
-                            <td> <a class="btn btn-default" href="{{ route('product.showColor', $producto->slug) }}" title="ver producto"><i class="fas fa-eye"></i></a>
+                            <td> 
+                                <a class="btn btn-default btn-sm btn-icon" href="{{ route('product.showColor', $producto->slug) }}" title="ver producto">
+                                    <i class="fas fa-eye"></i>
+                                </a>
                             </td>
 
-                            <td> <a class="btn btn-info" href="{{ route('product.editColor', $producto->slug) }}" title="editar"><i class="fas fa-pen"></i></a>
+                            <td> 
+                                <a class="btn btn-info btn-sm btn-icon" href="{{ route('product.editColor', $producto->slug) }}" title="editar">
+                                    <i class="fas fa-pen"></i>
+                                </a>
                             </td>
 
                             <td>@include('admin.productos.delete')</td>

@@ -62,8 +62,8 @@
                             <td> {{$tipo->id }} </td>
                             <td> {{$tipo->nombre }} </td>
                             <td> {{$tipo->descripcion }} </td>
-                            <td> {{$tipo->subcategoria->nombre }} </td>
                             <td> {{$tipo->subcategoria->categoria->nombre }} </td>
+                            <td> {{$tipo->subcategoria->nombre }} </td>
                             
                             <td> <a class="btn btn-primary btn-sm btn-icon" href="{{ route('tipo.show', $tipo->slug)}}" title="ver"><i class="fas fa-eye"></i></a></td>
 

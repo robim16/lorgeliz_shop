@@ -22,9 +22,9 @@
 
                             <div class="card-tools">
                                 <form>
-                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                    <div class="input-group input-group-sm" style="width: 160px;">
                                         <input type="text" name="busqueda" class="form-control float-right"
-                                            placeholder="buscar pedido" value="{{ request()->get('busqueda') }}">
+                                            placeholder="buscar devolucion" value="{{ request()->get('busqueda') }}">
 
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-success">
@@ -91,7 +91,10 @@
                                         <td>{{ $producto->productoReferencia->colorProducto->color->nombre  }}</td>
                                         <td>{{ $producto->cantidad }}</td>
                                        
-                                        <td><a href="{{ route('devolucion.show', $producto->id) }}" class="btn btn-primary" title="ver solicitud"> <i class="fas fa-eye"></i></a></td>
+                                        <td>
+                                            <a href="{{ route('devolucion.show', $producto->id) }}" class="btn btn-primary btn-sm btn-icon" 
+                                                title="ver solicitud"> <i class="fas fa-eye"></i></a>
+                                        </td>
                                     </tr>
                                         
                                     @endforeach

@@ -23,8 +23,8 @@
                                         <div class="input-group input-group-sm" style="width: 180px;">
 
                                             <div class="input-group-append">
-                                                <a href="" class="btn btn-info mx-1"
-                                                    v-on:click.prevent="imprimir(arrayProductos[0].venta.pedido.id)"
+                                                <a href="" class="btn btn-info btn-sm btn-icon mx-1"
+                                                    @click.prevent="imprimir(arrayProductos[0].venta.pedido.id)"
                                                     title="imprimir pedido"><i class="fas fa-print"></i></a>
                                             </div>
 
@@ -91,7 +91,7 @@
                                             </td> -->
 
                                             <td>
-                                                <a href="" class="btn btn-success" title="solicitar cambio"
+                                                <a href="" class="btn btn-success btn-sm btn-icon" title="solicitar cambio"
                                                     @click.prevent="store(producto.producto_referencia.id,
                                                     producto.venta.id,
                                                     producto.cantidad

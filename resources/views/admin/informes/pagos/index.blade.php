@@ -91,9 +91,11 @@
                                         </td>
                                         <td>{{ $pago->cantidad }}</td>
                                         <td>${{ floatval($pago->total) }}</td>
-                                        <td><a href="{{ route('listado.pagos', $pago->mes)}}" class="btn btn-primary"
+                                        <td>
+                                            <a href="{{ route('listado.pagos', $pago->mes)}}" class="btn btn-primary btn-sm btn-icon"
                                                 title="ver pagos">
-                                                <i class="fas fa-eye"></i></a>
+                                                <i class="fas fa-eye"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach

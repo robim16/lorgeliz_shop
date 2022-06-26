@@ -21,7 +21,7 @@
     <form action="{{ route('product.destroy', $producto->id) }}" method="POST">
         @csrf
         @method('DELETE')
-        <button type="submit" class="btn btn-danger text-white"  title="desactivar producto">
+        <button type="submit" class="btn btn-danger btn-sm btn-icon text-white"  title="desactivar producto">
             <i class="fas fa-trash"></i>
         </button>
     </form>
