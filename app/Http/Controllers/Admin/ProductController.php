@@ -374,7 +374,7 @@ class ProductController extends Controller
             DB::beginTransaction();
 
             $producto = ColorProducto::where('slug',$slug)->firstOrFail();
-            $id = $producto->producto_id;
+            $producto_id = $producto->producto_id;
     
             if ($request->activo) {
                 $producto->activo = 'Si';    
@@ -409,7 +409,7 @@ class ProductController extends Controller
     
                     // $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
 
-                    $path = "imagenes/productos/producto/".$producto->id."/".$nombre;
+                    $path = "imagenes/productos/producto/".$producto_id."/".$nombre;
 
                     Storage::disk('public')->put($path, $image->stream());
 
@@ -426,7 +426,7 @@ class ProductController extends Controller
     
             session()->flash('message', ['success', ("Se ha actualizado el producto exitosamente")]);
     
-            return redirect()->route('product.colors', $id);
+            return redirect()->route('product.colors', $producto_id);
 
         } catch (Exception $e) {
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
@@ -530,10 +530,10 @@ class ProductController extends Controller
            
             DB::beginTransaction();
             
-            $producto = $request->producto;
+            $producto_id = $request->producto;
     
             $color_producto = ColorProducto::where('color_id', $request->color)
-            ->where('producto_id', $producto)
+            ->where('producto_id', $producto_id)
             ->first();
     
             if ($color_producto) {
@@ -542,6 +542,7 @@ class ProductController extends Controller
                 return redirect()->back();
             }
     
+            $producto = Producto::where('id', $producto_id)->first();
     
             $url_imagenes = [];
     
@@ -580,7 +581,7 @@ class ProductController extends Controller
     
            
             $colorproducto = new ColorProducto();
-            $colorproducto->producto_id = $producto;
+            $colorproducto->producto_id = $producto->id;
             $colorproducto->color_id = $request->color;
             $colorproducto->activo= 'Si'; 
     
@@ -599,7 +600,7 @@ class ProductController extends Controller
             
             session()->flash('message', ['success', ("Se ha creado el producto exitosamente")]);
     
-            return redirect()->route('product.colors', $producto);
+            return redirect()->route('product.colors', $producto->id);
 
         }  catch (Exception $e) {
             session()->flash('message', ['warning', ("ha ocurrido un error")]);

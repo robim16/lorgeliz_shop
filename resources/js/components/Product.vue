@@ -21,7 +21,7 @@
         <div class="product_buttons">
             <div class="text-right d-flex flex-row align-items-start justify-content-start">
                 <div
-                    class="product_button product_cart text-center d-flex flex-column align-items-center justify-content-center" id="cart" v-on:click.prevent="getCarrito()">
+                    class="product_button product_cart text-center d-flex flex-column align-items-center justify-content-center" id="cart" @click.prevent="getCarrito">
                     <div>
                         <div><img :src="'../asset/images/cart.svg'" class="svg" alt="">
                             <div>+</div>

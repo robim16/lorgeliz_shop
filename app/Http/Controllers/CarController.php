@@ -116,6 +116,7 @@ class CarController extends Controller
         //obtener el carrito del cliente autenticado antes de agregar nuevo producto
         if (!$request->ajax()) return redirect('/');
         
+        
         $carrito = Carrito::estado()
         //where('estado', '1')
         // ->where('cliente_id', auth()->user()->cliente->id)

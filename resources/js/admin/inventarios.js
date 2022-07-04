@@ -68,6 +68,7 @@ const inventarios = new Vue({
             this.producto = '';
             this.talla = '';
             this.color = '';
+            this.operacion = 3;
         }
     },
 

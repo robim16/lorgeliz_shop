@@ -137,6 +137,7 @@
 					type: "GET",
 					// url: "route('subcategory.get')",
                     url: 'http://lorenzogeliztienda.com/api/admin/subcategorias',
+                    // url: 'http://localhost/lorgeliz_tienda_copia/public/api/admin/subcategorias',
 					data:{categoria:categoria},
 					dataType: 'json',
 					success: function (response) {
@@ -144,7 +145,8 @@
 						$('#subcategory_id').html('');
 						$('#subcategory_id').append('<option value="0">Seleccione una</option>')
 						
-						$.each(response.data, function (key, value) {
+						// $.each(response.data, function (key, value) {
+                        $.each(response, function (key, value) {
 							$('#subcategory_id').append("<option value='" 
 								+ value.id + "'>" + value.nombre + "</option>");
 						});

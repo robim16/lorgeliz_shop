@@ -22,7 +22,9 @@ $factory->define(User::class, function (Faker $faker) {
     $usuario = 'lorgeliz';
     $direccion = 'Montería';
     $telefono = '3138645929';
-    $email = 'lorgeliztienda@gmail.com';
+    $departamento = 'Córdoba';
+    $municipio = 'Montería';
+    $email = 'lorenzogelizcotera@gmail.com';
     return [
         'role_id' => \App\Role::ADMIN,
         'identificacion' => '1063456009',
@@ -30,6 +32,8 @@ $factory->define(User::class, function (Faker $faker) {
         'apellidos' => $apellidos,
         'direccion' => $direccion,
         'telefono' => $telefono,
+        'departamento' => $departamento,
+        'municipio' => $municipio,
         'email' => $email,
         'email_verified_at' => now(),
         'username' => $usuario,

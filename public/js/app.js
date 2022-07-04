@@ -5527,6 +5527,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -50326,7 +50332,7 @@ var render = function() {
     _c(
       "a",
       {
-        staticClass: "btn btn-success",
+        staticClass: "btn btn-success btn-sm btn-icon",
         attrs: { href: "", title: "descargar factura" },
         on: {
           click: function($event) {
@@ -50785,7 +50791,8 @@ var render = function() {
                               _c(
                                 "a",
                                 {
-                                  staticClass: "btn btn-info mx-1",
+                                  staticClass:
+                                    "btn btn-info btn-sm btn-icon mx-1",
                                   attrs: { href: "", title: "imprimir pedido" },
                                   on: {
                                     click: function($event) {
@@ -50923,7 +50930,8 @@ var render = function() {
                                 ? _c(
                                     "a",
                                     {
-                                      staticClass: "btn btn-success",
+                                      staticClass:
+                                        "btn btn-success btn-sm btn-icon",
                                       attrs: {
                                         href: "",
                                         title: "solicitar cambio"
@@ -51332,7 +51340,7 @@ var render = function() {
               on: {
                 click: function($event) {
                   $event.preventDefault()
-                  return _vm.getCarrito()
+                  return _vm.getCarrito($event)
                 }
               }
             },
@@ -51857,8 +51865,7 @@ var render = function() {
                                                   producto.producto
                                                     .precio_actual
                                                   ? producto.producto
-                                                      .precio_anterior |
-                                                      _vm.currencyFormat
+                                                      .precio_anterior
                                                   : ""
                                               )
                                             }
@@ -52840,7 +52847,8 @@ var render = function() {
                                 _c(
                                   "a",
                                   {
-                                    staticClass: "btn btn-primary",
+                                    staticClass:
+                                      "btn btn-primary btn-sm btn-icon",
                                     attrs: { href: "", title: "chatear" },
                                     on: {
                                       click: function($event) {
@@ -73946,6 +73954,7 @@ var inventarios = new Vue({
       this.producto = '';
       this.talla = '';
       this.color = '';
+      this.operacion = 3;
     }
   }
 });
