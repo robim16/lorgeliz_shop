@@ -207,7 +207,10 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('asset/js/cart.js') }}"></script>
+	<script src="{{ asset('asset/js/cart.js') }}"></script>
+
+	<script src="{{ asset('asset/plugins/bootstrap-4.1.2/bootstrap.min.js') }}"></script>
+	<script src="{{ asset('asset/js/bootbox.min.js') }}"></script>
 
 
 {{--<script>

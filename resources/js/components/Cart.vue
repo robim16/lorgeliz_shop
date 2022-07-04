@@ -307,11 +307,12 @@
                        this.loadCart();
 				    }
                     if (response.data.data == 'error') {
-                        swal(
-                            'Stock limitado!',
-                            'No puedes añadir más unidades de este producto a tu carrito!',
-                            'error'
-                        )
+                        // swal(
+                        //     'Stock limitado!',
+                        //     'No puedes añadir más unidades de este producto a tu carrito!',
+                        //     'error'
+                        // )
+                        bootbox.alert('Stock limitado. No puedes añadir más unidades de este producto a tu carrito!');
                     }
 
                 }).catch(error => {

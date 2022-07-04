@@ -79,9 +79,9 @@ Copyright &copy;@section('scripts')
 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></div>
                         <nav class="footer_nav ml-md-auto order-md-2 order-1">
                             <ul class="d-flex flex-row align-items-center justify-content-start">
-                                <li><a href="categorias?categoria=mujeres">Mujer</a></li>
-                                <li><a href="categorias?categoria=hombres"></a></li>
-                                <li><a href="categorias?categoria=niños">Niños</a></li>
+                                <li><a href="" @click.prevent="setCategoria('mujeres')">Mujeres</a></li>
+                                <li><a href="" @click.prevent="setCategoria('hombres')">Hombres</a></li>
+                                <li><a href="" @click.prevent="setCategoria('niños')">Niños</a></li>	
                                 <li><a href="category.html">Home Deco</a></li>
                                 <li><a href="#">Contacto</a></li>
                             </ul>
