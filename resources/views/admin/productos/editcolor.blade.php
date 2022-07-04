@@ -3,13 +3,14 @@
 
 @section('titulo', 'Editar Producto')
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{route('product.index')}}">Productos</a></li>
-<li class="breadcrumb-item active">@yield('titulo')</li>
+    <li class="breadcrumb-item"><a href="{{route('product.index')}}">Productos</a></li>
+    <li class="breadcrumb-item active">@yield('titulo')</li>
 @endsection
 
 
 @section('estilos')
 <!-- Select2 -->
+
 <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/css/select2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 <!-- Ekko Lightbox -->
@@ -617,6 +618,15 @@
 
 @section('scripts')
 
+<script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
+
+<script src="{{ asset('adminlte/ckeditor/ckeditor.js') }}"></script>
+
+<!-- Ekko Lightbox -->
+<script src="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.min.js') }}"></script> 
+
+<!-- Select2 -->
+
 <script>
 
     window.data = {
@@ -626,7 +636,7 @@
             "porcentajededescuento": "{{$producto->porcentaje_descuento}}"
         }
     }
-    $(function () {
+    // $(function () {
         //Initialize Select2 Elements
         // $('#category_id').select2()
 
@@ -635,23 +645,19 @@
         //     theme: 'bootstrap4'
         // });
 
-        //uso de lightbox
-        $(document).on('click', '[data-toggle="lightbox"]', function (event) {
-            event.preventDefault();
-            $(this).ekkoLightbox({
-                alwaysShowClose: true
+        // $(document).ready(function () {
+            
+            //uso de lightbox
+            $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+                event.preventDefault();
+                $(this).ekkoLightbox({
+                    alwaysShowClose: true
+                });
             });
-        });
+        // });
 
-    });
+    // });
 </script>
 
-<!-- Select2 -->
-<script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
-
-<script src="{{ asset('adminlte/ckeditor/ckeditor.js') }}"></script>
-
-<!-- Ekko Lightbox -->
-<script src="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.min.js') }}"></script>
 
 @endsection

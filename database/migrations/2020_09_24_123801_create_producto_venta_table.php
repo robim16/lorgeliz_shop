@@ -20,6 +20,8 @@ class CreateProductoVentaTable extends Migration
             $table->unsignedInteger('venta_id');
             $table->foreign('venta_id')->references('id')->on('ventas');
             $table->integer('cantidad');
+            $table->decimal('precio_venta', 12, 0);
+            $table->decimal('porcentaje_descuento', 12, 0);
             //$table->timestamps();
         });
     }
