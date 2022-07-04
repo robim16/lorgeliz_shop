@@ -119,17 +119,17 @@
 
                     <div class="col-lg-6 product_col">
                         <div class="product_info info" id="{{ $producto->producto->id}}">
-                                <div class="product_name">{{ $producto->producto->nombre }} - {{ $producto->color->nombre }}</div>
-                                <div class="product_category">En <a href="" @click.prevent="setSubcategoria({{$producto->producto->tipo->id}})">{{$producto->producto->tipo->nombre}}</a></div>
-        
-                                <div class="product_price">${{ floatval($producto->producto->precio_actual)}}<del class="price-old"> ${{ floatval($producto->producto->precio_anterior)}}</del></div>
-        
-                                <div class="product_text">
-                                    <p>{!! $producto->producto->descripcion_corta !!}</p>
-                                </div>
-                    
-                                {{-- <product producto="{{$producto->cop}}"></product> --}}
-                                <product :producto="{{$producto->id}}" :ruta="ruta"></product>
+                            <div class="product_name">{{ $producto->producto->nombre }} - {{ $producto->color->nombre }}</div>
+                            <div class="product_category">En <a href="" @click.prevent="setSubcategoria({{$producto->producto->tipo->id}})">{{$producto->producto->tipo->nombre}}</a></div>
+    
+                            <div class="product_price">${{ floatval($producto->producto->precio_actual)}}<del class="price-old"> ${{ floatval($producto->producto->precio_anterior)}}</del></div>
+    
+                            <div class="product_text">
+                                <p>{!! $producto->producto->descripcion_corta !!}</p>
+                            </div>
+                
+                            {{-- <product producto="{{$producto->cop}}"></product> --}}
+                            <product :user_id="{{  auth()->user() ? json_encode(auth()->id()) : '0' }}" :producto="{{$producto->id}}" :ruta="ruta"></product>
                             {{--<div class="product_text">
                                 <span style="color: black; font-weight: bold;">Talla</span>
                                 <select name="talla" id="talla" class="form-control" v-model="talla" @change="setStock()" @click="change()">
@@ -249,7 +249,7 @@
                             </div>
                             <div class="box_content">
                                 <div class="box_title">Envío</div>
-                                <div class="box_text">Envío gratis por pedidos desde $.</div>
+                                {{-- <div class="box_text">Envío gratis por pedidos desde $.</div> --}}
                             </div>
                         </div>
                     </div>
@@ -271,6 +271,9 @@
     </script> --}}
     {{--<script src="{{ asset('asset/plugins/OwlCarousel2-2.2.1/owl.carousel.js') }}"></script>
     <script src="{{ asset('asset/plugins/flexslider/jquery.flexslider-min.js') }}"></script>--}}
+    {{-- <script src="{{ asset('asset/plugins/bootstrap-4.1.2/popper.js') }}"></script> --}}
+    {{-- <script src="{{ asset('asset/plugins/bootstrap-4.1.2/bootstrap.min.js') }}"></script> --}}
+    <script src="{{ asset('asset/js/bootbox.min.js') }}"></script>
     <script src="{{ asset('asset/js/product.js') }}"></script>
 @endsection
 

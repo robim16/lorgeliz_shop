@@ -66,8 +66,8 @@
     {{--<script src="{{ asset('js/app_admin.js') }}" defer></script>
 	
 	
-	<script src="{{ asset('asset/styles/bootstrap-4.1.2/popper.js') }}"></script>
-	<script src="{{ asset('asset/styles/bootstrap-4.1.2/bootstrap.min.js') }}"></script>
+	<script src="{{ asset('asset/plugins/bootstrap-4.1.2/popper.js') }}"></script>
+	<script src="{{ asset('asset/plugins/bootstrap-4.1.2/bootstrap.min.js') }}"></script>
 	{{--<script src="{{ asset('asset/plugins/greensock/TweenMax.min.js') }}"></script>--}}
 	{{--<script src="{{ asset('asset/plugins/greensock/TimelineMax.min.js') }}"></script>--}}
 	{{--<script src="{{ asset('asset/plugins/scrollmagic/ScrollMagic.min.js') }}"></script>--}}

@@ -1,3 +1,4 @@
+
 <template>
     <main>
         <div class="product_text">
@@ -44,6 +45,10 @@
             ruta:{
                 required: true,
                 type: String
+            },
+            user_id: {
+                type: Number,
+                required: true
             }
         },
         data (){
@@ -113,137 +118,144 @@
             getCarrito(){
                 // let url = '/lorgeliz_tienda_copia/public/cart/buscarCarrito';
 
-                let url = `${this.ruta}/cart/buscarCarrito`
-
-                if ((this.cantidad != '' && this.cantidad != 0) && this.talla != '') {
-
-                    if(this.error) this.error = false;
-                    axios.get(url).then(response => {
-                        this.arrayCarrito = response.data.carrito;
-        
-                        if (this.arrayCarrito != null){
-                            this.carrito = this.arrayCarrito.id;
-
-                            // let url = '/lorgeliz_tienda_copia/public/cart/update';
-
-                            let url = `${this.ruta}/cart/update`
-                            
-            
-                            for (let i = 0; i < this.arrayTallas.length; i++) {
-                                if (this.arrayTallas[i].id == this.talla) {
-                                    if (this.cantidad <= this.arrayTallas[i].stock ) {
-                                        axios.post(url,{
-                                        'producto': this.producto,
-                                        'talla': this.talla,
-                                        'cantidad': this.cantidad,
-                                        'carrito': this.carrito
-                            
-                                        }).then(response => {
+                if (this.user_id != 0) {
                     
-                                            if (response.data.data == 'error') {
+                    let url = `${this.ruta}/cart/buscarCarrito`
+    
+                    if ((this.cantidad != '' && this.cantidad != 0) && this.talla != '') {
+    
+                        if(this.error) this.error = false;
+                        axios.get(url).then(response => {
+                            this.arrayCarrito = response.data.carrito;
+            
+                            if (this.arrayCarrito != null){
+                                this.carrito = this.arrayCarrito.id;
+    
+                                // let url = '/lorgeliz_tienda_copia/public/cart/update';
+    
+                                let url = `${this.ruta}/cart/update`
+                                
+                
+                                for (let i = 0; i < this.arrayTallas.length; i++) {
+                                    if (this.arrayTallas[i].id == this.talla) {
+                                        if (this.cantidad <= this.arrayTallas[i].stock ) {
+                                            axios.post(url,{
+                                            'producto': this.producto,
+                                            'talla': this.talla,
+                                            'cantidad': this.cantidad,
+                                            'carrito': this.carrito
+                                
+                                            }).then(response => {
                         
-                                                var unidades = parseInt(response.data.carrito);
-                                                var actual = parseInt(response.data.stock);
-                                                var restantes = actual - unidades;
-                        
-                                                if (restantes == 0) {
-                                                    // swal(
-                                                    // 'Producto agotado!',
-                                                    // 'No puedes agregar más unidades de este producto a tu carrito!',
-                                                    // 'error'
-                                                    // )
-
-                                                    bootbox.alert('Producto agotado. No puedes agregar más unidades de este producto a tu carrito!');
+                                                if (response.data.data == 'error') {
+                            
+                                                    var unidades = parseInt(response.data.carrito);
+                                                    var actual = parseInt(response.data.stock);
+                                                    var restantes = actual - unidades;
+                            
+                                                    if (restantes == 0) {
+                                                        // swal(
+                                                        // 'Producto agotado!',
+                                                        // 'No puedes agregar más unidades de este producto a tu carrito!',
+                                                        // 'error'
+                                                        // )
+    
+                                                        bootbox.alert('Producto agotado. No puedes agregar más unidades de este producto a tu carrito!');
+                                                    }
+                                                    else{
+                                                        // swal(
+                                                        //     'Producto con stock limitado!',
+                                                        //     'Puedes agregar a tu carrito sólo ' + restantes + ' unidad(es) más de este producto',
+                                                        //     'error'
+                                                        // )
+                                                        bootbox.alert('Stock limitado. Puedes agregar a tu carrito sólo ' + restantes + ' unidad(es) más de este producto');
+                                                        
+                                                    }
                                                 }
                                                 else{
-                                                    // swal(
-                                                    //     'Producto con stock limitado!',
-                                                    //     'Puedes agregar a tu carrito sólo ' + restantes + ' unidad(es) más de este producto',
-                                                    //     'error'
-                                                    // )
-                                                    bootbox.alert('Stock limitado. Puedes agregar a tu carrito sólo ' + restantes + ' unidad(es) más de este producto');
-                                                    
-                                                }
-                                            }
-                                            else{
-                        
-                                                swal(
-                                                'Producto agregado al carrito!',
-                                                'Haz agregado este producto a tu carrito',
-                                                'success'
-                                                )   
-                        
-                                            }
-                                
-                                        }).catch(error => {
-                                            console.log(error);
-                                        }); 
-                                    } else{
-                                        //let datos = 'No se puede agregar el producto al carrito!. La cantidad debe ser máximo ' + this.arrayTallas[i].stock;
-
-                                        bootbox.alert(datos);
-                                        // swal(
-                                        // 'No se puede agregar el producto al carrito!',
-                                        // 'La cantidad debe ser máximo ' + this.arrayTallas[i].stock,
-                                        // 'error'
-                                        // )   
-                                    }
-                                }
-                                
-                            }
-                    
-                        } else{
-            
-                            // let url = '/lorgeliz_tienda_copia/public/cart/store';
-                            // let url = '/lorgeliz_tienda_copia/public/cart';
-
-                            let url = `${this.ruta}/cart`
-                
-                            for (let i = 0; i < this.arrayTallas.length; i++) {
-                                if (this.arrayTallas[i].id == this.talla) {
-                                    if (this.cantidad <= this.arrayTallas[i].stock) {
-                                        axios.post(url,{
-                                        'producto': this.producto,
-                                        'talla': this.talla,
-                                        'cantidad': this.cantidad
                             
-                                        }).then(response => {
-                                        
-                                            swal(
-                                                'Producto agregado al carrito!',
-                                                'Haz agregado este producto a tu carrito',
-                                                'success'
-                                            )
-                                        }).catch(error => {
-                                            console.log(error);
-                                        });
+                                                    swal(
+                                                    'Producto agregado al carrito!',
+                                                    'Haz agregado este producto a tu carrito',
+                                                    'success'
+                                                    )   
+                            
+                                                }
+                                    
+                                            }).catch(error => {
+                                                console.log(error);
+                                            }); 
+                                        } else{
+                                            let datos = 'No se puede agregar el producto al carrito!. La cantidad debe ser máximo ' + this.arrayTallas[i].stock;
+    
+                                            bootbox.alert(datos);
+                                            // swal(
+                                            // 'No se puede agregar el producto al carrito!',
+                                            // 'La cantidad debe ser máximo ' + this.arrayTallas[i].stock,
+                                            // 'error'
+                                            // )   
+                                        }
                                     }
-                                    else{
-                                        //let datos = 'No se puede agregar el producto al carrito!. La cantidad debe ser máximo ' + this.arrayTallas[i].stock;
-                                        
-                                        bootbox.alert(datos);
-                                        // swal(
-                                        // 'No se puede agregar el producto al carrito!',
-                                        // 'La cantidad debe ser máximo ' + this.arrayTallas[i].stock,
-                                        // 'error'
-                                        // )   
-                                    }
+                                    
                                 }
+                        
+                            } else{
+                
+                                // let url = '/lorgeliz_tienda_copia/public/cart/store';
+                                // let url = '/lorgeliz_tienda_copia/public/cart';
+    
+                                let url = `${this.ruta}/cart`
+                    
+                                for (let i = 0; i < this.arrayTallas.length; i++) {
+                                    if (this.arrayTallas[i].id == this.talla) {
+                                        if (this.cantidad <= this.arrayTallas[i].stock) {
+                                            axios.post(url,{
+                                            'producto': this.producto,
+                                            'talla': this.talla,
+                                            'cantidad': this.cantidad
                                 
+                                            }).then(response => {
+                                            
+                                                swal(
+                                                    'Producto agregado al carrito!',
+                                                    'Haz agregado este producto a tu carrito',
+                                                    'success'
+                                                )
+                                            }).catch(error => {
+                                                console.log(error);
+                                            });
+                                        }
+                                        else{
+                                            let datos = 'No se puede agregar el producto al carrito!. La cantidad debe ser máximo ' + this.arrayTallas[i].stock;
+                                            
+                                            bootbox.alert(datos);
+                                            // swal(
+                                            // 'No se puede agregar el producto al carrito!',
+                                            // 'La cantidad debe ser máximo ' + this.arrayTallas[i].stock,
+                                            // 'error'
+                                            // )   
+                                        }
+                                    }
+                                    
+                                }
+                
                             }
             
-                        }
-        
-                    }); 
-                
-                }
-                else{
-                    // swal(
-                    //     'No se puede agregar este producto al carrito!',
-                    //     'Debes indicar la talla y la cantidad!',
-                    //     'error'
-                    // )
-                    this.error = true;
+                        }); 
+                    
+                    }
+                    else{
+                        // swal(
+                        //     'No se puede agregar este producto al carrito!',
+                        //     'Debes indicar la talla y la cantidad!',
+                        //     'error'
+                        // )
+                        this.error = true;
+                    }
+
+                } else {
+                    
+                    window.location.href = `${this.ruta}/login`;
                 }
 
             },

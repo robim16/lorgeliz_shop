@@ -4307,6 +4307,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   // props : ['producto'],
   props: {
@@ -4317,6 +4318,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     ruta: {
       required: true,
       type: String
+    },
+    user_id: {
+      type: Number,
+      required: true
     }
   },
   data: function data() {
@@ -4370,99 +4375,104 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this2 = this;
 
       // let url = '/lorgeliz_tienda_copia/public/cart/buscarCarrito';
-      var url = "".concat(this.ruta, "/cart/buscarCarrito");
+      if (this.user_id != 0) {
+        var url = "".concat(this.ruta, "/cart/buscarCarrito");
 
-      if (this.cantidad != '' && this.cantidad != 0 && this.talla != '') {
-        if (this.error) this.error = false;
-        axios.get(url).then(function (response) {
-          _this2.arrayCarrito = response.data.carrito;
+        if (this.cantidad != '' && this.cantidad != 0 && this.talla != '') {
+          if (this.error) this.error = false;
+          axios.get(url).then(function (response) {
+            _this2.arrayCarrito = response.data.carrito;
 
-          if (_this2.arrayCarrito != null) {
-            _this2.carrito = _this2.arrayCarrito.id; // let url = '/lorgeliz_tienda_copia/public/cart/update';
+            if (_this2.arrayCarrito != null) {
+              _this2.carrito = _this2.arrayCarrito.id; // let url = '/lorgeliz_tienda_copia/public/cart/update';
 
-            var _url = "".concat(_this2.ruta, "/cart/update");
+              var _url = "".concat(_this2.ruta, "/cart/update");
 
-            for (var i = 0; i < _this2.arrayTallas.length; i++) {
-              if (_this2.arrayTallas[i].id == _this2.talla) {
-                if (_this2.cantidad <= _this2.arrayTallas[i].stock) {
-                  axios.post(_url, {
-                    'producto': _this2.producto,
-                    'talla': _this2.talla,
-                    'cantidad': _this2.cantidad,
-                    'carrito': _this2.carrito
-                  }).then(function (response) {
-                    if (response.data.data == 'error') {
-                      var unidades = parseInt(response.data.carrito);
-                      var actual = parseInt(response.data.stock);
-                      var restantes = actual - unidades;
+              for (var i = 0; i < _this2.arrayTallas.length; i++) {
+                if (_this2.arrayTallas[i].id == _this2.talla) {
+                  if (_this2.cantidad <= _this2.arrayTallas[i].stock) {
+                    axios.post(_url, {
+                      'producto': _this2.producto,
+                      'talla': _this2.talla,
+                      'cantidad': _this2.cantidad,
+                      'carrito': _this2.carrito
+                    }).then(function (response) {
+                      if (response.data.data == 'error') {
+                        var unidades = parseInt(response.data.carrito);
+                        var actual = parseInt(response.data.stock);
+                        var restantes = actual - unidades;
 
-                      if (restantes == 0) {
-                        // swal(
-                        // 'Producto agotado!',
-                        // 'No puedes agregar más unidades de este producto a tu carrito!',
-                        // 'error'
-                        // )
-                        bootbox.alert('Producto agotado. No puedes agregar más unidades de este producto a tu carrito!');
+                        if (restantes == 0) {
+                          // swal(
+                          // 'Producto agotado!',
+                          // 'No puedes agregar más unidades de este producto a tu carrito!',
+                          // 'error'
+                          // )
+                          bootbox.alert('Producto agotado. No puedes agregar más unidades de este producto a tu carrito!');
+                        } else {
+                          // swal(
+                          //     'Producto con stock limitado!',
+                          //     'Puedes agregar a tu carrito sólo ' + restantes + ' unidad(es) más de este producto',
+                          //     'error'
+                          // )
+                          bootbox.alert('Stock limitado. Puedes agregar a tu carrito sólo ' + restantes + ' unidad(es) más de este producto');
+                        }
                       } else {
-                        // swal(
-                        //     'Producto con stock limitado!',
-                        //     'Puedes agregar a tu carrito sólo ' + restantes + ' unidad(es) más de este producto',
-                        //     'error'
-                        // )
-                        bootbox.alert('Stock limitado. Puedes agregar a tu carrito sólo ' + restantes + ' unidad(es) más de este producto');
+                        swal('Producto agregado al carrito!', 'Haz agregado este producto a tu carrito', 'success');
                       }
-                    } else {
-                      swal('Producto agregado al carrito!', 'Haz agregado este producto a tu carrito', 'success');
-                    }
-                  })["catch"](function (error) {
-                    console.log(error);
-                  });
-                } else {
-                  //let datos = 'No se puede agregar el producto al carrito!. La cantidad debe ser máximo ' + this.arrayTallas[i].stock;
-                  bootbox.alert(datos); // swal(
-                  // 'No se puede agregar el producto al carrito!',
-                  // 'La cantidad debe ser máximo ' + this.arrayTallas[i].stock,
-                  // 'error'
-                  // )   
+                    })["catch"](function (error) {
+                      console.log(error);
+                    });
+                  } else {
+                    var datos = 'No se puede agregar el producto al carrito!. La cantidad debe ser máximo ' + _this2.arrayTallas[i].stock;
+                    bootbox.alert(datos); // swal(
+                    // 'No se puede agregar el producto al carrito!',
+                    // 'La cantidad debe ser máximo ' + this.arrayTallas[i].stock,
+                    // 'error'
+                    // )   
+                  }
                 }
               }
-            }
-          } else {
-            // let url = '/lorgeliz_tienda_copia/public/cart/store';
-            // let url = '/lorgeliz_tienda_copia/public/cart';
-            var _url2 = "".concat(_this2.ruta, "/cart");
+            } else {
+              // let url = '/lorgeliz_tienda_copia/public/cart/store';
+              // let url = '/lorgeliz_tienda_copia/public/cart';
+              var _url2 = "".concat(_this2.ruta, "/cart");
 
-            for (var _i = 0; _i < _this2.arrayTallas.length; _i++) {
-              if (_this2.arrayTallas[_i].id == _this2.talla) {
-                if (_this2.cantidad <= _this2.arrayTallas[_i].stock) {
-                  axios.post(_url2, {
-                    'producto': _this2.producto,
-                    'talla': _this2.talla,
-                    'cantidad': _this2.cantidad
-                  }).then(function (response) {
-                    swal('Producto agregado al carrito!', 'Haz agregado este producto a tu carrito', 'success');
-                  })["catch"](function (error) {
-                    console.log(error);
-                  });
-                } else {
-                  //let datos = 'No se puede agregar el producto al carrito!. La cantidad debe ser máximo ' + this.arrayTallas[i].stock;
-                  bootbox.alert(datos); // swal(
-                  // 'No se puede agregar el producto al carrito!',
-                  // 'La cantidad debe ser máximo ' + this.arrayTallas[i].stock,
-                  // 'error'
-                  // )   
+              for (var _i = 0; _i < _this2.arrayTallas.length; _i++) {
+                if (_this2.arrayTallas[_i].id == _this2.talla) {
+                  if (_this2.cantidad <= _this2.arrayTallas[_i].stock) {
+                    axios.post(_url2, {
+                      'producto': _this2.producto,
+                      'talla': _this2.talla,
+                      'cantidad': _this2.cantidad
+                    }).then(function (response) {
+                      swal('Producto agregado al carrito!', 'Haz agregado este producto a tu carrito', 'success');
+                    })["catch"](function (error) {
+                      console.log(error);
+                    });
+                  } else {
+                    var _datos = 'No se puede agregar el producto al carrito!. La cantidad debe ser máximo ' + _this2.arrayTallas[_i].stock;
+
+                    bootbox.alert(_datos); // swal(
+                    // 'No se puede agregar el producto al carrito!',
+                    // 'La cantidad debe ser máximo ' + this.arrayTallas[i].stock,
+                    // 'error'
+                    // )   
+                  }
                 }
               }
             }
-          }
-        });
+          });
+        } else {
+          // swal(
+          //     'No se puede agregar este producto al carrito!',
+          //     'Debes indicar la talla y la cantidad!',
+          //     'error'
+          // )
+          this.error = true;
+        }
       } else {
-        // swal(
-        //     'No se puede agregar este producto al carrito!',
-        //     'Debes indicar la talla y la cantidad!',
-        //     'error'
-        // )
-        this.error = true;
+        window.location.href = "".concat(this.ruta, "/login");
       }
     }
   },
