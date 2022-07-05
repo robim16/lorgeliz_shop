@@ -64,6 +64,26 @@ const inventarios = new Vue({
             }); 
         },
 
+        ingresarStock(){
+            let url = 'http://lorenzogeliztienda.com/admin/stock';
+
+            axios.post(url,{
+                'producto': this.producto,
+                'talla': this.talla,
+                'color': this.color,
+                'cantidad': this.cantidad
+                }).then(response => {
+                   console.log(response)
+
+                }).catch(error => {
+                   for (var [el, message] of Object.entries(error.responseJSON.errors)) {
+                    $(`#${el}-error`).html(message)
+                    
+                   }
+                });
+
+        },
+
         reset(){
             this.producto = '';
             this.talla = '';

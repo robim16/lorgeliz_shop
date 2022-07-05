@@ -2494,7 +2494,12 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         if (response.data.data == 'error') {
-          swal('Stock limitado!', 'No puedes añadir más unidades de este producto a tu carrito!', 'error');
+          // swal(
+          //     'Stock limitado!',
+          //     'No puedes añadir más unidades de este producto a tu carrito!',
+          //     'error'
+          // )
+          bootbox.alert('Stock limitado. No puedes añadir más unidades de este producto a tu carrito!');
         }
       })["catch"](function (error) {
         console.log(error);
@@ -73906,6 +73911,14 @@ var product = new Vue({
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 var inventarios = new Vue({
   el: '#inventarios',
   data: {
@@ -73958,6 +73971,25 @@ var inventarios = new Vue({
       axios.get(url).then(function (response) {
         //   this.arrayColores = response.data.colores;
         _this2.arrayColores = response.data;
+      });
+    },
+    ingresarStock: function ingresarStock() {
+      var url = 'http://lorenzogeliztienda.com/admin/stock';
+      axios.post(url, {
+        'producto': this.producto,
+        'talla': this.talla,
+        'color': this.color,
+        'cantidad': this.cantidad
+      }).then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {
+        for (var _i = 0, _Object$entries = Object.entries(error.responseJSON.errors); _i < _Object$entries.length; _i++) {
+          var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+              el = _Object$entries$_i[0],
+              message = _Object$entries$_i[1];
+
+          $("#".concat(el, "-error")).html(message);
+        }
       });
     },
     reset: function reset() {

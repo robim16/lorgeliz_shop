@@ -212,8 +212,8 @@
                                 @endif
                             </div>
 
-                            <button type="submit" class="btn btn-primary float-left" id="aceptar">Guardar <i
-                                    class="bi bi-hdd"></i></button>
+                            <button type="submit" class="btn btn-primary float-left" id="aceptar" @click.prevent="ingresarStock">Guardar <i
+                                class="bi bi-hdd"></i></button>
                             <button type="reset" class="btn btn-danger float-right" id="rechazar">Cancelar</button>
 
                         </form>
