@@ -62,47 +62,54 @@ class StockController extends Controller
         // ->where('producto_id', $request->producto_id)
         // ->first(); //obtener el color
 
-        $colorproducto = ColorProducto::where('color_id', $request->color_id)
-        ->where('producto_id', $request->producto_id)
-        ->with('producto:id,slider_principal,estado')
-        ->first();
-        
-        $referencia = ProductoReferencia::where('color_producto_id', $colorproducto->id)
-        ->where('talla_id', $request->talla_id)
-        ->first(); // buscar la referencia
-
-       
-        if ($referencia == '') {//si no existe la referencia, se crea
-
-            $producto = new ProductoReferencia();
-            $producto->color_producto_id = $colorproducto->id;
-            $producto->talla_id = $request->talla_id;
-            $producto->stock = $request->cantidad;
+        try {
+           
+            $colorproducto = ColorProducto::where('color_id', $request->color_id)
+            ->where('producto_id', $request->producto_id)
+            ->with('producto:id,slider_principal,estado')
+            ->first();
+            
+            $referencia = ProductoReferencia::where('color_producto_id', $colorproducto->id)
+            ->where('talla_id', $request->talla_id)
+            ->first(); // buscar la referencia
     
-            $producto->save();  
-        }
-        else{
-
-            if ($request->operacion == 1) {
-               
-                $referencia->stock = $referencia->stock + $request->cantidad; //sino, se actualiza el stock
+           
+            if ($referencia == '') {//si no existe la referencia, se crea
+    
+                $producto = new ProductoReferencia();
+                $producto->color_producto_id = $colorproducto->id;
+                $producto->talla_id = $request->talla_id;
+                $producto->stock = $request->cantidad;
+        
+                $producto->save();  
             }
             else{
-                $referencia->stock = $referencia->stock - $request->cantidad;
+    
+                if ($request->operacion == 1) {
+                   
+                    $referencia->stock = $referencia->stock + $request->cantidad; //sino, se actualiza el stock
+                }
+                else{
+                    $referencia->stock = $referencia->stock - $request->cantidad;
+                }
+    
+                $referencia->save();
             }
+    
+            session()->flash('message', ['success', ("Se ha actualizado el inventario exitosamente")]);
+    
+            $product = array();
+            $product['data'] = array();
+    
+            $product['data'] = $colorproducto;
+            broadcast(new AddProductEvent($product));
+    
+            return back();
 
-            $referencia->save();
+
+        } catch (\Exception $e) {
+            session()->flash('message', ['warning', ("Ha ocurrido un error".$e)]);
         }
-
-        session()->flash('message', ['success', ("Se ha actualizado el inventario exitosamente")]);
-
-        $product = array();
-        $product['data'] = array();
-
-        $product['data'] = $colorproducto;
-        broadcast(new AddProductEvent($product));
-
-        return back();
 
     }
 
