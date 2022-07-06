@@ -75887,7 +75887,7 @@ if (document.getElementById('app')) {
     data: {
       keyword: '',
       location: '',
-      ruta: 'http://lorenzogeliztienda.com'
+      ruta: 'http://dev.lorenzogeliztienda.com'
     },
     methods: {
       setCategoria: function setCategoria(categoria) {
