@@ -273,7 +273,7 @@
     <script src="{{ asset('asset/plugins/flexslider/jquery.flexslider-min.js') }}"></script>--}}
     {{-- <script src="{{ asset('asset/plugins/bootstrap-4.1.2/popper.js') }}"></script> --}}
     {{-- <script src="{{ asset('asset/plugins/bootstrap-4.1.2/bootstrap.min.js') }}"></script> --}}
-    <script src="{{ asset('asset/js/bootbox.min.js') }}"></script>
+    {{-- <script src="{{ asset('asset/js/bootbox.min.js') }}"></script> --}}
     <script src="{{ asset('asset/js/product.js') }}"></script>
 @endsection
 
