@@ -9,6 +9,7 @@ use App\ColorProducto;
 use App\Events\UserCart;
 use App\Producto;
 use App\ProductoReferencia;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -283,6 +284,7 @@ class CarController extends Controller
     { 
         // se ejecuta al modificar la cantidad de producto en la página del carrito
         if (!$request->ajax()) return redirect('/');
+        
         try {
             
             DB::beginTransaction();

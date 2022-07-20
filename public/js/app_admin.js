@@ -73974,7 +73974,8 @@ var inventarios = new Vue({
       });
     },
     ingresarStock: function ingresarStock() {
-      var url = 'http://lorenzogeliztienda.com/admin/stock';
+      // let url = 'http://lorenzogeliztienda.com/admin/stock';
+      var url = '/lorgeliz_tienda_copia/public/admin/stock';
       axios.post(url, {
         'producto': this.producto,
         'talla': this.talla,
@@ -73983,7 +73984,8 @@ var inventarios = new Vue({
       }).then(function (response) {
         console.log(response);
       })["catch"](function (error) {
-        for (var _i = 0, _Object$entries = Object.entries(error.responseJSON.errors); _i < _Object$entries.length; _i++) {
+        // for (var [el, message] of Object.entries(error.responseJSON.errors)) {
+        for (var _i = 0, _Object$entries = Object.entries(error.errors); _i < _Object$entries.length; _i++) {
           var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
               el = _Object$entries$_i[0],
               message = _Object$entries$_i[1];
