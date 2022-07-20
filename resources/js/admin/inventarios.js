@@ -65,7 +65,9 @@ const inventarios = new Vue({
         },
 
         ingresarStock(){
-            let url = 'http://lorenzogeliztienda.com/admin/stock';
+            // let url = 'http://lorenzogeliztienda.com/admin/stock';
+
+            let url = '/lorgeliz_tienda_copia/public/admin/stock';
 
             axios.post(url,{
                 'producto': this.producto,
@@ -76,10 +78,10 @@ const inventarios = new Vue({
                    console.log(response)
 
                 }).catch(error => {
-                   for (var [el, message] of Object.entries(error.responseJSON.errors)) {
-                    $(`#${el}-error`).html(message)
-                    
-                   }
+                    for (var [el, message] of Object.entries(error.responseJSON.errors)) {
+                        $(`#${el}-error`).html(message)
+                        
+                    }
                 });
 
         },

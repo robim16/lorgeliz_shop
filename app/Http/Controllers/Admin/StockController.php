@@ -65,13 +65,13 @@ class StockController extends Controller
         try {
            
             $colorproducto = ColorProducto::where('color_id', $request->color_id)
-            ->where('producto_id', $request->producto_id)
-            ->with('producto:id,slider_principal,estado')
-            ->first();
+                ->where('producto_id', $request->producto_id)
+                ->with('producto:id,slider_principal,estado')
+                ->first();
             
             $referencia = ProductoReferencia::where('color_producto_id', $colorproducto->id)
-            ->where('talla_id', $request->talla_id)
-            ->first(); // buscar la referencia
+                ->where('talla_id', $request->talla_id)
+                ->first(); // buscar la referencia
     
            
             if ($referencia == '') {//si no existe la referencia, se crea
@@ -102,6 +102,7 @@ class StockController extends Controller
             $product['data'] = array();
     
             $product['data'] = $colorproducto;
+            
             broadcast(new AddProductEvent($product));
     
             return back();
