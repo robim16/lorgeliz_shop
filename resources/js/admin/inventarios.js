@@ -13,6 +13,7 @@ const inventarios = new Vue({
     }, 
     
     methods: {
+        
         pdfInventarios(){
             // let url = '/lorgeliz_tienda_copia/public/admin/stock/listado';
             let url = 'http://lorenzogeliztienda.com/admin/stock/listado'
@@ -62,6 +63,26 @@ const inventarios = new Vue({
             //   this.arrayColores = response.data.colores;
                 this.arrayColores = response.data;
             }); 
+        },
+
+        ingresarStock(){
+            let url = 'http://lorenzogeliztienda.com/admin/stock';
+
+            axios.post(url,{
+                'producto': this.producto,
+                'talla': this.talla,
+                'color': this.color,
+                'cantidad': this.cantidad
+                }).then(response => {
+                   console.log(response)
+
+                }).catch(error => {
+                   for (var [el, message] of Object.entries(error.responseJSON.errors)) {
+                    $(`#${el}-error`).html(message)
+                    
+                   }
+                });
+
         },
 
         reset(){
