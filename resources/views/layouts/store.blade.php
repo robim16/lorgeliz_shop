@@ -43,15 +43,16 @@
     <div id="app">
         <!-- Menu -->
         @include('partials.tienda.menu')
+
         <div class="super_container">
             @include('partials.tienda.header')
             
-                    @yield('content')
-                
-                    <!-- Footer -->
-                    @include('partials.tienda.footer')
-            
-                    </div>
+            @yield('content')
+        
+            <!-- Footer -->
+            @include('partials.tienda.footer')
+        
+            </div>
             
             {{--@include('partials.footer')--}}
         </div>

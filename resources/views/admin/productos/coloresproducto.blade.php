@@ -4,28 +4,31 @@
 @section('titulo', 'Administración de productos')
 
 @section('breadcrumb')
-<li class="breadcrumb-item active">@yield('titulo')</li>
+    <li class="breadcrumb-item active">@yield('titulo')</li>
 @endsection
 
 
+@section('estilos')
+    <style type="text/css">
+        .table1 {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+            text-align: center;
+        }
+
+        .table1 td,
+        .table1 th {
+            padding: .75rem;
+            vertical-align: center;
+            border-top: 1px solid #dee2e6;
+        }
+
+    </style>
+    
+@endsection
+
 @section('content')
-<style type="text/css">
-    .table1 {
-        width: 100%;
-        margin-bottom: 1rem;
-        color: #212529;
-        text-align: center;
-    }
-
-    .table1 td,
-    .table1 th {
-        padding: .75rem;
-        vertical-align: center;
-        border-top: 1px solid #dee2e6;
-    }
-
-</style>
-
 
 <div id="product" class="row">
     <div class="col-12">

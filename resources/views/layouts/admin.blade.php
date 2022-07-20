@@ -7,11 +7,13 @@
   <!-- Site wrapper -->
   <div class="wrapper">
 
-   @include('partials.admin.navbar')
+
+    @include('partials.admin.navbar')
 
     @include('partials.admin.aside')
 
     <!-- Content Wrapper. Contains page content -->
+    {{-- <div id="app" class="content-wrapper"> --}}
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
@@ -70,7 +72,7 @@
 
   <!-- Datatables !-->
 
-  <script src="{{asset('adminlte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+  {{-- <script src="{{asset('adminlte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
   <script src="{{asset('adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
   <script src="{{asset('adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
   <script src="{{asset('adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
@@ -81,22 +83,21 @@
   <script src="{{asset('adminlte/plugins/pdfmake/vfs_fonts.js')}}"></script>
   <script src="{{asset('adminlte/plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
   <script src="{{asset('adminlte/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
-  <script src="{{asset('adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
+  <script src="{{asset('adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script> --}}
 
   <!-- AdminLTE App -->
-  <script src="{{ asset('adminlte/dist/js/adminlte.min.js') }}"></script>
+  {{-- <script src="{{ asset('adminlte/dist/js/adminlte.min.js') }}"></script> --}}
   <!-- AdminLTE for demo purposes -->
-  <script src="{{ asset('adminlte/dist/js/demo.js') }}"></script>
+  {{-- <script src="{{ asset('adminlte/dist/js/demo.js') }}"></script> --}}
  
   {{-- <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script> --}}
   <!-- Ekko Lightbox -->
   {{-- <script src="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.min.js') }}"></script> --}}
 
-  {{-- <script src="{{ asset('js/plugins.js') }}" defer></script> --}}
   <script src="{{ asset('js/app_admin.js') }}" defer></script>
+  <script src="{{ asset('js/plugins.js') }}" defer></script>
 
   {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
-  {{-- <script src="{{ asset('DataTables/datatables.js') }}"></script> --}}
 
   @yield('scripts')
 
