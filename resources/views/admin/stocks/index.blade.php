@@ -122,10 +122,8 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header modal-primary">
-                        <h5 class="modal-title" id="appModalLabel"
-                            v-text="operacion == 1 ? 'Aumentar inventario' : operacion == 2 ? 
-                            'Disminuir inventario' : 'Crear inventario nuevo'">
-                        </h5>
+                        <h5 class="modal-title" id="appModalLabel" v-text="operacion == 1 ? 'Aumentar inventario' : operacion == 2 ? 
+                            'Disminuir inventario' : 'Crear inventario nuevo'"></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -160,9 +158,7 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Talla</label>
                                 <div class="col-md-9">
-                                    {{-- <select name="talla_id" id="talla_id" class="form-control">
-                                    
-                                </select> --}}
+                                   
                                     <select name="talla_id" id="talla_id" class="form-control" v-model="talla"
                                         @change="getColores">
                                         <option value="0">Seleccione una talla</option>
@@ -181,19 +177,11 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Color</label>
                                 <div class="col-md-9">
-                                    {{-- <select name="color_id" id="color_id" class="form-control">
-                                    <option value="">Seleccione uno</option>
-                                    @foreach (\App\Color::pluck('nombre', 'id') as $id => $color)
-                                        <option value="{{ $id }}">
-                                            {{ $color }}
-                                        </option>
-                                    @endforeach
-                                </select> --}}
-
+                                   
                                     <select name="color_id" id="color_id" class="form-control" v-model="color">
                                         <option value="0">Seleccione un color</option>
-                                        <option v-for="color in arrayColores" :key="color.color_id"
-                                            :value="color.color_id" v-text="color.nombre"></option>
+                                        <option v-for="color in arrayColores" :key="color.color_id" :value="color.color_id"
+                                            v-text="color.nombre"></option>
                                     </select>
 
                                     @if ($errors->has('color_id'))
@@ -219,8 +207,8 @@
                                 @endif
                             </div>
 
-                            <button type="submit" class="btn btn-primary float-left" id="aceptar">Guardar <i
-                                    class="bi bi-hdd"></i></button>
+                            <button type="submit" class="btn btn-primary float-left" id="aceptar" @click.prevent="ingresarStock">Guardar <i
+                                class="bi bi-hdd"></i></button>
                             <button type="reset" class="btn btn-danger float-right" id="rechazar">Cancelar</button>
 
                         </form>
