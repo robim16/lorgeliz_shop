@@ -144,6 +144,7 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
 
     Route::group(['prefix' => '/informes'], function () {
         Route::get('/ventas', 'Admin\InformesController@informeVentas')->name('informes.ventas');
+        Route::get('/inventario/productos', 'Admin\InformesController@inventarios')->name('informes.inventarios');
         Route::get('/ventas/listado/{mes}', 'Admin\InformesController@mostrarVentas')->name('listado.ventas');
         Route::get('/productos', 'Admin\InformesController@ventaProductos')->name('informes.productos');
         Route::get('/clientes', 'Admin\InformesController@informeClientes')->name('informes.clientes');
@@ -181,6 +182,8 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
         //Route::get('/', 'ProductController@index')->name('product.index');
         Route::get('/{id}/colores', 'Admin\ProductController@product')->name('product.colors');
         Route::get('/color/{slug}', 'Admin\ProductController@showColor')->name('product.showColor');
+        Route::get('/datatables', 'Admin\ProductController@index_datatables')->name('product.datatables');
+	    Route::get('/datatables/all', 'Admin\ProductController@datatables')->name('product.view_all');
         //Route::get('/create', 'ProductController@create')->name('product.create');
         //Route::post('/', 'ProductController@store')->name('product.store');
         Route::post('/newColor', 'Admin\ProductController@storeColor')->name('product.storeColor');

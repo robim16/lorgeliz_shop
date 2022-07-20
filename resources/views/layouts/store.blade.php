@@ -42,14 +42,14 @@
 <body>
     <div id="app">
         <!-- Menu -->
-        @include('partials.menu')
+        @include('partials.tienda.menu')
         <div class="super_container">
-            @include('partials.header')
+            @include('partials.tienda.header')
             
                     @yield('content')
                 
                     <!-- Footer -->
-                    @include('partials.footer')
+                    @include('partials.tienda.footer')
             
                     </div>
             
@@ -80,3 +80,5 @@
 </body>
 
 </html>
+
+

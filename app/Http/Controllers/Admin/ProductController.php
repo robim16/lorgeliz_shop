@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Spatie\Dropbox\Client;
+use Yajra\Datatables\Datatables;
+
 
 
 class ProductController extends Controller
@@ -42,6 +44,36 @@ class ProductController extends Controller
         ->paginate(10);
 
         return view('admin.productos.index',compact('productos')); //index de productos en admin
+
+    }
+
+
+    public function index_datatables()
+    {
+       
+        return view('admin.productos.datatables'); //index de productos en admin
+
+    }
+
+    public function datatables(Datatables $datatables)
+    {
+        
+        $actions = 'admin.productos.datatables.actions';
+        $imagen = 'admin.productos.datatables.imagen';
+       
+
+        $productos = Producto::withCount('colors')
+            ->with('colors')
+            ->orderBy('id')->get();
+
+        // return $productos;
+
+        return $datatables
+            ->collection($productos)
+            ->addColumn('actions',$actions)
+            ->addColumn('imagen', $imagen)
+            ->rawColumns(['actions', 'imagen'])
+            ->toJson();
 
     }
 

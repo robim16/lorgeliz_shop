@@ -110,7 +110,8 @@
                             
                             @if ($venta->estado != 3)
                                 
-                                <td><form action="{{ route('venta.anular', $venta->id)}}" method="post">
+                                <td>
+                                    <form action="{{ route('venta.anular', $venta->id)}}" method="post">
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="btn btn-danger btn-sm btn-icon" title="anular venta"><i class="fas fa-trash"></i></button>
