@@ -21,17 +21,15 @@
     <form action="{{ route('product.destroy', $producto->id) }}" method="POST">
         @csrf
         @method('DELETE')
-        <button type="submit" class="btn btn-danger btn-sm btn-icon text-white"  title="desactivar producto">
+        <button type="submit" class="btn btn-danger btn-sm btn-icon text-white" title="desactivar producto">
             <i class="fas fa-trash"></i>
         </button>
     </form>
 @else
-
-<form action="{{ route('product.activate', $producto->id) }}" method="POST">
-    @csrf
-    <button type="submit" class="btn btn-success text-white"  title="activar producto">
-        <i class="fas fa-check"></i>
-    </button>
-</form>
-
+    <form action="{{ route('product.activate', $producto->id) }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-success text-white" title="activar producto">
+            <i class="fas fa-check"></i>
+        </button>
+    </form>
 @endif

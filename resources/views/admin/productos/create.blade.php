@@ -9,12 +9,12 @@
 @endsection
 
 
-@section('estilos')
+{{-- @section('estilos')
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 
-@endsection
+@endsection --}}
 
 
 @section('content')
@@ -472,7 +472,7 @@
                                 <div class="form-group">
 
                                     <label>Estado</label>
-                                    <select name="estado" id="estado" class="form-control" style="width: 100%;">
+                                    <select name="estado" id="estado" class="form-control select2" style="width: 100%;">
                                         @foreach ($estados as $estado)
                                             <option value="{{$estado}}">
                                                 @if ($estado == 1)
@@ -566,103 +566,105 @@
 
 @section('scripts')
 
-<script src="{{ asset('adminlte/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('adminlte/ckeditor/ckeditor.js') }}"></script>
 
-<!-- Select2 -->
-<script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
+    {{-- <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-<script>
+    <!-- Select2 -->
+    <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script> --}}
 
-    // $('#estado').select2();
+    <script>
 
-    // //Initialize Select2 Elements
-    // $('.select2bs4').select2({
-    //     theme: 'bootstrap4'
-    // });
+        // $('#estado').select2();
 
-    window.data = {
-        editar: 'No',
-    }
+        // //Initialize Select2 Elements
+        // $('.select2bs4').select2({
+        //     theme: 'bootstrap4'
+        // });
 
-</script>
+        window.data = {
+            editar: 'No',
+        }
 
-<script>
-	$(document).ready(function () {
-		
-		$.ajaxSetup({
+    </script>
 
-			headers: {
-				'X-CSRF-TOKEN': $("input[name= _token]").val()
-			}
-		});
+    <script>
+        $(document).ready(function () {
+            
+            $.ajaxSetup({
 
-		$(document).on('change', '#category_id', function(e) { 
-			e.preventDefault();
+                headers: {
+                    'X-CSRF-TOKEN': $("input[name= _token]").val()
+                }
+            });
 
-			var categoria = parseInt($('#category_id').val());
+            $(document).on('change', '#category_id', function(e) { 
+                e.preventDefault();
 
-			if (categoria != 0) {
+                var categoria = parseInt($('#category_id').val());
 
-				$.ajax({
-					type: "GET",
-                    // "route('subcategory.get')",
-                    // url: '/lorgeliz_tienda_copia/public/api/admin/subcategorias',
-                    url: 'http://lorenzogeliztienda.com/api/admin/subcategorias',
-					data:{categoria:categoria},
-					dataType: 'json',
-					success: function (response) {
-                        
-						$('#subcategory_id').html('');
-						$('#subcategory_id').append('<option value="0">Seleccione una</option>')
-						// response.data
-						$.each(response, function (key, value) {
-							$('#subcategory_id').append("<option value='" 
-								+ value.id + "'>" + value.nombre + "</option>");
-						});
-						
-					}
+                if (categoria != 0) {
 
-				});
+                    $.ajax({
+                        type: "GET",
+                        // "route('subcategory.get')",
+                        // url: '/lorgeliz_tienda_copia/public/api/admin/subcategorias',
+                        url: 'http://lorenzogeliztienda.com/api/admin/subcategorias',
+                        data:{categoria:categoria},
+                        dataType: 'json',
+                        success: function (response) {
+                            
+                            $('#subcategory_id').html('');
+                            $('#subcategory_id').append('<option value="0">Seleccione una</option>')
+                            // response.data
+                            $.each(response, function (key, value) {
+                                $('#subcategory_id').append("<option value='" 
+                                    + value.id + "'>" + value.nombre + "</option>");
+                            });
+                            
+                        }
 
-			}
+                    });
 
-		});
+                }
 
-        // url: " route('tipo.get') }",
-        $(document).on('change', '#subcategory_id', function(e) { 
-			e.preventDefault();
+            });
 
-			var subcategoria = parseInt($('#subcategory_id').val());
+            // url: " route('tipo.get') }",
+            $(document).on('change', '#subcategory_id', function(e) { 
+                e.preventDefault();
 
-			if (subcategoria != 0) {
+                var subcategoria = parseInt($('#subcategory_id').val());
 
-				$.ajax({
-					type: "GET",
-					// url: "/lorgeliz_tienda_copia/public/api/admin/tipos",
-                   
-                    url: "http://lorenzogeliztienda.com/api/admin/tipos",
-					data:{subcategoria:subcategoria},
-					dataType: 'json',
-					success: function (response) {
+                if (subcategoria != 0) {
 
-						$('#tipo_id').html('');
-						$('#tipo_id').append('<option value="0">Seleccione una</option>')
-						
-						$.each(response, function (key, value) {
-							$('#tipo_id').append("<option value='" 
-								+ value.id + "'>" + value.nombre + "</option>");
-						});
-						
-					}
+                    $.ajax({
+                        type: "GET",
+                        // url: "/lorgeliz_tienda_copia/public/api/admin/tipos",
+                    
+                        url: "http://lorenzogeliztienda.com/api/admin/tipos",
+                        data:{subcategoria:subcategoria},
+                        dataType: 'json',
+                        success: function (response) {
 
-				});
+                            $('#tipo_id').html('');
+                            $('#tipo_id').append('<option value="0">Seleccione una</option>')
+                            
+                            $.each(response, function (key, value) {
+                                $('#tipo_id').append("<option value='" 
+                                    + value.id + "'>" + value.nombre + "</option>");
+                            });
+                            
+                        }
 
-			}
+                    });
 
-		});
+                }
 
-	});
-</script>
+            });
+
+        });
+    </script>
     
 @endsection
 

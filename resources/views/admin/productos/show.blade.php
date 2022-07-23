@@ -9,13 +9,13 @@
 @endsection
 
 
-@section('estilos')
+{{-- @section('estilos')
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/css/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}"> 
     <!-- Ekko Lightbox -->
-    <link rel="stylesheet" href="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.css') }}">
-@endsection
+     <link rel="stylesheet" href="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.css') }}">
+@endsection --}}
 
 @section('content')
 
@@ -554,16 +554,16 @@
 @section('scripts')
 
     <!-- Select2 -->
-    <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
+    {{-- <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script> --}}
 
     <script src="{{ asset('adminlte/ckeditor/ckeditor.js') }}"></script>
 
     <!-- Ekko Lightbox -->
-    <script src="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.min.js') }}"></script>
+    {{-- <script src="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.min.js') }}"></script> --}}
 
     <script>
         $(function() {
-            //Initialize Select2 Elements
+            // //Initialize Select2 Elements
             // $('#category_id').select2()
 
             // //Initialize Select2 Elements

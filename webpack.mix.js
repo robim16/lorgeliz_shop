@@ -24,12 +24,13 @@ mix.js('resources/js/app.js', 'public/js')
 
    mix.styles([
       // 'public/adminlte/plugins/fontawesome-free/css/all.min.css',
-      'public/adminlte/dist/css/adminlte.min.css',
       'public/adminlte/plugins/select2/css/select2.min.css',
-      //'public/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css'
+      'public/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css',
+      'public/adminlte/plugins/ekko-lightbox/ekko-lightbox.css',
       'public/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css',
       'public/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css',
-      'public/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css'
+      'public/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css',
+      'public/adminlte/dist/css/adminlte.min.css',
    ], 'public/css/styles.css');  
 
    mix.scripts([
@@ -50,10 +51,9 @@ mix.js('resources/js/app.js', 'public/js')
 
    mix.scripts([
       'public/adminlte/plugins/jquery/jquery.min.js',
-      // 'public/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js',
-      'public/adminlte/dist/js/adminlte.min.js',
-      'public/adminlte/dist/js/demo.js',
+      'public/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js',
       'public/adminlte/plugins/select2/js/select2.full.min.js',
+      'public/adminlte/plugins/ekko-lightbox/ekko-lightbox.min.js',
       'public/adminlte/plugins/datatables/jquery.dataTables.min.js',
       'public/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js',
       'public/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js',
@@ -66,6 +66,8 @@ mix.js('resources/js/app.js', 'public/js')
       'public/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js',
       'public/adminlte/plugins/datatables-buttons/js/buttons.print.min.js',
       'public/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js',
+      'public/adminlte/dist/js/adminlte.min.js',
+      'public/adminlte/dist/js/demo.js',
    ], 'public/js/plugins.js');  
 
    mix.js('resources/js/app_admin.js', 'public/js');

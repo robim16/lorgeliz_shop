@@ -9,14 +9,14 @@
 @endsection
 
 
-@section('estilos')
+{{-- @section('estilos')
     <!-- Select2 -->
 
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <!-- Ekko Lightbox -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.css') }}">
-@endsection
+@endsection --}}
 
 
 @section('content')
@@ -619,46 +619,46 @@
 
 @section('scripts')
 
-<script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
+    {{-- <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script> --}}
 
-<script src="{{ asset('adminlte/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('adminlte/ckeditor/ckeditor.js') }}"></script>
 
-<!-- Ekko Lightbox -->
-<script src="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.min.js') }}"></script> 
+    {{-- <!-- Ekko Lightbox -->
+    <script src="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.min.js') }}"></script>  --}}
 
-<!-- Select2 -->
+    <!-- Select2 -->
 
-<script>
+    <script>
 
-    window.data = {
-        editar: 'Si',
-        datos: {
-            "precioanterior": "{{$producto->precio_anterior}}",
-            "porcentajededescuento": "{{$producto->porcentaje_descuento}}"
+        window.data = {
+            editar: 'Si',
+            datos: {
+                "precioanterior": "{{$producto->precio_anterior}}",
+                "porcentajededescuento": "{{$producto->porcentaje_descuento}}"
+            }
         }
-    }
-    // $(function () {
-        //Initialize Select2 Elements
-        // $('#category_id').select2()
+        // $(function () {
+            //Initialize Select2 Elements
+            // $('#category_id').select2()
 
-        // //Initialize Select2 Elements
-        // $('.select2bs4').select2({
-        //     theme: 'bootstrap4'
-        // });
+            // //Initialize Select2 Elements
+            // $('.select2bs4').select2({
+            //     theme: 'bootstrap4'
+            // });
 
-        // $(document).ready(function () {
-            
-            //uso de lightbox
-            $(document).on('click', '[data-toggle="lightbox"]', function (event) {
-                event.preventDefault();
-                $(this).ekkoLightbox({
-                    alwaysShowClose: true
+            // $(document).ready(function () {
+                
+                //uso de lightbox
+                $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+                    event.preventDefault();
+                    $(this).ekkoLightbox({
+                        alwaysShowClose: true
+                    });
                 });
-            });
-        // });
+            // });
 
-    // });
-</script>
+        // });
+    </script>
 
 
 @endsection

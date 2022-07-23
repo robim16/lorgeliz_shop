@@ -9,13 +9,14 @@
 @endsection
 
 
-@section('estilos')
+{{-- @section('estilos')
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    
     <!-- Ekko Lightbox -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.css') }}">
-@endsection
+@endsection --}}
 
 
 @section('content')
@@ -521,7 +522,7 @@
                                 <div class="form-group">
 
                                     <label>Estado</label>
-                                    <select name="estado" id="estado" class="form-control " style="width: 100%;">
+                                    <select name="estado" id="estado" class="form-control" style="width: 100%;">
                                         @foreach($estados as $estado)
                                         <option @if ($producto->estado == $estado)
                                             selected
@@ -619,118 +620,117 @@
 
 @section('scripts')
 
-<!-- Select2 -->
-<script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
+    {{-- <!-- Select2 -->
+    <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script> --}}
 
-<script src="{{ asset('adminlte/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('adminlte/ckeditor/ckeditor.js') }}"></script>
 
-<!-- Ekko Lightbox -->
-<script src="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.min.js') }}"></script>
+    <!-- Ekko Lightbox -->
+    {{-- <script src="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.min.js') }}"></script> --}}
 
 
-
-<script>
-    window.data = {
-        editar: 'Si',
-        datos: {
-            "precioanterior": "{{$producto->precio_anterior}}",
-            "porcentajededescuento": "{{$producto->porcentaje_descuento}}"
+    <script>
+        window.data = {
+            editar: 'Si',
+            datos: {
+                "precioanterior": "{{$producto->precio_anterior}}",
+                "porcentajededescuento": "{{$producto->porcentaje_descuento}}"
+            }
         }
-    }
-    $(function () {
-        //Initialize Select2 Elements
-        // $('#category_id').select2()
+        $(function () {
+            //Initialize Select2 Elements
+            // $('#category_id').select2()
 
-        // //Initialize Select2 Elements
-        // $('.select2bs4').select2({
-        //     theme: 'bootstrap4'
-        // });
+            // //Initialize Select2 Elements
+            // $('.select2bs4').select2({
+            //     theme: 'bootstrap4'
+            // });
 
-        //uso de lightbox
-        $(document).on('click', '[data-toggle="lightbox"]', function (event) {
-            event.preventDefault();
-            $(this).ekkoLightbox({
-                alwaysShowClose: true
+            //uso de lightbox
+            $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+                event.preventDefault();
+                $(this).ekkoLightbox({
+                    alwaysShowClose: true
+                });
             });
+
         });
+    </script>
 
-    });
-</script>
+    <script>
+        $(document).ready(function () {
+            
+            $.ajaxSetup({
 
-<script>
-	$(document).ready(function () {
-		
-		$.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $("input[name= _token]").val()
+                }
+            });
 
-			headers: {
-				'X-CSRF-TOKEN': $("input[name= _token]").val()
-			}
-		});
+            $(document).on('change', '#category_id', function(e) { 
+                e.preventDefault();
 
-		$(document).on('change', '#category_id', function(e) { 
-			e.preventDefault();
+                var categoria = parseInt($('#category_id').val());
 
-			var categoria = parseInt($('#category_id').val());
+                if (categoria != 0) {
 
-			if (categoria != 0) {
+                    $.ajax({
+                        type: "GET",
+                        // url: '/lorgeliz_tienda_copia/public/api/admin/subcategorias',
+                        url: 'http://lorenzogeliztienda.com/api/admin/subcategorias',
+                        data:{categoria:categoria},
+                        dataType: 'json',
+                        success: function (response) {
 
-				$.ajax({
-					type: "GET",
-                    // url: '/lorgeliz_tienda_copia/public/api/admin/subcategorias',
-                    url: 'http://lorenzogeliztienda.com/api/admin/subcategorias',
-					data:{categoria:categoria},
-					dataType: 'json',
-					success: function (response) {
+                            $('#subcategory_id').html('');
+                            $('#subcategory_id').append('<option value="0">Seleccione una</option>')
+                            
+                            $.each(response.data, function (key, value) {
+                                $('#subcategory_id').append("<option value='" 
+                                    + value.id + "'>" + value.nombre + "</option>");
+                            });
+                            
+                        }
 
-						$('#subcategory_id').html('');
-						$('#subcategory_id').append('<option value="0">Seleccione una</option>')
-						
-						$.each(response.data, function (key, value) {
-							$('#subcategory_id').append("<option value='" 
-								+ value.id + "'>" + value.nombre + "</option>");
-						});
-						
-					}
+                    });
 
-				});
+                }
 
-			}
+            });
 
-		});
+            $(document).on('change', '#subcategory_id', function(e) { 
+                e.preventDefault();
 
-        $(document).on('change', '#subcategory_id', function(e) { 
-			e.preventDefault();
+                var subcategoria = parseInt($('#subcategory_id').val());
 
-			var subcategoria = parseInt($('#subcategory_id').val());
+                if (subcategoria != 0) {
 
-			if (subcategoria != 0) {
+                    $.ajax({
+                        type: "GET",
+                        // url: "route('tipo.get')",
+                        // url: "/lorgeliz_tienda_copia/public/api/admin/tipos",
+                        url: "http://lorenzogeliztienda.com/api/admin/tipos",
+                        data:{subcategoria:subcategoria},
+                        dataType: 'json',
+                        success: function (response) {
 
-				$.ajax({
-					type: "GET",
-					// url: "route('tipo.get')",
-                    // url: "/lorgeliz_tienda_copia/public/api/admin/tipos",
-                    url: "http://lorenzogeliztienda.com/api/admin/tipos",
-					data:{subcategoria:subcategoria},
-					dataType: 'json',
-					success: function (response) {
+                            $('#tipo_id').html('');
+                            $('#tipo_id').append('<option value="0">Seleccione una</option>')
+                            
+                            $.each(response.data, function (key, value) {
+                                $('#tipo_id').append("<option value='" 
+                                    + value.id + "'>" + value.nombre + "</option>");
+                            });
+                            
+                        }
 
-						$('#tipo_id').html('');
-						$('#tipo_id').append('<option value="0">Seleccione una</option>')
-						
-						$.each(response.data, function (key, value) {
-							$('#tipo_id').append("<option value='" 
-								+ value.id + "'>" + value.nombre + "</option>");
-						});
-						
-					}
+                    });
 
-				});
+                }
 
-			}
+            });
 
-		});
-
-	});
-</script>
+        });
+    </script>
 
 @endsection
