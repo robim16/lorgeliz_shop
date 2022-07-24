@@ -3,5 +3,7 @@
     "/css/app.css": "/css/app.css",
     "/js/app_admin.js": "/js/app_admin.js",
     "/css/all.css": "/css/all.css",
-    "/js/all.js": "/js/all.js"
+    "/css/styles.css": "/css/styles.css",
+    "/js/all.js": "/js/all.js",
+    "/js/plugins.js": "/js/plugins.js"
 }
