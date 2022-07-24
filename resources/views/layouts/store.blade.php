@@ -42,16 +42,17 @@
 <body>
     <div id="app">
         <!-- Menu -->
-        @include('partials.menu')
+        @include('partials.tienda.menu')
+
         <div class="super_container">
-            @include('partials.header')
+            @include('partials.tienda.header')
             
-                    @yield('content')
-                
-                    <!-- Footer -->
-                    @include('partials.footer')
-            
-                    </div>
+            @yield('content')
+        
+            <!-- Footer -->
+            @include('partials.tienda.footer')
+        
+            </div>
             
             {{--@include('partials.footer')--}}
         </div>
@@ -59,15 +60,15 @@
 	<!-- Scripts -->
 	
     <script src="{{ asset('asset/js/jquery-3.2.1.min.js') }}"></script>
-    {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>--}}
+	<script src="{{ asset('asset/plugins/bootstrap-4.1.2/popper.js') }}"></script>
+	<script src="{{ asset('asset/plugins/bootstrap-4.1.2/bootstrap.min.js') }}"></script>
+    
     {{--<script src="{{ asset('asset/js/bootbox.min.js') }}"></script>--}}
 	<script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/all.js') }}" defer></script>
     {{--<script src="{{ asset('js/app_admin.js') }}" defer></script>
 	
 	
-	<script src="{{ asset('asset/plugins/bootstrap-4.1.2/popper.js') }}"></script>
-	<script src="{{ asset('asset/plugins/bootstrap-4.1.2/bootstrap.min.js') }}"></script>
 	{{--<script src="{{ asset('asset/plugins/greensock/TweenMax.min.js') }}"></script>--}}
 	{{--<script src="{{ asset('asset/plugins/greensock/TimelineMax.min.js') }}"></script>--}}
 	{{--<script src="{{ asset('asset/plugins/scrollmagic/ScrollMagic.min.js') }}"></script>--}}
@@ -80,3 +81,5 @@
 </body>
 
 </html>
+
+

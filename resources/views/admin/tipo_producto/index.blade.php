@@ -4,15 +4,14 @@
 @section('titulo', 'Administración de Tipos de productos')
 
 @section('breadcrumb')
-<li class="breadcrumb-item active">@yield('titulo')</li>
+    <li class="breadcrumb-item active">@yield('titulo')</li>
 @endsection
 
-@section('estilos')
-<!-- Select2 -->
-<link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/css/select2.min.css') }}">
-{{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
-<link rel="stylesheet" href="{{ asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
-@endsection
+{{-- @section('estilos')
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+@endsection --}}
 
 
 @section('content')
@@ -154,7 +153,7 @@
 
 @section('scripts')
 <!-- Select2 -->
-<script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
+{{-- <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script> --}}
 {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
 
 <script>
@@ -179,11 +178,11 @@ $(document).ready(function () {
         var id = jQuery(this).data('id');
         $('#tipo_id').val(id);
 
-        // $("#tallas_id").select2().val(null).trigger("change");
+        $("#tallas_id").select2().val(null).trigger("change");
         
-        $(".option").each(function() {     
-            $(this).prop('selected',false);                   
-        });
+        // $(".option").each(function() {     
+        //     $(this).prop('selected',false);                   
+        // });
 
        
         //obtiene las tallas del tipo de producto
