@@ -78,8 +78,10 @@ const inventarios = new Vue({
                    console.log(response)
 
                 }).catch(error => {
-                    for (var [el, message] of Object.entries(error.responseJSON.errors)) {
-                        $(`#${el}-error`).html(message)
+                    console.log(error)
+                    for (var [el, message] of Object.entries(error.responseJSON)) {
+                        // $(`#${el}-error`).html(message)
+                        document.getElementById(`${el}-error`).innerHTML(message);
                         
                     }
                 });
