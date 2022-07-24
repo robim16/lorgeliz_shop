@@ -14,7 +14,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-	<link rel="stylesheet" type="text/css" href="{{ asset('asset/styles/bootstrap-4.1.2/bootstrap.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('asset/plugins/bootstrap-4.1.2/bootstrap.min.css') }}">
 	@yield('estilos')
 	
 </head>
@@ -33,8 +33,8 @@
     <!-- Scripts -->
     
     <script src="{{ asset('asset/js/jquery-3.2.1.min.js') }}"></script>
-	<script src="{{ asset('asset/styles/bootstrap-4.1.2/popper.js') }}"></script>
-	<script src="{{ asset('asset/styles/bootstrap-4.1.2/bootstrap.min.js') }}"></script>
+	<script src="{{ asset('asset/plugins/bootstrap-4.1.2/popper.js') }}"></script>
+	<script src="{{ asset('asset/plugins/bootstrap-4.1.2/bootstrap.min.js') }}"></script>
 
 	@yield('scripts')
 	

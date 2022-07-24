@@ -24,6 +24,7 @@ mix.js('resources/js/app.js', 'public/js')
 
    mix.styles([
       // 'public/adminlte/plugins/fontawesome-free/css/all.min.css',
+      'public/asset/js/plugins/bootstrap-4.1.2/bootstrap.min.css',
       'public/adminlte/plugins/select2/css/select2.min.css',
       'public/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css',
       'public/adminlte/plugins/ekko-lightbox/ekko-lightbox.css',
@@ -35,6 +36,8 @@ mix.js('resources/js/app.js', 'public/js')
 
    mix.scripts([
       'public/asset/js/jquery-3.2.1.min.js',
+      'public/asset/plugins/bootstrap-4.1.2/popper.js',
+      'public/asset/plugins/bootstrap-4.1.2/bootstrap.min.js',
       'public/asset/plugins/greensock/TweenMax.min.js',
       'public/asset/plugins/greensock/TimelineMax.min.js',
       'public/asset/plugins/scrollmagic/ScrollMagic.min.js',
@@ -46,6 +49,7 @@ mix.js('resources/js/app.js', 'public/js')
       'public/asset/plugins/progressbar/progressbar.min.js',
       'public/asset/plugins/parallax-js-master/parallax.min.js',
       'public/asset/plugins/sweetalert/sweetalert.min.js',
+      'public/asset/plugins/bootbox/bootbox.min.js',
       'public/asset/js/custom.js'
    ], 'public/js/all.js');  
 
