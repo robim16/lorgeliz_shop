@@ -158,12 +158,12 @@
 
 <script>
 
-$('#tallas_id').select2()
+// $('#tallas_id').select2()
 
 //Initialize Select2 Elements
-$('.select2bs4').select2({
-    theme: 'bootstrap4'
-});
+// $('.select2bs4').select2({
+//     theme: 'bootstrap4'
+// });
 
 </script>
 
@@ -171,6 +171,12 @@ $('.select2bs4').select2({
 <script>
 
 $(document).ready(function () {
+
+    $('#tallas_id').select2()
+
+    $('.select2bs4').select2({
+        theme: 'bootstrap4'
+    });
     
     $('.btn-default').click(function (e) { 
         e.preventDefault();
