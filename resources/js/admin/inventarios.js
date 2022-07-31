@@ -78,11 +78,9 @@ const inventarios = new Vue({
                 //    console.log(response)
 
                 }).catch(error => {
-                    console.log(error.response.data)
+                    // console.log(error.response.data)
                     for (var [el, message] of Object.entries(error.response.data)) {
-                        // $(`#${el}-error`).html(message)
                         document.getElementById(`${el}-error`).innerHTML = message;
-                        
                     }
                 });
 
