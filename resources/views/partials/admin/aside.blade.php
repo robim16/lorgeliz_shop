@@ -199,7 +199,8 @@
           <!-- Ventas -->
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-list-alt"></i>
+              {{-- <i class="nav-icon fas fa-list-alt"></i> --}}
+              <i class="bi bi-bag-plus"></i>
               <p>
                 Ventas
                 <i class="right fas fa-angle-left"></i>
