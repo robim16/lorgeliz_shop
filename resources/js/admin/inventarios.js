@@ -66,6 +66,7 @@ const inventarios = new Vue({
         },
 
         ingresarStock(){
+
             let url = 'http://lorenzogeliztienda.com/admin/stock';
 
             axios.post(url,{
@@ -74,16 +75,19 @@ const inventarios = new Vue({
                 'color': this.color,
                 'cantidad': this.cantidad
                 }).then(response => {
-                   console.log(response)
+                //    console.log(response)
 
                 }).catch(error => {
-                   for (var [el, message] of Object.entries(error.responseJSON.errors)) {
-                    $(`#${el}-error`).html(message)
-                    
-                   }
+                    console.log(error.response.data)
+                    for (var [el, message] of Object.entries(error.response.data)) {
+                        // $(`#${el}-error`).html(message)
+                        document.getElementById(`${el}-error`).innerHTML = message;
+                        
+                    }
                 });
 
         },
+
 
         reset(){
             this.producto = '';
