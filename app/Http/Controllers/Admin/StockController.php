@@ -56,11 +56,20 @@ class StockController extends Controller
 
     }
 
-    public function store(StockRequest $request)
+    public function store(Request $request)
     {
-        // $colorproducto = ColorProducto::where('color_id', $request->color_id)
-        // ->where('producto_id', $request->producto_id)
-        // ->first(); //obtener el color
+       
+
+        $validator = Validator::make($request->all(), [
+            'producto_id'   => 'required',
+            'talla_id'      => 'required',
+            'color_id'      => 'required',
+            'cantidad'      => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
 
         $colorproducto = ColorProducto::where('color_id', $request->color_id)
         ->where('producto_id', $request->producto_id)
