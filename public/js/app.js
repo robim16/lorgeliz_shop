@@ -73981,18 +73981,17 @@ var inventarios = new Vue({
         'talla': this.talla,
         'color': this.color,
         'cantidad': this.cantidad
-      }).then(function (response) {
-        console.log(response);
+      }).then(function (response) {//    console.log(response)
       })["catch"](function (error) {
-        console.log(error);
+        console.log(error.response.data);
 
-        for (var _i = 0, _Object$entries = Object.entries(error.responseJSON); _i < _Object$entries.length; _i++) {
+        for (var _i = 0, _Object$entries = Object.entries(error.response.data); _i < _Object$entries.length; _i++) {
           var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
               el = _Object$entries$_i[0],
               message = _Object$entries$_i[1];
 
           // $(`#${el}-error`).html(message)
-          document.getElementById("".concat(el, "-error")).innerHTML(message);
+          document.getElementById("".concat(el, "-error")).innerHTML = message;
         }
       });
     },

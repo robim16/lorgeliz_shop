@@ -68,6 +68,7 @@ const inventarios = new Vue({
             // let url = 'http://lorenzogeliztienda.com/admin/stock';
 
             let url = '/lorgeliz_tienda_copia/public/admin/stock';
+            
 
             axios.post(url,{
                 'producto': this.producto,
@@ -75,13 +76,13 @@ const inventarios = new Vue({
                 'color': this.color,
                 'cantidad': this.cantidad
                 }).then(response => {
-                   console.log(response)
+                //    console.log(response)
 
                 }).catch(error => {
-                    console.log(error)
-                    for (var [el, message] of Object.entries(error.responseJSON)) {
+                    console.log(error.response.data)
+                    for (var [el, message] of Object.entries(error.response.data)) {
                         // $(`#${el}-error`).html(message)
-                        document.getElementById(`${el}-error`).innerHTML(message);
+                        document.getElementById(`${el}-error`).innerHTML = message;
                         
                     }
                 });
