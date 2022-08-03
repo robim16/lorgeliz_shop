@@ -62,6 +62,7 @@ class CategoryController extends Controller
         $categoria->save();
 
         session()->flash('message', ['success', ("Se ha creado la categoría exitosamente")]);
+
         return redirect()->route('category.index');
     }
 
@@ -106,6 +107,7 @@ class CategoryController extends Controller
         $categoria->save();
 
         session()->flash('message', ['success', ("Se ha actualizado la categoría exitosamente")]);
+        
         return redirect()->route('category.index');
     }
 
