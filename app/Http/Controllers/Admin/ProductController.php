@@ -15,10 +15,12 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Spatie\Dropbox\Client;
-
+use Symfony\Component\Console\Input\Input;
+use Log;
 
 class ProductController extends Controller
 {
@@ -351,7 +353,7 @@ class ProductController extends Controller
     
             $data['producto'] = $colores;
     
-            broadcast(new ProductStatusEvent($data))->toOthers();
+            // broadcast(new ProductStatusEvent($data))->toOthers();
            
             
             session()->flash('message', ['success', ("Se ha actualizado el producto exitosamente")]);
@@ -360,7 +362,12 @@ class ProductController extends Controller
 
         } catch (Exception $e) {
 
-            session()->flash('message', ['warning', ("ha ocurrido un error")]);
+            session()->flash('message', ['warning', ("ha ocurrido un error".$e)]);
+
+            Log::debug('Error actualizando el producto'.json_encode($producto));
+
+            return redirect()->back()
+                ->withInput($request->input());
 
             DB::rollBack();
         }
