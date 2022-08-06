@@ -15,11 +15,10 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-// use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-use Spatie\Dropbox\Client;
-use Symfony\Component\Console\Input\Input;
+// use Spatie\Dropbox\Client;
+// use Symfony\Component\Console\Input\Input;
 use Log;
 
 class ProductController extends Controller
@@ -60,16 +59,22 @@ class ProductController extends Controller
         // ->orderBy('productos.created_at')
         // ->paginate(5); //obtener todos los colores de un producto por id
 
-        $productos = ColorProducto::whereHas('producto', 
-        function (Builder $query) use ($id, $busqueda) {
-           $query->where('id', $id)
-           ->where('nombre','like',"%$busqueda%")
-           ->orderBy('created_at');
-        })
-        ->with(['color', 'producto', 'imagenes'])
-        ->paginate(5); 
-        
-        return view('admin.productos.coloresproducto',compact('productos'));
+        try {
+           
+            $productos = ColorProducto::whereHas('producto', 
+            function (Builder $query) use ($id, $busqueda) {
+               $query->where('id', $id)
+               ->where('nombre','like',"%$busqueda%")
+               ->orderBy('created_at');
+            })
+            ->with(['color', 'producto', 'imagenes'])
+            ->paginate(5); 
+            
+            return view('admin.productos.coloresproducto',compact('productos'));
+
+        } catch (\Exception $e) {
+           
+        }
 
     }   
 
@@ -199,6 +204,11 @@ class ProductController extends Controller
 
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
 
+            Log::debug('Error creando el producto. producto: '.json_encode($producto).' '.'color_producto: '
+                .json_encode($color_producto));
+
+            return redirect()->back();
+
             DB::rollBack();
         }
         
@@ -213,7 +223,6 @@ class ProductController extends Controller
     public function show($id)
     {
         $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
-        //->join('colores', 'color_producto.color_id', '=', 'colores.id') 
             ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo')
             ->where('productos.id',$id)
             ->firstOrFail();
@@ -245,7 +254,6 @@ class ProductController extends Controller
     public function edit($id)
     {
         $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
-        //->join('colores', 'color_producto.color_id', '=', 'colores.id') 
             ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo')
             ->where('productos.id',$id)
             ->firstOrFail();
@@ -436,7 +444,13 @@ class ProductController extends Controller
             return redirect()->route('product.colors', $producto_id);
 
         } catch (Exception $e) {
+
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
+
+            Log::debug('Error editando el color producto'.' '.'color_producto: '
+                .json_encode($producto));
+
+            return redirect()->back();
 
             DB::rollBack();
         }
@@ -457,12 +471,10 @@ class ProductController extends Controller
                $query->where('id', $id);
             })
             ->count(); 
-            // ->exists();
 
-            // $numventas = ProductoReferencia::join('producto_venta', 'producto_referencia.id', 'producto_venta.producto_referencia_id')
-            // ->join('color_producto', 'producto_referencia.color_producto_id',  'color_producto.id')
-            // ->where('color_producto.id',$id)
-            // ->count(); // se consultan las ventas del producto
+    
+            DB::beginTransaction();
+
 
             $color = ColorProducto::where('id', $id)->first();
 
@@ -492,6 +504,8 @@ class ProductController extends Controller
                 $color->save();
             }
 
+            DB::commit();
+
             session()->flash('message', ['success', ("Se ha desactivado o eliminado el producto")]);
 
             if ($productos > 1) {
@@ -506,20 +520,37 @@ class ProductController extends Controller
 
             session()->flash('message', ['warning', ("Ha ocurrido un error al eliminar el producto")]);
 
+            Log::debug('Error eliminando el color_producto: '
+                .json_encode($color));
+
+            DB::rollBack();
+
             return back();
         }
     }
 
     public function activate($id)
     {
-        $color = ColorProducto::where('id', $id)->first();
-        $color->activo = 'Si';
+        try {
+           
+            $color = ColorProducto::where('id', $id)->first();
+    
+            $color->activo = 'Si';
+    
+            $color->save(); // se ectiva el color
+    
+            session()->flash('message', ['success', ("Se ha activado el producto")]);
+    
+            return back();
 
-        $color->save(); // se ectiva el color
+        } catch (\Exception $e) {
 
-        session()->flash('message', ['success', ("Se ha activado el producto")]);
+            Log::debug('Error activando el color_producto: '.json_encode($color));
 
-        return back();
+            session()->flash('message', ['warning', ("Ha ocurrido un error al activar el producto")]);
+
+            return back();
+        }
     }
 
     public function createColor($id)
@@ -540,8 +571,8 @@ class ProductController extends Controller
             $producto_id = $request->producto;
     
             $color_producto = ColorProducto::where('color_id', $request->color)
-            ->where('producto_id', $producto_id)
-            ->first();
+                ->where('producto_id', $producto_id)
+                ->first();
     
             if ($color_producto) {
     
@@ -590,7 +621,7 @@ class ProductController extends Controller
             $colorproducto = new ColorProducto();
             $colorproducto->producto_id = $producto->id;
             $colorproducto->color_id = $request->color;
-            $colorproducto->activo= 'Si'; 
+            $colorproducto->activo = 'Si'; 
     
             $colorproducto->save();
             
@@ -610,7 +641,12 @@ class ProductController extends Controller
             return redirect()->route('product.colors', $producto->id);
 
         }  catch (Exception $e) {
+            
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
+
+            Log::debug('Error creando el color_producto: '.json_encode($colorproducto));
+
+            return back();
 
             DB::rollBack();
         }
@@ -622,13 +658,26 @@ class ProductController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
 
-        $image = Imagene::find($id);
+        try {
+          
+            $image = Imagene::find($id);
+    
+            $eliminar = Storage::disk('public')->delete($image->url); // se elimina del directorio
+    
+            $image->delete(); // se elimina de la bd
+    
+            return "eliminado id:".$id.' '.$eliminar;
 
-        $eliminar = Storage::disk('public')->delete($image->url); // se elimina del directorio
+        } catch (\Exception $e) {
 
-        $image->delete(); // se elimina de la bd
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
 
-        return "eliminado id:".$id.' '.$eliminar;
+            Log::debug('Error eliminando la imagen: '.json_encode($image));
+
+            return back();
+
+        }
+
     }
 
     public function estado_productos()

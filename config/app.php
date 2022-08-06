@@ -165,6 +165,8 @@ return [
         /*
          * Package Service Providers...
          */
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
+        OwenIt\Auditing\AuditingServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
 
 
