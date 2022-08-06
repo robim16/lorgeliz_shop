@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Producto extends Model
+class Producto extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+
     const NUEVO = 1;
     const OFERTA = 2;
     
