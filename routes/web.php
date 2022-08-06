@@ -302,6 +302,8 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
     //Route::get('/colores/get', 'ColorController@getColores')->name('colores.get');
     Route::resource('/color', 'Admin\ColorController');
 
+    Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+
 });
 
 //Route::resource('/car', 'CarController');
