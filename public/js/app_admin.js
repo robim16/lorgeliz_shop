@@ -2447,9 +2447,9 @@ __webpack_require__.r(__webpack_exports__);
       arrayProductos: [],
       producto: '',
       operacion: '',
-      cantidad: '',
-      total: '',
-      totalneto: '',
+      cantidad: 0,
+      total: 0,
+      totalneto: 0,
       carrito: '',
       empty: false,
       envio: 8000
@@ -2470,8 +2470,8 @@ __webpack_require__.r(__webpack_exports__);
           // this.total = this.arrayProductos[0].total;
           // this.totalneto = this.arrayProductos[0].total;
           _this.carrito = _this.arrayProductos[0].carrito.id;
-          _this.total = _this.arrayProductos[0].carrito.total;
-          _this.totalneto = _this.arrayProductos[0].carrito.total;
+          _this.total = parseInt(_this.arrayProductos[0].carrito.total);
+          _this.totalneto = parseInt(_this.arrayProductos[0].carrito.total) + _this.envio;
         }
       })["catch"](function (error) {
         console.log(error);
@@ -49090,9 +49090,7 @@ var render = function() {
                               [
                                 _vm._v(
                                   _vm._s(
-                                    _vm._f("currencyFormat")(
-                                      _vm.totalneto + _vm.envio
-                                    )
+                                    _vm._f("currencyFormat")(_vm.totalneto)
                                   )
                                 )
                               ]
@@ -49101,7 +49099,15 @@ var render = function() {
                         )
                       ]),
                       _vm._v(" "),
-                      _vm._m(3)
+                      _c("div", { staticClass: "checkout_button trans_200" }, [
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: _vm.ruta + "/checkout", id: "pago" }
+                          },
+                          [_vm._v("proceder al pago")]
+                        )
+                      ])
                     ]
                   )
                 ])
@@ -49111,7 +49117,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _vm.arrayProductos.length == 0 && _vm.empty == false
-        ? _c("div", { staticClass: "col-md-2 offset-5" }, [_vm._m(4)])
+        ? _c("div", { staticClass: "col-md-2 offset-5" }, [_vm._m(3)])
         : _vm._e(),
       _vm._v(" "),
       _c(
@@ -49199,20 +49205,6 @@ var staticRenderFns = [
       _c("span", { staticClass: "radio_mark" }),
       _vm._v(" "),
       _c("span", { staticClass: "radio_text" }, [_vm._v("Envío estandar")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "checkout_button trans_200" }, [
-      _c(
-        "a",
-        {
-          attrs: { href: "http://lorenzogeliztienda.com/checkout", id: "pago" }
-        },
-        [_vm._v("proceder al pago")]
-      )
     ])
   },
   function() {
@@ -75890,7 +75882,8 @@ if (document.getElementById('app')) {
     data: {
       keyword: '',
       location: '',
-      ruta: 'http://dev.lorenzogeliztienda.com'
+      // ruta: 'http://dev.lorenzogeliztienda.com'
+      ruta: '/lorgeliz_tienda_copia/public'
     },
     methods: {
       setCategoria: function setCategoria(categoria) {
