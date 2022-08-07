@@ -214,10 +214,10 @@
                                         </li>
                                         <li class="d-flex flex-row align-items-center justify-content-start">
                                             <div class="cart_extra_total_title">Total</div>
-                                            <div class="cart_extra_total_value ml-auto" id="neto">{{ totalneto + envio | currencyFormat }}</div>
+                                            <div class="cart_extra_total_value ml-auto" id="neto">{{ totalneto | currencyFormat }}</div>
                                         </li>
                                     </ul>
-                                    <div class="checkout_button trans_200"><a href="http://lorenzogeliztienda.com/checkout" id="pago">proceder al pago</a></div>
+                                    <div class="checkout_button trans_200"><a :href="`${ruta}/checkout`" id="pago">proceder al pago</a></div>
                                 </div>
                             </div>
                         </div>
@@ -259,9 +259,9 @@
                 arrayProductos: [],
                 producto: '',
                 operacion: '',
-                cantidad: '',
-                total: '',
-                totalneto: '',
+                cantidad: 0,
+                total: 0,
+                totalneto: 0,
                 carrito: '',
                 empty: false,
                 envio: 8000
@@ -282,8 +282,8 @@
                         // this.total = this.arrayProductos[0].total;
                         // this.totalneto = this.arrayProductos[0].total;
                         this.carrito = this.arrayProductos[0].carrito.id;
-                        this.total = this.arrayProductos[0].carrito.total;
-                        this.totalneto = this.arrayProductos[0].carrito.total;
+                        this.total = parseInt(this.arrayProductos[0].carrito.total);
+                        this.totalneto = parseInt(this.arrayProductos[0].carrito.total) + this.envio;
                     }
                 }).catch(error => {
                     console.log(error);

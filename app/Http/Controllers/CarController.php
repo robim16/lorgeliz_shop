@@ -166,8 +166,9 @@ class CarController extends Controller
             
             DB::commit();
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
+          
         }
 
     }
@@ -238,7 +239,7 @@ class CarController extends Controller
 
             return response()->json($response);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
         }
         
