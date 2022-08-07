@@ -6,7 +6,9 @@ use App\Mail\OrderStatusMail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 
-class Pedido extends Model
+use OwenIt\Auditing\Contracts\Auditable;
+
+class Pedido extends Model implements Auditable
 {
     protected $fillable = ['fecha', 'direccion_entrega', 'estado', 'venta_id'];
 
@@ -14,6 +16,8 @@ class Pedido extends Model
     const PROCESADO = 2;
     const ENVIADO = 3;
     const ENTREGADO = 4;
+
+    use \OwenIt\Auditing\Auditable;
 
     public static function boot () {
         parent::boot();

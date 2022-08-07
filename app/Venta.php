@@ -5,8 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Events\SalesEvent;
 
-class Venta extends Model
+use OwenIt\Auditing\Contracts\Auditable;
+
+class Venta extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+    
     protected $fillable = ['fecha', 'factura', 'valor', 'cliente_id'];
     
     public function pedido (){

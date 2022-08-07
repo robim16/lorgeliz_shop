@@ -3,14 +3,17 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Devolucione extends Model
+class Devolucione extends Model implements Auditable
 {
     const PENDIENTE = 1;
     const EN_PROCESO = 2;
     const RECHAZADA = 3;
     const COMPLETADA = 4;
 
+    use \OwenIt\Auditing\Auditable;
+    
     protected $fillable = ['fecha', 'cantidad', 'producto_referencia_id', 'venta_id', 'estado'];
 
     public function productoReferencia (){

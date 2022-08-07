@@ -6,6 +6,7 @@ use App\Categoria;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoriaRequest;
 use Illuminate\Http\Request;
+use Log;
 
 
 class CategoryController extends Controller
@@ -55,15 +56,28 @@ class CategoryController extends Controller
      */
     public function store(CategoriaRequest $request)
     {
-        $categoria = new Categoria();
-        $categoria->nombre = $request->nombre;
-        $categoria->descripcion = $request->descripcion;
 
-        $categoria->save();
+        try {
+        
+            $categoria = new Categoria();
+            $categoria->nombre = $request->nombre;
+            $categoria->descripcion = $request->descripcion;
+    
+            $categoria->save();
+    
+            session()->flash('message', ['success', ("Se ha creado la categoría exitosamente")]);
+    
+            return redirect()->route('category.index');
 
-        session()->flash('message', ['success', ("Se ha creado la categoría exitosamente")]);
+        } catch (\Exception $e) {
 
-        return redirect()->route('category.index');
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
+
+            Log::debug('Error creando la categoría. categoría: '.json_encode($categoria));
+
+            return redirect()->back();
+
+        }
     }
 
     /**
@@ -100,15 +114,27 @@ class CategoryController extends Controller
      //model binding (Categoria $categoria)
     public function update(CategoriaRequest $request, $id)
     {
-        $categoria = Categoria::where('id', $id)->first();
-        $categoria->nombre = $request->nombre;
-        $categoria->descripcion = $request->descripcion;
 
-        $categoria->save();
+        try {
+           
+            $categoria = Categoria::where('id', $id)->first();
+            $categoria->nombre = $request->nombre;
+            $categoria->descripcion = $request->descripcion;
+    
+            $categoria->save();
+    
+            session()->flash('message', ['success', ("Se ha actualizado la categoría exitosamente")]);
+            
+            return redirect()->route('category.index');
 
-        session()->flash('message', ['success', ("Se ha actualizado la categoría exitosamente")]);
-        
-        return redirect()->route('category.index');
+        } catch (\Exception $e) {
+
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
+
+            Log::debug('Error editando la categoría. categoría: '.json_encode($categoria));
+
+            return redirect()->back();
+        }
     }
 
     /**
@@ -132,6 +158,8 @@ class CategoryController extends Controller
         }
 
         catch (\Exception $exception){
+
+            Log::debug('Error eliminando la categoría. categoría: '.json_encode($categoria));
 
             session()->flash('message', ['warning', ("No puedes eliminar la categoría porque está en uso")]);
 

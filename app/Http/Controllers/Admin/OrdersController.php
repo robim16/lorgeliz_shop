@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
+use Log;
 
 class OrdersController extends Controller
 {
@@ -45,21 +46,28 @@ class OrdersController extends Controller
         // ->where('ventas.estado', '!=', '3')
         // ->paginate(5); //listado de pedidos admin
 
-        $pedidos = Pedido::whereHas('venta',function (Builder $query) use ($keyword) {
-            $query->where('estado', '!=', '3');
-            // ->where('ventas.valor','like',"%$keyword%");
-        })
-        // ->orWhere('fecha','like',"%$keyword%")
-        // ->orWhere('id','like',"%$keyword%")
-        ->buscar($tipo, $keyword)
-        ->with('venta.cliente.user')
-        ->orderBy('created_at', 'DESC')
-        ->paginate(5);
+        try {
+            
+            $pedidos = Pedido::whereHas('venta',function (Builder $query) use ($keyword) {
+                $query->where('estado', '!=', '3');
+                // ->where('ventas.valor','like',"%$keyword%");
+            })
+            // ->orWhere('fecha','like',"%$keyword%")
+            // ->orWhere('id','like',"%$keyword%")
+            ->buscar($tipo, $keyword)
+            ->with('venta.cliente.user')
+            ->orderBy('created_at', 'DESC')
+            ->paginate(5);
+    
+    
+            $estados = $this->estados_pedido();
+    
+            return view('admin.pedidos.index', compact('pedidos', 'estados'));
 
+        } catch (\Exception $e) {
+            //throw $th;
+        }
 
-        $estados = $this->estados_pedido();
-
-        return view('admin.pedidos.index', compact('pedidos', 'estados'));
     }
 
     public function show($id)
@@ -83,42 +91,58 @@ class OrdersController extends Controller
      */
     public function update(Request $request)
     {
-        $pedido = Pedido::where('id', $request->pedido_id)->firstOrFail();
-        $pedido->estado = $request->estado;
 
-        $pedido->save(); // se actualiza el estado
+        try {
+           
+            $pedido = Pedido::where('id', $request->pedido_id)->firstOrFail();
+    
+            $pedido->estado = $request->estado;
+    
+            $pedido->save(); // se actualiza el estado
+    
+            $details = [
+                'cliente' => $pedido->venta->cliente->user->nombres,
+                'fecha' => date('d/m/Y', strtotime($pedido->fecha)),
+                'estado' => $pedido->estado,
+                'url' => url('/pedidos/'. $pedido->id),
+            ];
+    
+            if ($pedido->estado == 2) {
+               $mensaje = 'Tu pedido está siendo preparado';
+            }
 
-        //$details = [
-    		//'cliente' => $pedido->venta->cliente->user->nombres,
-    		//'fecha' => date('d/m/Y', strtotime($pedido->fecha)),
-    		//'estado' => $pedido->estado,
-    		//'url' => url('/pedidos/'. $pedido->id),
-    	//];
+            if ($pedido->estado == 3) {
+                $mensaje = 'Tu pedido está siendo enviado';
+            }
 
-        if ($pedido->estado == 2) {
-           $mensaje = 'Tu pedido está siendo preparado';
+            if ($pedido->estado == 4) {
+                $mensaje = 'Tu pedido ha sido entregado';
+            }
+    
+            
+            $arrayData = [
+                'notificacion' => [
+                    'msj' => $mensaje,
+                    'url' => url('/pedidos/'. $pedido->id)
+                ]
+            ];
+    
+            Cliente::findOrFail($pedido->venta->cliente->id)->notify(new NotificationClient($arrayData));
+    
+            Mail::to($pedido->venta->cliente->user->email)->send(new OrderStatusMail($details));
+    
+            session()->flash('message', ['success', ("Se ha actualizado el estado del pedido")]);
+    
+            return back();
+
+        } catch (\Exception $e) {
+
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
+
+            Log::debug('Error actualizando el pedido. pedido: '.json_encode($pedido));
+
+            return redirect()->back();
         }
-        if ($pedido->estado == 3) {
-            $mensaje = 'Tu pedido está siendo enviado';
-        }
-        if ($pedido->estado == 4) {
-            $mensaje = 'Tu pedido ha sido entregado';
-        }
-
-        
-        $arrayData = [
-            'notificacion' => [
-                'msj' => $mensaje,
-                'url' => url('/pedidos/'. $pedido->id)
-            ]
-        ];
-
-        Cliente::findOrFail($pedido->venta->cliente->id)->notify(new NotificationClient($arrayData));
-
-        //Mail::to($pedido->venta->cliente->user->email)->send(new OrderStatusMail($details));
-
-        session()->flash('message', ['success', ("Se ha actualizado el estado del pedido")]);
-        return back();
     }
 
     public function imprimirPedido(Request $request, $id)
@@ -149,22 +173,32 @@ class OrdersController extends Controller
         // ->orderBy('pedidos.fecha')
         // ->get();
 
-        $pedidos = Pedido::whereHas('venta',function (Builder $query) {
-            $query->where('estado', '!=', '3');
-        })
-        ->with('venta.cliente.user')
-        ->orderBy('created_at', 'DESC')
-        ->get();
+        try {
+           
+            $pedidos = Pedido::whereHas('venta',function (Builder $query) {
+                $query->where('estado', '!=', '3');
+            })
+            ->with('venta.cliente.user')
+            ->orderBy('created_at', 'DESC')
+            ->get();
+    
+            $count = 0;
 
-        $count = 0;
-        foreach ($pedidos as $pedido) {
-            $count = $count + 1;
+            foreach ($pedidos as $pedido) {
+                $count = $count + 1;
+            }
+    
+            $pdf = \PDF::loadView('admin.pdf.listadopedidos',['pedidos'=>$pedidos, 'count'=>$count])
+                ->setPaper('a4', 'landscape');
+            
+            return $pdf->download('listadopedidos.pdf'); //listado de pedidos en pdf
+
+        } catch (\Exception $e) {
+
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
+
+            Log::debug('Error imprimiendo los pedido. pedido: '.json_encode($pedidos));
         }
-
-        $pdf = \PDF::loadView('admin.pdf.listadopedidos',['pedidos'=>$pedidos, 'count'=>$count])
-        ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('listadopedidos.pdf'); //listado de pedidos en pdf
     }
 
     public function productosOrder($id) //esta función se reutiliza
@@ -186,12 +220,18 @@ class OrdersController extends Controller
         // ->groupBy('producto_referencia.id')
         // ->get();
 
-        return ProductoVenta::whereHas('venta.pedido',
-        function (Builder $query) use ($id) {
-           $query->where('id', $id);
-        })
-        ->with(['venta.pedido', 'venta.cliente.user'])
-        ->get();
+        try {
+
+            return ProductoVenta::whereHas('venta.pedido',
+                function (Builder $query) use ($id) {
+                $query->where('id', $id);
+                })
+                ->with(['venta.pedido', 'venta.cliente.user'])
+                ->get();
+            
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     // public function userPedido($id)

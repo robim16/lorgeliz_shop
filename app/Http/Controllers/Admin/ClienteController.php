@@ -123,9 +123,9 @@ class ClienteController extends Controller
     public function pdfListadoClientes()
     {
         $clientes = Cliente::join('users','clientes.user_id', '=', 'users.id')
-        ->select('clientes.id','users.nombres', 'users.apellidos','users.departamento',
-        'users.municipio','users.direccion','users.telefono','users.email')
-        ->paginate(10);
+            ->select('clientes.id','users.nombres', 'users.apellidos','users.departamento',
+            'users.municipio','users.direccion','users.telefono','users.email')
+            ->paginate(10);
 
         $count = 0;
         foreach ($clientes as $cliente) {

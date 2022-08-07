@@ -4,10 +4,13 @@ namespace App;
 
 // use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class ColorProducto extends Pivot
+class ColorProducto extends Pivot implements Auditable
 {
     //protected $with = ['producto'];
+
+    use \OwenIt\Auditing\Auditable;
 
     protected $table = 'color_producto';
     protected $fillable = [

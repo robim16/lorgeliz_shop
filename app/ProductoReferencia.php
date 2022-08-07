@@ -4,10 +4,13 @@ namespace App;
 
 // use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class ProductoReferencia extends Pivot
+class ProductoReferencia extends Pivot implements Auditable
 {
     //protected $with = ['colorProducto'];
+
+    use \OwenIt\Auditing\Auditable;
 
     protected $fillable = ['color_producto_id', 'talla_id', 'stock'];
     protected $table = 'producto_referencia';

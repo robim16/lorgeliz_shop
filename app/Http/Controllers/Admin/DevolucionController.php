@@ -17,6 +17,7 @@ use App\Notifications\NotificationDevolution;
 
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
+use Log;
 
 class DevolucionController extends Controller
 {
@@ -88,8 +89,9 @@ class DevolucionController extends Controller
     {
         //if (!$request->ajax()) return redirect('/');
         
-        $devoluciones = Devolucione::
-        with('venta')
+        $devoluciones = Devolucione::with('venta')
+            ->get();
+
         // with('venta.cliente.user','venta.pedido')
         // join('ventas', 'devoluciones.venta_id', '=', 'ventas.id')
         // ->join('pedidos', 'ventas.id', '=', 'pedidos.venta_id')
@@ -98,7 +100,6 @@ class DevolucionController extends Controller
         // ->select('devoluciones.id','devoluciones.estado', 'devoluciones.fecha','pedidos.id as pedido',
         // 'ventas.id as venta', 'users.nombres', 'users.apellidos'
         // ,'clientes.id as cliente')
-        ->get();
 
         $count = 0;
         foreach ($devoluciones as $devolucion) {
@@ -122,73 +123,79 @@ class DevolucionController extends Controller
      */
     public function update(Request $request)
     {
-        $devolucion = Devolucione::where('id', $request->devolucion_id)->firstOrFail();
-        $devolucion->estado = $request->estado;
 
-        $devolucion->save();
+        try {
 
-        $details = [
-            'cliente' => $devolucion->venta->cliente->user->nombres,
-            'fecha' => date('d/m/Y', strtotime($devolucion->fecha)),
-            'estado' => $devolucion->estado,
-            'url' => url('/devoluciones/'. $devolucion->id),
-        ];
+            DB::beginTransaction();
 
-        if ($request->estado == 4) { // comprobamos si la devolución ha sido efectuada completamente
+            $devolucion = Devolucione::where('id', $request->devolucion_id)->firstOrFail();
+    
+            $devolucion->estado = $request->estado;
+    
+            $devolucion->save();
 
-            try {
+    
+            $details = [
+                'cliente' => $devolucion->venta->cliente->user->nombres,
+                'fecha' => date('d/m/Y', strtotime($devolucion->fecha)),
+                'estado' => $devolucion->estado,
+                'url' => url('/devoluciones/'. $devolucion->id),
+            ];
 
-                DB::beginTransaction();
-
+    
+            if ($request->estado == 4) {
+    
+                // comprobamos si la devolución ha sido efectuada completamente
+    
                 $producto = ProductoVenta::where('producto_referencia_id', $devolucion->producto_referencia_id)
                     ->where('venta_id', $devolucion->venta_id)
                     ->first(); //buscamos el producto
-
+    
                 // $producto_data = Producto::join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
                 // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
                 // ->where('producto_referencia.id', $producto->producto_referencia_id)
                 // ->select('productos.precio_actual', 'color_producto.id as color')
                 // ->first(); // obtenemos el precio
-
+    
                 $producto_data = ProductoReferencia::where('id', $producto->producto_referencia_id)
                     ->first();
-
+    
                 // $precio = $producto_data->colorProducto->producto->precio_actual;
-
-
+    
+    
                 $precio = $producto->precio_venta;
-
+    
                 $cantidad = $producto->cantidad; //cantidad del producto vendida
-
+    
                 $totalproducto = $precio * $cantidad; // calculamos subtotal
-
+    
                 $venta = Venta::where('id', $producto->venta_id)->first();
-
+    
                 $pagos = $venta->pagos()->selectRaw('SUM(monto) as total')->get();
-
-
+    
+    
                 // if ($totalproducto == $venta->valor) {
-
+    
                 //     $venta->saldo = 0;
                     
                 //     if ($pagos[0]->total > 0) {
-
+    
                 //         //anular pagos
                 //     }
                 // }
                 // else{
-
+    
                     if ($pagos[0]->total == 0) {
                        
                         $venta->saldo = $venta->saldo - $totalproducto; // a la venta se resta el subtotal del producto y los pagos
                     } else {
                         if ($totalproducto <= $venta->saldo) {
                             $saldo = $venta->saldo - $totalproducto;
-
+    
                             $venta->saldo = $saldo;
-
+    
                             $deducciones = $pagos[0]->total + $totalproducto;
-
+    
                             if ($saldo == 0 && $deducciones > $venta->total) {
                                 //anular pagos
                             }
@@ -199,68 +206,81 @@ class DevolucionController extends Controller
                         }
                     }
                 // }
-
+    
                 $venta->save();
-
+    
                 // $prodreferencia = ProductoReferencia::where('id', $producto->producto_referencia_id)
                 // ->first();
-
+    
                 // $stock = $prodreferencia->stock; // se obtiene el stock actual del producto
-
+    
                 // $prodreferencia->stock = $stock + $devolucion->cantidad; // al stock se suma la cantidad vendida
-
+    
                 // $prodreferencia->save();
-
+    
                 $stock = $producto_data->stock; // se obtiene el stock actual del producto
-
+    
                 $producto_data->stock = $stock + $devolucion->cantidad; // al stock se suma la cantidad vendida
-
+    
                 $producto_data->save();
-
+    
                 // $producto->delete(); // se borra de la venta el producto
-
+    
                 $product = array();
+
                 $product['data'] = array();
-
+    
                 $product['data'] = $producto_data->colorProducto->id;
+    
                 broadcast(new AddProductEvent($product));
-
-
-                DB::commit();
-
-            } catch (Exception $e) {
-                DB::rollBack();
+    
+                
             }
-           
+    
+            if ($devolucion->estado == 2) {
+                $mensaje = 'La devolución está en estudio';
+            }
+
+            if ($devolucion->estado == 3) {
+                $mensaje = 'La devolución fue rechazada';
+            }
+
+            if ($devolucion->estado == 4) {
+                $mensaje = 'La devolución fue aprobada';
+            }
+    
+            //notificacion para el cliente
+            $arrayData = [
+                'notificacion' => [
+                    'msj' => $mensaje,
+                    'url' => url('/devoluciones/'. $devolucion->id)
+                ]
+            ];
+    
+            Cliente::findOrFail($devolucion->venta->cliente->id)->notify(new NotificationDevolution($arrayData));
+            
+            //return new DevolucionStatusMail($details);
+            
+            Mail::to($devolucion->venta->cliente->user->email)->send(new DevolucionStatusMail($details));
+            
+            session()->flash('message', ['success', ("Se ha actualizado el estado de la solicitud")]);
+            
+            DB::commit();
+    
+            return back();
+
+        } catch (\Exception $e) {
+
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
+
+            Log::debug('Error editando la devolucion. devolucion: '.json_encode($devolucion));
+
+            DB::rollBack();
+
+            return redirect()->back();
+
         }
 
-        if ($devolucion->estado == 2) {
-            $mensaje = 'La devolución está en estudio';
-        }
-        if ($devolucion->estado == 3) {
-            $mensaje = 'La devolución fue rechazada';
-        }
-        if ($devolucion->estado == 4) {
-            $mensaje = 'La devolución fue aprobada';
-        }
-
-        //notificacion para el cliente
-        $arrayData = [
-            'notificacion' => [
-                'msj' => $mensaje,
-                'url' => url('/devoluciones/'. $devolucion->id)
-            ]
-        ];
-
-        Cliente::findOrFail($devolucion->venta->cliente->id)->notify(new NotificationDevolution($arrayData));
-
-        //return new DevolucionStatusMail($details);
-
-        Mail::to($devolucion->venta->cliente->user->email)->send(new DevolucionStatusMail($details));
-
-        session()->flash('message', ['success', ("Se ha actualizado el estado de la solicitud")]);
-
-        return back();
     }
 
     public function estados_devolucion()
