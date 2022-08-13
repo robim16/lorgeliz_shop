@@ -127,7 +127,8 @@
                         if(this.error) this.error = false;
                         axios.get(url).then(response => {
                             this.arrayCarrito = response.data.carrito;
-            
+
+                            console.log(response)
                             if (this.arrayCarrito != null){
                                 this.carrito = this.arrayCarrito.id;
     
