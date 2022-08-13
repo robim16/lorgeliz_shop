@@ -2,9 +2,10 @@
 
 
 @section('titulo', 'Editar Producto')
+
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{route('product.index')}}">Productos</a></li>
-<li class="breadcrumb-item active">@yield('titulo')</li>
+    <li class="breadcrumb-item"><a href="{{route('product.index')}}">Productos</a></li>
+    <li class="breadcrumb-item active">@yield('titulo')</li>
 @endsection
 
 
@@ -676,7 +677,7 @@
 				$.ajax({
 					type: "GET",
                     // url: '/lorgeliz_tienda_copia/public/api/admin/subcategorias',
-                    url: 'http://lorenzogeliztienda.com/api/admin/subcategorias',
+                    url: 'http://dev.lorenzogeliztienda.com/api/admin/subcategorias',
 					data:{categoria:categoria},
 					dataType: 'json',
 					success: function (response) {
@@ -708,7 +709,7 @@
 					type: "GET",
 					// url: "route('tipo.get')",
                     // url: "/lorgeliz_tienda_copia/public/api/admin/tipos",
-                    url: "http://lorenzogeliztienda.com/api/admin/tipos",
+                    url: "http://dev.lorenzogeliztienda.com/api/admin/tipos",
 					data:{subcategoria:subcategoria},
 					dataType: 'json',
 					success: function (response) {

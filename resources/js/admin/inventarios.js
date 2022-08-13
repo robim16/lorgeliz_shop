@@ -15,7 +15,7 @@ const inventarios = new Vue({
     methods: {
         pdfInventarios(){
             // let url = '/lorgeliz_tienda_copia/public/admin/stock/listado';
-            let url = 'http://lorenzogeliztienda.com/admin/stock/listado'
+            let url = 'http://dev.lorenzogeliztienda.com/admin/stock/listado'
             window.open(url);
         },
         
@@ -40,7 +40,7 @@ const inventarios = new Vue({
             // let url = '/lorgeliz_tienda_copia/public/admin/tallas/'+this.producto;
 
             // let url = '/lorgeliz_tienda_copia/public/api/admin/tallas/'+this.producto;
-            let url = 'http://lorenzogeliztienda.com/api/admin/tallas/' +this.producto;
+            let url = 'http://dev.lorenzogeliztienda.com/api/admin/tallas/' +this.producto;
     
             axios.get(url).then(response => {
             //   this.arrayTallas = response.data.tallas;
@@ -55,7 +55,7 @@ const inventarios = new Vue({
 
             // let url = '/lorgeliz_tienda_copia/public/api/admin/colores/'+this.producto;
 
-            let url = 'http://lorenzogeliztienda.com/api/admin/colores/'+this.producto;
+            let url = 'http://dev.lorenzogeliztienda.com/api/admin/colores/'+this.producto;
 
     
             axios.get(url).then(response => {
@@ -65,7 +65,7 @@ const inventarios = new Vue({
         },
 
         ingresarStock(){
-            // let url = 'http://lorenzogeliztienda.com/admin/stock';
+            // let url = 'http://dev.lorenzogeliztienda.com/admin/stock';
 
             let url = '/lorgeliz_tienda_copia/public/admin/stock';
             

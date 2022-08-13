@@ -190,7 +190,7 @@
 
 <script>
 
-	let ruta = 'http://lorenzogeliztienda.com'
+	let ruta = 'http://dev.lorenzogeliztienda.com'
 	// let url = "/lorgeliz_tienda_copia/public/colombia-json-master/colombia-json-master/colombia.json"
 	let url = `${ruta}/colombia-json-master/colombia-json-master/colombia.json`
 
@@ -308,7 +308,7 @@ $(document).ready(function () {
 									)
 									// window.location.href = `/lorgeliz_tienda_copia/public/pedidos/` + pedido;
 
-									let ruta = 'http://lorenzogeliztienda.com'
+									let ruta = 'http://dev.lorenzogeliztienda.com'
 									window.location.href = `${ruta}/pedidos/${pedido}`;
 								}
 							}
@@ -323,7 +323,7 @@ $(document).ready(function () {
 							test: true
 						})  
 
-						let ruta = 'http://lorenzogeliztienda.com'
+						let ruta = 'http://dev.lorenzogeliztienda.com'
 
 						var data={
 						//Parametros compra (obligatorio)
@@ -371,7 +371,7 @@ $(document).ready(function () {
 					setTimeout(() => {
 						// window.location.href = `/lorgeliz_tienda_copia/public/cart`;
 
-						let ruta = 'http://lorenzogeliztienda.com'
+						let ruta = 'http://dev.lorenzogeliztienda.com'
 						window.location.href = `${ruta}/cart`
 					}, 4000);
 				}

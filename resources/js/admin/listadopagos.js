@@ -15,7 +15,7 @@ const payments = new Vue({
     methods: {
         pdfListPagos(){
             // let url = '/lorgeliz_tienda_copia/public/admin/payments/list';
-            let url = 'http://lorenzogeliztienda.com/admin/payments/list'
+            let url = 'http://dev.lorenzogeliztienda.com/admin/payments/list'
             window.open(url);
         },
 
@@ -23,7 +23,7 @@ const payments = new Vue({
             // window.open('/lorgeliz_tienda_copia/public/admin/payments/payment/'+ id + ',' + '_blank');
             // let url = `/lorgeliz_tienda_copia/public/admin/payments/${id},_blank/pdf`;
             
-            let url = `http://lorenzogeliztienda.com/admin/payments/${id},_blank/pdf`
+            let url = `http://dev.lorenzogeliztienda.com/admin/payments/${id},_blank/pdf`
             window.open(url)
             
         },
