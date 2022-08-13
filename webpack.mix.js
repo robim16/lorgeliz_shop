@@ -51,7 +51,7 @@ mix.js('resources/js/app.js', 'public/js')
       'public/asset/plugins/sweetalert/sweetalert.min.js',
       'public/asset/plugins/bootbox/bootbox.min.js',
       'public/asset/js/custom.js'
-   ], 'public/js/all.js');  
+   ], 'public/js/all.js'); //VA EN EL LAYOUT STORE
 
    mix.scripts([
       'public/adminlte/plugins/jquery/jquery.min.js',
@@ -72,8 +72,7 @@ mix.js('resources/js/app.js', 'public/js')
       'public/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js',
       'public/adminlte/dist/js/adminlte.min.js',
       'public/adminlte/dist/js/demo.js',
-   ], 'public/js/plugins.js');  
-
+   ], 'public/js/plugins.js');  //VA EN EL LAYOUT ADMIN IGUAL QUE APP_ADMIN
    mix.js('resources/js/app_admin.js', 'public/js');
 
   

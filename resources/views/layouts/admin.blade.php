@@ -13,7 +13,8 @@
     @include('partials.admin.aside')
 
     <!-- Content Wrapper. Contains page content -->
-    {{-- <div id="app" class="content-wrapper"> --}}
+    {{-- <div id="app" class="content-wrapper">  VUE --}}
+      
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
