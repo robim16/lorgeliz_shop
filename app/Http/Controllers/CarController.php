@@ -9,6 +9,7 @@ use App\ColorProducto;
 use App\Events\UserCart;
 use App\Producto;
 use App\ProductoReferencia;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -73,6 +74,7 @@ class CarController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
 
+        $cliente = Cliente::where('user_id',auth()->user()->id)->firstOrFail();
         // $cliente = auth()->user()->cliente->id;
        
         // $productos = Producto::
@@ -95,32 +97,21 @@ class CarController extends Controller
         // //->groupBy('color_producto.id')
         // ->get();
 
-        try {
-           
-            $cliente = Cliente::where('user_id',auth()->user()->id)->firstOrFail();
-    
-            
-            $productos = CarritoProducto::whereHas('carrito',
-            function (Builder $query) use ($cliente) {
-    
-            //    $query->where('estado', 1)
-            //    ->where('cliente_id', $cliente->id);
-                $query->estado()
-                ->cliente($cliente->id);
-            })
-            ->with(['carrito', 'productoReferencia.colorProducto.color', 
-            'productoReferencia.colorProducto.producto',
-            'productoReferencia.talla', 'productoReferencia.colorProducto.imagenes'])
-            ->get();
-    
-            return ['productos' => $productos];
+        
+        $productos = CarritoProducto::whereHas('carrito',
+        function (Builder $query) use ($cliente) {
 
-        } catch (\Exception $e) {
+        //    $query->where('estado', 1)
+        //    ->where('cliente_id', $cliente->id);
+            $query->estado()
+            ->cliente($cliente->id);
+        })
+        ->with(['carrito', 'productoReferencia.colorProducto.color', 
+        'productoReferencia.colorProducto.producto',
+        'productoReferencia.talla', 'productoReferencia.colorProducto.imagenes'])
+        ->get();
 
-            // session()->flash('message', ['warning', ("ha ocurrido un error")]);
-
-            Log::debug('Error obteniendo el carrito. carrito: '.json_encode($productos));
-        }
+        return ['productos' => $productos];
     }
     
     public function buscarCarrito(Request $request)
@@ -128,9 +119,8 @@ class CarController extends Controller
         //obtener el carrito del cliente autenticado antes de agregar nuevo producto
         if (!$request->ajax()) return redirect('/');
         
-        
         try {
-          
+
             $carrito = Carrito::estado()
             //where('estado', '1')
             // ->where('cliente_id', auth()->user()->cliente->id)
@@ -138,10 +128,11 @@ class CarController extends Controller
             ->first();
     
             return ['carrito' => $carrito];
-
+           
         } catch (\Exception $e) {
-            Log::debug('Error buscando el carrito. carrito: '.json_encode($carrito));
+            Log::debug('Error buscando el carrito'.json_encode($e));
         }
+        
     }
 
     public function store(Request $request)
@@ -184,12 +175,12 @@ class CarController extends Controller
             DB::commit();
 
         } catch (\Exception $e) {
-
             DB::rollBack();
 
-            Log::debug('Error creando el carrito. carrito: '.json_encode($carrito).
-                ' '.'productos: '.json_encode($carritoProducto));
-
+            Log::debug('Error creando el carrito'.'carrito:'.' '.json_encode($carrito).
+                'producto:'.' '.json_encode($carritoProducto).' '.
+                'error:'.json_encode($e));
+          
         }
 
     }
@@ -261,11 +252,11 @@ class CarController extends Controller
             return response()->json($response);
 
         } catch (\Exception $e) {
-
             DB::rollBack();
 
-            Log::debug('Error modificando el carrito. carrito: '.json_encode($carrito));
-            
+            Log::debug('Error actualizando el carrito'.'carrito:'.' '.json_encode($carrito).
+                'producto:'.' '.json_encode($carritoProducto).' '.
+                'error:'.json_encode($e));
         }
         
     }
@@ -302,9 +293,10 @@ class CarController extends Controller
         }
 
         catch (\Exception $e){
-
             DB::rollBack();
-            Log::debug('Error eliminando el carrito. carrito: '.json_encode($carrito));
+
+            Log::debug('Error eliminando el carrito'.'carrito:'.' '.json_encode($carrito).' '.
+            'error:'.json_encode($e));
         }
     }
 
@@ -312,6 +304,7 @@ class CarController extends Controller
     { 
         // se ejecuta al modificar la cantidad de producto en la página del carrito
         if (!$request->ajax()) return redirect('/');
+        
         try {
             
             DB::beginTransaction();
@@ -406,8 +399,9 @@ class CarController extends Controller
         } catch (\Exception $e){
             DB::rollBack();
 
-            Log::debug('Error modificando el producto del carrito. carrito: '.json_encode($carrito).
-                ' '.'producto: '.json_encode($productos));
+            Log::debug('Error modificando el producto en el carrito'.'carrito:'.' '.
+                json_encode($carrito).'producto:'.' '.json_encode($carrito_producto).' '.
+                'error:'.json_encode($e));
         }
         
     }
@@ -455,7 +449,7 @@ class CarController extends Controller
             return ['cantidad' => $cantidad];
            
         } catch (\Exception $e) {
-            Log::debug('Error obteniendo la cantidad de productos del carrito: '.json_encode($productos));
+            Log::debug('Error obteniendo el número de productos del carrito'.'error:'.' '.json_encode($e));
         }
 
     }
@@ -468,14 +462,14 @@ class CarController extends Controller
            
             
             $carrito = Carrito::where('cliente_id', auth()->user()->cliente->id)
-                ->estado()
-                ->first();
+            ->estado()
+            ->first();
 
             // cliente(auth()->user()->cliente->id)
 
             $car_producto = CarritoProducto::where('producto_referencia_id', $request->producto)
-                ->where('carrito_id', $carrito->id) // se busca el producto que viene
-                ->first();
+            ->where('carrito_id', $carrito->id) // se busca el producto que viene
+            ->first();
 
             // $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
             // ->join('producto_referencia', 'color_producto.id', 'producto_referencia.color_producto_id')
@@ -483,7 +477,7 @@ class CarController extends Controller
             // ->first();
 
             $producto = ProductoReferencia::where('id', $request->producto) // se obtiene su precio
-                ->first();
+            ->first();
 
 
             // $carrito->total = $carrito->total - ($producto->precio_actual * $car_producto->cantidad); // se resta al total, el subtotal del producto a remover
@@ -504,9 +498,9 @@ class CarController extends Controller
             return response()->json($response);
 
         } catch (\Exception $e) {
-
-            Log::debug('Error removiendo el producto del carrito. carrito: '.json_encode($carrito)
-                .' '.'producto: '.json_encode($car_producto));
+            Log::debug('Error eliminando el producto del carrito'.'carrito:'.' '.json_encode($carrito).
+                'producto:'.' '.json_encode($car_producto).' '.
+                'error:'.json_encode($e));
         }
     }
 
