@@ -292,8 +292,11 @@ class CarController extends Controller
 
         }
 
-        catch (\Exception $exception){
+        catch (\Exception $e){
             DB::rollBack();
+
+            Log::debug('Error eliminando el carrito'.'carrito:'.' '.json_encode($carrito).' '.
+            'error:'.json_encode($e));
         }
     }
 
