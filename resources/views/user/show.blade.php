@@ -256,7 +256,7 @@
     function loadJSON(callback) {
         // let url = "/lorgeliz_tienda_copia/public/colombia-json-master/colombia-json-master/colombia.json"
         
-        let ruta = 'http://lorenzogeliztienda.com'
+        let ruta = 'http://dev.lorenzogeliztienda.com'
         let url = `${ruta}/colombia-json-master/colombia-json-master/colombia.json`
 
         var xobj = new XMLHttpRequest();

@@ -566,103 +566,103 @@
 
 @section('scripts')
 
-<script src="{{ asset('adminlte/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('adminlte/ckeditor/ckeditor.js') }}"></script>
 
-<!-- Select2 -->
-<script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
+    <!-- Select2 -->
+    <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
 
-<script>
+    <script>
 
-    // $('#estado').select2();
+        // $('#estado').select2();
 
-    // //Initialize Select2 Elements
-    // $('.select2bs4').select2({
-    //     theme: 'bootstrap4'
-    // });
+        // //Initialize Select2 Elements
+        // $('.select2bs4').select2({
+        //     theme: 'bootstrap4'
+        // });
 
-    window.data = {
-        editar: 'No',
-    }
+        window.data = {
+            editar: 'No',
+        }
 
-</script>
+    </script>
 
-<script>
-	$(document).ready(function () {
-		
-		$.ajaxSetup({
+    <script>
+        $(document).ready(function () {
+            
+            $.ajaxSetup({
 
-			headers: {
-				'X-CSRF-TOKEN': $("input[name= _token]").val()
-			}
-		});
+                headers: {
+                    'X-CSRF-TOKEN': $("input[name= _token]").val()
+                }
+            });
 
-		$(document).on('change', '#category_id', function(e) { 
-			e.preventDefault();
+            $(document).on('change', '#category_id', function(e) { 
+                e.preventDefault();
 
-			var categoria = parseInt($('#category_id').val());
+                var categoria = parseInt($('#category_id').val());
 
-			if (categoria != 0) {
+                if (categoria != 0) {
 
-				$.ajax({
-					type: "GET",
-                    // "route('subcategory.get')",
-                    // url: '/lorgeliz_tienda_copia/public/api/admin/subcategorias',
-                    url: 'http://lorenzogeliztienda.com/api/admin/subcategorias',
-					data:{categoria:categoria},
-					dataType: 'json',
-					success: function (response) {
-                        
-						$('#subcategory_id').html('');
-						$('#subcategory_id').append('<option value="0">Seleccione una</option>')
-						// response.data
-						$.each(response, function (key, value) {
-							$('#subcategory_id').append("<option value='" 
-								+ value.id + "'>" + value.nombre + "</option>");
-						});
-						
-					}
+                    $.ajax({
+                        type: "GET",
+                        // "route('subcategory.get')",
+                        // url: '/lorgeliz_tienda_copia/public/api/admin/subcategorias',
+                        url: 'http://dev.lorenzogeliztienda.com/api/admin/subcategorias',
+                        data:{categoria:categoria},
+                        dataType: 'json',
+                        success: function (response) {
+                            
+                            $('#subcategory_id').html('');
+                            $('#subcategory_id').append('<option value="0">Seleccione una</option>')
+                            // response.data
+                            $.each(response, function (key, value) {
+                                $('#subcategory_id').append("<option value='" 
+                                    + value.id + "'>" + value.nombre + "</option>");
+                            });
+                            
+                        }
 
-				});
+                    });
 
-			}
+                }
 
-		});
+            });
 
-        // url: " route('tipo.get') }",
-        $(document).on('change', '#subcategory_id', function(e) { 
-			e.preventDefault();
+            // url: " route('tipo.get') }",
+            $(document).on('change', '#subcategory_id', function(e) { 
+                e.preventDefault();
 
-			var subcategoria = parseInt($('#subcategory_id').val());
+                var subcategoria = parseInt($('#subcategory_id').val());
 
-			if (subcategoria != 0) {
+                if (subcategoria != 0) {
 
-				$.ajax({
-					type: "GET",
-					// url: "/lorgeliz_tienda_copia/public/api/admin/tipos",
-                   
-                    url: "http://lorenzogeliztienda.com/api/admin/tipos",
-					data:{subcategoria:subcategoria},
-					dataType: 'json',
-					success: function (response) {
+                    $.ajax({
+                        type: "GET",
+                        // url: "/lorgeliz_tienda_copia/public/api/admin/tipos",
+                    
+                        url: "http://dev.lorenzogeliztienda.com/api/admin/tipos",
+                        data:{subcategoria:subcategoria},
+                        dataType: 'json',
+                        success: function (response) {
 
-						$('#tipo_id').html('');
-						$('#tipo_id').append('<option value="0">Seleccione una</option>')
-						
-						$.each(response, function (key, value) {
-							$('#tipo_id').append("<option value='" 
-								+ value.id + "'>" + value.nombre + "</option>");
-						});
-						
-					}
+                            $('#tipo_id').html('');
+                            $('#tipo_id').append('<option value="0">Seleccione una</option>')
+                            
+                            $.each(response, function (key, value) {
+                                $('#tipo_id').append("<option value='" 
+                                    + value.id + "'>" + value.nombre + "</option>");
+                            });
+                            
+                        }
 
-				});
+                    });
 
-			}
+                }
 
-		});
+            });
 
-	});
-</script>
+        });
+    </script>
     
 @endsection
 

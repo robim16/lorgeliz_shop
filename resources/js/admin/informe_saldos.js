@@ -9,7 +9,7 @@ const product = new Vue({
         pdfInformeSaldos(){
             // let url = '/lorgeliz_tienda_copia/public/admin/informes/pdf/saldos';
 
-            let url = 'http://lorenzogeliztienda.com/admin/informes/pdf/saldos'
+            let url = 'http://dev.lorenzogeliztienda.com/admin/informes/pdf/saldos'
             window.open(url);
             
         },

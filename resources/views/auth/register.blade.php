@@ -197,7 +197,7 @@
 @section('scripts')
 <script>
     function loadJSON(callback) {
-		let ruta = 'http://lorenzogeliztienda.com'
+		let ruta = 'http://dev.lorenzogeliztienda.com'
         let url = `${ruta}/colombia-json-master/colombia-json-master/colombia.json`
         var xobj = new XMLHttpRequest();
         xobj.overrideMimeType("application/json");

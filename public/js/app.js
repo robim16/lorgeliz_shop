@@ -73724,7 +73724,7 @@ var product = new Vue({
   methods: {
     facturaVenta: function facturaVenta(id) {
       // window.open('/lorgeliz_tienda_copia/public/admin/ventas/factura/'+ id + ',' + '_blank');
-      window.open('http://lorenzogeliztienda.com/admin/ventas/factura/' + id + ',' + '_blank');
+      window.open('http://dev.lorenzogeliztienda.com/admin/ventas/factura/' + id + ',' + '_blank');
     }
   }
 });
@@ -73744,11 +73744,11 @@ var product = new Vue({
   methods: {
     pdfInformePedidos: function pdfInformePedidos() {
       // window.open('/lorgeliz_tienda_copia/public/admin/pedidos/listado/pdf');
-      window.open('http://lorenzogeliztienda.com/admin/pedidos/listado/pdf');
+      window.open('http://dev.lorenzogeliztienda.com/admin/pedidos/listado/pdf');
     },
     imprimir: function imprimir(id) {
       // window.open('/lorgeliz_tienda_copia/public/admin/pedidos/pedido/pdf/'+ id + ',' + '_blank');
-      window.open('http://lorenzogeliztienda.com/admin/pedidos/pedido/pdf/' + id + ',' + '_blank');
+      window.open('http://dev.lorenzogeliztienda.com/admin/pedidos/pedido/pdf/' + id + ',' + '_blank');
     }
   }
 });
@@ -73773,7 +73773,7 @@ var notification = new Vue({
     readchat: function readchat(chat) {
       //marca como leído el mensaje
       // let url = '/lorgeliz_tienda_copia/public/admin/chats/read/'+chat;
-      var url = 'http://lorenzogeliztienda.com/admin/chats/read/' + chat;
+      var url = 'http://dev.lorenzogeliztienda.com/admin/chats/read/' + chat;
       axios.put(url).then(function (response) {});
     },
     initChat: function initChat(cliente, chat) {
@@ -73782,7 +73782,7 @@ var notification = new Vue({
 
       if (this.location != '/lorgeliz_tienda_copia/public/admin/chats') {
         // window.location.href = `/lorgeliz_tienda_copia/public/admin/chats`;//redirigimos al index, los mensajes se filtraran con id del cliente
-        window.location.href = "http://lorenzogeliztienda.com/admin/chats";
+        window.location.href = "http://dev.lorenzogeliztienda.com/admin/chats";
       }
 
       this.readchat(chat);
@@ -73791,7 +73791,7 @@ var notification = new Vue({
       var _this = this;
 
       // let url = '/lorgeliz_tienda_copia/public/admin/chats/messages';
-      var url = 'http://lorenzogeliztienda.com/admin/chats/messages';
+      var url = 'http://dev.lorenzogeliztienda.com/admin/chats/messages';
       axios.get(url).then(function (response) {
         _this.notifications = response.data.chats;
         _this.location = window.location.pathname; //se utiliza para obtener la url de las imágenes de los usuarios
@@ -73826,7 +73826,7 @@ var product = new Vue({
   methods: {
     pdfInformeClientes: function pdfInformeClientes() {
       // let url = '/lorgeliz_tienda_copia/public/admin/informes/pdf/clientes';
-      var url = 'http://lorenzogeliztienda.com/admin/informes/pdf/clientes';
+      var url = 'http://dev.lorenzogeliztienda.com/admin/informes/pdf/clientes';
       window.open(url);
     }
   }
@@ -73847,7 +73847,7 @@ var product = new Vue({
   methods: {
     pdfInformeProductos: function pdfInformeProductos() {
       // let url = '/lorgeliz_tienda_copia/public/admin/informes/pdf/productos';
-      var url = 'http://lorenzogeliztienda.com/admin/informes/pdf/productos';
+      var url = 'http://dev.lorenzogeliztienda.com/admin/informes/pdf/productos';
       window.open(url);
     }
   }
@@ -73868,7 +73868,7 @@ var product = new Vue({
   methods: {
     pdfInformeVentas: function pdfInformeVentas() {
       // let url = '/lorgeliz_tienda_copia/public/admin/informes/pdf/ventas'
-      var url = 'http://lorenzogeliztienda.com/admin/informes/pdf/ventas';
+      var url = 'http://dev.lorenzogeliztienda.com/admin/informes/pdf/ventas';
       window.open(url);
     }
   }
@@ -73889,7 +73889,7 @@ var product = new Vue({
   methods: {
     pdfInformeSaldos: function pdfInformeSaldos() {
       // let url = '/lorgeliz_tienda_copia/public/admin/informes/pdf/saldos';
-      var url = 'http://lorenzogeliztienda.com/admin/informes/pdf/saldos';
+      var url = 'http://dev.lorenzogeliztienda.com/admin/informes/pdf/saldos';
       window.open(url);
     }
   }
@@ -73926,7 +73926,7 @@ var inventarios = new Vue({
   methods: {
     pdfInventarios: function pdfInventarios() {
       // let url = '/lorgeliz_tienda_copia/public/admin/stock/listado';
-      var url = 'http://lorenzogeliztienda.com/admin/stock/listado';
+      var url = 'http://dev.lorenzogeliztienda.com/admin/stock/listado';
       window.open(url);
     },
     selectProducto: function selectProducto() {
@@ -73948,7 +73948,7 @@ var inventarios = new Vue({
       this.talla = 0; // let url = '/lorgeliz_tienda_copia/public/admin/tallas/'+this.producto;
       // let url = '/lorgeliz_tienda_copia/public/api/admin/tallas/'+this.producto;
 
-      var url = 'http://lorenzogeliztienda.com/api/admin/tallas/' + this.producto;
+      var url = 'http://dev.lorenzogeliztienda.com/api/admin/tallas/' + this.producto;
       axios.get(url).then(function (response) {
         //   this.arrayTallas = response.data.tallas;
         _this.arrayTallas = response.data;
@@ -73960,14 +73960,14 @@ var inventarios = new Vue({
       this.color = 0; // let url = '/lorgeliz_tienda_copia/public/admin/colores/get/'+this.producto;
       // let url = '/lorgeliz_tienda_copia/public/api/admin/colores/'+this.producto;
 
-      var url = 'http://lorenzogeliztienda.com/api/admin/colores/' + this.producto;
+      var url = 'http://dev.lorenzogeliztienda.com/api/admin/colores/' + this.producto;
       axios.get(url).then(function (response) {
         //   this.arrayColores = response.data.colores;
         _this2.arrayColores = response.data;
       });
     },
     ingresarStock: function ingresarStock() {
-      // let url = 'http://lorenzogeliztienda.com/admin/stock';
+      // let url = 'http://dev.lorenzogeliztienda.com/admin/stock';
       var url = '/lorgeliz_tienda_copia/public/admin/stock';
       axios.post(url, {
         'producto': this.producto,
@@ -74012,7 +74012,7 @@ var listsales = new Vue({
   methods: {
     pdfListadoClientes: function pdfListadoClientes() {
       // let url = '/lorgeliz_tienda_copia/public/admin/clientes/listado'
-      var url = 'http://lorenzogeliztienda.com/admin/clientes/listado';
+      var url = 'http://dev.lorenzogeliztienda.com/admin/clientes/listado';
       window.open(url);
     }
   },
@@ -74034,7 +74034,7 @@ var listsales = new Vue({
   methods: {
     pdfListadoDevoluciones: function pdfListadoDevoluciones() {
       // let url = '/lorgeliz_tienda_copia/public/admin/devoluciones/listado';
-      var url = 'http://lorenzogeliztienda.com/admin/devoluciones/listado';
+      var url = 'http://dev.lorenzogeliztienda.com/admin/devoluciones/listado';
       window.open(url);
     }
   },
@@ -74064,13 +74064,13 @@ var payments = new Vue({
   methods: {
     pdfListPagos: function pdfListPagos() {
       // let url = '/lorgeliz_tienda_copia/public/admin/payments/list';
-      var url = 'http://lorenzogeliztienda.com/admin/payments/list';
+      var url = 'http://dev.lorenzogeliztienda.com/admin/payments/list';
       window.open(url);
     },
     imprimirPago: function imprimirPago(id) {
       // window.open('/lorgeliz_tienda_copia/public/admin/payments/payment/'+ id + ',' + '_blank');
       // let url = `/lorgeliz_tienda_copia/public/admin/payments/${id},_blank/pdf`;
-      var url = "http://lorenzogeliztienda.com/admin/payments/".concat(id, ",_blank/pdf");
+      var url = "http://dev.lorenzogeliztienda.com/admin/payments/".concat(id, ",_blank/pdf");
       window.open(url);
     },
     getResponse: function getResponse(ref_payco) {
@@ -74114,7 +74114,7 @@ var listsales = new Vue({
   methods: {
     pdfListadoVentas: function pdfListadoVentas() {
       // let url = '/lorgeliz_tienda_copia/public/admin/ventas/listado';
-      var url = 'http://lorenzogeliztienda.com/admin/ventas/listado';
+      var url = 'http://dev.lorenzogeliztienda.com/admin/ventas/listado';
       window.open(url);
     }
   },
@@ -74154,7 +74154,7 @@ var app = new Vue({
   methods: {
     readNotification: function readNotification(id, ruta) {
       // let url = '/lorgeliz_tienda_copia/public/admin/notification/'+id;
-      var url = 'http://lorenzogeliztienda.com/admin/notification/' + id;
+      var url = 'http://dev.lorenzogeliztienda.com/admin/notification/' + id;
       axios.put(url).then(function (response) {
         window.location.href = ruta;
       });
@@ -74165,7 +74165,7 @@ var app = new Vue({
 
     // let url = '/lorgeliz_tienda_copia/public/api/admin/notifications';
     // let url = '/lorgeliz_tienda_copia/public/admin/notification'
-    var url = 'http://lorenzogeliztienda.com/admin/notification';
+    var url = 'http://dev.lorenzogeliztienda.com/admin/notification';
     axios.get(url).then(function (response) {
       _this.notifications = response.data;
     })["catch"](function (error) {
@@ -74195,7 +74195,7 @@ var product = new Vue({
   methods: {
     pdfInformeVentas: function pdfInformeVentas() {
       // let url = '/lorgeliz_tienda_copia/public/admin/informes/pdf/ventas/mes?mes='+this.mes
-      var url = 'http://lorenzogeliztienda.com/admin/informes/pdf/ventas/mes?mes=' + this.mes;
+      var url = 'http://dev.lorenzogeliztienda.com/admin/informes/pdf/ventas/mes?mes=' + this.mes;
       window.open(url);
     }
   },

@@ -136,7 +136,7 @@
 				$.ajax({
 					type: "GET",
 					// url: "route('subcategory.get')",
-                    url: 'http://lorenzogeliztienda.com/api/admin/subcategorias',
+                    url: 'http://dev.lorenzogeliztienda.com/api/admin/subcategorias',
                     // url: 'http://localhost/lorgeliz_tienda_copia/public/api/admin/subcategorias',
 					data:{categoria:categoria},
 					dataType: 'json',
