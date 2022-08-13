@@ -4387,6 +4387,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           if (this.error) this.error = false;
           axios.get(url).then(function (response) {
             _this2.arrayCarrito = response.data.carrito;
+            console.log(response);
 
             if (_this2.arrayCarrito != null) {
               _this2.carrito = _this2.arrayCarrito.id; // let url = '/lorgeliz_tienda_copia/public/cart/update';
@@ -75882,8 +75883,8 @@ if (document.getElementById('app')) {
     data: {
       keyword: '',
       location: '',
-      // ruta: 'http://dev.lorenzogeliztienda.com'
-      ruta: '/lorgeliz_tienda_copia/public'
+      ruta: 'http://dev.lorenzogeliztienda.com' // ruta: '/lorgeliz_tienda_copia/public'
+
     },
     methods: {
       setCategoria: function setCategoria(categoria) {
@@ -76064,7 +76065,7 @@ window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/d
 
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   // authEndpoint : 'http://localhost/lorgeliz_tienda_copia/public/broadcasting/auth',
-  authEndpoint: 'http://lorenzogeliztienda.com/broadcasting/auth',
+  authEndpoint: 'http://dev.lorenzogeliztienda.com/broadcasting/auth',
   broadcaster: 'pusher',
   key: "395d78638e3ae29a21e8",
   cluster: "us2",
