@@ -35,7 +35,11 @@ class ChatController extends Controller
     //obtener chats en el index de chats
     public function chatsAjax(Request $request)
     {
-        if (!$request->ajax()) return redirect('/chats/admin');
+        // if (!$request->ajax()) return redirect('/chats/admin');
+
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $buscar = $request->buscar;
         
@@ -101,7 +105,11 @@ class ChatController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$request->ajax()) return redirect('/chats/admin');
+        // if (!$request->ajax()) return redirect('/chats/admin');
+
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         try {
             
@@ -155,7 +163,11 @@ class ChatController extends Controller
     public function show(Request $request, $cliente)
     {
         //chats en el messenger
-        if (!$request->ajax()) return redirect('/chats/admin');
+        // if (!$request->ajax()) return redirect('/chats/admin');
+
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $user = auth()->user()->id;
 
@@ -222,7 +234,11 @@ class ChatController extends Controller
     public function lastMessage(Request $request)
     {
         //obtener los mensajes que se muestran en las notificaciones de chats del admin
-        if (!$request->ajax()) return redirect('/chats/admin');
+        // if (!$request->ajax()) return redirect('/chats/admin');
+
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $user = auth()->user()->id;
 
@@ -263,7 +279,10 @@ class ChatController extends Controller
 
     public function readMessage(Request $request, $chat)
     {
-        if (!$request->ajax()) return redirect('/chats/admin');
+        // if (!$request->ajax()) return redirect('/chats/admin');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         try {
             

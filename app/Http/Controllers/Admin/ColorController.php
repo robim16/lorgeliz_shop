@@ -7,6 +7,7 @@ use App\Producto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ColorRequest;
 use Illuminate\Http\Request;
+use Log;
 
 class ColorController extends Controller
 {
@@ -52,14 +53,24 @@ class ColorController extends Controller
      */
     public function store(ColorRequest $request)
     {
-        $color = new Color();
-        $color->nombre = $request->nombre;
-        $color->descripcion = $request->descripcion;
 
-        $color->save();
+        try {
+           
+            $color = new Color();
+            $color->nombre = $request->nombre;
+            $color->descripcion = $request->descripcion;
+    
+            $color->save();
+    
+            session()->flash('message', ['success', ("Se ha creado el color exitosamente")]);
+            return redirect()->route('color.index');
 
-        session()->flash('message', ['success', ("Se ha creado el color exitosamente")]);
-        return redirect()->route('color.index');
+        } catch (\Exception $e) {
+
+            Log::debug('Error creando el color. error: '.json_encode($e));
+
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
+        }
     }
 
     /**
@@ -95,14 +106,25 @@ class ColorController extends Controller
      */
     public function update(ColorRequest $request, $id)
     {
-        $color = Color::where('id', $id)->first();
-        $color->nombre = $request->nombre;
-        $color->descripcion = $request->descripcion;
 
-        $color->save();
+        try {
+            
+            $color = Color::where('id', $id)->first();
+            $color->nombre = $request->nombre;
+            $color->descripcion = $request->descripcion;
+    
+            $color->save();
+    
+            session()->flash('message', ['success', ("Se ha actualizado el color exitosamente")]);
 
-        session()->flash('message', ['success', ("Se ha actualizado el color exitosamente")]);
-        return redirect()->route('color.index');
+            return redirect()->route('color.index');
+
+        } catch (\Exception $e) {
+
+            Log::debug('Error editando el color. error: '.json_encode($e));
+
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
+        }
     }
 
     /**
@@ -123,9 +145,11 @@ class ColorController extends Controller
             return redirect()->route('color.index');
         }
 
-        catch (\Exception $exception){
+        catch (\Exception $e){
 
             session()->flash('message', ['warning', ("No puedes eliminar el color porque está en uso")]);
+
+            Log::debug('Error eliminando el color. error: '.json_encode($e));
 
             return redirect()->route('color.index');
         }
@@ -134,13 +158,15 @@ class ColorController extends Controller
     //implementada en index de Admin/Api/ColorController
     public function getColores(Request $request, $id)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         //$id  = $request->producto;
         
         $colores = Color::join('color_producto', 'colores.id', 'color_producto.color_id')
-        ->where('color_producto.producto_id', $id)
-        ->get();
+            ->where('color_producto.producto_id', $id)
+            ->get();
 
         return ['colores' => $colores];
         

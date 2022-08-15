@@ -7,6 +7,7 @@ use App\Pago;
 use App\User;
 use App\Notifications\NotificationPay;
 use Illuminate\Http\Request;
+use Log;
 
 
 class PaymentController extends Controller
@@ -37,14 +38,23 @@ class PaymentController extends Controller
 
     public function store($x_ref_payco, $total, $venta_id, $x_cod_response)
     {
-        $pago = new Pago();
-        $pago->ref_epayco = $x_ref_payco;
-        $pago->fecha = \Carbon\Carbon::now();
-        $pago->monto = $total;
-        $pago->venta_id = $venta_id;
-        $pago->estado =  $x_cod_response;
 
-        $pago->save();//guardar el pago
+        try {
+            
+            $pago = new Pago();
+            $pago->ref_epayco = $x_ref_payco;
+            $pago->fecha = \Carbon\Carbon::now();
+            $pago->monto = $total;
+            $pago->venta_id = $venta_id;
+            $pago->estado =  $x_cod_response;
+    
+            $pago->save();//guardar el pago
+
+        } catch (\Exception $e) {
+            Log::debug('Error guardando el pago. error: '.json_encode($e));
+
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
+        }
 
     }
 
@@ -79,24 +89,33 @@ class PaymentController extends Controller
 
     public function anular(Pago $pago)
     {
-        $monto = $pago->monto;
+        try {
+           
+            $monto = $pago->monto;
+    
+            $venta = $pago->venta;
+    
+            $saldo_venta = $venta->saldo;
+    
+            $venta->saldo = $saldo_venta + $monto;
+    
+            $venta->estado = 2;
+            
+            $venta->save();
+    
+            $pago->estado = 5;
+    
+            $pago->save();
+    
+            session()->flash('message', ['success', ("Se ha anulado el pago exitosamente")]);
+    
+            return back();
 
-        $venta = $pago->venta;
+        } catch (\Exception $e) {
 
-        $saldo_venta = $venta->saldo;
+            Log::debug('Error anulando el pago. error: '.json_encode($e));
 
-        $venta->saldo = $saldo_venta + $monto;
-
-        $venta->estado = 2;
-        
-        $venta->save();
-
-        $pago->estado = 5;
-
-        $pago->save();
-
-        session()->flash('message', ['success', ("Se ha anulado el pago exitosamente")]);
-
-        return back();
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
+        }
     }
 }

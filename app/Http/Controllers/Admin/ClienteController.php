@@ -142,7 +142,10 @@ class ClienteController extends Controller
     //en desuso, se implemento en /api/clienteController
     public function clientesChat(Request $request)
     {
-        if (!$request->ajax()) return back();
+        // if (!$request->ajax()) return back();
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $buscar = $request->buscar;
         $criterio = $request->criterio;

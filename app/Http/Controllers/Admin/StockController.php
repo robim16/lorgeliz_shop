@@ -117,10 +117,12 @@ class StockController extends Controller
             return back();
 
         } catch (\Exception $e) {
-           //
+            Log::debug('Error actualizando el stock. error: '.json_encode($e));
+
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
         }
        
-        Log::debug('An informational message.'.json_encode($product));
+       
     }
 
     public function pdfInventarios()
@@ -159,7 +161,8 @@ class StockController extends Controller
             return $pdf->download('inventarioproductos.pdf');
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error imprimiendo el pdf de stock. error: '.json_encode($e));
+
         }
     }
 }

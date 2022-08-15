@@ -65,7 +65,9 @@ class OrdersController extends Controller
             return view('admin.pedidos.index', compact('pedidos', 'estados'));
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error listando pedidos. error: '.json_encode($e));
+
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
         }
 
     }

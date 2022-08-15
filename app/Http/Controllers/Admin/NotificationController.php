@@ -7,6 +7,7 @@ use App\Notification;
 use App\Cliente;
 use Auth;
 use Illuminate\Http\Request;
+use Log;
 
 class NotificationController extends Controller
 {
@@ -18,11 +19,14 @@ class NotificationController extends Controller
     //notificaciones del admin
     public function index(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
         
-        $unreadNotifications = Auth::user()->unreadNotifications;
+        // $unreadNotifications = Auth::user()->unreadNotifications;
         
-        $fechaActual = date('Y-m-d');
+        // $fechaActual = date('Y-m-d');
 
         //foreach ($unreadNotifications as $notification) {
             //if ($fechaActual != $notification->created_at->toDateString()) {
@@ -36,11 +40,24 @@ class NotificationController extends Controller
     //leer notificación del admin
     public function update(Request $request, $id)
     {
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
-        $notification = Notification::where('id', $request->id)->firstOrFail();
-        $notification->read_at =  \Carbon\Carbon::now();
+        try {
 
-        $notification->save();
+            $notification = Notification::where('id', $request->id)->firstOrFail();
+            $notification->read_at =  \Carbon\Carbon::now();
+    
+            $notification->save();
+            
+        } catch (\Exception $e) {
+
+            Log::debug('Error leyendo la notificación. error: '.json_encode($e));
+
+            session()->flash('message', ['warning', ("ha ocurrido un error")]);
+        }
+
     }
 }
