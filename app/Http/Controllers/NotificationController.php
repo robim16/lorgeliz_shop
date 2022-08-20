@@ -28,12 +28,23 @@ class NotificationController extends Controller
     
     public function setClientRead(Request $request, $id)
     {
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
 
-        $notification = Notification::where('id', $request->id)->firstOrFail();
-        $notification->read_at =  \Carbon\Carbon::now();
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
-        $notification->save();
+        try {
+           
+            $notification = Notification::where('id', $request->id)->firstOrFail();
+            $notification->read_at =  \Carbon\Carbon::now();
+    
+            $notification->save();
+
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
     }
 }
 

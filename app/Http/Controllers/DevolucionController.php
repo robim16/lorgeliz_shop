@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Mail\AdminDevolucionMail;
-
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -89,16 +89,25 @@ class DevolucionController extends Controller
         // ->orderBy('devoluciones.created_at','DESC')
         // ->paginate(5);
 
-        $productos = Devolucione::whereHas('venta',
-        function (Builder $query) {
-           $query->where('cliente_id', auth()->user()->cliente->id);
-        })
-        ->with(['venta', 'productoReferencia'])
-        ->where('id', $id)
-        ->paginate(5);
-       
+        try {
 
-        return view('user.devoluciones.show',compact('productos'));
+            $productos = Devolucione::whereHas('venta',
+                function (Builder $query) {
+                $query->where('cliente_id', auth()->user()->cliente->id);
+                })
+                ->with(['venta', 'productoReferencia'])
+                ->where('id', $id)
+                ->paginate(5);
+           
+    
+            return view('user.devoluciones.show',compact('productos'));
+           
+        } catch (\Exception $e) {
+
+            Log::debug('Error mostrando devoluciones del usuario'.'Usuario:'.' '.
+                json_encode(auth()->user()->id).' '.'Error:'.json_encode($e));
+        }
+
     }
 
     /**
@@ -108,59 +117,84 @@ class DevolucionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   //podría implementare en api
-        if (!$request->ajax()) return redirect('/');
-
-        // $ref = $request->ref;
-        $producto = $request->producto;
-        $venta = $request->venta;
-        $cantidad = $request->cantidad;
-
-        $devoluciones = Devolucione::where('producto_referencia_id', $producto)//$ref
-        ->where('venta_id', $venta)
-        ->count(); // verificamos que no se haya solicitado la devolución anteriormente
-
-        if ($devoluciones == 0) {
-            $devolucion = new Devolucione();
-            $devolucion->fecha = \Carbon\Carbon::now();
-            $devolucion->cantidad = $cantidad;
-            $devolucion->producto_referencia_id = $producto; //$ref
-            $devolucion->venta_id = $venta;
-
-            $devolucion->save();
-
-            $admin = User::where('role_id', 2)->first();
-            $user = auth()->user();
-
-            // return $admin->nombres;
+    {   
         
-            $details = [
-                'title' => 'Se ha solicitado una nueva devolucion',
-                'user' => $admin->nombres,
-                'cliente' => $user->nombres.' '.$user->apellidos,
-                'url' => url('/admin/devoluciones/'. $devolucion->id),
-            ];
+        //podría implementare en api
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
-            //return new AdminDevolucionMail($details);
-            Mail::to($admin->email)->send(new AdminDevolucionMail($details));
+        try {
+           
+            // $ref = $request->ref;
+            $producto = $request->producto;
+            $venta = $request->venta;
+            $cantidad = $request->cantidad;
+    
+            $devoluciones = Devolucione::where('producto_referencia_id', $producto)//$ref
+                ->where('venta_id', $venta)
+                ->count(); // verificamos que no se haya solicitado la devolución anteriormente
+    
+            if ($devoluciones == 0) {
+                $devolucion = new Devolucione();
+                $devolucion->fecha = \Carbon\Carbon::now();
+                $devolucion->cantidad = $cantidad;
+                $devolucion->producto_referencia_id = $producto; //$ref
+                $devolucion->venta_id = $venta;
+    
+                $devolucion->save();
+    
+                $admin = User::where('role_id', 2)->first();
+                $user = auth()->user();
+    
+                // return $admin->nombres;
+            
+                $details = [
+                    'title' => 'Se ha solicitado una nueva devolucion',
+                    'user' => $admin->nombres,
+                    'cliente' => $user->nombres.' '.$user->apellidos,
+                    'url' => url('/admin/devoluciones/'. $devolucion->id),
+                ];
+    
+                //return new AdminDevolucionMail($details);
+                Mail::to($admin->email)->send(new AdminDevolucionMail($details));
+    
+                User::findOrFail($admin->id)->notify(new AdminDevolucionMail($details));
+    
+            } 
+    
+            $response = ['data' => $devoluciones];
+            
+            return response()->json($response);
 
-            User::findOrFail($admin->id)->notify(new AdminDevolucionMail($details));
+        } catch (\Exception $e) {
 
-        } 
-
-        $response = ['data' => $devoluciones];
-        
-        return response()->json($response);
+            Log::debug('Errorguardando la devolución del usuario'.'Usuario:'.' '.
+                json_encode(auth()->user()->id).' '.'Error:'.json_encode($e));
+        }
         
     }
 
     //implementado en rutas api/devolucion
     public function verificar(Request $request){
 
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
-        return Devolucione::where('venta_id',$request->venta)
-        ->where('producto_referencia_id',$request->producto)
-        ->first();
+        try {
+            
+            return Devolucione::where('venta_id',$request->venta)
+            ->where('producto_referencia_id',$request->producto)
+            ->first();
+
+        } catch (\Exception $e) {
+
+            Log::debug('Error consultando las devoluciones del usuario'.'Usuario:'.' '.
+                json_encode(auth()->user()->id).' '.'Error:'.json_encode($e));
+        }
+
     }
 }

@@ -50,7 +50,7 @@ class VentaController extends Controller
         $x_signature = $request->x_signature;
         //$signature = hash('sha256', $p_cust_id_cliente. '^' . $p_key . '^' . $this->x_ref_payco . '^' . $x_transaction_id . '^' . $this->x_amount . '^' .$x_currency_code);
        
-        $signature=hash('sha256',
+        $signature = hash('sha256',
                        $p_cust_id_cliente.'^'
                       .$p_key.'^'
                       .$this->x_ref_payco.'^'
