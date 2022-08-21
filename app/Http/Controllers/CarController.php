@@ -13,7 +13,6 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 use Log;
 
 class CarController extends Controller
@@ -72,7 +71,9 @@ class CarController extends Controller
     //función para cargar el carrito en el componente cart
     public function cartUser(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $cliente = Cliente::where('user_id',auth()->user()->id)->firstOrFail();
         // $cliente = auth()->user()->cliente->id;
@@ -97,27 +98,34 @@ class CarController extends Controller
         // //->groupBy('color_producto.id')
         // ->get();
 
-        
-        $productos = CarritoProducto::whereHas('carrito',
-        function (Builder $query) use ($cliente) {
+        try {
+           
+            $productos = CarritoProducto::whereHas('carrito',
+                function (Builder $query) use ($cliente) {
+                    $query->estado()
+                    ->cliente($cliente->id);
+                })
+                ->with(['carrito', 'productoReferencia.colorProducto.color', 
+                'productoReferencia.colorProducto.producto',
+                'productoReferencia.talla', 'productoReferencia.colorProducto.imagenes'])
+                ->get();
+    
+            return ['productos' => $productos];
 
-        //    $query->where('estado', 1)
-        //    ->where('cliente_id', $cliente->id);
-            $query->estado()
-            ->cliente($cliente->id);
-        })
-        ->with(['carrito', 'productoReferencia.colorProducto.color', 
-        'productoReferencia.colorProducto.producto',
-        'productoReferencia.talla', 'productoReferencia.colorProducto.imagenes'])
-        ->get();
+        } catch (\Exception $e) {
 
-        return ['productos' => $productos];
+            Log::debug('ha ocurrido un error al obtener el carrito del cliente:'.
+                $cliente->id.'Error: '.json_encode($e));
+        }
     }
     
     public function buscarCarrito(Request $request)
     {
         //obtener el carrito del cliente autenticado antes de agregar nuevo producto
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
         
         try {
 
@@ -138,41 +146,58 @@ class CarController extends Controller
     public function store(Request $request)
     {
         
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         try {
 
-            DB::beginTransaction();
+            $carrito =  Carrito::estado()->cliente(auth()->user()->cliente->id)
+                ->first();
 
+
+            if (!$carrito) {
+              
+    
+                DB::beginTransaction();
+    
+                
+                $producto = ProductoReferencia::obtenerProducto($request->producto,$request->talla);
+    
+                // $precio = $producto[0]->precio_actual;
+    
+                $precio = $producto[0]->colorProducto->producto->precio_actual;
+
+                $cantidad = $request->cantidad;
+    
+                $carrito = new Carrito();
+                $carrito->fecha = \Carbon\Carbon::now();
+                $carrito->total = $cantidad * $precio;
+                $carrito->cliente_id = auth()->user()->cliente->id;
+                $carrito->estado = '1';
+    
+                $carrito->save();
+    
+                $carritoProducto = new CarritoProducto();
+                // $carritoProducto->producto_referencia_id = $producto[0]->referencia;
+                $carritoProducto->producto_referencia_id = $producto[0]->id;
+                $carritoProducto->carrito_id = $carrito->id;
+                $carritoProducto->cantidad = $cantidad;
+    
+                $carritoProducto->save();
+    
+                $cart =  $this->userCart($request); //calcular número de productos en el carrito
+    
+                broadcast(new UserCart($cart)); // notificar el evento
+                
+                DB::commit();
+
+            } else {
+
+               $this->update($request);
+            }
             
-            $producto = ProductoReferencia::obtenerProducto($request->producto,$request->talla);
-
-            // $precio = $producto[0]->precio_actual;
-
-            $precio = $producto[0]->colorProducto->producto->precio_actual;
-            $cantidad = $request->cantidad;
-
-            $carrito = new Carrito();
-            $carrito->fecha = \Carbon\Carbon::now();
-            $carrito->total = $cantidad * $precio;
-            $carrito->cliente_id = auth()->user()->cliente->id;
-            $carrito->estado = '1';
-
-            $carrito->save();
-
-            $carritoProducto = new CarritoProducto();
-            // $carritoProducto->producto_referencia_id = $producto[0]->referencia;
-            $carritoProducto->producto_referencia_id = $producto[0]->id;
-            $carritoProducto->carrito_id = $carrito->id;
-            $carritoProducto->cantidad = $cantidad;
-
-            $carritoProducto->save();
-
-            $cart =  $this->userCart($request); //calcular número de productos en el carrito
-
-            broadcast(new UserCart($cart)); // notificar el evento
-            
-            DB::commit();
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -188,7 +213,9 @@ class CarController extends Controller
     //función que se ejecuta al agregar un producto a un carrito existente
     public function update(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         try {
 
@@ -264,7 +291,10 @@ class CarController extends Controller
 
     public function destroy(Request $request)
     {
-        if (!$request->ajax()) return redirect('/cart');
+        // if (!$request->ajax()) return redirect('/cart');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
         
         try{
 
@@ -303,7 +333,10 @@ class CarController extends Controller
     public function updateProduct(Request $request)
     { 
         // se ejecuta al modificar la cantidad de producto en la página del carrito
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/')
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		};
         
         try {
             
@@ -410,7 +443,10 @@ class CarController extends Controller
     //public function userCart(Request $request)
     public function userCart(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         try {
 
@@ -456,7 +492,10 @@ class CarController extends Controller
 
     public function remove(Request $request)
     {
-        if (!$request->ajax()) return redirect('/cart');
+        // if (!$request->ajax()) return redirect('/cart');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         try {
            
