@@ -485,7 +485,8 @@ class CarController extends Controller
             return ['cantidad' => $cantidad];
            
         } catch (\Exception $e) {
-            Log::debug('Error obteniendo el número de productos del carrito'.'error:'.' '.json_encode($e));
+            Log::debug('Error obteniendo el número de productos del carrito'.
+                'Error:'.' '.json_encode($e));
         }
 
     }

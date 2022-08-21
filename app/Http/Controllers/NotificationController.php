@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Notification;
 use App\Cliente;
 use Auth;
+use Log;
 
 class NotificationController extends Controller
 {
@@ -42,7 +43,7 @@ class NotificationController extends Controller
             $notification->save();
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error leyendo notificación del cliente'.'Error:'.' '.json_encode($e));
         }
 
     }

@@ -250,7 +250,7 @@ class VentaController extends Controller
                 return response()->json($response);//$response
             }
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
         }
     }
