@@ -247,10 +247,11 @@ class VentaController extends Controller
                 // broadcast(new SalesEvent());
 
                 $response = ['data' => 'success', 'pedido' => $venta->pedido->id];
+                
                 return response()->json($response);//$response
             }
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
         }
     }

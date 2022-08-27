@@ -76386,7 +76386,8 @@ var notification = new Vue({
   computed: {},
   methods: {
     read_at: function read_at(id) {
-      var url = '/lorgeliz_tienda_copia/public/chats/' + id;
+      // let url = '/lorgeliz_tienda_copia/public/chats/'+id;
+      var url = 'http://dev.lorenzogeliztienda.com/chats/' + id;
       var me = this;
       axios.put(url).then(function (response) {
         me.loadMessages();
@@ -76396,7 +76397,9 @@ var notification = new Vue({
     loadMessages: function loadMessages() {
       var _this = this;
 
-      axios.get('/lorgeliz_tienda_copia/public/chats/messages').then(function (response) {
+      // let url = '/lorgeliz_tienda_copia/public/chats/messages';
+      var url = 'http://dev.lorenzogeliztienda.com/chats/messages';
+      axios.get(url).then(function (response) {
         _this.messages = response.data.chats;
       })["catch"](function (error) {
         console.log(error);
