@@ -607,7 +607,6 @@
                         type: "GET",
                         // "route('subcategory.get')",
                         url: '/lorgeliz_tienda_copia/public/api/admin/subcategorias',
-                        // url: 'http://dev.lorenzogeliztienda.com/api/admin/subcategorias',
                         data:{categoria:categoria},
                         dataType: 'json',
                         success: function (response) {
@@ -639,7 +638,6 @@
                     $.ajax({
                         type: "GET",
                         url: "/lorgeliz_tienda_copia/public/api/admin/tipos",
-                        // url: "http://dev.lorenzogeliztienda.com/api/admin/tipos",
                         data:{subcategoria:subcategoria},
                         dataType: 'json',
                         success: function (response) {

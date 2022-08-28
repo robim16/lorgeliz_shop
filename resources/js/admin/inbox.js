@@ -11,8 +11,8 @@ const notification = new Vue({
     },
     methods:{
         readchat(chat){//marca como leído el mensaje
-            // let url = '/lorgeliz_tienda_copia/public/admin/chats/read/'+chat;
-            let url = 'http://dev.lorenzogeliztienda.com/admin/chats/read/'+chat;
+            let url = '/lorgeliz_tienda_copia/public/admin/chats/read/'+chat;
+            // let url = 'http://dev.lorenzogeliztienda.com/admin/chats/read/'+chat;
            
             axios.put(url).then(response => {
                 

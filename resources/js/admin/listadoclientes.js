@@ -8,8 +8,8 @@ const listsales = new Vue({
     
     methods: {
         pdfListadoClientes(){
-            // let url = '/lorgeliz_tienda_copia/public/admin/clientes/listado'
-            let url = 'http://dev.lorenzogeliztienda.com/admin/clientes/listado';
+            let url = '/lorgeliz_tienda_copia/public/admin/clientes/listado';
+            // let url = 'http://dev.lorenzogeliztienda.com/admin/clientes/listado';
             window.open(url);
         },
         
