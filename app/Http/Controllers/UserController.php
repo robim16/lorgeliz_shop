@@ -7,6 +7,7 @@ use App\User;
 use App\Http\Requests\UserRequest;
 use App\Rules\StrengthPassword;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -89,25 +90,36 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, $id)
     {
-        $user = User::where('id', $id)->first();
+        try {
 
-        // $user = auth()->user();
-        $user->username = request('usuario');
-        $user->nombres = request('nombres');
-        $user->apellidos = request('apellidos');
-        $user->departamento = request('departamento');
-        $user->municipio = request('municipio');
-        $user->direccion = request('direccion');
-        $user->telefono = request('telefono');
 
-        if (request('password')) { //si se envía el password se somete a la rule
+            $user = User::where('id', $id)->first();
+    
+            // $user = auth()->user();
+            $user->username = request('usuario');
+            $user->nombres = request('nombres');
+            $user->apellidos = request('apellidos');
+            $user->departamento = request('departamento');
+            $user->municipio = request('municipio');
+            $user->direccion = request('direccion');
+            $user->telefono = request('telefono');
+    
+            if (request('password')) { //si se envía el password se somete a la rule
+    
+                $this->validate(request(), 
+                 ['password' => ['confirmed', new StrengthPassword]]);
+                 $user->password = bcrypt(request('password'));
+            }
+           
+            $user->save();
+            
+            session()->flash('message', ['success', ("Se han actualizado los datos")]);
 
-            $this->validate(request(), 
-             ['password' => ['confirmed', new StrengthPassword]]);
-             $user->password = bcrypt(request('password'));
+            return back();
+
+        } catch (\Exception $e) {
+           Log::debug('Error actualizando el usuario'.'error:'.' '.json_encode($e));
         }
-       
-        $user->save();
 
         //if ($request->hasFile('imagen')) {
 
@@ -126,8 +138,6 @@ class UserController extends Controller
 
         //$img->save();
 
-        session()->flash('message', ['success', ("Se han actualizado los datos")]);
-        return back();
     }
 
     /**
