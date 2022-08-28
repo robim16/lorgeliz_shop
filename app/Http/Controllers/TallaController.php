@@ -10,7 +10,10 @@ class TallaController extends Controller
     public function getProductoTallas(Request $request, $id)
     {
         //en desuso, se utiliza tallaController del directorio api
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+            abort(401, 'Acceso denegado');
+        };
 
         $tallas = Talla::join('producto_referencia', 'tallas.id', '=', 'producto_referencia.talla_id')
         ->join('color_producto', 'producto_referencia.color_producto_id', '=', 'color_producto.id')

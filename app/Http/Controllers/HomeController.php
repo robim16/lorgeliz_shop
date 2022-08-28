@@ -142,7 +142,10 @@ class HomeController extends Controller
     // función para implementar index con ajax
     public function productsIndex(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $disponibles = ProductoReferencia::disponibles();
 
@@ -227,14 +230,22 @@ class HomeController extends Controller
 
     public function checkout()
     {
-        $carrito = Carrito::with('cliente.user')
-        ->estado()
-        ->cliente(auth()->user()->cliente->id)
-        ->firstOrFail();
+
+        try {
+           
+            $carrito = Carrito::with('cliente.user')
+                ->estado()
+                ->cliente(auth()->user()->cliente->id)
+                ->firstOrFail();
+
+
+            return view('tienda.checkout', compact('carrito'));
+        } catch (\Exception $e) {
+            //throw $th;
+        }
         
         // ->where('estado', 1)
         // ->where('cliente_id', auth()->user()->cliente->id)
-        return view('tienda.checkout', compact('carrito'));
     }
 
     //todas las funciones asociadas a la página de categorías fueron 
@@ -242,7 +253,10 @@ class HomeController extends Controller
     public function getProductos(Request $request)
     {
         //obtener todos los productos, en vista categorías
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         // $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
         // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
@@ -281,7 +295,10 @@ class HomeController extends Controller
 
     public function getProductosByState(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $estado = $request->estado;
 
@@ -329,7 +346,10 @@ class HomeController extends Controller
 
     public function getProductosSales(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         // $productos = DB::table('productos')
         // ->join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
@@ -377,7 +397,10 @@ class HomeController extends Controller
 
     public function getProductosVisitas(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         // $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
         // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
@@ -424,7 +447,10 @@ class HomeController extends Controller
     public function getProductsByOrder(Request $request)
     {
 
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $criterio = $request->criterio;
 
@@ -470,7 +496,10 @@ class HomeController extends Controller
     public function getProductsByTipo(Request $request)
     {
         
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $tipo = $request->tipo;
         
@@ -517,7 +546,10 @@ class HomeController extends Controller
 
     public function getProductsByGenre(Request $request)
     {
-       if (!$request->ajax()) return redirect('/');
+    //    if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+            abort(401, 'Acceso denegado');
+        }
 
         $genero = $request->genero;
 

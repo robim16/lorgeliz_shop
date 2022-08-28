@@ -49,16 +49,22 @@ class OrdersController extends Controller
     //     ->where('ventas.estado', '!=', 3)
     //     ->orderBy('pedidos.created_at', 'DESC')
     //     ->paginate(5);
+    
+        try {
         
-        $pedidos = Venta::with(['pedido', 'factura'])
-        ->orWhere('valor','like',"%$busqueda%")
-        ->where('cliente_id', auth()->user()->cliente->id)
-        // ->where('estado', '!=', 3)
-        ->estado()
-        ->orderBy('created_at', 'DESC')
-        ->paginate(5);
-        
-        return view('user.orders.index', compact('pedidos'));
+            $pedidos = Venta::with(['pedido', 'factura'])
+                ->orWhere('valor','like',"%$busqueda%")
+                ->where('cliente_id', auth()->user()->cliente->id)
+                // ->where('estado', '!=', 3)
+                ->estado()
+                ->orderBy('created_at', 'DESC')
+                ->paginate(5);
+                
+            return view('user.orders.index', compact('pedidos'));
+            
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     /**
@@ -124,23 +130,29 @@ class OrdersController extends Controller
         // ->groupBy('producto_referencia.id')
         // ->get();
 
-        $productos = ProductoVenta::whereHas('venta.pedido',
-        function (Builder $query) use ($pedido) {
-           $query->where('id', $pedido->id);
-        })
-        ->whereHas('venta',
-        function (Builder $query) {
-           $query->where('cliente_id', auth()->user()->cliente->id);
-        })
-        ->with(['productoReferencia.colorProducto.color', 'productoReferencia.colorProducto.producto',
-        'productoReferencia.talla','venta.pedido', 'productoReferencia.colorProducto.imagenes',
-            'productoReferencia.devoluciones'=>function($query) use($pedido){
-                $query->where('venta_id', $pedido->venta_id);
-            }
-        ])
-        ->get();
+        try {
+            
+            $productos = ProductoVenta::whereHas('venta.pedido',
+            function (Builder $query) use ($pedido) {
+               $query->where('id', $pedido->id);
+            })
+            ->whereHas('venta',
+            function (Builder $query) {
+               $query->where('cliente_id', auth()->user()->cliente->id);
+            })
+            ->with(['productoReferencia.colorProducto.color', 'productoReferencia.colorProducto.producto',
+            'productoReferencia.talla','venta.pedido', 'productoReferencia.colorProducto.imagenes',
+                'productoReferencia.devoluciones'=>function($query) use($pedido){
+                    $query->where('venta_id', $pedido->venta_id);
+                }
+            ])
+            ->get();
+    
+            return ['productos' => $productos];
 
-        return ['productos' => $productos];
+        } catch (\Exception $e) {
+            //throw $th;
+        }
 
     }
 
@@ -207,13 +219,19 @@ class OrdersController extends Controller
         // ->where('imagenes.imageable_type', 'App\ColorProducto')
         // ->groupBy('producto_referencia.id')
         // ->get();
+        
+        try {
 
-        return ProductoVenta::whereHas('venta.pedido',
-        function (Builder $query) use ($id) {
-           $query->where('id', $id);
-        })
-        ->with(['venta.pedido', 'venta.cliente.user', 'venta.factura'])
-        ->get();
+            return ProductoVenta::whereHas('venta.pedido',
+                function (Builder $query) use ($id) {
+                $query->where('id', $id);
+                })
+                ->with(['venta.pedido', 'venta.cliente.user', 'venta.factura'])
+                ->get();
+            
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     // public function userPedido($id)

@@ -11,6 +11,8 @@ use App\Producto;
 // use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
 use App\Events\VisitEvent;
+use Illuminate\Support\Facades\Log;
+
 // use Illuminate\Support\Facades\Storage;
 // use Intervention\Image\Facades\Image;
 // use Spatie\Dropbox\Client;
@@ -52,20 +54,28 @@ class ProductController extends Controller
     //implementado en api/productController
     public function setVisitas(Request $request, $id)
     {
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+            abort(401, 'Acceso denegado');
+        };
 
-        $producto = ColorProducto::where('id', $id)->first();
-        // $visitas = $producto->visitas;
-        // $producto->visitas = $visitas + 1;
-        $producto->visitas += 1;
+        try {
 
-        $producto->save(); // se incrementa el campo visitas
-
-        $response = ['data' => 'success'];
+            $producto = ColorProducto::where('id', $id)->first();
             
-        return response()->json($response);
-
-        // broadcast(new VisitEvent());
+            $producto->visitas += 1;
+    
+            $producto->save(); // se incrementa el campo visitas
+    
+            $response = ['data' => 'success'];
+                
+            return response()->json($response);
+    
+            broadcast(new VisitEvent());
+            
+        } catch (\Exception $e) {
+           Log::debug('Error actualizando las visitas del producto'.'Error:'.' '.json_encode($e));
+        }
 
     }
 
