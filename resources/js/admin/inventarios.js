@@ -1,21 +1,21 @@
 
 
+
+
 const inventarios = new Vue({
     el: '#inventarios',
     data: {
        producto: '',
        talla: 0,
        color: 0,
-       cantidad: '',
+       cantidad: 1,
        arrayTallas: [],
        arrayColores: [],
        operacion: ''
     }, 
     
     methods: {
-        
         pdfInventarios(){
-            // let url = '/lorgeliz_tienda_copia/public/admin/stock/listado';
             let url = 'http://lorenzogeliztienda.com/admin/stock/listado'
             window.open(url);
         },
@@ -40,7 +40,6 @@ const inventarios = new Vue({
             this.talla = 0;
             // let url = '/lorgeliz_tienda_copia/public/admin/tallas/'+this.producto;
 
-            // let url = '/lorgeliz_tienda_copia/public/api/admin/tallas/'+this.producto;
             let url = 'http://lorenzogeliztienda.com/api/admin/tallas/' +this.producto;
     
             axios.get(url).then(response => {
@@ -54,8 +53,6 @@ const inventarios = new Vue({
             this.color = 0;
             // let url = '/lorgeliz_tienda_copia/public/admin/colores/get/'+this.producto;
 
-            // let url = '/lorgeliz_tienda_copia/public/api/admin/colores/'+this.producto;
-
             let url = 'http://lorenzogeliztienda.com/api/admin/colores/'+this.producto;
 
     
@@ -66,26 +63,28 @@ const inventarios = new Vue({
         },
 
         ingresarStock(){
-
             let url = 'http://lorenzogeliztienda.com/admin/stock';
+            
 
             axios.post(url,{
-                'producto': this.producto,
-                'talla': this.talla,
-                'color': this.color,
-                'cantidad': this.cantidad
+                'producto_id': this.producto,
+                'talla_id': this.talla,
+                'color_id': this.color,
+                'cantidad': this.cantidad,
+                'operacion': this.operacion
                 }).then(response => {
                 //    console.log(response)
 
                 }).catch(error => {
-                    // console.log(error.response.data)
+                    console.log(error.response.data)
                     for (var [el, message] of Object.entries(error.response.data)) {
+                        // $(`#${el}-error`).html(message)
                         document.getElementById(`${el}-error`).innerHTML = message;
+                        
                     }
                 });
 
         },
-
 
         reset(){
             this.producto = '';
@@ -96,3 +95,4 @@ const inventarios = new Vue({
     },
 
 });
+

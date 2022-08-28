@@ -217,7 +217,7 @@
                                 <label class="col-md-3 form-control-label" for="text-input">Cantidad</label>
                                 <div class="col-md-9">
                                     <input type="number" id="cantidad" name="cantidad" class="form-control"
-                                        placeholder="Cantidad" value="{{ old('cantidad') }}">
+                                        placeholder="Cantidad" v-model="cantidad>
                                 </div>
 
                                 {{-- @if ($errors->has('cantidad'))
