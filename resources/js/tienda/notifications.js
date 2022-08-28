@@ -10,14 +10,18 @@ const notification = new Vue({
     },
     methods:{
         readNotification(id,ruta){
-            let url = '/lorgeliz_tienda_copia/public/notification/'+id;
+            // let url = '/lorgeliz_tienda_copia/public/notification/'+id;
+            let url = 'http://dev.lorenzogeliztienda.com/notification/' + id;
+
             axios.put(url).then(response => {
                 window.location.href = ruta;
             });   
         }
     },
     created() {
-        axios.get('/lorgeliz_tienda_copia/public/notification').then(response => {
+        let url = 'http://dev.lorenzogeliztienda.com/notification';
+
+        axios.get(url).then(response => {
           this.notifications = response.data;
         }).catch(function(error){
            console.log(error)

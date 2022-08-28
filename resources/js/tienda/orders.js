@@ -7,11 +7,17 @@ const order = new Vue({
 
   methods: {
     imprimir(id) {
-      window.open('/lorgeliz_tienda_copia/public/pedidos/show/pdf/' + id + ',' + '_blank');
+      // let url = '/lorgeliz_tienda_copia/public/pedidos/show/pdf/' + id + ',' + '_blank';
+
+      let url = 'http://dev.lorenzogeliztienda.com/pedidos/show/pdf/';
+
+      window.open(url + id + ',' + '_blank');
     },
 
     store(producto, venta, cantidad) {
-      let url = '/lorgeliz_tienda_copia/public/devoluciones';
+      // let url = '/lorgeliz_tienda_copia/public/devoluciones';
+
+      let url = 'http://dev.lorenzogeliztienda.com/devoluciones';
 
       axios.post(url, {
         'producto': producto,
