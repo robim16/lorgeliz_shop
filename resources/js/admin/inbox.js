@@ -23,8 +23,7 @@ const notification = new Vue({
             localStorage.setItem('cliente', JSON.stringify(cliente));//guardamos el id del cliente para mostrar sus mensajes
 
             if (this.location != '/lorgeliz_tienda_copia/public/admin/chats') {
-                // window.location.href = `/lorgeliz_tienda_copia/public/admin/chats`;//redirigimos al index, los mensajes se filtraran con id del cliente
-                window.location.href = `http://dev.lorenzogeliztienda.com/admin/chats`;
+                window.location.href = `/lorgeliz_tienda_copia/public/admin/chats`;//redirigimos al index, los mensajes se filtraran con id del cliente
                 
             }
            
@@ -32,8 +31,8 @@ const notification = new Vue({
         },
 
         loadNotifications(){
-            // let url = '/lorgeliz_tienda_copia/public/admin/chats/messages';
-            let url = 'http://dev.lorenzogeliztienda.com/admin/chats/messages'
+            let url = '/lorgeliz_tienda_copia/public/admin/chats/messages';
+            
             axios.get(url).then(response => {
                 this.notifications=response.data.chats;
                 this.location = window.location.pathname;//se utiliza para obtener la url de las imágenes de los usuarios

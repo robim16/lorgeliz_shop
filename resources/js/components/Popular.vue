@@ -91,7 +91,12 @@
             this.productoPopular = this.productos;
             
             window.Echo.channel('add-product').listen('AddProductEvent', (e) => {
-                let product = e.data.product;
+
+                let product = e.data;
+
+
+                console.log(product.data.id)
+                
 
                 const index = this.productoPopular.findIndex(p => p.id == product.id);
 

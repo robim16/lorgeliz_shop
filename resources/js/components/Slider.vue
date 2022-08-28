@@ -143,6 +143,7 @@
             window.Echo.channel('add-product').listen('AddProductEvent', (e) => {
                let product = e.data;
             //    console.log(product.data.producto.slider_principal)
+                console.log(product.data.id)
                 
                 if (product.data.producto.slider_principal == 'Si') {
 

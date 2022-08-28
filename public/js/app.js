@@ -4234,7 +4234,8 @@ __webpack_require__.r(__webpack_exports__);
 
     this.productoPopular = this.productos;
     window.Echo.channel('add-product').listen('AddProductEvent', function (e) {
-      var product = e.data.product;
+      var product = e.data;
+      console.log(product.data.id);
 
       var index = _this2.productoPopular.findIndex(function (p) {
         return p.id == product.id;
@@ -4987,6 +4988,8 @@ __webpack_require__.r(__webpack_exports__);
 
     window.Echo.channel('add-product').listen('AddProductEvent', function (e) {
       var product = e.data; //    console.log(product.data.producto.slider_principal)
+
+      console.log(product.data.id);
 
       if (product.data.producto.slider_principal == 'Si') {
         var element = _this2.productoSlider.findIndex(function (p) {
@@ -73781,8 +73784,7 @@ var notification = new Vue({
       localStorage.setItem('cliente', JSON.stringify(cliente)); //guardamos el id del cliente para mostrar sus mensajes
 
       if (this.location != '/lorgeliz_tienda_copia/public/admin/chats') {
-        // window.location.href = `/lorgeliz_tienda_copia/public/admin/chats`;//redirigimos al index, los mensajes se filtraran con id del cliente
-        window.location.href = "http://dev.lorenzogeliztienda.com/admin/chats";
+        window.location.href = "/lorgeliz_tienda_copia/public/admin/chats"; //redirigimos al index, los mensajes se filtraran con id del cliente
       }
 
       this.readchat(chat);
@@ -73790,8 +73792,7 @@ var notification = new Vue({
     loadNotifications: function loadNotifications() {
       var _this = this;
 
-      // let url = '/lorgeliz_tienda_copia/public/admin/chats/messages';
-      var url = 'http://dev.lorenzogeliztienda.com/admin/chats/messages';
+      var url = '/lorgeliz_tienda_copia/public/admin/chats/messages';
       axios.get(url).then(function (response) {
         _this.notifications = response.data.chats;
         _this.location = window.location.pathname; //se utiliza para obtener la url de las imágenes de los usuarios
@@ -73918,15 +73919,15 @@ var inventarios = new Vue({
     producto: '',
     talla: 0,
     color: 0,
-    cantidad: '',
+    cantidad: 1,
     arrayTallas: [],
     arrayColores: [],
     operacion: ''
   },
   methods: {
     pdfInventarios: function pdfInventarios() {
-      // let url = '/lorgeliz_tienda_copia/public/admin/stock/listado';
-      var url = 'http://dev.lorenzogeliztienda.com/admin/stock/listado';
+      var url = '/lorgeliz_tienda_copia/public/admin/stock/listado'; // let url = 'http://dev.lorenzogeliztienda.com/admin/stock/listado'
+
       window.open(url);
     },
     selectProducto: function selectProducto() {
@@ -73946,9 +73947,9 @@ var inventarios = new Vue({
       var _this = this;
 
       this.talla = 0; // let url = '/lorgeliz_tienda_copia/public/admin/tallas/'+this.producto;
-      // let url = '/lorgeliz_tienda_copia/public/api/admin/tallas/'+this.producto;
 
-      var url = 'http://dev.lorenzogeliztienda.com/api/admin/tallas/' + this.producto;
+      var url = '/lorgeliz_tienda_copia/public/api/admin/tallas/' + this.producto; // let url = 'http://dev.lorenzogeliztienda.com/api/admin/tallas/' +this.producto;
+
       axios.get(url).then(function (response) {
         //   this.arrayTallas = response.data.tallas;
         _this.arrayTallas = response.data;
@@ -73958,9 +73959,9 @@ var inventarios = new Vue({
       var _this2 = this;
 
       this.color = 0; // let url = '/lorgeliz_tienda_copia/public/admin/colores/get/'+this.producto;
-      // let url = '/lorgeliz_tienda_copia/public/api/admin/colores/'+this.producto;
 
-      var url = 'http://dev.lorenzogeliztienda.com/api/admin/colores/' + this.producto;
+      var url = '/lorgeliz_tienda_copia/public/api/admin/colores/' + this.producto; // let url = 'http://dev.lorenzogeliztienda.com/api/admin/colores/'+this.producto;
+
       axios.get(url).then(function (response) {
         //   this.arrayColores = response.data.colores;
         _this2.arrayColores = response.data;
@@ -73970,10 +73971,11 @@ var inventarios = new Vue({
       // let url = 'http://dev.lorenzogeliztienda.com/admin/stock';
       var url = '/lorgeliz_tienda_copia/public/admin/stock';
       axios.post(url, {
-        'producto': this.producto,
-        'talla': this.talla,
-        'color': this.color,
-        'cantidad': this.cantidad
+        'producto_id': this.producto,
+        'talla_id': this.talla,
+        'color_id': this.color,
+        'cantidad': this.cantidad,
+        'operacion': this.operacion
       }).then(function (response) {//    console.log(response)
       })["catch"](function (error) {
         console.log(error.response.data);
@@ -74153,8 +74155,7 @@ var app = new Vue({
   },
   methods: {
     readNotification: function readNotification(id, ruta) {
-      // let url = '/lorgeliz_tienda_copia/public/admin/notification/'+id;
-      var url = 'http://dev.lorenzogeliztienda.com/admin/notification/' + id;
+      var url = '/lorgeliz_tienda_copia/public/admin/notification/' + id;
       axios.put(url).then(function (response) {
         window.location.href = ruta;
       });
@@ -74164,8 +74165,7 @@ var app = new Vue({
     var _this = this;
 
     // let url = '/lorgeliz_tienda_copia/public/api/admin/notifications';
-    // let url = '/lorgeliz_tienda_copia/public/admin/notification'
-    var url = 'http://dev.lorenzogeliztienda.com/admin/notification';
+    var url = '/lorgeliz_tienda_copia/public/admin/notification';
     axios.get(url).then(function (response) {
       _this.notifications = response.data;
     })["catch"](function (error) {
@@ -75885,8 +75885,8 @@ if (document.getElementById('app')) {
     data: {
       keyword: '',
       location: '',
-      ruta: 'http://dev.lorenzogeliztienda.com' // ruta: '/lorgeliz_tienda_copia/public'
-
+      // ruta: 'http://dev.lorenzogeliztienda.com'
+      ruta: '/lorgeliz_tienda_copia/public'
     },
     methods: {
       setCategoria: function setCategoria(categoria) {
@@ -76066,8 +76066,7 @@ if (token) {
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js"); //descomentar
 
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
-  // authEndpoint : 'http://localhost/lorgeliz_tienda_copia/public/broadcasting/auth',
-  authEndpoint: 'http://dev.lorenzogeliztienda.com/broadcasting/auth',
+  authEndpoint: 'http://localhost/lorgeliz_tienda_copia/public/broadcasting/auth',
   broadcaster: 'pusher',
   key: "395d78638e3ae29a21e8",
   cluster: "us2",

@@ -33,8 +33,8 @@ if (document.getElementById('app')) {
         data: {
             keyword: '',
             location: '',
-            ruta: 'http://dev.lorenzogeliztienda.com'
-            // ruta: '/lorgeliz_tienda_copia/public'
+            // ruta: 'http://dev.lorenzogeliztienda.com'
+            ruta: '/lorgeliz_tienda_copia/public'
         }, 
         methods:{
             setCategoria(categoria){
