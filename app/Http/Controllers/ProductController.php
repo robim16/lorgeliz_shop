@@ -65,7 +65,7 @@ class ProductController extends Controller
             
         return response()->json($response);
 
-        // broadcast(new VisitEvent());
+        broadcast(new VisitEvent());
 
     }
 
