@@ -148,7 +148,9 @@ class ProductController extends Controller
     
                     // $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
 
-                    $path = "imagenes/productos/producto/".$producto->id."/".$nombre;
+                    // $path = "imagenes/productos/producto/".$producto->id."/".$nombre;
+
+                    $path = "imagenes/productos/producto_".$producto->id."/".$nombre;
 
                     Storage::disk('public')->put($path, $image->stream());
 
@@ -424,7 +426,9 @@ class ProductController extends Controller
     
                     // $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
 
-                    $path = "imagenes/productos/producto/".$producto_id."/".$nombre;
+                    // $path = "imagenes/productos/producto/".$producto_id."/".$nombre;
+
+                    $path = "imagenes/productos/producto_".$producto->id."/".$nombre;
 
                     Storage::disk('public')->put($path, $image->stream());
 
@@ -607,7 +611,9 @@ class ProductController extends Controller
     
                     // $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
 
-                    $path = "imagenes/productos/producto/".$producto->id."/".$nombre;
+                    // $path = "imagenes/productos/producto/".$producto->id."/".$nombre;
+
+                    $path = "imagenes/productos/producto_".$producto->id."/".$nombre;
 
                     Storage::disk('public')->put($path, $image->stream());
 
