@@ -74,6 +74,15 @@
                 });
             
         	},
+
+            setSubcategoria(subcategoria){
+                localStorage.setItem('subcategory', JSON.stringify(subcategoria));
+                // window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
+
+                window.location.href = `${this.ruta}/categorias`;
+            }
+
+            
         },
 
         filters: {
