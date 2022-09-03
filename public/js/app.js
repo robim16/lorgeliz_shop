@@ -73772,8 +73772,8 @@ var notification = new Vue({
   methods: {
     readchat: function readchat(chat) {
       //marca como leído el mensaje
-      // let url = '/lorgeliz_tienda_copia/public/admin/chats/read/'+chat;
-      var url = 'http://dev.lorenzogeliztienda.com/admin/chats/read/' + chat;
+      var url = '/lorgeliz_tienda_copia/public/admin/chats/read/' + chat; // let url = 'http://dev.lorenzogeliztienda.com/admin/chats/read/'+chat;
+
       axios.put(url).then(function (response) {});
     },
     initChat: function initChat(cliente, chat) {
@@ -73781,8 +73781,8 @@ var notification = new Vue({
       localStorage.setItem('cliente', JSON.stringify(cliente)); //guardamos el id del cliente para mostrar sus mensajes
 
       if (this.location != '/lorgeliz_tienda_copia/public/admin/chats') {
-        // window.location.href = `/lorgeliz_tienda_copia/public/admin/chats`;//redirigimos al index, los mensajes se filtraran con id del cliente
-        window.location.href = "http://dev.lorenzogeliztienda.com/admin/chats";
+        window.location.href = "/lorgeliz_tienda_copia/public/admin/chats"; //redirigimos al index, los mensajes se filtraran con id del cliente
+        // window.location.href = `http://dev.lorenzogeliztienda.com/admin/chats`;
       }
 
       this.readchat(chat);
@@ -73790,8 +73790,8 @@ var notification = new Vue({
     loadNotifications: function loadNotifications() {
       var _this = this;
 
-      // let url = '/lorgeliz_tienda_copia/public/admin/chats/messages';
-      var url = 'http://dev.lorenzogeliztienda.com/admin/chats/messages';
+      var url = '/lorgeliz_tienda_copia/public/admin/chats/messages'; // let url = 'http://dev.lorenzogeliztienda.com/admin/chats/messages'
+
       axios.get(url).then(function (response) {
         _this.notifications = response.data.chats;
         _this.location = window.location.pathname; //se utiliza para obtener la url de las imágenes de los usuarios
@@ -73918,14 +73918,13 @@ var inventarios = new Vue({
     producto: '',
     talla: 0,
     color: 0,
-    cantidad: '',
+    cantidad: 1,
     arrayTallas: [],
     arrayColores: [],
     operacion: ''
   },
   methods: {
     pdfInventarios: function pdfInventarios() {
-      // let url = '/lorgeliz_tienda_copia/public/admin/stock/listado';
       var url = 'http://dev.lorenzogeliztienda.com/admin/stock/listado';
       window.open(url);
     },
@@ -73946,7 +73945,6 @@ var inventarios = new Vue({
       var _this = this;
 
       this.talla = 0; // let url = '/lorgeliz_tienda_copia/public/admin/tallas/'+this.producto;
-      // let url = '/lorgeliz_tienda_copia/public/api/admin/tallas/'+this.producto;
 
       var url = 'http://dev.lorenzogeliztienda.com/api/admin/tallas/' + this.producto;
       axios.get(url).then(function (response) {
@@ -73958,7 +73956,6 @@ var inventarios = new Vue({
       var _this2 = this;
 
       this.color = 0; // let url = '/lorgeliz_tienda_copia/public/admin/colores/get/'+this.producto;
-      // let url = '/lorgeliz_tienda_copia/public/api/admin/colores/'+this.producto;
 
       var url = 'http://dev.lorenzogeliztienda.com/api/admin/colores/' + this.producto;
       axios.get(url).then(function (response) {
@@ -73967,13 +73964,13 @@ var inventarios = new Vue({
       });
     },
     ingresarStock: function ingresarStock() {
-      // let url = 'http://dev.lorenzogeliztienda.com/admin/stock';
-      var url = '/lorgeliz_tienda_copia/public/admin/stock';
+      var url = 'http://dev.lorenzogeliztienda.com/admin/stock';
       axios.post(url, {
-        'producto': this.producto,
-        'talla': this.talla,
-        'color': this.color,
-        'cantidad': this.cantidad
+        'producto_id': this.producto,
+        'talla_id': this.talla,
+        'color_id': this.color,
+        'cantidad': this.cantidad,
+        'operacion': this.operacion
       }).then(function (response) {//    console.log(response)
       })["catch"](function (error) {
         console.log(error.response.data);
@@ -76364,7 +76361,9 @@ var factura = new Vue({
   data: {},
   methods: {
     pdfVenta: function pdfVenta(id) {
-      window.open('/lorgeliz_tienda_copia/public/pedidos/factura/' + id + ',' + '_blank');
+      // window.open('/lorgeliz_tienda_copia/public/pedidos/factura/'+ id + ',' + '_blank');
+      var url = 'http://dev.lorenzogeliztienda.com/pedidos/factura/';
+      window.open(url + id + ',' + '_blank');
     }
   }
 });
@@ -76433,7 +76432,8 @@ var notification = new Vue({
   computed: {},
   methods: {
     readNotification: function readNotification(id, ruta) {
-      var url = '/lorgeliz_tienda_copia/public/notification/' + id;
+      // let url = '/lorgeliz_tienda_copia/public/notification/'+id;
+      var url = 'http://dev.lorenzogeliztienda.com/notification/' + id;
       axios.put(url).then(function (response) {
         window.location.href = ruta;
       });
@@ -76442,7 +76442,8 @@ var notification = new Vue({
   created: function created() {
     var _this = this;
 
-    axios.get('/lorgeliz_tienda_copia/public/notification').then(function (response) {
+    var url = 'http://dev.lorenzogeliztienda.com/notification';
+    axios.get(url).then(function (response) {
       _this.notifications = response.data;
     })["catch"](function (error) {
       console.log(error);
@@ -76470,10 +76471,13 @@ var order = new Vue({
   },
   methods: {
     imprimir: function imprimir(id) {
-      window.open('/lorgeliz_tienda_copia/public/pedidos/show/pdf/' + id + ',' + '_blank');
+      // let url = '/lorgeliz_tienda_copia/public/pedidos/show/pdf/' + id + ',' + '_blank';
+      var url = 'http://dev.lorenzogeliztienda.com/pedidos/show/pdf/';
+      window.open(url + id + ',' + '_blank');
     },
     store: function store(producto, venta, cantidad) {
-      var url = '/lorgeliz_tienda_copia/public/devoluciones';
+      // let url = '/lorgeliz_tienda_copia/public/devoluciones';
+      var url = 'http://dev.lorenzogeliztienda.com/devoluciones';
       axios.post(url, {
         'producto': producto,
         'venta': venta,
