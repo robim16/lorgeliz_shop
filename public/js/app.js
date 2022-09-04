@@ -73924,7 +73924,8 @@ var inventarios = new Vue({
     cantidad: 1,
     arrayTallas: [],
     arrayColores: [],
-    operacion: ''
+    operacion: '',
+    alertShow: false
   },
   methods: {
     pdfInventarios: function pdfInventarios() {
@@ -73937,6 +73938,7 @@ var inventarios = new Vue({
       var param = arguments.length > 1 ? arguments[1] : undefined;
       //recibe una instancia de producto
       // this.producto =  data['id'];//se accede a las propiedades como un array
+      this.alertShow = false;
       this.producto = data['color_producto']['producto_id'];
       this.operacion = param;
       this.getTallas();
@@ -73970,6 +73972,8 @@ var inventarios = new Vue({
       });
     },
     ingresarStock: function ingresarStock() {
+      var _this3 = this;
+
       // let url = 'http://dev.lorenzogeliztienda.com/admin/stock';
       var url = '/lorgeliz_tienda_copia/public/admin/stock';
       axios.post(url, {
@@ -73978,7 +73982,10 @@ var inventarios = new Vue({
         'color_id': this.color,
         'cantidad': this.cantidad,
         'operacion': this.operacion
-      }).then(function (response) {//    console.log(response)
+      }).then(function (response) {
+        if (response.data.data == 'success') {
+          _this3.alertShow = true;
+        }
       })["catch"](function (error) {
         console.log(error.response.data);
 

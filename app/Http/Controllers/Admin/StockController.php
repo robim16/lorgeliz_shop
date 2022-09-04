@@ -115,9 +115,12 @@ class StockController extends Controller
     
             $product['data'] = $colorproducto;
             
-            broadcast(new AddProductEvent($product));
+            // broadcast(new AddProductEvent($product));
+
     
-            return back();
+            $response = ['data' => 'success'];
+            
+            return response()->json($response);
 
 
         } catch (\Exception $e) {
