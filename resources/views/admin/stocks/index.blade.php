@@ -39,9 +39,8 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                            <button type="button" id="new" class="m-2 float-right btn btn-primary"
-                                data-toggle="modal" data-target="#modalStock" @click.prevent="reset"><i
-                                    class="far fa-plus-square"></i>
+                            <button type="button" id="new" class="m-2 float-right btn btn-primary" data-toggle="modal"
+                                data-target="#modalStock" @click.prevent="reset"><i class="far fa-plus-square"></i>
                                 Nuevo</button>
                             <table class="table table-head-fixed">
                                 <thead>
@@ -57,50 +56,46 @@
                                 </thead>
                                 <tbody>
 
-                                    {{-- @foreach ($productos as $producto)
+                                {{-- @foreach ($productos as $producto)
 
-                                        <tr>
-                                            <td>{{ $producto->id }}</td>
-                                            <td>{{ $producto->nombre }}</td>
-                                            <td> <a href="{{ route('producto.show', $producto->slug) }}"> 
-                                                @foreach (\App\Imagene::where('imageable_type', 'App\ColorProducto')->where('imageable_id', $producto->cop)->pluck('url', 'id')->take(1)
-                                                    as $id => $imagen)    
-                                                <img src="{{ url('storage/' . $imagen) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
-                                                @endforeach
-                                                </a>
-                                            </td>
-                                            <td>{{ $producto->talla }}</td>
-                                            <td>{{ $producto->color }}</td>
-                                            <td>{{ $producto->stock }}</td>
-                                            <td><a href="" class="btn btn-success" data-toggle="modal" data-target="#modalStock" v-on:click.prevent="selectProducto({{$producto}})"> <i class="far fa-plus-square"></i></a></td>
-                                        </tr>
-                                            
-                                    @endforeach --}}
+                                <tr>
+                                    <td>{{ $producto->id }}</td>
+                                    <td>{{ $producto->nombre }}</td>
+                                    <td> <a href="{{ route('producto.show', $producto->slug) }}"> 
+                                        @foreach (\App\Imagene::where('imageable_type', 'App\ColorProducto')->where('imageable_id', $producto->cop)->pluck('url', 'id')->take(1)
+                                        as $id => $imagen)    
+                                        <img src="{{ url('storage/' . $imagen) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
+                                        @endforeach
+                                        </a>
+                                    </td>
+                                    <td>{{ $producto->talla }}</td>
+                                    <td>{{ $producto->color }}</td>
+                                    <td>{{ $producto->stock }}</td>
+                                    <td><a href="" class="btn btn-success" data-toggle="modal" data-target="#modalStock" v-on:click.prevent="selectProducto({{$producto}})"> <i class="far fa-plus-square"></i></a></td>
+                                </tr>
+                                    
+                                @endforeach --}}
 
                                     @foreach ($productos as $producto)
                                         <tr>
                                             <td>{{ $producto->colorProducto->producto->id }}</td>
                                             <td>{{ $producto->colorProducto->producto->nombre }}</td>
-                                            <td> 
-                                                <a href="{{ route('productos.show', $producto->colorProducto->slug) }}">
+                                            <td> <a href="{{ route('productos.show', $producto->colorProducto->slug) }}">
                                                     <img src="{{ url('storage/' . $producto->colorProducto->imagenes[0]->url) }}"
-                                                        alt="" style="height: 50px; width: 50px;"
-                                                        class="rounded-circle">
+                                                        alt="" style="height: 50px; width: 50px;" class="rounded-circle">
                                                 </a>
                                             </td>
                                             <td>{{ $producto->talla->nombre }}</td>
                                             <td>{{ $producto->colorProducto->color->nombre }}</td>
                                             <td>{{ $producto->stock }}</td>
                                             <td>
-                                                <a href="" class="btn btn-success" data-toggle="modal"
-                                                    data-target="#modalStock" title="aumentar inventario"
-                                                    @click.prevent="selectProducto({{ $producto }}, 1)">
-                                                    <i class="bi bi-bag-plus-fill"></i></a>
-
-                                                <a href="" class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#modalStock" title="disminuir inventario"
-                                                    @click.prevent="selectProducto({{ $producto }}, 2)">
-                                                    <i class="bi bi-dash-circle-fill"></i></a>
+                                                <a href="" class="btn btn-success" data-toggle="modal" data-target="#modalStock" title="aumentar inventario"
+                                                @click.prevent="selectProducto({{$producto}}, 1)">
+                                                 <i class="bi bi-bag-plus-fill"></i></a>
+                                                 
+                                                <a href="" class="btn btn-danger" data-toggle="modal" data-target="#modalStock" title="disminuir inventario"
+                                                @click.prevent="selectProducto({{$producto}}, 2)">
+                                                 <i class="bi bi-dash-circle-fill"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -217,7 +212,7 @@
                                 <label class="col-md-3 form-control-label" for="text-input">Cantidad</label>
                                 <div class="col-md-9">
                                     <input type="number" id="cantidad" name="cantidad" class="form-control"
-                                        placeholder="Cantidad" v-model="cantidad>
+                                        placeholder="Cantidad" v-model="cantidad">
                                 </div>
 
                                 {{-- @if ($errors->has('cantidad'))
