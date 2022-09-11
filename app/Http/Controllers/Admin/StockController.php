@@ -45,16 +45,22 @@ class StockController extends Controller
         // ->orderBy('productos.id')
         // ->paginate(5);
 
-        $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
-            $query->where('activo', 'Si');
-        })
-        ->with(['talla', 'colorProducto'])//faltan los filtros
-        ->where('stock', '>', '0')
-        ->orderBy('color_producto_id')
-        ->paginate(5);
+        try {
 
-
-        return view('admin.stocks.index',compact('productos'));
+            $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
+                $query->where('activo', 'Si');
+            })
+            ->with(['talla', 'colorProducto'])//faltan los filtros
+            ->where('stock', '>', '0')
+            ->orderBy('color_producto_id')
+            ->paginate(5);
+    
+    
+            return view('admin.stocks.index',compact('productos'));
+          
+        } catch (\Exception $e) {
+            //throw $th;
+        }
 
     }
 

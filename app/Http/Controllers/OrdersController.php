@@ -54,12 +54,12 @@ class OrdersController extends Controller
         try {
            
             $pedidos = Venta::with(['pedido', 'factura'])
-            ->orWhere('valor','like',"%$busqueda%")
-            ->where('cliente_id', auth()->user()->cliente->id)
-            // ->where('estado', '!=', 3)
-            ->estado()
-            ->orderBy('created_at', 'DESC')
-            ->paginate(5);
+                ->orWhere('valor','like',"%$busqueda%")
+                ->where('cliente_id', auth()->user()->cliente->id)
+                // ->where('estado', '!=', 3)
+                ->estado()
+                ->orderBy('created_at', 'DESC')
+                ->paginate(5);
             
             return view('user.orders.index', compact('pedidos'));
 

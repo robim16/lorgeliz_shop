@@ -60,26 +60,33 @@ class TallaController extends Controller
 
     public function store(Request $request)
     {
-        $tipo = Tipo::where('id', $request->tipo_id)->firstOrFail();
 
-        $tallas = $request->tallas_id;
-
-        if ($tallas) {
-
-            $tipo->tallas()->detach();
-            foreach($tallas as $talla){
-                $tipo->tallas()->attach($talla);
+        try {
+            
+            $tipo = Tipo::where('id', $request->tipo_id)->firstOrFail();
+    
+            $tallas = $request->tallas_id;
+    
+            if ($tallas) {
+    
+                $tipo->tallas()->detach();
+                foreach($tallas as $talla){
+                    $tipo->tallas()->attach($talla);
+                }
+                
+                session()->flash('message', ['success', ("Se han creado las tallas")]);
+    
+                return back();
+            }else {
+                session()->flash('message', ['danger', ("Debes indicar las tallas")]);
+    
+                return back();
             }
             
-            session()->flash('message', ['success', ("Se han creado las tallas")]);
-
-            return back();
-        }else {
-            session()->flash('message', ['danger', ("Debes indicar las tallas")]);
-
-            return back();
+        } catch (\Exception $e) {
+            //throw $th;
         }
-       
+        
     }
 }
 

@@ -60,31 +60,44 @@ class PaymentController extends Controller
 
     public function printPay(Request $request, $id)
     {
-        $pago = Pago::where('pagos.id', $id)
-        ->orderBy('pagos.fecha', 'DESC')
-        ->first();
+        try {
+           
+            $pago = Pago::where('pagos.id', $id)
+            ->orderBy('pagos.fecha', 'DESC')
+            ->first();
+    
+            $pdf = \PDF::loadView('admin.pdf.pago',['pago'=>$pago])
+            ->setPaper('a4', 'landscape');
+            
+            return $pdf->download('pago-'.$pago->id.'.pdf');
 
-        $pdf = \PDF::loadView('admin.pdf.pago',['pago'=>$pago])
-        ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('pago-'.$pago->id.'.pdf');
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
     }
 
     public function pdfPagosReporte()
     {
-        $pagos = Pago::orderBy('pagos.fecha')
-        ->get();
-
-        $count = 0;
-        foreach ($pagos as $pago) {
-            // $count = $count + 1;
-            $count += 1;
+        try {
+            
+            $pagos = Pago::orderBy('pagos.fecha')
+            ->get();
+    
+            $count = 0;
+            foreach ($pagos as $pago) {
+                // $count = $count + 1;
+                $count += 1;
+            }
+    
+            $pdf = \PDF::loadView('admin.pdf.listadopagos',['pagos'=>$pagos, 'count'=>$count])
+            ->setPaper('a4', 'landscape');
+            
+            return $pdf->download('listadopagos.pdf');
+            
+        } catch (\Exception $e) {
+            //throw $th;
         }
-
-        $pdf = \PDF::loadView('admin.pdf.listadopagos',['pagos'=>$pagos, 'count'=>$count])
-        ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('listadopagos.pdf');
     }
 
     public function anular(Pago $pago)

@@ -53,21 +53,28 @@ class VentaController extends Controller
         //     ->paginate(5);
         // }
 
-        $ventas = Venta::when($estado, function ($query) use ($estado) {
-            return $query->orWhere('estado', $estado)
-            ->with('cliente');
-        },
-        function ($query) use ($busqueda) {
-            return $query->orWhere('valor', 'like',"%$busqueda%")
-            ->orWhereHas('cliente.user', function (Builder $query)  use ($busqueda)  {
-                $query->where('nombres', 'like',"%$busqueda%");
-            });
-        })
-        ->orderBy('id', 'DESC')
-        ->paginate(5);
-        
+        try {
+            
+            $ventas = Venta::when($estado, function ($query) use ($estado) {
+                return $query->orWhere('estado', $estado)
+                ->with('cliente');
+            },
+            function ($query) use ($busqueda) {
+                return $query->orWhere('valor', 'like',"%$busqueda%")
+                ->orWhereHas('cliente.user', function (Builder $query)  use ($busqueda)  {
+                    $query->where('nombres', 'like',"%$busqueda%");
+                });
+            })
+            ->orderBy('id', 'DESC')
+            ->paginate(5);
+            
+    
+            return view('admin.ventas.index', compact('ventas'));
 
-        return view('admin.ventas.index', compact('ventas'));
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
     }
 
     public function show($id)
@@ -81,29 +88,36 @@ class VentaController extends Controller
         // ->where('ventas.id', $id)
         // ->firstOrFail();
 
-        $venta = Venta::with('cliente.user', 'factura')
-        ->where('id', $id)
-        ->firstOrFail();
+        try {
+            
+            $venta = Venta::with('cliente.user', 'factura')
+            ->where('id', $id)
+            ->firstOrFail();
 
-        $pagos = $venta->pagos()->select('*', DB::raw('SUM(monto) as total'))
-        ->orderBy('pagos.fecha', 'DESC')
-        ->paginate(5);
+            $pagos = $venta->pagos()->select('*', DB::raw('SUM(monto) as total'))
+            ->orderBy('pagos.fecha', 'DESC')
+            ->paginate(5);
 
 
-        $devoluciones = $venta->devoluciones()->paginate(5);
+            $devoluciones = $venta->devoluciones()->paginate(5);
 
-        $valor_devolucion = 0;
+            $valor_devolucion = 0;
 
-        foreach ($devoluciones as $devolucion) {
-            $valor_devolucion += $devolucion->productoReferencia->colorProducto->producto->precio_actual;
-        };
+            foreach ($devoluciones as $devolucion) {
+                $valor_devolucion += $devolucion->productoReferencia->colorProducto->producto->precio_actual;
+            };
 
-        $devolucion =  new DevolucionController();
+            $devolucion =  new DevolucionController();
 
-        $estados = $devolucion->estados_devolucion();
+            $estados = $devolucion->estados_devolucion();
 
-        return view('admin.ventas.show', compact('venta', 'pagos', 'valor_devolucion',
-        'devoluciones', 'estados'));
+            return view('admin.ventas.show', compact('venta', 'pagos', 'valor_devolucion',
+            'devoluciones', 'estados'));
+
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
     }
 
     public function anular(Venta $venta)
@@ -148,29 +162,36 @@ class VentaController extends Controller
 
     public function registrarPago(Request $request, Venta $venta)
     {
-        $valor = $request->valor;
-        
-        if ($venta->saldo == $valor) {
-            $venta->estado = 1;
+
+        try {
+           
+            $valor = $request->valor;
+            
+            if ($venta->saldo == $valor) {
+                $venta->estado = 1;
+            }
+            else{
+                $venta->estado = 2;
+            }
+    
+            $venta->saldo = $venta->saldo - $valor;
+            $venta->save();
+    
+            $total = $request->valor;
+            $venta_id = $venta->id;
+            $x_ref_payco = 0;
+            $x_cod_response = 1;
+    
+            $payment =  new PaymentController();
+            $payment->store($x_ref_payco, $total, $venta_id, $x_cod_response);// se envían las variables al método store de pagos
+    
+            session()->flash('message', ['success', ("Se ha registrado el pago exitosamente")]);
+    
+            return back();
+
+        } catch (\Exception $e) {
+            //throw $th;
         }
-        else{
-            $venta->estado = 2;
-        }
-
-        $venta->saldo = $venta->saldo - $valor;
-        $venta->save();
-
-        $total = $request->valor;
-        $venta_id = $venta->id;
-        $x_ref_payco = 0;
-        $x_cod_response = 1;
-
-        $payment =  new PaymentController();
-        $payment->store($x_ref_payco, $total, $venta_id, $x_cod_response);// se envían las variables al método store de pagos
-
-        session()->flash('message', ['success', ("Se ha registrado el pago exitosamente")]);
-
-        return back();
     }
 
     public function listadoVentasPdf()
@@ -183,19 +204,25 @@ class VentaController extends Controller
         // ->orderBy('ventas.id', 'DESC')
         // ->get();
 
-        $ventas = Venta::with('cliente.user')
-        ->orderBy('id', 'DESC')
-        ->get();
+        try {
+            
+            $ventas = Venta::with('cliente.user')
+            ->orderBy('id', 'DESC')
+            ->get();
+    
+            $count = 0;
+            foreach ($ventas as $venta) {
+                $count += 1;
+            }
+    
+            $pdf = \PDF::loadView('admin.pdf.listadoventas',['ventas'=>$ventas, 'count'=>$count])
+            ->setPaper('a4', 'landscape');
+            
+            return $pdf->download('listadoventas.pdf');
 
-        $count = 0;
-        foreach ($ventas as $venta) {
-            $count += 1;
+        } catch (\Exception $e) {
+            //throw $th;
         }
-
-        $pdf = \PDF::loadView('admin.pdf.listadoventas',['ventas'=>$ventas, 'count'=>$count])
-        ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('listadoventas.pdf');
 
     }
 
@@ -225,12 +252,18 @@ class VentaController extends Controller
         // $pdf = \PDF::loadView('admin.pdf.venta',['productos'=>$productos,'users'=>$users]);
         // return $pdf->download('factura-'.$users[0]->consecutivo.'.pdf');
 
-        $productos = ProductoVenta::where('venta_id', $id)
-        ->with('venta', 'productoReferencia')
-        ->get();
+        try {
+         
+            $productos = ProductoVenta::where('venta_id', $id)
+            ->with('venta', 'productoReferencia')
+            ->get();
+    
+            $pdf = \PDF::loadView('admin.pdf.venta',['productos'=>$productos]);
+            return $pdf->download('factura-'.$productos[0]->venta->factura->consecutivo.'.pdf');
 
-        $pdf = \PDF::loadView('admin.pdf.venta',['productos'=>$productos]);
-        return $pdf->download('factura-'.$productos[0]->venta->factura->consecutivo.'.pdf');
+        } catch (\Exception $e) {
+            //throw $th;
+        }
 
     }
 

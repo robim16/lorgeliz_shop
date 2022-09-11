@@ -68,74 +68,90 @@ class ClienteController extends Controller
         // ->select('pedidos.id','pedidos.fecha', 'ventas.valor', 'facturas.prefijo','facturas.consecutivo')
         // ->paginate(10);
 
-        $pedidos = Venta::with(['pedido', 'factura', 'cliente.user.imagene'])
-        ->where('cliente_id', $id)
-        // ->where('estado', '!=', '3')
-        ->estado()
-        ->paginate(10);
+        try {
+           
+            $pedidos = Venta::with(['pedido', 'factura', 'cliente.user.imagene'])
+            ->where('cliente_id', $id)
+            // ->where('estado', '!=', '3')
+            ->estado()
+            ->paginate(10);
+    
+            $total = 0;
+    
+            foreach ($pedidos as $key => $value) {
+              $total = $total + $value->valor;
+            }
+            
+            return view('admin.clientes.show', compact('pedidos', 'total'));
 
-        $total = 0;
-
-        foreach ($pedidos as $key => $value) {
-          $total = $total + $value->valor;
+        } catch (\Exception $e) {
+            //throw $th;
         }
-
-        // return $pedidos;
-
-        // return view('admin.clientes.show', compact('cliente','pedidos', 'total'));
-        return view('admin.clientes.show', compact('pedidos', 'total'));
 
     }
 
     public function sendMessage()
     {
-        $info = \request('info');
-        $data = [];
-        parse_str($info, $data);
-
+        
         // $cliente = User::join('clientes', 'users.id', '=', 'clientes.user_id')
         // ->where('clientes.id', $data['cliente_id'])
         // ->select('users.*')
         // ->first();
-
-        $cliente = Cliente::with('user')
-        ->where('id', $data['cliente_id'])
-        ->first();
-
+        
+        
         try {
             
+            $info = \request('info');
+            $data = [];
+            parse_str($info, $data);
+
+
+            $cliente = Cliente::with('user')
+                ->where('id', $data['cliente_id'])
+                ->first();
+
+
             // Mail::to($cliente->email)->send(new ClientePrivateMail($cliente->nombres, $data['mensaje']));
             Mail::to($cliente->user->email)->send(new ClientePrivateMail($cliente->user->nombres, $data['mensaje']));
+            
             $success = true;
 
             
             // return new ClientePrivateMail($cliente->user->nombres, $data['mensaje']);
 
 
+            return response()->json(['response' => $success]);
+
         } catch (\Exception $exception) {
             $success = false;
         }
 
-        return response()->json(['response' => $success]);
     
     }
 
     public function pdfListadoClientes()
     {
-        $clientes = Cliente::join('users','clientes.user_id', '=', 'users.id')
-            ->select('clientes.id','users.nombres', 'users.apellidos','users.departamento',
-            'users.municipio','users.direccion','users.telefono','users.email')
-            ->paginate(10);
 
-        $count = 0;
-        foreach ($clientes as $cliente) {
-            $count = $count + 1;
+        try {
+           
+            $clientes = Cliente::join('users','clientes.user_id', '=', 'users.id')
+                ->select('clientes.id','users.nombres', 'users.apellidos','users.departamento',
+                'users.municipio','users.direccion','users.telefono','users.email')
+                ->paginate(10);
+    
+            $count = 0;
+            foreach ($clientes as $cliente) {
+                $count = $count + 1;
+            }
+    
+            $pdf = \PDF::loadView('admin.pdf.listadoclientes',['clientes'=>$clientes, 'count'=>$count])
+            ->setPaper('a4', 'landscape');
+            
+            return $pdf->download('listadoclientes.pdf');
+            
+        } catch (\Exception $e) {
+            //throw $th;
         }
-
-        $pdf = \PDF::loadView('admin.pdf.listadoclientes',['clientes'=>$clientes, 'count'=>$count])
-        ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('listadoclientes.pdf');
 
     }
 

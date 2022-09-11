@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ChatController extends Controller
 {
@@ -91,7 +92,7 @@ class ChatController extends Controller
             ];
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error en index de chats en admin'.'.Error:'.' '.json_encode($e));
         }
 
     }
@@ -150,7 +151,7 @@ class ChatController extends Controller
 
             // }
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error enviando el mensaje del admin'.'.Error:'.' '.json_encode($e));
         }
        
     }
@@ -185,7 +186,7 @@ class ChatController extends Controller
                 return $query->whereIn('chats.from_id', [$user, $cliente])
                 ->whereIn('chats.to_id', [$user, $cliente]);
             },
-            function ($query) {
+            function ($query) use ($cliente) {
                 return $query->where('chats.from_id', $cliente)
                 ->orWhere('chats.to_id',$cliente);
             })
@@ -225,7 +226,7 @@ class ChatController extends Controller
             return ['chats'=> $chats];
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error cargando el messenger del admin'.'.Error:'.' '.json_encode($e));
         }
 
     }
@@ -272,7 +273,7 @@ class ChatController extends Controller
             return ['chats'=> $chats];
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error obteniendo los últimos mensajes del admin'.'.Error:'.' '.json_encode($e));
         }
 
     }
@@ -305,7 +306,7 @@ class ChatController extends Controller
             }
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error leyendo el mensaje del admin'.'.Error:'.' '.json_encode($e));
         }
 
     }

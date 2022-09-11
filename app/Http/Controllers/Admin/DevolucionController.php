@@ -34,20 +34,28 @@ class DevolucionController extends Controller
     public function index()
     {
         //devoluciones en panel de admin
-        $devoluciones = Devolucione::with('venta.cliente.user')
         // join('ventas','devoluciones.venta_id','ventas.id')
         // ->join('clientes','ventas.cliente_id','clientes.id')
         // ->join('users','clientes.user_id','users.id')
         // ->select('devoluciones.id','devoluciones.estado', 'devoluciones.fecha', 'ventas.id as venta', 
         // 'users.nombres', 'users.apellidos'
         // ,'clientes.id as cliente')
-        ->orderBy('devoluciones.created_at','DESC')
-        ->paginate(5);
 
-        $estados = $this->estados_devolucion();
+        try {
+            
+            $devoluciones = Devolucione::with('venta.cliente.user')
+            ->orderBy('devoluciones.created_at','DESC')
+            ->paginate(5);
+    
+            $estados = $this->estados_devolucion();
+
+            return view('admin.devoluciones.index',compact('devoluciones', 'estados'));
+
+        } catch (\Exception $e) {
+            //throw $th;
+        }
         // return $devoluciones;
 
-        return view('admin.devoluciones.index',compact('devoluciones', 'estados'));
     }
 
     /**
@@ -77,12 +85,19 @@ class DevolucionController extends Controller
         // ->groupBy('color_producto.id')
         // ->paginate(5);
 
-        $producto_devolucion = Devolucione::with(['venta', 'productoReferencia'])
-        ->where('id', $id)
-        ->paginate(5);
-        
+        try {
+           
+            $producto_devolucion = Devolucione::with(['venta', 'productoReferencia'])
+            ->where('id', $id)
+            ->paginate(5);
+            
+    
+            return view('admin.devoluciones.show',compact('producto_devolucion'));
+            
+        } catch (\Exception $e) {
+            //throw $th;
+        }
 
-        return view('admin.devoluciones.show',compact('producto_devolucion'));
     }
 
     public function pdfListarDevoluciones(Request $request)

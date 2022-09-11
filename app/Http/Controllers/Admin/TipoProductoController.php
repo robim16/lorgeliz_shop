@@ -50,15 +50,22 @@ class TipoProductoController extends Controller
      */
     public function store(TipoRequest $request)
     {
-        $tipo = new Tipo();
-        $tipo->nombre = $request->nombre;
-        $tipo->descripcion = $request->descripcion;
-        $tipo->subcategoria_id = $request->subcategory_id;
 
-        $tipo->save();
+        try {
 
-        session()->flash('message', ['success', ("Se ha creado el tipo exitosamente")]);
-        return redirect()->route('tipo.index');
+            $tipo = new Tipo();
+            $tipo->nombre = $request->nombre;
+            $tipo->descripcion = $request->descripcion;
+            $tipo->subcategoria_id = $request->subcategory_id;
+    
+            $tipo->save();
+    
+            session()->flash('message', ['success', ("Se ha creado el tipo exitosamente")]);
+            return redirect()->route('tipo.index');
+
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     /**
@@ -95,16 +102,24 @@ class TipoProductoController extends Controller
     // public function update(TipoRequest $request, Tipo $tipo)
     public function update(TipoRequest $request, $id)
     {
-        $tipo = Tipo::where('id', $id)->firstOrFail();
+        try {
+            
+            $tipo = Tipo::where('id', $id)->firstOrFail();
+    
+            $tipo->nombre = $request->nombre;
+            $tipo->descripcion = $request->descripcion;
+            $tipo->subcategoria_id = $request->subcategory_id;
+    
+            $tipo->save();
+    
+            session()->flash('message', ['success', ("Se ha creado editado el tipo exitosamente")]);
 
-        $tipo->nombre = $request->nombre;
-        $tipo->descripcion = $request->descripcion;
-        $tipo->subcategoria_id = $request->subcategory_id;
+            return redirect()->route('tipo.index');
 
-        $tipo->save();
-
-        session()->flash('message', ['success', ("Se ha creado editado el tipo exitosamente")]);
-        return redirect()->route('tipo.index');
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+        
     }
 
 
@@ -128,7 +143,7 @@ class TipoProductoController extends Controller
             return redirect()->route('tipo.index');
         }
 
-        catch (\Exception $exception){
+        catch (\Exception $e){
 
             session()->flash('message', ['warning', ("No se puede eliminar la subcategoría porque está en uso")]);
 

@@ -54,15 +54,23 @@ class SubcategoryController extends Controller
      */
     public function store(SubcategoriaRequest $request)
     {
-        $subcategoria = new Subcategoria();
-        $subcategoria->nombre = $request->nombre;
-        $subcategoria->descripcion = $request->descripcion;
-        $subcategoria->categoria_id = $request->category_id;
+        try {
+           
+            $subcategoria = new Subcategoria();
+            $subcategoria->nombre = $request->nombre;
+            $subcategoria->descripcion = $request->descripcion;
+            $subcategoria->categoria_id = $request->category_id;
+    
+            $subcategoria->save();
+    
+            session()->flash('message', ['success', ("Se ha creado la subcategoría exitosamente")]);
 
-        $subcategoria->save();
+            return redirect()->route('subcategory.index');
 
-        session()->flash('message', ['success', ("Se ha creado la subcategoría exitosamente")]);
-        return redirect()->route('subcategory.index');
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+        
     }
 
     /**
@@ -85,7 +93,7 @@ class SubcategoryController extends Controller
      */
     public function edit($slug)
     {
-        $subcategoria= Subcategoria::where('slug',$slug)->firstOrFail();
+        $subcategoria = Subcategoria::where('slug',$slug)->firstOrFail();
         return view('admin.subcategorias.edit',compact('subcategoria'));
     }
 
@@ -99,16 +107,23 @@ class SubcategoryController extends Controller
     //public function update(SubcategoriaRequest $request, Subcategoria $subcategoria)
     public function update(SubcategoriaRequest $request, $id)
     {
-        $subcategoria = Subcategoria::where('id', $id)->first();
+        try {
+            
+            $subcategoria = Subcategoria::where('id', $id)->first();
+    
+            $subcategoria->nombre = $request->nombre;
+            $subcategoria->descripcion = $request->descripcion;
+            $subcategoria->categoria_id = $request->category_id;
+    
+            $subcategoria->save();
+    
+            session()->flash('message', ['success', ("Se ha actualizado la subcategoría exitosamente")]);
+    
+            return redirect()->route('subcategory.index');
 
-        $subcategoria->nombre = $request->nombre;
-        $subcategoria->descripcion = $request->descripcion;
-        $subcategoria->categoria_id = $request->category_id;
-
-        $subcategoria->save();
-
-        session()->flash('message', ['success', ("Se ha actualizado la subcategoría exitosamente")]);
-        return redirect()->route('subcategory.index');
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     /**
@@ -143,12 +158,18 @@ class SubcategoryController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
 
-        $id  = $request->categoria;
-        $subcategorias = Subcategoria::where('categoria_id', $id)->get(); 
-        
-        $response = ['data' => $subcategorias];
-        
-        return response()->json($response); //obtener subcategorias al crear un producto en admin
+        try {
+          
+            $id  = $request->categoria;
+            $subcategorias = Subcategoria::where('categoria_id', $id)->get(); 
+            
+            $response = ['data' => $subcategorias];
+            
+            return response()->json($response); //obtener subcategorias al crear un producto en admin
+
+        } catch (\Exception $e) {
+            //throw $th;
+        }
 
     }
 }

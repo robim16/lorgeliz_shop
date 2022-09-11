@@ -55,14 +55,20 @@ class DevolucionController extends Controller
         // ->orderBy('devoluciones.created_at','DESC')
         // ->paginate(5);
 
-        $productos = Devolucione::whereHas('venta',
-        function (Builder $query) {
-           $query->where('cliente_id', auth()->user()->cliente->id);
-        })
-        ->with(['venta', 'productoReferencia'])
-        ->paginate(5);
+        try {
+          
+            $productos = Devolucione::whereHas('venta',
+            function (Builder $query) {
+               $query->where('cliente_id', auth()->user()->cliente->id);
+            })
+            ->with(['venta', 'productoReferencia'])
+            ->paginate(5);
+    
+            return view('user.devoluciones.index',compact('productos'));
 
-        return view('user.devoluciones.index',compact('productos'));
+        } catch (\Exception $e) {
+           Log::debug('Error obteniendo las devoluciones del usuario'.'Error:'.' '.json_encode($e));
+        }
     }
 
     public function show(Request $request, $id)
