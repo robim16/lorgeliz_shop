@@ -61,7 +61,7 @@ Route::group(['prefix' => "/admin"], function ($router) {
 
     Route::group(['prefix' => '/tallas'], function () {
         Route::get('/{id}', 'Admin\Api\TallaController@index');
-        Route::get('/tipos/get', 'Admin\Api\TallaController@fetchTallasByTipo');
+        Route::get('/tipos/get', 'Admin\Api\TallaController@fetchTallasByTipo')->name('api.tallas.tipos');
     });
 
     Route::group(['prefix' => '/chats'], function () {
@@ -86,11 +86,11 @@ Route::group(['prefix' => "/admin"], function ($router) {
     });
 
     Route::group(['prefix' => '/subcategorias'], function () {
-        Route::get('/', 'Admin\Api\SubcategoryController@index');
+        Route::get('/', 'Admin\Api\SubcategoryController@index')->name('api.subcategorias.get');
     });
 
     Route::group(['prefix' => '/tipos'], function () {
-        Route::get('/', 'Admin\Api\TipoProductoController@index');
+        Route::get('/', 'Admin\Api\TipoProductoController@index')->name('api.tipos.get');
     });
 
 });

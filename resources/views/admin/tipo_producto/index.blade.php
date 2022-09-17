@@ -153,14 +153,14 @@
 
 @section('scripts')
 <!-- Select2 -->
-{{-- <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script> --}}
 {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
 
 <script>
 
 // $('#tallas_id').select2()
 
-//Initialize Select2 Elements
+// Initialize Select2 Elements
 // $('.select2bs4').select2({
 //     theme: 'bootstrap4'
 // });
@@ -171,6 +171,13 @@
 <script>
 
 $(document).ready(function () {
+
+    $.ajaxSetup({
+
+        headers: {
+            'X-CSRF-TOKEN': $("input[name= _token]").val()
+        }
+    });
 
     $('#tallas_id').select2()
 
@@ -195,10 +202,12 @@ $(document).ready(function () {
         $.ajax({
             type: "GET",
             // url: "route('talla.tipos'",
-            // url:'/lorgeliz_tienda_copia/public/api/admin/tallas/tipos/get',
-            url:'http://dev.lorenzogeliztienda.com/api/admin/tallas/tipos/get',
+            url:"{{ route('api.tallas.tipos') }}",
             data:{id:id},
             dataType: 'json',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             success: function (response) {
                 
                 // if (response.data[0] != null) {

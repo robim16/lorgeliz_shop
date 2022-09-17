@@ -187,8 +187,7 @@ class ProductController extends Controller
                 'activo' => $activo 
             ]);
 
-            $color_producto = ColorProducto::where('slug', $colorproducto->slug)
-                ->where('color_id', $colorproducto->color_id)
+            $color_producto = ColorProducto::where('color_id', $colorproducto->color_id)
                 ->where('producto_id', $colorproducto->producto_id)
                 ->first();
             
@@ -206,8 +205,7 @@ class ProductController extends Controller
 
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
 
-            Log::debug('Error creando el producto. producto: '.json_encode($producto).' '.'color_producto: '
-                .json_encode($color_producto));
+            Log::debug('Error creando el producto.Error: '.json_encode($e));
 
             return redirect()->back();
 
@@ -374,7 +372,7 @@ class ProductController extends Controller
 
             session()->flash('message', ['warning', ("ha ocurrido un error".$e)]);
 
-            Log::debug('Error actualizando el producto'.json_encode($producto));
+            Log::debug('Error actualizando el producto'.'Error: '.json_encode($e));
 
             return redirect()->back()
                 ->withInput($request->input());
@@ -451,8 +449,8 @@ class ProductController extends Controller
 
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
 
-            Log::debug('Error editando el color producto'.' '.'color_producto: '
-                .json_encode($producto));
+            Log::debug('Error editando el color producto'.'.Error: '
+                .json_encode($e));
 
             return redirect()->back();
 
@@ -520,12 +518,12 @@ class ProductController extends Controller
             
         }
 
-        catch (\Exception $exception){
+        catch (\Exception $e){
 
             session()->flash('message', ['warning', ("Ha ocurrido un error al eliminar el producto")]);
 
-            Log::debug('Error eliminando el color_producto: '
-                .json_encode($color));
+            Log::debug('Error eliminando el color_producto'.'Error: '
+                .json_encode($e));
 
             DB::rollBack();
 
@@ -549,7 +547,7 @@ class ProductController extends Controller
 
         } catch (\Exception $e) {
 
-            Log::debug('Error activando el color_producto: '.json_encode($color));
+            Log::debug('Error activando el color_producto.Error: '.json_encode($e));
 
             session()->flash('message', ['warning', ("Ha ocurrido un error al activar el producto")]);
 
@@ -651,7 +649,7 @@ class ProductController extends Controller
             
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
 
-            Log::debug('Error creando el color_producto: '.json_encode($colorproducto));
+            Log::debug('Error creando el color_producto.Error: '.json_encode($e));
 
             return back();
 
@@ -679,7 +677,7 @@ class ProductController extends Controller
 
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
 
-            Log::debug('Error eliminando la imagen: '.json_encode($image));
+            Log::debug('Error eliminando la imagen.Error: '.json_encode($e));
 
             return back();
 

@@ -29,7 +29,7 @@
             <div class="container-fluid">
                 <!-- SELECT2 EXAMPLE -->
 
-                <div class="card card-success">
+                {{-- <div class="card card-success">
                     <div class="card-header">
                         <h3 class="card-title">Datos generados automáticamente</h3>
 
@@ -67,7 +67,7 @@
                     <div class="card-footer">
 
                     </div>
-                </div>
+                </div> --}}
                 <!-- /.card -->
 
                 <div class="card card-info">
@@ -589,12 +589,15 @@
     <script>
         $(document).ready(function () {
             
-            $.ajaxSetup({
+            // $.ajaxSetup({
 
-                headers: {
-                    'X-CSRF-TOKEN': $("input[name= _token]").val()
-                }
-            });
+            //     headers: {
+            //         'X-CSRF-TOKEN': $("input[name= _token]").val()
+            //     }
+            // });
+
+            // $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': '<?= csrf_token() ?>' } });
+
 
             $(document).on('change', '#category_id', function(e) { 
                 e.preventDefault();
@@ -606,10 +609,13 @@
                     $.ajax({
                         type: "GET",
                         // "route('subcategory.get')",
-                        // url: '/lorgeliz_tienda_copia/public/api/admin/subcategorias',
-                        url: 'http://dev.lorenzogeliztienda.com/api/admin/subcategorias',
+                        // url: 'http://dev.lorenzogeliztienda.com/api/admin/subcategorias',
+                        url:"{{ route('api.subcategorias.get') }}",
                         data:{categoria:categoria},
                         dataType: 'json',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
                         success: function (response) {
                             
                             $('#subcategory_id').html('');
@@ -639,10 +645,13 @@
                     $.ajax({
                         type: "GET",
                         // url: "/lorgeliz_tienda_copia/public/api/admin/tipos",
-                        
-                        url: "http://dev.lorenzogeliztienda.com/api/admin/tipos",
+                        // url: "http://dev.lorenzogeliztienda.com/api/admin/tipos",
+                        url:"{{ route('api.tipos.get') }}",
                         data:{subcategoria:subcategoria},
                         dataType: 'json',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
                         success: function (response) {
 
                             $('#tipo_id').html('');

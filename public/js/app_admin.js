@@ -73777,17 +73777,17 @@ var notification = new Vue({
   methods: {
     readchat: function readchat(chat) {
       //marca como leído el mensaje
-      var url = '/lorgeliz_tienda_copia/public/admin/chats/read/' + chat; // let url = 'http://dev.lorenzogeliztienda.com/admin/chats/read/'+chat;
-
+      // let url = '/lorgeliz_tienda_copia/public/admin/chats/read/'+chat;
+      var url = 'http://dev.lorenzogeliztienda.com/admin/chats/read/' + chat;
       axios.put(url).then(function (response) {});
     },
     initChat: function initChat(cliente, chat) {
       // se ejecuta al hacer click sobre una notificación de chat, redirige al index, despliega la tabla 
       localStorage.setItem('cliente', JSON.stringify(cliente)); //guardamos el id del cliente para mostrar sus mensajes
 
-      if (this.location != '/lorgeliz_tienda_copia/public/admin/chats') {
-        window.location.href = "/lorgeliz_tienda_copia/public/admin/chats"; //redirigimos al index, los mensajes se filtraran con id del cliente
-        // window.location.href = `http://dev.lorenzogeliztienda.com/admin/chats`;
+      if (this.location != 'http://dev.lorenzogeliztienda.com/admin/chats') {
+        // window.location.href = `/lorgeliz_tienda_copia/public/admin/chats`;//redirigimos al index, los mensajes se filtraran con id del cliente
+        window.location.href = "http://dev.lorenzogeliztienda.com/admin/chats";
       }
 
       this.readchat(chat);
@@ -73795,8 +73795,8 @@ var notification = new Vue({
     loadNotifications: function loadNotifications() {
       var _this = this;
 
-      var url = '/lorgeliz_tienda_copia/public/admin/chats/messages'; // let url = 'http://dev.lorenzogeliztienda.com/admin/chats/messages'
-
+      // let url = '/lorgeliz_tienda_copia/public/admin/chats/messages';
+      var url = 'http://dev.lorenzogeliztienda.com/admin/chats/messages';
       axios.get(url).then(function (response) {
         _this.notifications = response.data.chats;
         _this.location = window.location.pathname; //se utiliza para obtener la url de las imágenes de los usuarios

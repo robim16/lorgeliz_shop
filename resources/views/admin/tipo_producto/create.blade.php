@@ -119,12 +119,12 @@
 <script>
 	$(document).ready(function () {
 		
-		$.ajaxSetup({
+		// $.ajaxSetup({
 
-			headers: {
-				'X-CSRF-TOKEN': $("input[name= _token]").val()
-			}
-		});
+		// 	headers: {
+		// 		'X-CSRF-TOKEN': $("input[name= _token]").val()
+		// 	}
+		// });
 
 		$(document).on('change', '#category_id', function(e) { 
 			e.preventDefault();
@@ -133,27 +133,30 @@
 
 			if (categoria != 0) {
 
-				$.ajax({
-					type: "GET",
-					// url: "route('subcategory.get')",
-                    url: 'http://dev.lorenzogeliztienda.com/api/admin/subcategorias',
-                    // url: 'http://localhost/lorgeliz_tienda_copia/public/api/admin/subcategorias',
-					data:{categoria:categoria},
-					dataType: 'json',
-					success: function (response) {
-
-						$('#subcategory_id').html('');
-						$('#subcategory_id').append('<option value="0">Seleccione una</option>')
-						
-						// $.each(response.data, function (key, value) {
+				
+                $.ajax({
+                    type: "GET",
+                    // "route('subcategory.get')",
+                    // url: 'http://dev.lorenzogeliztienda.com/api/admin/subcategorias',
+                    url:"{{ route('api.subcategorias.get') }}",
+                    data:{categoria:categoria},
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        
+                        $('#subcategory_id').html('');
+                        $('#subcategory_id').append('<option value="0">Seleccione una</option>')
+                        // response.data
                         $.each(response, function (key, value) {
-							$('#subcategory_id').append("<option value='" 
-								+ value.id + "'>" + value.nombre + "</option>");
-						});
-						
-					}
+                            $('#subcategory_id').append("<option value='" 
+                                + value.id + "'>" + value.nombre + "</option>");
+                        });
+                        
+                    }
 
-				});
+                });
 
 			}
 
