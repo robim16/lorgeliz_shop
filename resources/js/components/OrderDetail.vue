@@ -107,8 +107,16 @@
 
                                     <tfoot>
                                         <tr>
+                                            <td colspan="6" class="text-right">Subtotal:</td>
+                                            <td colspan="2" class="text-left">{{subtotal | currencyFormat}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" class="text-right">Envío:</td>
+                                            <td colspan="2" class="text-left">{{envio | currencyFormat}}</td>
+                                        </tr>
+                                        <tr>
                                             <td colspan="6" class="text-right">Total pedido:</td>
-                                            <td colspan="2" class="text-left">{{valor | currencyFormat}}</td>
+                                            <td colspan="2" class="text-left">{{total | currencyFormat}}</td>
                                         </tr>
 
                                     </tfoot>
@@ -144,7 +152,9 @@ export default {
         return {
             devolucion:'',
             arrayProductos:[],
-            valor:0,
+            total:0,
+            subtotal:0,
+            envio:0,
             prodDevolucion:[]
 
         }
@@ -162,7 +172,10 @@ export default {
 
             axios.get(url).then(response => {
                 this.arrayProductos = response.data.productos;
-                this.valor = this.arrayProductos[0].venta.valor;
+
+                this.total = this.arrayProductos[0].venta.valor;
+                this.subtotal = this.arrayProductos[0].venta.subtotal;
+                this.envio = this.arrayProductos[0].venta.envio;
 
                 // this.arrayProductos.forEach(producto => {
                 //     this.activarDevolucion(producto.producto_referencia.id, producto.venta.id)

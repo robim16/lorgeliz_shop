@@ -206,7 +206,7 @@
                                     <ul class="cart_extra_total_list">
                                         <li class="d-flex flex-row align-items-center justify-content-start">
                                             <div class="cart_extra_total_title">Subtotal</div>
-                                            <div class="cart_extra_total_value ml-auto" id="subtotal">{{ total | currencyFormat}}</div>
+                                            <div class="cart_extra_total_value ml-auto" id="subtotal">{{ subtotal | currencyFormat}}</div>
                                         </li>
                                         <li class="d-flex flex-row align-items-center justify-content-start">
                                             <div class="cart_extra_total_title">Envío</div>
@@ -214,7 +214,7 @@
                                         </li>
                                         <li class="d-flex flex-row align-items-center justify-content-start">
                                             <div class="cart_extra_total_title">Total</div>
-                                            <div class="cart_extra_total_value ml-auto" id="neto">{{ totalneto | currencyFormat }}</div>
+                                            <div class="cart_extra_total_value ml-auto" id="neto">{{ total | currencyFormat }}</div>
                                         </li>
                                     </ul>
                                     <div class="checkout_button trans_200"><a :href="`${ruta}/checkout`" id="pago">proceder al pago</a></div>
@@ -261,7 +261,7 @@
                 operacion: '',
                 cantidad: 0,
                 total: 0,
-                totalneto: 0,
+                subtotal: 0,
                 carrito: '',
                 empty: false,
                 envio: 8000
@@ -282,8 +282,9 @@
                         // this.total = this.arrayProductos[0].total;
                         // this.totalneto = this.arrayProductos[0].total;
                         this.carrito = this.arrayProductos[0].carrito.id;
+                        this.subtotal = parseInt(this.arrayProductos[0].carrito.subtotal);
                         this.total = parseInt(this.arrayProductos[0].carrito.total);
-                        this.totalneto = parseInt(this.arrayProductos[0].carrito.total) + this.envio;
+                        this.envio = parseInt(this.arrayProductos[0].carrito.envio);
                     }
                 }).catch(error => {
                     console.log(error);

@@ -2449,7 +2449,7 @@ __webpack_require__.r(__webpack_exports__);
       operacion: '',
       cantidad: 0,
       total: 0,
-      totalneto: 0,
+      subtotal: 0,
       carrito: '',
       empty: false,
       envio: 8000
@@ -2470,8 +2470,9 @@ __webpack_require__.r(__webpack_exports__);
           // this.total = this.arrayProductos[0].total;
           // this.totalneto = this.arrayProductos[0].total;
           _this.carrito = _this.arrayProductos[0].carrito.id;
+          _this.subtotal = parseInt(_this.arrayProductos[0].carrito.subtotal);
           _this.total = parseInt(_this.arrayProductos[0].carrito.total);
-          _this.totalneto = parseInt(_this.arrayProductos[0].carrito.total) + _this.envio;
+          _this.envio = parseInt(_this.arrayProductos[0].carrito.envio);
         }
       })["catch"](function (error) {
         console.log(error);
@@ -4033,6 +4034,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     id: {
@@ -4048,7 +4057,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       devolucion: '',
       arrayProductos: [],
-      valor: 0,
+      total: 0,
+      subtotal: 0,
+      envio: 0,
       prodDevolucion: []
     };
   },
@@ -4062,7 +4073,9 @@ __webpack_require__.r(__webpack_exports__);
       var url = "".concat(this.ruta, "/pedidos/productos/").concat(this.id);
       axios.get(url).then(function (response) {
         _this.arrayProductos = response.data.productos;
-        _this.valor = _this.arrayProductos[0].venta.valor; // this.arrayProductos.forEach(producto => {
+        _this.total = _this.arrayProductos[0].venta.valor;
+        _this.subtotal = _this.arrayProductos[0].venta.subtotal;
+        _this.envio = _this.arrayProductos[0].venta.envio; // this.arrayProductos.forEach(producto => {
         //     this.activarDevolucion(producto.producto_referencia.id, producto.venta.id)
         //     .then(res => {
         //         this.prodDevolucion.push(res);
@@ -49045,7 +49058,7 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  _vm._s(_vm._f("currencyFormat")(_vm.total))
+                                  _vm._s(_vm._f("currencyFormat")(_vm.subtotal))
                                 )
                               ]
                             )
@@ -49098,9 +49111,7 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  _vm._s(
-                                    _vm._f("currencyFormat")(_vm.totalneto)
-                                  )
+                                  _vm._s(_vm._f("currencyFormat")(_vm.total))
                                 )
                               ]
                             )
@@ -50982,6 +50993,54 @@ var render = function() {
                               staticClass: "text-right",
                               attrs: { colspan: "6" }
                             },
+                            [_vm._v("Subtotal:")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            {
+                              staticClass: "text-left",
+                              attrs: { colspan: "2" }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(_vm._f("currencyFormat")(_vm.subtotal))
+                              )
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c(
+                            "td",
+                            {
+                              staticClass: "text-right",
+                              attrs: { colspan: "6" }
+                            },
+                            [_vm._v("Envío:")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            {
+                              staticClass: "text-left",
+                              attrs: { colspan: "2" }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(_vm._f("currencyFormat")(_vm.envio))
+                              )
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c(
+                            "td",
+                            {
+                              staticClass: "text-right",
+                              attrs: { colspan: "6" }
+                            },
                             [_vm._v("Total pedido:")]
                           ),
                           _vm._v(" "),
@@ -50993,7 +51052,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                _vm._s(_vm._f("currencyFormat")(_vm.valor))
+                                _vm._s(_vm._f("currencyFormat")(_vm.total))
                               )
                             ]
                           )

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Carrito extends Model
 {
-    protected $fillable = ['fecha', 'total', 'cliente_id', 'estado'];
+    protected $fillable = ['fecha', 'subtotal', 'envio', 'total', 'cliente_id', 'estado'];
     
     public function cliente (){
         return $this->belongsTo(Cliente::class);

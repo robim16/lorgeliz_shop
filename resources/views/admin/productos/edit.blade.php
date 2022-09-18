@@ -34,7 +34,7 @@
                 <!-- SELECT2 EXAMPLE -->
 
 
-                <div class="card card-success">
+                {{-- <div class="card card-success">
                     <div class="card-header">
                         <h3 class="card-title">Datos generados automáticamente</h3>
 
@@ -82,7 +82,7 @@
                     <div class="card-footer">
 
                     </div>
-                </div>
+                </div> --}}
                 <!-- /.card -->
 
 
