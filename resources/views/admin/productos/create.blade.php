@@ -4,8 +4,8 @@
 @section('titulo', 'Crear Producto')
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('product.index') }}">Productos</a></li>
-<li class="breadcrumb-item active">@yield('titulo')</li>
+    <li class="breadcrumb-item"><a href="{{ route('product.index') }}">Productos</a></li>
+    <li class="breadcrumb-item active">@yield('titulo')</li>
 @endsection
 
 

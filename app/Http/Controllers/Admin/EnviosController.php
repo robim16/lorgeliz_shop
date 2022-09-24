@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Configuracion;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ConfiguracionController extends Controller
+class EnviosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +14,7 @@ class ConfiguracionController extends Controller
      */
     public function index()
     {
-        $configuracion = Configuracion::where('nit', '78900765')->first();
-
-        return view('admin.configuracion.index', compact('configuracion'));
+        //
     }
 
     /**
@@ -58,9 +55,9 @@ class ConfiguracionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Configuracion $configuracion)
+    public function edit($id)
     {
-        return view('admin.configuracion.edit', compact('configuracion'));
+        //
     }
 
     /**
@@ -70,18 +67,9 @@ class ConfiguracionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Configuracion $configuracion)
+    public function update(Request $request, $id)
     {
-        try {
-           
-            $configuracion->update($request->all());
-    
-            session()->flash('message', ['success', ("Se ha actualizado la configuración exitosamente")]);
-            return redirect()->route('configuracion.index');
-            
-        } catch (\Exception $e) {
-            //throw $th;
-        }
+        //
     }
 
     /**
