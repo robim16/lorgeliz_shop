@@ -19,7 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::group(['prefix' => '/'], function ($router) {
+// Route::group(['prefix' => '/'], function ($router) {
+Route::middleware('auth:api')->group(function () {
 
     Route::group(['prefix' => '/categorias'], function (){
         Route::get('/default', 'Api\CategoryController@getProductos');
@@ -57,40 +58,43 @@ Route::group(['prefix' => '/'], function ($router) {
 });
 
 
-Route::group(['prefix' => "/admin"], function ($router) {
+// Route::group(['prefix' => "/admin"], function ($router) {
+Route::middleware('auth:api')->group(function () {
 
-    Route::group(['prefix' => '/tallas'], function () {
-        Route::get('/{id}', 'Admin\Api\TallaController@index');
-        Route::get('/tipos/get', 'Admin\Api\TallaController@fetchTallasByTipo')->name('api.tallas.tipos');
+    Route::group(['prefix' => "/admin"], function ($router) {
+
+        Route::group(['prefix' => '/tallas'], function () {
+            Route::get('/{id}', 'Admin\Api\TallaController@index');
+            Route::get('/tipos/get', 'Admin\Api\TallaController@fetchTallasByTipo')->name('api.tallas.tipos');
+        });
+
+        Route::group(['prefix' => '/chats'], function () {
+            Route::get('/', 'Admin\Api\ChatController@index');
+        });
+
+        Route::group(['prefix' => '/colores'], function () {
+            Route::get('/{id}', 'Admin\Api\ColorController@index');
+        });
+
+        Route::group(['prefix' => '/clientes'], function () {
+            Route::get('/', 'Admin\Api\ClienteController@index');
+        });
+
+        Route::group(['prefix' => '/imagenes'], function () {
+            Route::delete('/{id}/delete', 'Admin\Api\ImagenController@destroy');
+        });
+
+        Route::group(['prefix' => '/notifications'], function () {
+            Route::get('/', 'Admin\Api\NotificationController@index');
+            Route::put('/{id}', 'Admin\Api\NotificationController@update');
+        });
+
+        Route::group(['prefix' => '/subcategorias'], function () {
+            Route::get('/', 'Admin\Api\SubcategoryController@index')->name('api.subcategorias.get');
+        });
+
+        Route::group(['prefix' => '/tipos'], function () {
+            Route::get('/', 'Admin\Api\TipoProductoController@index')->name('api.tipos.get');
+        });
     });
-
-    Route::group(['prefix' => '/chats'], function () {
-        Route::get('/', 'Admin\Api\ChatController@index');
-    });
-
-    Route::group(['prefix' => '/colores'], function () {
-        Route::get('/{id}', 'Admin\Api\ColorController@index');
-    });
-
-    Route::group(['prefix' => '/clientes'], function () {
-        Route::get('/', 'Admin\Api\ClienteController@index');
-    });
-
-    Route::group(['prefix' => '/imagenes'], function () {
-        Route::delete('/{id}/delete', 'Admin\Api\ImagenController@destroy');
-    });
-
-    Route::group(['prefix' => '/notifications'], function () {
-        Route::get('/', 'Admin\Api\NotificationController@index');
-        Route::put('/{id}', 'Admin\Api\NotificationController@update');
-    });
-
-    Route::group(['prefix' => '/subcategorias'], function () {
-        Route::get('/', 'Admin\Api\SubcategoryController@index')->name('api.subcategorias.get');
-    });
-
-    Route::group(['prefix' => '/tipos'], function () {
-        Route::get('/', 'Admin\Api\TipoProductoController@index')->name('api.tipos.get');
-    });
-
 });
