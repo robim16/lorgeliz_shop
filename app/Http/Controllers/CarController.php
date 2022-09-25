@@ -6,6 +6,7 @@ use App\Carrito;
 use App\CarritoProducto;
 use App\Cliente;
 use App\ColorProducto;
+use App\Configuracion;
 use App\Events\UserCart;
 use App\Producto;
 use App\ProductoReferencia;
@@ -166,14 +167,21 @@ class CarController extends Controller
                 $producto = ProductoReferencia::obtenerProducto($request->producto,$request->talla);
     
                 // $precio = $producto[0]->precio_actual;
+                $configuracion = Configuracion::where('nit', '78900765')->first();
     
                 $precio = $producto[0]->colorProducto->producto->precio_actual;
 
                 $cantidad = $request->cantidad;
+
+
+                $subtotal = $cantidad * $precio;
+                $envio = $configuracion->costo_envio;
     
                 $carrito = new Carrito();
                 $carrito->fecha = \Carbon\Carbon::now();
-                $carrito->total = $cantidad * $precio;
+                $carrito->subtotal = $subtotal;
+                $carrito->envio = $envio;
+                $carrito->total = $subtotal + $envio;
                 $carrito->cliente_id = auth()->user()->cliente->id;
                 $carrito->estado = '1';
     
@@ -202,9 +210,9 @@ class CarController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            Log::debug('Error creando el carrito'.'carrito:'.' '.json_encode($carrito).
-                'producto:'.' '.json_encode($carritoProducto).' '.
-                'error:'.json_encode($e));
+            Log::debug('Error creando el carrito'.'Error:'.json_encode($e));
+
+            // return $e;
           
         }
 
@@ -226,12 +234,17 @@ class CarController extends Controller
             $producto = ProductoReferencia::obtenerProducto($request->producto,$request->talla);
 
            
-            $total = $carrito->total;
+            $subtotal = $carrito->subtotal;
+
+            $envio = $carrito->envio;
+
             // $precio = $producto[0]->precio_actual;
             $precio = $producto[0]->colorProducto->producto->precio_actual;
             
-            $carrito->total = ($request->cantidad * $precio) + $total; //se actualiza el total del carrito
+            $carrito->subtotal = ($request->cantidad * $precio) + $subtotal; //se actualiza el subtotal del carrito
 
+
+            $carrito->total = $envio + $carrito->subtotal;
             // $cart = CarritoProducto::where('carrito_id',$carrito->id)
             // ->where('producto_referencia_id',$producto[0]->referencia)// se comprueba si el producto ha sido agregado antes
             // ->first();
@@ -281,9 +294,8 @@ class CarController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            Log::debug('Error actualizando el carrito'.'carrito:'.' '.json_encode($carrito).
-                'producto:'.' '.json_encode($carritoProducto).' '.
-                'error:'.json_encode($e));
+            Log::debug('Error actualizando el carrito'.
+                'Error:'.json_encode($e));
         }
         
     }
@@ -416,7 +428,9 @@ class CarController extends Controller
             }
             
 
-            $carrito->total += $total; //$carrito->total += $total se actualiza el total del carrito
+            $carrito->subtotal += $total; //$carrito->total += $total se actualiza el subtotal del carrito
+
+            $carrito->total = $carrito->subtotal + $carrito->envio; //$carrito->total += $total se actualiza el total del carrito
             $carrito->save();
 
             DB::commit();
@@ -521,8 +535,13 @@ class CarController extends Controller
 
             // $carrito->total = $carrito->total - ($producto->precio_actual * $car_producto->cantidad); // se resta al total, el subtotal del producto a remover
 
-            $carrito->total = $carrito->total - 
+            // $carrito->total = $carrito->total - 
+            // ($producto->colorProducto->producto->precio_actual * $car_producto->cantidad);
+
+            $carrito->subtotal = $carrito->subtotal - 
             ($producto->colorProducto->producto->precio_actual * $car_producto->cantidad);
+
+            $carrito->total =  $carrito->subtotal + $carrito->envio;
 
             $carrito->save();
 
