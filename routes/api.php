@@ -93,4 +93,9 @@ Route::group(['prefix' => "/admin"], function ($router) {
         Route::get('/', 'Admin\Api\TipoProductoController@index');
     });
 
+
+    Route::group(['prefix' => '/ventas'], function () {
+        Route::get('/cliente/{cliente}', 'Admin\Api\VentasController@obtener');
+    });
+
 });

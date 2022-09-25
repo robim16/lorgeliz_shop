@@ -42,6 +42,11 @@ class Venta extends Model
     }
 
 
+    public function envio(){
+        return $this->hasOne(Envio::class, 'venta_id');
+    }
+
+
     public static function boot () {
         parent::boot();
             

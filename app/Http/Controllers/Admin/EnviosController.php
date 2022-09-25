@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Cliente;
 use App\Envio;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -15,7 +16,9 @@ class EnviosController extends Controller
      */
     public function index()
     {
-        $envios = Envio::orderBy('id')->get();
+
+        $envios = Envio::with('venta.cliente.user:id,nombres,apellidos')
+            ->orderBy('id')->get();
 
         return view('admin.envios.index', compact('envios'));
 
@@ -28,7 +31,13 @@ class EnviosController extends Controller
      */
     public function create()
     {
-        //
+        $clientes = Cliente::with('user')
+            ->whereHas('ventas')
+            // ->orderBy('nombres')
+            // ->orderBy('apellidos')
+            ->get();
+
+        return view('admin.envios.create', compact('clientes'));
     }
 
     /**
@@ -39,7 +48,13 @@ class EnviosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $envio = Envio::create($request->except('cliente_id'));
+
+        session()->flash('message', ['success', ("Se registrado la guía de envío exitosamente")]);
+
+        return back();
+
     }
 
     /**
