@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Envio;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,10 @@ class EnviosController extends Controller
      */
     public function index()
     {
-        //
+        $envios = Envio::orderBy('id')->get();
+
+        return view('admin.envios.index', compact('envios'));
+
     }
 
     /**
