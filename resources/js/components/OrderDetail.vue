@@ -165,7 +165,12 @@ export default {
 
             axios.get(url).then(response => {
                 this.arrayProductos = response.data.productos;
-                this.valor = this.arrayProductos[0].venta.valor;
+                // this.valor = this.arrayProductos[0].venta.valor;
+
+                this.total = this.arrayProductos[0].venta.valor;
+                this.subtotal = this.arrayProductos[0].venta.subtotal;
+                this.envio = this.arrayProductos[0].venta.envio;
+
 
                 // this.arrayProductos.forEach(producto => {
                 //     this.activarDevolucion(producto.producto_referencia.id, producto.venta.id)
