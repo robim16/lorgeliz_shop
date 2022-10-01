@@ -7,7 +7,8 @@ use App\Events\SalesEvent;
 
 class Venta extends Model
 {
-    protected $fillable = ['fecha', 'factura', 'valor', 'cliente_id'];
+    // protected $fillable = ['fecha', 'factura', 'valor', 'cliente_id'];
+    protected $fillable = ['fecha', 'factura', 'subtotal', 'envio', 'valor', 'cliente_id'];
     
     public function pedido (){
         return $this->hasOne(Pedido::class);
