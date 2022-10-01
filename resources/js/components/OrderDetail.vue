@@ -144,8 +144,11 @@ export default {
         return {
             devolucion:'',
             arrayProductos:[],
-            valor:0,
-            prodDevolucion:[]
+            // valor:0,
+            prodDevolucion:[],
+            total:0,
+            subtotal:0,
+            envio:0,
 
         }
     },
