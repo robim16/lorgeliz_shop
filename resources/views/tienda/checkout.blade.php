@@ -136,11 +136,11 @@
 								<ul class="cart_extra_total_list">
 									<li class="d-flex flex-row align-items-center justify-content-start">
 										<div class="cart_extra_total_title">Subtotal</div>
-										<div class="cart_extra_total_value ml-auto">${{ floatval($carrito->total)}}</div>
+										<div class="cart_extra_total_value ml-auto">${{ floatval($carrito->subtotal)}}</div>
 									</li>
 									<li class="d-flex flex-row align-items-center justify-content-start">
 										<div class="cart_extra_total_title">Envío</div>
-										<div class="cart_extra_total_value ml-auto">Gratis</div>
+										<div class="cart_extra_total_value ml-auto">${{ floatval($carrito->envio)}}</div>
 									</li>
 									<li class="d-flex flex-row align-items-center justify-content-start">
 										<div class="cart_extra_total_title">Total</div>
