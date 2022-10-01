@@ -107,8 +107,16 @@
 
                                     <tfoot>
                                         <tr>
+                                            <td colspan="6" class="text-right">Subtotal:</td>
+                                            <td colspan="2" class="text-left">{{subtotal | currencyFormat}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" class="text-right">Envío:</td>
+                                            <td colspan="2" class="text-left">{{envio | currencyFormat}}</td>
+                                        </tr>
+                                        <tr>
                                             <td colspan="6" class="text-right">Total pedido:</td>
-                                            <td colspan="2" class="text-left">{{valor | currencyFormat}}</td>
+                                            <td colspan="2" class="text-left">{{total | currencyFormat}}</td>
                                         </tr>
 
                                     </tfoot>
