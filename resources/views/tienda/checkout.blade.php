@@ -190,7 +190,7 @@
 
 <script>
 
-	let ruta = 'http://dev.lorenzogeliztienda.com'
+	let ruta = 'lorgeliz_tienda_copia/public';
 	// let url = "/lorgeliz_tienda_copia/public/colombia-json-master/colombia-json-master/colombia.json"
 	let url = `${ruta}/colombia-json-master/colombia-json-master/colombia.json`
 
