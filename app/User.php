@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Spatie\Dropbox\Client;
+use Laravel\Passport\HasApiTokens;
 //use Illuminate\Support\Str;
 
 class User extends Authenticatable
@@ -162,7 +163,7 @@ class User extends Authenticatable
 		});
     }
     
-    use Notifiable;
+    use HasApiTokens, Notifiable;
 
     /**
      * The attributes that are mass assignable.
