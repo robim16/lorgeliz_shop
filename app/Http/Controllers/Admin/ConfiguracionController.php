@@ -15,8 +15,11 @@ class ConfiguracionController extends Controller
      */
     public function index()
     {
-        return view('admin.configuracion.index');
+        $configuracion = Configuracion::where('nit', '78900765')->first();
+
+        return view('admin.configuracion.index', compact('configuracion'));
     }
+
 
     /**
      * Show the form for creating a new resource.
