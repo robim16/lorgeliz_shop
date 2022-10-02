@@ -261,6 +261,15 @@
                             <th>Envío</th>
                             <td>${{ floatval($producto->venta->envio)}}</td>
                         </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>       
+                            <th>TOTAL</th>      
+                            <td>${{ floatval($producto->venta->valor)}}</td>
+                        </tr>
                        {{-- @endforeach--}}
                     </tfoot>
                 </table>
