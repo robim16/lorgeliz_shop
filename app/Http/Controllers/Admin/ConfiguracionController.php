@@ -71,10 +71,21 @@ class ConfiguracionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Configuracion $configuracion)
     {
         //
+        try {
+           
+            $configuracion->update($request->all());
+    
+            session()->flash('message', ['success', ("Se ha actualizado la configuración exitosamente")]);
+            return redirect()->route('configuracion.index');
+            
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
