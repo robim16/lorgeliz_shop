@@ -279,18 +279,8 @@
                             <th></th>
                             <th></th>
                             <th>SUBTOTAL</th>
-                            {{-- <td>${{ floatval($producto->valor)}}</td> --}}
-                            <td>${{ floatval($producto->venta->valor)}}</td>
+                            <td>${{ floatval($producto->venta->subtotal)}}</td>
                         </tr>
-                        {{-- <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>Descuento</th>
-                            <td>$0{{$v->total*$v->impuesto}}</td>
-                        </tr> --}}
                         <tr>
                             <th></th>
                             <th></th>
@@ -298,7 +288,16 @@
                             <th></th>
                             <th></th>
                             <th>Impuesto</th>
-                            <td>$0{{--$v->total*$v->impuesto--}}</td>
+                            <td>$0</td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Envío</th>
+                            <td>${{ floatval($producto->venta->envio)}}</td>
                         </tr>
                         <tr>
                             <th></th>
@@ -307,7 +306,6 @@
                             <th></th>
                             <th></th>       
                             <th>TOTAL</th>      
-                            {{-- <td>${{floatval($producto->valor)}}</td> --}}
                             <td>${{ floatval($producto->venta->valor)}}</td>
                         </tr>
                        {{-- @endforeach--}}
