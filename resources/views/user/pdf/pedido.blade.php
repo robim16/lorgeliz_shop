@@ -114,6 +114,8 @@
 
                     <td>{{ $productos[0]->venta->cliente->user->nombres }} {{ $productos[0]->venta->cliente->user->apellidos }}</td>
                     <td>{{ $productos[0]->venta->cliente->user->identificacion }}</td>
+                    <td>{{ $productos[0]->venta->cliente->user->departamento }}</td>
+                    <td>{{ $productos[0]->venta->cliente->user->municipio }}</td>
                     <td>{{ $productos[0]->venta->cliente->user->direccion }}</td>
                     <td>{{ $productos[0]->venta->cliente->user->telefono }}</td>
                     <td>{{ $productos[0]->venta->cliente->user->email }}</td>
