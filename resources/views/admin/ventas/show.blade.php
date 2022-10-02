@@ -203,8 +203,8 @@
                                     <td>${{ floatval($venta->subtotal) }}</td>
                                     <td>${{ floatval($venta->envio) }}</td>
                                     <td>${{ floatval($venta->valor) }}</td>
-                                    <td>${{ $pagos[0] ? floatval($pagos[0]->total) : 0 }}</td>
-                                    <td>${{ floatval($valor_devolucion)}}</td>
+                                    {{-- <td>${{ $pagos[0] ? floatval($pagos[0]->total) : 0 }}</td>
+                                    <td>${{ floatval($valor_devolucion)}}</td> --}}
                                     <td>${{ floatval($venta->saldo) }}</td>
                                     <td>
                                         @if ($venta->estado == 1)
