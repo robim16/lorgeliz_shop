@@ -96,6 +96,8 @@
                 <tr>
                     <th>Cliente</th>
                     <th>Cédula</th>
+                    <th>Departamento</th>
+                    <th>Municipio</th>
                     <th>Dirección</th>
                     <th>Teléfono</th>
                     <th>Email</th>
