@@ -200,6 +200,8 @@
                                     <td>{{ date('d/m/Y h:i:s A', strtotime($venta->fecha)) }}</td>
                                     <td><a href="{{ route('cliente.show', $venta->cliente->id)}}">{{ $venta->cliente->user->nombres }} {{ $venta->cliente->user->apellidos}}</a></td>
                                     <td>{{ ($venta->factura->prefijo) }}{{ ($venta->factura->consecutivo) }}</td>
+                                    <td>${{ floatval($venta->subtotal) }}</td>
+                                    <td>${{ floatval($venta->envio) }}</td>
                                     <td>${{ floatval($venta->valor) }}</td>
                                     <td>${{ $pagos[0] ? floatval($pagos[0]->total) : 0 }}</td>
                                     <td>${{ floatval($valor_devolucion)}}</td>
