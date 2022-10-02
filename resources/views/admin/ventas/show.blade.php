@@ -181,9 +181,11 @@
                                     <th>Fecha</th>
                                     <th>Cliente</th>
                                     <th>Factura</th>
-                                    <th>Valor</th>
-                                    <th>Pagos</th>
-                                    <th>Devoluciones</th>
+                                    <th>Subtotal</th>
+                                    <th>Envío</th>
+                                    <th>Total</th>
+                                    {{-- <th>Pagos</th>
+                                    <th>Devoluciones</th> --}}
                                     <th>Saldo</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
