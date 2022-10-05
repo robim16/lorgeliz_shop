@@ -17,7 +17,9 @@
         "laravel/passport": "^9.4",
         "laravel/tinker": "^1.0",
         "laravel/ui": "^1.2",
+        "owen-it/laravel-auditing": "^10.0",
         "pusher/pusher-php-server": "^4.1",
+        "rap2hpoutre/laravel-log-viewer": "^2.2",
         "spatie/flysystem-dropbox": "^1.2"
     },
     "require-dev": {

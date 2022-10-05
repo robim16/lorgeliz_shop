@@ -161,12 +161,14 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
+        OwenIt\Auditing\AuditingServiceProvider::class,
 
         /*
          * Package Service Providers...
          */
-        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
-        OwenIt\Auditing\AuditingServiceProvider::class,
+        // Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
+        // OwenIt\Auditing\AuditingServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
 
 
