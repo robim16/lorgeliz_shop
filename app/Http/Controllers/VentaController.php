@@ -157,11 +157,15 @@ class VentaController extends Controller
     
                 //$car->estado = '0';
                 //$car->save();
-    
+
+
+
                 $venta = new Venta();
                 $venta->fecha = \Carbon\Carbon::now();
                 $venta->factura_id = $factura->id;
                 //$venta->valor = $request->total;
+                $venta->subtotal =  $car->subtotal;
+                $venta->envio =  $car->envio;
                 $venta->valor =  $car->total;
                 $venta->cliente_id = auth()->user()->cliente->id;
                 $venta->saldo = $car->total - $x_amount; // si el pago no fue por epayco o está pendiente, la venta queda con saldo
@@ -179,6 +183,7 @@ class VentaController extends Controller
                     $venta->estado = 2;
                     $venta->save();
                 }
+
 
     
                 $admin = User::where('role_id', 2)->first();
