@@ -73,7 +73,7 @@ class ConfiguracionController extends Controller
      */
     public function update(Request $request, Configuracion $configuracion)
     {
-        //
+        
         try {
            
             $configuracion->update($request->all());

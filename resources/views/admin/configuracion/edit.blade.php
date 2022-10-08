@@ -49,11 +49,11 @@
                 </div>
                 <div class="form-group">
                     <label for="email">E-Mail</label>
-                    <input type="email" id="email" class="form-control" value="{{ $configuracion->email }}" />
+                    <input type="email" id="email" name="email" class="form-control" value="{{ $configuracion->email }}" />
                 </div>
                 <div class="form-group">
                     <label for="costo_envio">Costo de envío</label>
-                    <input type="costo_envio" id="costo_envio" class="form-control"
+                    <input type="costo_envio" id="costo_envio" name="costo_envio" class="form-control"
                         value="{{ $configuracion->costo_envio }}" />
                 </div>
                 <div class="form-group">
