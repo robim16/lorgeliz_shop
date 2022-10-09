@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+
     public function productos(Request $request, Pedido $pedido) {
 
 
