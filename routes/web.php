@@ -76,7 +76,7 @@ Route::group(['prefix' => '/pedidos'], function () {
     // Route::get('/', 'OrdersController@index')->name('pedidos.index');
     Route::get('/show/pdf/{id}', 'OrdersController@showPdf')->name('pedidos.show.pdf');
     Route::get('/factura/{id}', 'OrdersController@facturas')->name('pedidos.factura');
-    Route::get('/productos/{pedido}', 'OrdersController@productos');
+    // Route::get('/productos/{pedido}', 'OrdersController@productos');
 });
 
 Route::resource('/pedidos', 'OrdersController');
