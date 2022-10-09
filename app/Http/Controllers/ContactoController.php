@@ -33,6 +33,7 @@ class ContactoController extends Controller
         try {
            
             $admin = User::where('role_id', 2)->first();
+            
             $user = auth()->user();
         
             $details = [
