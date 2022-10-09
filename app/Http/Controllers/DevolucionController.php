@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Mail\AdminDevolucionMail;
-
+use App\Notifications\NotificationAdminNewDevolution;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -133,6 +133,8 @@ class DevolucionController extends Controller
             $user = auth()->user();
 
             // return $admin->nombres;
+
+
         
             $details = [
                 'title' => 'Se ha solicitado una nueva devolucion',
@@ -144,7 +146,21 @@ class DevolucionController extends Controller
             //return new AdminDevolucionMail($details);
             Mail::to($admin->email)->send(new AdminDevolucionMail($details));
 
-            User::findOrFail($admin->id)->notify(new AdminDevolucionMail($details));
+
+            $mensaje = 'nueva devolución solicitada';
+
+            //notificacion para el admin
+            $arrayData = [
+                'notificacion' => [
+                    'msj' => $mensaje,
+                    'url' => url('/admin/devoluciones/'. $devolucion->id)
+                ]
+            ];
+
+
+            // User::findOrFail($admin->id)->notify(new NotificationAdminNewDevolution($arrayData));
+
+        
 
         } 
 

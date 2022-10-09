@@ -228,7 +228,7 @@ class DevolucionController extends Controller
 
                 DB::commit();
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 DB::rollBack();
             }
            

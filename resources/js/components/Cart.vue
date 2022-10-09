@@ -261,7 +261,6 @@
                 operacion: '',
                 cantidad: 0,
                 total: 0,
-                // totalneto: 0,
                 subtotal: 0,
                 carrito: '',
                 empty: false,
@@ -284,7 +283,8 @@
                         // this.totalneto = this.arrayProductos[0].total;
                         this.carrito = this.arrayProductos[0].carrito.id;
                         this.subtotal = parseInt(this.arrayProductos[0].carrito.subtotal);
-                        this.total = parseInt(this.arrayProductos[0].carrito.subtotal) + this.envio;
+                        this.total = parseInt(this.arrayProductos[0].carrito.total);
+                        this.envio = parseInt(this.arrayProductos[0].carrito.envio);
                     }
                 }).catch(error => {
                     console.log(error);

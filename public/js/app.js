@@ -2449,7 +2449,6 @@ __webpack_require__.r(__webpack_exports__);
       operacion: '',
       cantidad: 0,
       total: 0,
-      // totalneto: 0,
       subtotal: 0,
       carrito: '',
       empty: false,
@@ -2472,7 +2471,8 @@ __webpack_require__.r(__webpack_exports__);
           // this.totalneto = this.arrayProductos[0].total;
           _this.carrito = _this.arrayProductos[0].carrito.id;
           _this.subtotal = parseInt(_this.arrayProductos[0].carrito.subtotal);
-          _this.total = parseInt(_this.arrayProductos[0].carrito.subtotal) + _this.envio;
+          _this.total = parseInt(_this.arrayProductos[0].carrito.total);
+          _this.envio = parseInt(_this.arrayProductos[0].carrito.envio);
         }
       })["catch"](function (error) {
         console.log(error);
