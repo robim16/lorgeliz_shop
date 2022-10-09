@@ -27,6 +27,7 @@ class StockController extends Controller
     
     public function index(Request $request)
     {
+
         $busqueda = $request->get('busqueda');
 
         // $productos = Producto::orWhere('productos.nombre','like',"%$busqueda%")
@@ -49,10 +50,19 @@ class StockController extends Controller
         })
         ->with(['talla', 'colorProducto'])//faltan los filtros
         ->where('stock', '>', '0')
+        ->when($busqueda, function ($query) use ($busqueda) {
+            return $query->whereHas('colorProducto.producto', function (Builder $query) use($busqueda){
+                $query->where('nombre','like',"%$busqueda%");
+            })
+            ->orWhereHas('colorProducto.color', function (Builder $query) use($busqueda){
+                $query->where('nombre','like',"%$busqueda%");
+            });
+        })
         ->orderBy('color_producto_id')
         ->paginate(5);
 
 
+        
         return view('admin.stocks.index',compact('productos'));
 
     }

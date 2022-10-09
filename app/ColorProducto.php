@@ -39,6 +39,7 @@ class ColorProducto extends Pivot
     }
 
     public $timestamps = false;
+    
 
     public function producto () {
         return $this->belongsTo(Producto::class);

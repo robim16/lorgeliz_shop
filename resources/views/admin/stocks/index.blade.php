@@ -26,7 +26,7 @@
 
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-success"><i
-                                                    class="fas fa-search"></i></button>
+                                                class="fas fa-search"></i></button>
                                         </div>
                                         <div class="input-group-append">
                                             <a href="" class="btn btn-success mx-1" @click.prevent="pdfInventarios">
