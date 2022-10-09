@@ -166,10 +166,11 @@ export default {
     }, 
     methods: {
         getProductos(){
-            // let url = '/lorgeliz_tienda_copia/public/pedidos/productos/' + this.id;
-            // let url = `/lorgeliz_tienda_copia/public/api/orders/${this.id}/productos`;
+            
 
-            let url = `${this.ruta}/pedidos/productos/${this.id}`
+            // let url = `${this.ruta}/pedidos/productos/${this.id}`
+
+            let url = `${this.ruta}/api/pedidos/productos/${this.id}`
 
             axios.get(url).then(response => {
                 this.arrayProductos = response.data.productos;
