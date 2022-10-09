@@ -25,6 +25,8 @@ class ClienteController extends Controller
         $this->middleware('auth');
     }
 
+
+
     public function index(Request $request)
     {
         $keyword = $request->get('keyword');
@@ -52,7 +54,9 @@ class ClienteController extends Controller
         return view('admin.clientes.index', compact('clientes'));
     }
 
-    public function show($id)
+
+
+     public function show($id)
     {
         // $cliente = User::with('imagene')
         // ->join('clientes','users.id', 'clientes.user_id')
@@ -69,23 +73,34 @@ class ClienteController extends Controller
         // ->paginate(10);
 
         $pedidos = Venta::with(['pedido', 'factura', 'cliente.user.imagene'])
-        ->where('cliente_id', $id)
-        // ->where('estado', '!=', '3')
-        ->estado()
-        ->paginate(10);
+            ->where('cliente_id', $id)
+            // ->where('estado', '!=', '3')
+            ->estado();
+            // ->paginate(10);
 
-        $total = 0;
 
-        foreach ($pedidos as $key => $value) {
-          $total = $total + $value->valor;
-        }
 
-        // return $pedidos;
+        $total_general = $pedidos->sum('valor');
+
+        $pedidos = $pedidos->paginate(10);
+
+
+        $total_pagina = $pedidos->sum('valor');
+
+        // $total = 0;
+
+        // foreach ($pedidos as $key => $value) {
+        //   $total = $total + $value->valor;
+        // }
+
+        
 
         // return view('admin.clientes.show', compact('cliente','pedidos', 'total'));
-        return view('admin.clientes.show', compact('pedidos', 'total'));
+        return view('admin.clientes.show', compact('pedidos', 'total_general', 'total_pagina'));
 
     }
+
+    
 
     public function sendMessage()
     {

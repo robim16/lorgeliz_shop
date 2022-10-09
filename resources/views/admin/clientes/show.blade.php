@@ -163,7 +163,12 @@
 
                     <tfoot>
                         <tr>
-                            <td colspan="3" class="text-right">Total: ${{ floatval($total)}}</td>
+                            <td colspan="3" class="text-right">Total página: ${{ floatval($total_pagina)}}</td>
+                            <td colspan="3" class="text-left"></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" class="text-right">Total general: ${{ floatval($total_general)}}</td>
                             <td colspan="3" class="text-left"></td>
                         </tr>
 
