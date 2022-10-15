@@ -4069,9 +4069,8 @@ __webpack_require__.r(__webpack_exports__);
     getProductos: function getProductos() {
       var _this = this;
 
-      // let url = '/lorgeliz_tienda_copia/public/pedidos/productos/' + this.id;
-      // let url = `/lorgeliz_tienda_copia/public/api/orders/${this.id}/productos`;
-      var url = "".concat(this.ruta, "/pedidos/productos/").concat(this.id);
+      // let url = `${this.ruta}/pedidos/productos/${this.id}`
+      var url = "".concat(this.ruta, "/api/pedidos/productos/").concat(this.id);
       axios.get(url).then(function (response) {
         _this.arrayProductos = response.data.productos; // this.valor = this.arrayProductos[0].venta.valor;
 
