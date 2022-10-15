@@ -104,6 +104,7 @@ class ClienteController extends Controller
 
     public function sendMessage()
     {
+        
         $info = \request('info');
         $data = [];
         parse_str($info, $data);

@@ -196,59 +196,56 @@
 
 @section('scripts')
 <script>
-    function loadJSON(callback) {
-		let ruta = 'http://dev.lorenzogeliztienda.com'
-        let url = `${ruta}/colombia-json-master/colombia-json-master/colombia.json`
-        var xobj = new XMLHttpRequest();
-        xobj.overrideMimeType("application/json");
-        // xobj.open("GET", "/lorgeliz_tienda_copia/public/colombia-json-master/colombia-json-master/colombia.json", true); // Reemplaza colombia-json.json con el nombre que le hayas puesto
+	function loadJSON(callback) {
+		let ruta = "http://dev.lorenzogeliztienda.com";
+		let url = `${ruta}/colombia-json-master/colombia-json-master/colombia.json`
+		var xobj = new XMLHttpRequest();
+		xobj.overrideMimeType("application/json");
+		// xobj.open("GET", "http://dev.lorenzogeliztienda.com/colombia-json-master/colombia-json-master/colombia.json", true); // Reemplaza colombia-json.json con el nombre que le hayas puesto
 		xobj.open("GET", url, true);
 		xobj.onreadystatechange = function () {
-            if (xobj.readyState == 4 && xobj.status == "200") {
-                callback(xobj.responseText);
-            }
-        };
-        xobj.send(null);
-    }
+			if (xobj.readyState == 4 && xobj.status == "200") {
+				callback(xobj.responseText);
+			}
+		};
+		xobj.send(null);
+	}
 
-    var JSONFinal = '';
+	var JSONFinal = '';
 
-    function init() {
-        loadJSON(function (response) {
+	function init() {
+		loadJSON(function (response) {
 
-            // Parse JSON string into object
-            JSONFinal =  JSON.parse(response);
-            const departamentos = JSONFinal.map(d => d.departamento);
-            
-            $.each(departamentos, function (key, value) {
-                $('#departamento').append("<option value='" 
-                    + value + "'>" + value + "</option>");
-            });
-        });
-    }
+			// Parse JSON string into object
+			JSONFinal =  JSON.parse(response);
+			const departamentos = JSONFinal.map(d => d.departamento);
+			
+			$.each(departamentos, function (key, value) {
+				$('#departamento').append("<option value='" 
+					+ value + "'>" + value + "</option>");
+			});
+		});
+	}
 </script>
 <script>
 	$(document).ready(function () {
 		
-        init();
+		init();
 
-        $(document).on('change', '#departamento', function(e) { 
+		$(document).on('change', '#departamento', function(e) { 
 			e.preventDefault();
 
-            $('#municipio').html('');
+			$('#municipio').html('');
 
-            const departamento = $('#departamento').val();
-            const filtrados = JSONFinal.filter(d => d.departamento === departamento);
-            const municipios = filtrados[0].ciudades;
+			const departamento = $('#departamento').val();
+			const filtrados = JSONFinal.filter(d => d.departamento === departamento);
+			const municipios = filtrados[0].ciudades;
 
-            $('#municipio').append('<option value="0">Seleccione uno</option>')
-            $.each(municipios, function (key, value) {
-                $('#municipio').append("<option value='" 
-                    + value + "'>" + value + "</option>");
-            });
+			$('#municipio').append('<option value="0">Seleccione uno</option>')
+			$.each(municipios, function (key, value) {
+				$('#municipio').append("<option value='" 
+					+ value + "'>" + value + "</option>");
+			});
 		});
-       
-	});
-</script>
 	
 @endsection

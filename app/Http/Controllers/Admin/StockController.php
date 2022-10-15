@@ -49,6 +49,14 @@ class StockController extends Controller
         })
         ->with(['talla', 'colorProducto'])//faltan los filtros
         ->where('stock', '>', '0')
+        ->when($busqueda, function ($query) use ($busqueda) {
+            return $query->whereHas('colorProducto.producto', function (Builder $query) use($busqueda){
+                $query->where('nombre','like',"%$busqueda%");
+            })
+            ->orWhereHas('colorProducto.color', function (Builder $query) use($busqueda){
+                $query->where('nombre','like',"%$busqueda%");
+            });
+        })
         ->orderBy('color_producto_id')
         ->paginate(5);
 
