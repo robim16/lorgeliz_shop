@@ -101,6 +101,7 @@ class ClienteController extends Controller
 
     public function sendMessage()
     {
+
         $info = \request('info');
         $data = [];
         parse_str($info, $data);
@@ -136,20 +137,29 @@ class ClienteController extends Controller
 
     public function pdfListadoClientes()
     {
-        $clientes = Cliente::join('users','clientes.user_id', '=', 'users.id')
-        ->select('clientes.id','users.nombres', 'users.apellidos','users.departamento',
-        'users.municipio','users.direccion','users.telefono','users.email')
-        ->paginate(10);
 
-        $count = 0;
-        foreach ($clientes as $cliente) {
-            $count = $count + 1;
+        try {
+       
+            $clientes = Cliente::join('users','clientes.user_id', '=', 'users.id')
+                ->select('clientes.id','users.nombres', 'users.apellidos','users.departamento',
+                'users.municipio','users.direccion','users.telefono','users.email')
+                ->paginate(10);
+                
+    
+            $count = 0;
+            foreach ($clientes as $cliente) {
+                $count = $count + 1;
+            }
+    
+            $pdf = \PDF::loadView('admin.pdf.listadoclientes',['clientes'=>$clientes, 'count'=>$count])
+            ->setPaper('a4', 'landscape');
+            
+            return $pdf->download('listadoclientes.pdf');
+
+
+        } catch (\Exception $e) {
+            //throw $th;
         }
-
-        $pdf = \PDF::loadView('admin.pdf.listadoclientes',['clientes'=>$clientes, 'count'=>$count])
-        ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('listadoclientes.pdf');
 
     }
 

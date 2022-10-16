@@ -36,23 +36,34 @@ class ProductController extends Controller
         // ->where('color_producto.slug',$slug)
         // ->firstOrFail();
 
-        $producto = ColorProducto::with(['imagenes:imageable_id,url', 'color:id,nombre',
-            'producto.tipo.subcategoria.categoria'])
-            ->where('color_producto.slug',$slug)
-            ->firstOrFail();
+        try {
+            
+            $producto = ColorProducto::with(['imagenes:imageable_id,url', 'color:id,nombre',
+                'producto.tipo.subcategoria.categoria'])
+                ->where('color_producto.slug',$slug)
+                ->firstOrFail();
+    
+            $related_products = ColorProducto::with('imagenes:imageable_id,url')
+                ->where('producto_id', $producto->producto_id)
+                ->where('id', '!=', $producto->id)
+                ->get();
+            
+            return view('tienda.product', compact('producto', 'related_products'));
 
-        $related_products = ColorProducto::with('imagenes:imageable_id,url')
-            ->where('producto_id', $producto->producto_id)
-            ->where('id', '!=', $producto->id)
-            ->get();
-        
-        return view('tienda.product', compact('producto', 'related_products'));
+            
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
     }
 
     //implementado en api/productController
     public function setVisitas(Request $request, $id)
     {
-        if (!$request->ajax()) return redirect('/');
+
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $producto = ColorProducto::where('id', $id)->first();
         // $visitas = $producto->visitas;

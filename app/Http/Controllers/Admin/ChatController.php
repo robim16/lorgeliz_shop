@@ -181,7 +181,7 @@ class ChatController extends Controller
                 return $query->whereIn('chats.from_id', [$user, $cliente])
                 ->whereIn('chats.to_id', [$user, $cliente]);
             },
-            function ($query) {
+            function ($query) use($cliente) {
                 return $query->where('chats.from_id', $cliente)
                 ->orWhere('chats.to_id',$cliente);
             })

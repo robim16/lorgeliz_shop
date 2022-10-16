@@ -36,29 +36,37 @@ class OrdersController extends Controller
      */
     public function index(Request $request)
     {
+
         $busqueda = $request->get('busqueda');
 
-    //     $pedidos = Pedido::orWhere('pedidos.id','like',"%$busqueda%")
-    //    //->orWhere('pedidos.fecha','like',"%$busqueda%")
-    //     //orWhere('facturas.id','like',"%$busqueda%")
-    //     ->orWhere('ventas.valor','like',"%$busqueda%")
-    //     ->join('ventas','pedidos.venta_id', '=','ventas.id')
-    //     ->join('facturas','ventas.factura_id', '=', 'facturas.id')
-    //     ->select('ventas.valor','facturas.prefijo','facturas.consecutivo', 'pedidos.*')
-    //     ->where('ventas.cliente_id', auth()->user()->cliente->id)
-    //     ->where('ventas.estado', '!=', 3)
-    //     ->orderBy('pedidos.created_at', 'DESC')
-    //     ->paginate(5);
+        //     $pedidos = Pedido::orWhere('pedidos.id','like',"%$busqueda%")
+        //    //->orWhere('pedidos.fecha','like',"%$busqueda%")
+        //     //orWhere('facturas.id','like',"%$busqueda%")
+        //     ->orWhere('ventas.valor','like',"%$busqueda%")
+        //     ->join('ventas','pedidos.venta_id', '=','ventas.id')
+        //     ->join('facturas','ventas.factura_id', '=', 'facturas.id')
+        //     ->select('ventas.valor','facturas.prefijo','facturas.consecutivo', 'pedidos.*')
+        //     ->where('ventas.cliente_id', auth()->user()->cliente->id)
+        //     ->where('ventas.estado', '!=', 3)
+        //     ->orderBy('pedidos.created_at', 'DESC')
+        //     ->paginate(5);
         
-        $pedidos = Venta::with(['pedido', 'factura'])
-        ->orWhere('valor','like',"%$busqueda%")
-        ->where('cliente_id', auth()->user()->cliente->id)
-        // ->where('estado', '!=', 3)
-        ->estado()
-        ->orderBy('created_at', 'DESC')
-        ->paginate(5);
-        
-        return view('user.orders.index', compact('pedidos'));
+        try {
+            
+            $pedidos = Venta::with(['pedido', 'factura'])
+                ->orWhere('valor','like',"%$busqueda%")
+                ->where('cliente_id', auth()->user()->cliente->id)
+                // ->where('estado', '!=', 3)
+                ->estado()
+                ->orderBy('created_at', 'DESC')
+                ->paginate(5);
+            
+            return view('user.orders.index', compact('pedidos'));
+
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
     }
 
     /**
@@ -124,23 +132,30 @@ class OrdersController extends Controller
         // ->groupBy('producto_referencia.id')
         // ->get();
 
-        $productos = ProductoVenta::whereHas('venta.pedido',
-        function (Builder $query) use ($pedido) {
-           $query->where('id', $pedido->id);
-        })
-        ->whereHas('venta',
-        function (Builder $query) {
-           $query->where('cliente_id', auth()->user()->cliente->id);
-        })
-        ->with(['productoReferencia.colorProducto.color', 'productoReferencia.colorProducto.producto',
-        'productoReferencia.talla','venta.pedido', 'productoReferencia.colorProducto.imagenes',
-            'productoReferencia.devoluciones'=>function($query) use($pedido){
-                $query->where('venta_id', $pedido->venta_id);
-            }
-        ])
-        ->get();
+        try {
 
-        return ['productos' => $productos];
+            $productos = ProductoVenta::whereHas('venta.pedido',
+            function (Builder $query) use ($pedido) {
+               $query->where('id', $pedido->id);
+            })
+            ->whereHas('venta',
+            function (Builder $query) {
+               $query->where('cliente_id', auth()->user()->cliente->id);
+            })
+            ->with(['productoReferencia.colorProducto.color', 'productoReferencia.colorProducto.producto',
+            'productoReferencia.talla','venta.pedido', 'productoReferencia.colorProducto.imagenes',
+                'productoReferencia.devoluciones'=>function($query) use($pedido){
+                    $query->where('venta_id', $pedido->venta_id);
+                }
+            ])
+            ->get();
+    
+            return ['productos' => $productos];
+            
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
 
     }
 
@@ -208,12 +223,19 @@ class OrdersController extends Controller
         // ->groupBy('producto_referencia.id')
         // ->get();
 
-        return ProductoVenta::whereHas('venta.pedido',
-        function (Builder $query) use ($id) {
-           $query->where('id', $id);
-        })
-        ->with(['venta.pedido', 'venta.cliente.user', 'venta.factura'])
-        ->get();
+        try {
+            
+            return ProductoVenta::whereHas('venta.pedido',
+            function (Builder $query) use ($id) {
+               $query->where('id', $id);
+            })
+            ->with(['venta.pedido', 'venta.cliente.user', 'venta.factura'])
+            ->get();
+           
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
     }
 
     // public function userPedido($id)
