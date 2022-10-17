@@ -27,6 +27,7 @@ class StockController extends Controller
     
     public function index(Request $request)
     {
+
         $busqueda = $request->get('busqueda');
 
         // $productos = Producto::orWhere('productos.nombre','like',"%$busqueda%")
@@ -44,24 +45,30 @@ class StockController extends Controller
         // ->orderBy('productos.id')
         // ->paginate(5);
 
-        $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
-            $query->where('activo', 'Si');
-        })
-        ->with(['talla', 'colorProducto'])//faltan los filtros
-        ->where('stock', '>', '0')
-        ->when($busqueda, function ($query) use ($busqueda) {
-            return $query->whereHas('colorProducto.producto', function (Builder $query) use($busqueda){
-                $query->where('nombre','like',"%$busqueda%");
+        try {
+           
+            $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
+                $query->where('activo', 'Si');
             })
-            ->orWhereHas('colorProducto.color', function (Builder $query) use($busqueda){
-                $query->where('nombre','like',"%$busqueda%");
-            });
-        })
-        ->orderBy('color_producto_id')
-        ->paginate(5);
+            ->with(['talla', 'colorProducto'])//faltan los filtros
+            ->where('stock', '>', '0')
+            ->when($busqueda, function ($query) use ($busqueda) {
+                return $query->whereHas('colorProducto.producto', function (Builder $query) use($busqueda){
+                    $query->where('nombre','like',"%$busqueda%");
+                })
+                ->orWhereHas('colorProducto.color', function (Builder $query) use($busqueda){
+                    $query->where('nombre','like',"%$busqueda%");
+                });
+            })
+            ->orderBy('color_producto_id')
+            ->paginate(5);
+    
+    
+            return view('admin.stocks.index',compact('productos'));
 
-
-        return view('admin.stocks.index',compact('productos'));
+        } catch (\Exception $e) {
+            //throw $th;
+        }
 
     }
 
@@ -148,22 +155,29 @@ class StockController extends Controller
         // ->orderBy('productos.id')
         // ->get();
 
-        $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
-            $query->where('activo', 'Si');
-        })
-        ->with(['talla', 'colorProducto'])
-        ->where('stock', '>', '0')
-        ->orderBy('color_producto_id')
-        ->get();
-
-        $count = 0;
-        foreach ($productos as $producto) {
-            $count = $count + 1;
+        try {
+            
+            $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
+                $query->where('activo', 'Si');
+            })
+            ->with(['talla', 'colorProducto'])
+            ->where('stock', '>', '0')
+            ->orderBy('color_producto_id')
+            ->get();
+    
+            $count = 0;
+            foreach ($productos as $producto) {
+                $count = $count + 1;
+            }
+    
+            $pdf = \PDF::loadView('admin.pdf.inventarios',['productos'=>$productos, 'count'=>$count])
+            ->setPaper('a4', 'landscape');
+            
+            return $pdf->download('inventarioproductos.pdf');
+            
+        } catch (\Exception $e) {
+            //throw $th;
         }
 
-        $pdf = \PDF::loadView('admin.pdf.inventarios',['productos'=>$productos, 'count'=>$count])
-        ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('inventarioproductos.pdf');
     }
 }

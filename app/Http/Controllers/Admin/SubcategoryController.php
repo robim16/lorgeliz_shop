@@ -27,13 +27,21 @@ class SubcategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $nombre = $request->get('nombre');
-       
-        $subcategorias = Subcategoria::where('nombre','like',"%$nombre%")
-        ->orderBy('created_at')
-        ->paginate(5);
-        
-        return view('admin.subcategorias.index',compact('subcategorias'));
+
+        try {
+           
+            $nombre = $request->get('nombre');
+           
+            $subcategorias = Subcategoria::where('nombre','like',"%$nombre%")
+            ->orderBy('created_at')
+            ->paginate(5);
+            
+            return view('admin.subcategorias.index',compact('subcategorias'));
+
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
     }
 
     /**
@@ -54,15 +62,23 @@ class SubcategoryController extends Controller
      */
     public function store(SubcategoriaRequest $request)
     {
-        $subcategoria = new Subcategoria();
-        $subcategoria->nombre = $request->nombre;
-        $subcategoria->descripcion = $request->descripcion;
-        $subcategoria->categoria_id = $request->category_id;
 
-        $subcategoria->save();
+        try {
 
-        session()->flash('message', ['success', ("Se ha creado la subcategoría exitosamente")]);
-        return redirect()->route('subcategory.index');
+            $subcategoria = new Subcategoria();
+            $subcategoria->nombre = $request->nombre;
+            $subcategoria->descripcion = $request->descripcion;
+            $subcategoria->categoria_id = $request->category_id;
+    
+            $subcategoria->save();
+    
+            session()->flash('message', ['success', ("Se ha creado la subcategoría exitosamente")]);
+
+            return redirect()->route('subcategory.index');
+           
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     /**
@@ -85,7 +101,7 @@ class SubcategoryController extends Controller
      */
     public function edit($slug)
     {
-        $subcategoria= Subcategoria::where('slug',$slug)->firstOrFail();
+        $subcategoria = Subcategoria::where('slug',$slug)->firstOrFail();
         return view('admin.subcategorias.edit',compact('subcategoria'));
     }
 
@@ -99,16 +115,23 @@ class SubcategoryController extends Controller
     //public function update(SubcategoriaRequest $request, Subcategoria $subcategoria)
     public function update(SubcategoriaRequest $request, $id)
     {
-        $subcategoria = Subcategoria::where('id', $id)->first();
 
-        $subcategoria->nombre = $request->nombre;
-        $subcategoria->descripcion = $request->descripcion;
-        $subcategoria->categoria_id = $request->category_id;
+        try {
+            
+            $subcategoria = Subcategoria::where('id', $id)->first();
+    
+            $subcategoria->nombre = $request->nombre;
+            $subcategoria->descripcion = $request->descripcion;
+            $subcategoria->categoria_id = $request->category_id;
+    
+            $subcategoria->save();
+    
+            session()->flash('message', ['success', ("Se ha actualizado la subcategoría exitosamente")]);
+            return redirect()->route('subcategory.index');
 
-        $subcategoria->save();
-
-        session()->flash('message', ['success', ("Se ha actualizado la subcategoría exitosamente")]);
-        return redirect()->route('subcategory.index');
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     /**
@@ -130,7 +153,7 @@ class SubcategoryController extends Controller
             return redirect()->route('subcategory.index');
         }
 
-        catch (\Exception $exception){
+        catch (\Exception $e){
 
             session()->flash('message', ['warning', ("No es posible eliminar la subcategoría porque está en uso")]);
 

@@ -132,6 +132,7 @@ class VentaController extends Controller
         if(!$request->ajax()) return back();
 
         try {
+            
             $x_ref_payco = ($this->x_ref_payco) ? $this->x_ref_payco : 0; // si no viene la ref. se pone 0
             $x_cod_response = ($this->x_cod_response) ? $this->x_cod_response : 3;
             $x_amount = ($this->x_amount) ? $this->x_amount : 0;

@@ -11,12 +11,22 @@ class VentasController extends Controller
 {
     public function obtener(Request $request, Cliente $cliente)
     {
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
-        $ventas = Venta::doesntHave('envio')
-            ->where('cliente_id', $cliente->id)
-            ->get(); 
-        
-        return $ventas;
+        try {
+       
+            $ventas = Venta::doesntHave('envio')
+                ->where('cliente_id', $cliente->id)
+                ->get(); 
+            
+            return $ventas;
+            
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
     }
 }

@@ -29,29 +29,38 @@ class ClienteController extends Controller
 
     public function index(Request $request)
     {
-        $keyword = $request->get('keyword');
 
-        $clientes = User::with('cliente')
-        ->where('users.nombres','like',"%$keyword%")
-        ->orWhere('users.apellidos','like',"%$keyword%")
-        ->orWhere('users.identificacion','like',"%$keyword%")
-        ->orWhere('users.direccion','like',"%$keyword%")
-        ->orWhere('users.telefono','like',"%$keyword%")
-        ->orWhere('users.email','like',"%$keyword%")
-        // join('users','clientes.user_id', '=', 'users.id')
-        // ->where('users.nombres','like',"%$keyword%")
-        // ->orWhere('users.apellidos','like',"%$keyword%")
-        // ->orWhere('users.identificacion','like',"%$keyword%")
-        // ->orWhere('users.direccion','like',"%$keyword%")
-        // ->orWhere('users.telefono','like',"%$keyword%")
-        // ->orWhere('users.email','like',"%$keyword%")
-        // ->select('clientes.id','users.nombres', 'users.apellidos', 'users.identificacion',
-        // 'users.direccion','users.telefono','users.email', 'users.departamento', 'users.municipio')
-        ->paginate(5);
+        try {
+            
+            $keyword = $request->get('keyword');
+    
+            $clientes = User::with('cliente')
+            ->where('users.nombres','like',"%$keyword%")
+            ->orWhere('users.apellidos','like',"%$keyword%")
+            ->orWhere('users.identificacion','like',"%$keyword%")
+            ->orWhere('users.direccion','like',"%$keyword%")
+            ->orWhere('users.telefono','like',"%$keyword%")
+            ->orWhere('users.email','like',"%$keyword%")
+            // join('users','clientes.user_id', '=', 'users.id')
+            // ->where('users.nombres','like',"%$keyword%")
+            // ->orWhere('users.apellidos','like',"%$keyword%")
+            // ->orWhere('users.identificacion','like',"%$keyword%")
+            // ->orWhere('users.direccion','like',"%$keyword%")
+            // ->orWhere('users.telefono','like',"%$keyword%")
+            // ->orWhere('users.email','like',"%$keyword%")
+            // ->select('clientes.id','users.nombres', 'users.apellidos', 'users.identificacion',
+            // 'users.direccion','users.telefono','users.email', 'users.departamento', 'users.municipio')
+            ->paginate(5);
+    
+            // return $clientes;
+    
+            return view('admin.clientes.index', compact('clientes'));
 
-        // return $clientes;
 
-        return view('admin.clientes.index', compact('clientes'));
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
     }
 
 
@@ -72,20 +81,31 @@ class ClienteController extends Controller
         // ->select('pedidos.id','pedidos.fecha', 'ventas.valor', 'facturas.prefijo','facturas.consecutivo')
         // ->paginate(10);
 
-        $pedidos = Venta::with(['pedido', 'factura', 'cliente.user.imagene'])
-            ->where('cliente_id', $id)
-            // ->where('estado', '!=', '3')
-            ->estado();
-            // ->paginate(10);
 
+        try {
 
+           
+            $pedidos = Venta::with(['pedido', 'factura', 'cliente.user.imagene'])
+                ->where('cliente_id', $id)
+                // ->where('estado', '!=', '3')
+                ->estado();
+                // ->paginate(10);
+    
+    
+    
+            $total_general = $pedidos->sum('valor');
+    
+            $pedidos = $pedidos->paginate(10);
+    
+    
+            $total_pagina = $pedidos->sum('valor');
 
-        $total_general = $pedidos->sum('valor');
+            return view('admin.clientes.show', compact('pedidos', 'total_general', 'total_pagina'));
 
-        $pedidos = $pedidos->paginate(10);
+        } catch (\Exception $e) {
+            //throw $th;
+        }
 
-
-        $total_pagina = $pedidos->sum('valor');
 
         // $total = 0;
 
@@ -96,7 +116,6 @@ class ClienteController extends Controller
         
 
         // return view('admin.clientes.show', compact('cliente','pedidos', 'total'));
-        return view('admin.clientes.show', compact('pedidos', 'total_general', 'total_pagina'));
 
     }
 
@@ -138,27 +157,38 @@ class ClienteController extends Controller
 
     public function pdfListadoClientes()
     {
-        $clientes = Cliente::join('users','clientes.user_id', '=', 'users.id')
-        ->select('clientes.id','users.nombres', 'users.apellidos','users.departamento',
-        'users.municipio','users.direccion','users.telefono','users.email')
-        ->paginate(10);
 
-        $count = 0;
-        foreach ($clientes as $cliente) {
-            $count = $count + 1;
+        try {
+           
+            $clientes = Cliente::join('users','clientes.user_id', '=', 'users.id')
+                ->select('clientes.id','users.nombres', 'users.apellidos','users.departamento',
+                'users.municipio','users.direccion','users.telefono','users.email')
+                ->paginate(10);
+    
+            $count = 0;
+            foreach ($clientes as $cliente) {
+                $count = $count + 1;
+            }
+    
+            $pdf = \PDF::loadView('admin.pdf.listadoclientes',['clientes'=>$clientes, 'count'=>$count])
+            ->setPaper('a4', 'landscape');
+            
+            return $pdf->download('listadoclientes.pdf');
+
+
+        } catch (\Exception $e) {
+            //throw $th;
         }
-
-        $pdf = \PDF::loadView('admin.pdf.listadoclientes',['clientes'=>$clientes, 'count'=>$count])
-        ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('listadoclientes.pdf');
 
     }
 
     //en desuso, se implemento en /api/clienteController
     public function clientesChat(Request $request)
     {
-        if (!$request->ajax()) return back();
+        if ( ! request()->ajax()) {
+            abort(401, 'Acceso denegado');
+        }
+
 
         $buscar = $request->buscar;
         $criterio = $request->criterio;
@@ -207,6 +237,7 @@ class ClienteController extends Controller
         //     ];
             
         // }
+        
 
         $clientes = User::when($buscar, function ($query) use ($buscar, $criterio) {
             return $query->where('users.'.$criterio, 'like', '%'. $buscar . '%');

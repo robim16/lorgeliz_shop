@@ -12,19 +12,29 @@ class ProductController extends Controller
 {
     public function setVisitas(Request $request, $id)
     {
-        if (!$request->ajax()) return redirect('/');
+        
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
-        $producto = ColorProducto::where('id', $id)->first();
-    
-        $producto->visitas += 1;
-
-        $producto->save(); // se incrementa el campo visitas
-
-        $response = ['data' => 'success'];
+        try {
             
-        return response()->json($response);
+            $producto = ColorProducto::where('id', $id)->first();
+        
+            $producto->visitas += 1;
+    
+            $producto->save(); // se incrementa el campo visitas
+    
+            $response = ['data' => 'success'];
+                
+            return response()->json($response);
+    
+            // broadcast(new VisitEvent());
 
-        // broadcast(new VisitEvent());
+
+        } catch (\Exception $e) {
+            //throw $th;
+        }
 
     }
 }

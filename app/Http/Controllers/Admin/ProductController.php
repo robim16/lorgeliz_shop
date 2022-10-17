@@ -38,11 +38,17 @@ class ProductController extends Controller
     {
         $busqueda = $request->get('busqueda');
 
-        $productos = Producto::orWhere('productos.nombre','like',"%$busqueda%")
-        ->orWhere('productos.id','like',"%$busqueda%")
-        ->paginate(10);
+        try {
+            
+            $productos = Producto::orWhere('productos.nombre','like',"%$busqueda%")
+            ->orWhere('productos.id','like',"%$busqueda%")
+            ->paginate(10);
+    
+            return view('admin.productos.index',compact('productos')); //index de productos en admin
 
-        return view('admin.productos.index',compact('productos')); //index de productos en admin
+        } catch (\Exception $e) {
+            //throw $th;
+        }
 
     }
 
@@ -222,27 +228,42 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
-            ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo')
-            ->where('productos.id',$id)
-            ->firstOrFail();
 
-        $estados = $this->estado_productos(); 
+        try {
+           
+            $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
+                ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo')
+                ->where('productos.id',$id)
+                ->firstOrFail();
+    
+            $estados = $this->estado_productos(); 
+    
+            return view('admin.productos.show',compact('producto','estados')); //mostrar el producto
 
-        return view('admin.productos.show',compact('producto','estados')); //mostrar el producto
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     public function showColor($slug)
     {
-        $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
-            ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo',
-            'color_producto.color_id as color', 'color_producto.slug')
-            ->where('color_producto.slug',$slug)
-            ->firstOrFail();
 
-        $estados = $this->estado_productos();
+        try {
 
-        return view('admin.productos.showcolor',compact('producto','estados')); //mostrar un color de un producto
+            $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
+                ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo',
+                'color_producto.color_id as color', 'color_producto.slug')
+                ->where('color_producto.slug',$slug)
+                ->firstOrFail();
+    
+            $estados = $this->estado_productos();
+    
+            return view('admin.productos.showcolor',compact('producto','estados')); //mostrar un color de un producto
+        
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
     }
 
     /**
@@ -253,27 +274,41 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
-            ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo')
-            ->where('productos.id',$id)
-            ->firstOrFail();
-        
-        $estados = $this->estado_productos();
 
-        return view('admin.productos.edit',compact('producto', 'estados')); // editar el producto
+        try {
+            
+            $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
+                ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo')
+                ->where('productos.id',$id)
+                ->firstOrFail();
+            
+            $estados = $this->estado_productos();
+    
+            return view('admin.productos.edit',compact('producto', 'estados')); // editar el producto
+
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+        
     }
 
     public function editColor($slug)
     {
-        $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
-            ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo',
-            'color_producto.color_id as color', 'color_producto.slug')
-            ->where('color_producto.slug',$slug)
-            ->firstOrFail();
+        try {
+            
+            $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
+                ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo',
+                'color_producto.color_id as color', 'color_producto.slug')
+                ->where('color_producto.slug',$slug)
+                ->firstOrFail();
+    
+            $estados = $this->estado_productos();
+    
+            return view('admin.productos.editcolor',compact('producto','estados'));
 
-        $estados = $this->estado_productos();
-
-        return view('admin.productos.editcolor',compact('producto','estados'));
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     /**

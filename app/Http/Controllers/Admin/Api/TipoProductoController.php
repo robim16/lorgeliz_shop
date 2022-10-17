@@ -10,11 +10,22 @@ class TipoProductoController extends Controller
 {
     public function index(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
 
-        $id  = $request->subcategoria;
-        $tipos = Tipo::where('subcategoria_id', $id)->get(); 
-        
-        return $tipos;
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
+
+        try {
+         
+            $id  = $request->subcategoria;
+            $tipos = Tipo::where('subcategoria_id', $id)->get(); 
+            
+            return $tipos;
+            
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
     }
 }

@@ -25,10 +25,18 @@ class ProveedorController extends Controller
      */
     public function index(Request $request)
     {
-        $nombre = $request->get('nombre');
+        try {
        
-        $proveedores = Proveedore::where('nombre','like',"%$nombre%")->orderBy('created_at')->paginate(5);
-        return view('admin.proveedores.index',compact('proveedores'));
+            $nombre = $request->get('nombre');
+           
+            $proveedores = Proveedore::where('nombre','like',"%$nombre%")
+                ->orderBy('created_at')->paginate(5);
+    
+            return view('admin.proveedores.index',compact('proveedores'));
+
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     /**
@@ -49,18 +57,25 @@ class ProveedorController extends Controller
      */
     public function store(Request $request)
     {
-        $proveedor = new Proveedore();
-        $proveedor->nombre = $request->nombre;
-        $proveedor->nit = $request->nit;
-        $proveedor->razon_social = $request->razon_social;
-        $proveedor->direccion = $request->direccion;
-        $proveedor->telefono = $request->telefono;
-        $proveedor->email = $request->email;
+        try {
+           
+            $proveedor = new Proveedore();
+            $proveedor->nombre = $request->nombre;
+            $proveedor->nit = $request->nit;
+            $proveedor->razon_social = $request->razon_social;
+            $proveedor->direccion = $request->direccion;
+            $proveedor->telefono = $request->telefono;
+            $proveedor->email = $request->email;
+    
+            $proveedor->save();
+    
+            session()->flash('message', ['success', ("Se ha creado el proveedor exitosamente")]);
+            return redirect()->route('proveedor.index');
 
-        $proveedor->save();
+        } catch (\Exception $e) {
+            //throw $th;
+        }
 
-        session()->flash('message', ['success', ("Se ha creado el proveedor exitosamente")]);
-        return redirect()->route('proveedor.index');
     }
 
     /**
@@ -98,17 +113,26 @@ class ProveedorController extends Controller
      */
     public function update(Request $request, Proveedore $proveedor)
     {
-        $proveedor->nombre = $request->nombre;
-        $proveedor->nit = $request->nit;
-        $proveedor->razon_social = $request->razon_social;
-        $proveedor->direccion = $request->direccion;
-        $proveedor->telefono = $request->telefono;
-        $proveedor->email = $request->email;
 
-        $proveedor->save();
+        try {
+           
+            $proveedor->nombre = $request->nombre;
+            $proveedor->nit = $request->nit;
+            $proveedor->razon_social = $request->razon_social;
+            $proveedor->direccion = $request->direccion;
+            $proveedor->telefono = $request->telefono;
+            $proveedor->email = $request->email;
+    
+            $proveedor->save();
+    
+            session()->flash('message', ['success', ("Se ha editado el proveedor exitosamente")]);
 
-        session()->flash('message', ['success', ("Se ha editado el proveedor exitosamente")]);
-        return redirect()->route('proveedor.index');
+            return redirect()->route('proveedor.index');
+
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
     }
 
     /**
@@ -117,8 +141,9 @@ class ProveedorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy( Proveedor $proveedor)
+    public function destroy(Proveedore $proveedor)
     {
+
         try{
 
             $proveedor->delete();
@@ -134,5 +159,6 @@ class ProveedorController extends Controller
 
             return redirect()->route('proveedor.index');
         }
+
     }
 }

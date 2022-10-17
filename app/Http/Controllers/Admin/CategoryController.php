@@ -55,14 +55,20 @@ class CategoryController extends Controller
      */
     public function store(CategoriaRequest $request)
     {
-        $categoria = new Categoria();
-        $categoria->nombre = $request->nombre;
-        $categoria->descripcion = $request->descripcion;
+        try {
+           
+            $categoria = new Categoria();
+            $categoria->nombre = $request->nombre;
+            $categoria->descripcion = $request->descripcion;
+    
+            $categoria->save();
+    
+            session()->flash('message', ['success', ("Se ha creado la categoría exitosamente")]);
+            return redirect()->route('category.index');
 
-        $categoria->save();
-
-        session()->flash('message', ['success', ("Se ha creado la categoría exitosamente")]);
-        return redirect()->route('category.index');
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     /**
@@ -99,14 +105,21 @@ class CategoryController extends Controller
      //model binding (Categoria $categoria)
     public function update(CategoriaRequest $request, $id)
     {
-        $categoria = Categoria::where('id', $id)->first();
-        $categoria->nombre = $request->nombre;
-        $categoria->descripcion = $request->descripcion;
+        try {
 
-        $categoria->save();
+            $categoria = Categoria::where('id', $id)->first();
+            $categoria->nombre = $request->nombre;
+            $categoria->descripcion = $request->descripcion;
+    
+            $categoria->save();
+    
+            session()->flash('message', ['success', ("Se ha actualizado la categoría exitosamente")]);
 
-        session()->flash('message', ['success', ("Se ha actualizado la categoría exitosamente")]);
-        return redirect()->route('category.index');
+            return redirect()->route('category.index');
+
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     /**

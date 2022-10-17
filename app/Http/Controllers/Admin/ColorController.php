@@ -52,14 +52,20 @@ class ColorController extends Controller
      */
     public function store(ColorRequest $request)
     {
-        $color = new Color();
-        $color->nombre = $request->nombre;
-        $color->descripcion = $request->descripcion;
+        try {
+            
+            $color = new Color();
+            $color->nombre = $request->nombre;
+            $color->descripcion = $request->descripcion;
+    
+            $color->save();
+    
+            session()->flash('message', ['success', ("Se ha creado el color exitosamente")]);
+            return redirect()->route('color.index');
 
-        $color->save();
-
-        session()->flash('message', ['success', ("Se ha creado el color exitosamente")]);
-        return redirect()->route('color.index');
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     /**
@@ -95,14 +101,20 @@ class ColorController extends Controller
      */
     public function update(ColorRequest $request, $id)
     {
-        $color = Color::where('id', $id)->first();
-        $color->nombre = $request->nombre;
-        $color->descripcion = $request->descripcion;
-
-        $color->save();
-
-        session()->flash('message', ['success', ("Se ha actualizado el color exitosamente")]);
-        return redirect()->route('color.index');
+        try {
+           
+            $color = Color::where('id', $id)->first();
+            $color->nombre = $request->nombre;
+            $color->descripcion = $request->descripcion;
+    
+            $color->save();
+    
+            session()->flash('message', ['success', ("Se ha actualizado el color exitosamente")]);
+            return redirect()->route('color.index');
+            
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     /**
