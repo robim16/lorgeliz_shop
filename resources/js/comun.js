@@ -97,6 +97,10 @@ if (document.getElementById('productos')) {
     require('./admin/product');
 }
 
+if (document.getElementById('venta_show')) {
+    require('./admin/ventas_show');
+}
+
 if (document.getElementById('venta_cliente')) {
     require('./tienda/facturacliente');
 }
@@ -157,8 +161,8 @@ if (document.getElementById('user_cart')) {
     require('./tienda/userCart');
 }
 
-if (document.getElementById('factura_venta')) {
-    require('./admin/factura_venta');
-}
+// if (document.getElementById('factura_venta')) {
+//     require('./admin/factura_venta');
+// }
 
 

@@ -3,7 +3,7 @@
 @section('titulo', 'Listado de Pagos')
 
 @section('breadcrumb')
-<li class="breadcrumb-item active">@yield('titulo')</li>
+    <li class="breadcrumb-item active">@yield('titulo')</li>
 @endsection
 
 @section('content')
@@ -133,7 +133,7 @@
             <div class="modal-content pt-3">
                 <div class="modal-header">
                     <h4 class="modal-title">Respuesta de epayco</h4>
-                    <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                    <button type="button" class="close" @click="cerrarModal" aria-label="Close">
                       <span aria-hidden="true">×</span>
                     </button>
                 </div>
@@ -164,7 +164,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                    <button type="button" class="btn btn-secondary" @click="cerrarModal">Cerrar</button>
                 </div>
             </div>
             <!-- /.modal-content -->

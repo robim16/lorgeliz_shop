@@ -126,11 +126,13 @@
             </div>
             <div id="datos">
                 <p id="encabezado">
-                    <b>Lorgeliz Tienda</b><br>José Gálvez 1368, Montería - Córdoba, Colombia<br>Telefono:(+57)   3138645929<br>Email: lorgeliztienda@gmail.com
+                    <b>Lorgeliz Tienda</b><br>José Gálvez 1368, Montería - Córdoba, Colombia<br>Telefono:(+57)   
+                    3138645929<br>Email: lorgeliztienda@gmail.com
                 </p>
             </div>
             <div id="fact">
-            <p>Factura<br>
+            <p>
+                Comprobante de compra<br>
                 {{-- {{$user->factura->prefijo}}-{{$user->factura->consecutivo}}</p> --}}
                 {{$productos[0]->venta->factura->prefijo}}-{{$productos[0]->venta->factura->consecutivo}}
             </p>
@@ -156,13 +158,15 @@
                             Email: {{$user->cliente->user->email}}</</p></th> --}}
 
                             <th>
-                                <p id="cliente">Sr(a). {{ $productos[0]->venta->cliente->user->nombres}} {{ $productos[0]->venta->cliente->user->apellidos}}<br>
-                                {{ "identificacion"}}: {{$productos[0]->venta->cliente->user->identificacion}}<br>
-                                Departamento: {{$productos[0]->venta->cliente->user->departamento}}<br>
-                                Municipio: {{$productos[0]->venta->cliente->user->municipio}}<br>
-                                Dirección: {{$productos[0]->venta->cliente->user->direccion}}<br>
-                                Teléfono: {{$productos[0]->venta->cliente->user->telefono}}<br>
-                                Email: {{$productos[0]->venta->cliente->user->email}}</</p>
+                                <p id="cliente">
+                                    Sr(a). {{ $productos[0]->venta->cliente->user->nombres}} {{ $productos[0]->venta->cliente->user->apellidos}} <br>
+                                    Identificación: {{$productos[0]->venta->cliente->user->identificacion}}<br>
+                                    Departamento: {{$productos[0]->venta->cliente->user->departamento}}<br>
+                                    Municipio: {{$productos[0]->venta->cliente->user->municipio}}<br>
+                                    Dirección: {{$productos[0]->venta->cliente->user->direccion}}<br>
+                                    Teléfono: {{$productos[0]->venta->cliente->user->telefono}}<br>
+                                    Email: {{$productos[0]->venta->cliente->user->email}}
+                                </p>
                             </th>
                         </tr>
                     </tbody>

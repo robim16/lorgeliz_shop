@@ -163,7 +163,7 @@
                 </p>
             </div>
             <div id="fact">
-                <p>Factura<br>
+                <p>Comprobante de compra<br>
                 {{$productos[0]->venta->factura->prefijo}}-{{$productos[0]->venta->factura->consecutivo}}</p>
             </div>
         </header>
@@ -178,13 +178,17 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th><p id="cliente">Sr(a). {{ $productos[0]->venta->cliente->user->nombres}}<br>
-                            Identificación: {{$productos[0]->venta->cliente->user->identificacion}}<br>
-                            Departamento: {{$productos[0]->venta->cliente->user->departamento}}<br>
-                            Municipio: {{$productos[0]->venta->cliente->user->municipio}}<br>
-                            Dirección: {{$productos[0]->venta->cliente->user->direccion}}<br>
-                            Teléfono: {{$productos[0]->venta->cliente->user->telefono}}<br>
-                            Email: {{$productos[0]->venta->cliente->user->email}}</</p></th>
+                            <th>
+                                <p id="cliente">
+                                    Sr(a). {{ $productos[0]->venta->cliente->user->nombres}} {{ $productos[0]->venta->cliente->user->apellidos}} <br>
+                                    Identificación: {{$productos[0]->venta->cliente->user->identificacion}}<br>
+                                    Departamento: {{$productos[0]->venta->cliente->user->departamento}}<br>
+                                    Municipio: {{$productos[0]->venta->cliente->user->municipio}}<br>
+                                    Dirección: {{$productos[0]->venta->cliente->user->direccion}}<br>
+                                    Teléfono: {{$productos[0]->venta->cliente->user->telefono}}<br>
+                                    Email: {{$productos[0]->venta->cliente->user->email}}
+                                </p>
+                            </th>
                         </tr>
                     </tbody>
                 </table>

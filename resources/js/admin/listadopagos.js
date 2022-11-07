@@ -13,6 +13,7 @@ const payments = new Vue({
     }, 
     
     methods: {
+        
         pdfListPagos(){
             let url = '/lorgeliz_tienda_copia/public/admin/payments/list';
 
@@ -48,7 +49,7 @@ const payments = new Vue({
         },
 
         cerrarModal(){
-            this.modal=0;
+            this.modal = 0;
         }, 
 
         abrirModal(){               
