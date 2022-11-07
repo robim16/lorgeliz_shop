@@ -201,28 +201,43 @@ class DevolucionController extends Controller
     
                 if ($pagos[0]->total == 0) {
                     
-                    $venta->saldo = $venta->saldo - $totalproducto; // a la venta se resta el subtotal del producto y los pagos
+                    $venta->saldo = $venta->saldo - $totalproducto; //al saldo de la venta se resta el subtotal del producto 
                 
                 } else {
+                    //sumatoria de pagos es > 0
                     
                     if ($totalproducto <= $venta->saldo) {
+                        //si el subtotal del producto  es <= al saldo restante
+
                         $saldo = $venta->saldo - $totalproducto;
 
                         $venta->saldo = $saldo;
 
-                        $deducciones = $pagos[0]->total + $totalproducto;
+                        $deducciones = $pagos[0]->total + $totalproducto;//se suman los pagos totales y el subtotal del producto
 
                         if ($saldo == 0 && $deducciones > $venta->total) {
                             //anular pagos
                         }
                     }
 
-                    else{
-                        $venta->saldo = 0;//$venta->valor
-                        //anular pagos
+                    else {//subtotal del producto > saldo de la venta
+                        if ($venta->saldo > 0) {//si queda saldo aún
+                            //190 150 40 170
+
+                            //si total pagos > total producto
+                            //saldo = (total venta - subtotal producto) - (total pagos - subtotal producto)
+                        
+                            //si no, saldo = saldo si se devuelve el dinero
+                        }
+
+                        else{
+                            //anular todos los pagos si el subtotal del producto + 
+                            //envío es igual al total de la venta
+
+                        } 
                     }
                 }
-                // }
+                
     
                 $venta->save();
     
@@ -244,6 +259,7 @@ class DevolucionController extends Controller
                 // $producto->delete(); // se borra de la venta el producto
     
                 $product = array();
+                
                 $product['data'] = array();
     
                 $product['data'] = $producto_data->colorProducto->id;

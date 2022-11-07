@@ -4,14 +4,31 @@
 @section('titulo', 'Administración de Ventas')
 
 @section('breadcrumb')
-<li class="breadcrumb-item active">@yield('titulo')</li>
+    <li class="breadcrumb-item active">@yield('titulo')</li>
+@endsection
+
+@section('estilos')
+    <style>
+        
+        .modal-content{
+            width: 100% !important;
+            position: absolute !important;
+        }
+        .mostrar{
+            display: list-item !important;
+            opacity: 1 !important;
+            position: absolute !important;
+            background-color: #3c29297a !important;
+        }
+        
+    </style>
 @endsection
 
 
 @section('content')
 
 
-<div id="factura_venta" class="row">
+<div class="row">
 
     {{-- <div class="col-12"> --}}
         {{-- <div class="card"> --}}

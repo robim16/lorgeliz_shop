@@ -32,6 +32,8 @@
                                 <option value="">estado</option>
                                 <option value="1">pagadas</option>
                                 <option value="2">con saldo</option>
+                                <option value="3">anuladas</option>
+
                             </select>
 
                             <div class="input-group-append pr-1">

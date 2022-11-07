@@ -11,6 +11,7 @@ use App\Venta;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 
 
@@ -92,15 +93,21 @@ class VentaController extends Controller
         // ->firstOrFail();
 
         try {
+
             
             $venta = Venta::with('cliente.user', 'factura')
-            ->where('id', $id)
-            ->firstOrFail();
+                ->where('id', $id)
+                ->firstOrFail();
+
     
-            $pagos = $venta->pagos()->select('*', DB::raw('SUM(monto) as total'))
-            ->orderBy('pagos.fecha', 'DESC')
-            ->paginate(5);
-    
+           // $pagos = $venta->pagos()->select('*', DB::raw('SUM(monto) as total'))
+            //     ->orderBy('pagos.fecha', 'DESC')
+            //     ->paginate(5);
+
+            $pagos = $venta->pagos()
+                ->orderBy('pagos.fecha', 'DESC')
+                ->paginate(5);
+
     
             $devoluciones = $venta->devoluciones()->paginate(5);
     
@@ -173,8 +180,25 @@ class VentaController extends Controller
     {
 
         try {
+            
 
             $valor = $request->valor;
+
+            $validator = Validator::make($request->all(), [
+                'valor' => ['required', function ($attribute, $value, $fail) use ($request, $venta) {
+                    if (!($request->valor <= $venta->saldo)) {
+                       $fail('El valor del pago no puede ser mayor al saldo de la venta');
+                    }
+                }],
+            ]);
+    
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 422);
+            }
+
+
+            // $estado_devolucion = $venta->estado;
             
             if ($venta->saldo == $valor) {
                 $venta->estado = 1;
@@ -183,6 +207,7 @@ class VentaController extends Controller
                 $venta->estado = 2;
             }
     
+
             $venta->saldo = $venta->saldo - $valor;
             $venta->save();
     
@@ -194,12 +219,17 @@ class VentaController extends Controller
             $payment =  new PaymentController();
             $payment->store($x_ref_payco, $total, $venta_id, $x_cod_response);// se envían las variables al método store de pagos
     
-            session()->flash('message', ['success', ("Se ha registrado el pago exitosamente")]);
-    
-            return back();
+            
+            $response = ['data' => 'success'];
+            
+            return response()->json($response);
+
+            // session()->flash('message', ['success', ("Se ha registrado el pago exitosamente")]);
+
+            // return back();
            
         } catch (\Exception $e) {
-            //throw $th;
+            return $e;
         }
 
     }
