@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ChatController extends Controller
 {
@@ -91,7 +92,7 @@ class ChatController extends Controller
             ];
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error obteniendo el index de chats.Error: '.json_encode($e));
         }
 
     }
@@ -137,7 +138,7 @@ class ChatController extends Controller
             return response()->json($response);
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error guardando el mensaje.Error: '.json_encode($e));
         }
 
         // if ($request->admin == true) {
@@ -192,7 +193,7 @@ class ChatController extends Controller
             return ['chats'=> $chats];
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error obteniendo los chats en el messenger.Error: '.json_encode($e));
         }
 
         // $mensajes = Chat::whereIn('from_id', [$user, $cliente])
@@ -260,7 +261,7 @@ class ChatController extends Controller
             return ['chats'=> $chats];
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error obteniendo las notificaciones de mensajes.Error: '.json_encode($e));
         }
 
 
@@ -280,6 +281,7 @@ class ChatController extends Controller
         
     }
 
+    
     public function readMessage(Request $request, $chat)
     {
         // if (!$request->ajax()) return redirect('/chats/admin');
@@ -308,7 +310,7 @@ class ChatController extends Controller
             }
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error marcando leídos los mensajes.Error: '.json_encode($e));
         }
 
     }

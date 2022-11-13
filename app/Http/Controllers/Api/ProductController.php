@@ -7,6 +7,7 @@ use App\Events\VisitEvent;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -33,7 +34,7 @@ class ProductController extends Controller
 
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error actualizando las visitas del producto.Error: '.json_encode($e));
         }
 
     }

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TipoRequest;
 use App\Tipo;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 
 class TipoProductoController extends Controller
 {
@@ -21,15 +21,22 @@ class TipoProductoController extends Controller
         $this->middleware('auth');
     }
 
+
     public function index(Request $request)
     {
-        $nombre = $request->get('nombre');
-       
-        $tipos = Tipo::where('nombre','like',"%$nombre%")
-        ->orderBy('id')
-        ->paginate(5);
-        
-        return view('admin.tipo_producto.index',compact('tipos'));
+        try {
+
+            $nombre = $request->get('nombre');
+           
+            $tipos = Tipo::where('nombre','like',"%$nombre%")
+            ->orderBy('id')
+            ->paginate(5);
+            
+            return view('admin.tipo_producto.index',compact('tipos'));
+           
+        } catch (\Exception $e) {
+            Log::debug('Error consultando el index de tipos de productos.Error: '.json_encode($e));
+        }
     }
 
     /**
@@ -50,15 +57,23 @@ class TipoProductoController extends Controller
      */
     public function store(TipoRequest $request)
     {
-        $tipo = new Tipo();
-        $tipo->nombre = $request->nombre;
-        $tipo->descripcion = $request->descripcion;
-        $tipo->subcategoria_id = $request->subcategory_id;
 
-        $tipo->save();
+        try {
+            
+            $tipo = new Tipo();
+            $tipo->nombre = $request->nombre;
+            $tipo->descripcion = $request->descripcion;
+            $tipo->subcategoria_id = $request->subcategory_id;
+    
+            $tipo->save();
+    
+            session()->flash('message', ['success', ("Se ha creado el tipo exitosamente")]);
 
-        session()->flash('message', ['success', ("Se ha creado el tipo exitosamente")]);
-        return redirect()->route('tipo.index');
+            return redirect()->route('tipo.index');
+
+        } catch (\Exception $e) {
+            Log::debug('Error creando el tipo de producto.Error: '.json_encode($e));
+        }
     }
 
     /**
@@ -95,16 +110,22 @@ class TipoProductoController extends Controller
     // public function update(TipoRequest $request, Tipo $tipo)
     public function update(TipoRequest $request, $id)
     {
-        $tipo = Tipo::where('id', $id)->firstOrFail();
+        try {
 
-        $tipo->nombre = $request->nombre;
-        $tipo->descripcion = $request->descripcion;
-        $tipo->subcategoria_id = $request->subcategory_id;
-
-        $tipo->save();
-
-        session()->flash('message', ['success', ("Se ha creado editado el tipo exitosamente")]);
-        return redirect()->route('tipo.index');
+            $tipo = Tipo::where('id', $id)->firstOrFail();
+    
+            $tipo->nombre = $request->nombre;
+            $tipo->descripcion = $request->descripcion;
+            $tipo->subcategoria_id = $request->subcategory_id;
+    
+            $tipo->save();
+    
+            session()->flash('message', ['success', ("Se ha creado editado el tipo exitosamente")]);
+            return redirect()->route('tipo.index');
+     
+        } catch (\Exception $e) {
+            Log::debug('Error editando el tipo de producto.Error: '.json_encode($e));
+        }
     }
 
 
@@ -128,14 +149,17 @@ class TipoProductoController extends Controller
             return redirect()->route('tipo.index');
         }
 
-        catch (\Exception $exception){
+        catch (\Exception $e){
 
             session()->flash('message', ['warning', ("No se puede eliminar la subcategoría porque está en uso")]);
+
+            Log::debug('Error eliminando el tipo de producto.Error: '.json_encode($e));
 
             return redirect()->route('tipo.index');
         }
     }
 
+    
     //ruta api, en desuso. obtiene los tipos de productos de acuerdo a una subcategoría, al crear un producto
     public function getTipo(Request $request)
     {

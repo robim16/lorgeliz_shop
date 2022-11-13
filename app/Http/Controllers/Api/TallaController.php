@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Talla;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TallaController extends Controller
 {
@@ -28,7 +29,8 @@ class TallaController extends Controller
             return $tallas;
              
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error obteniendo las tallas en la vista productos de la tienda.
+            Error: '.json_encode($e));
         }
 
     }

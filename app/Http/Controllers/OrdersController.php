@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Builder;
 // use App\Mail\OrderStatusMail;
 // use App\Notifications\NotificationClient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 // use Illuminate\Support\Facades\Mail;
 
 
@@ -63,7 +65,7 @@ class OrdersController extends Controller
             return view('user.orders.index', compact('pedidos'));
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando las ordenes del cliente.Error: '.json_encode($e));
         }
     }
 
@@ -157,10 +159,11 @@ class OrdersController extends Controller
 
     }
 
+
+
     public function facturas(Request $request, $id)
     {
-        $productos = $this->productosOrder($id);
-
+        
         // $users = Venta::join('clientes','ventas.cliente_id', '=', 'clientes.id')
         // ->join('pedidos','ventas.id', '=', 'pedidos.venta_id')
         // ->join('users','clientes.user_id', '=', 'users.id')
@@ -180,27 +183,47 @@ class OrdersController extends Controller
         // $pdf = \PDF::loadView('user.pdf.factura',['productos'=>$productos,'users'=>$users]);
         // return $pdf->download('factura-'.$users[0]->factura->consecutivo.'.pdf');
 
-        $pdf = \PDF::loadView('user.pdf.factura',['productos'=>$productos]);
-        return $pdf->download('factura-'.$productos[0]->venta->factura->consecutivo.'.pdf'); // imprimir factura de cliente
+        try {
+            
+            $productos = $this->productosOrder($id);
+    
+    
+            $pdf = \PDF::loadView('user.pdf.factura',['productos'=>$productos]);
+            return $pdf->download('factura-'.$productos[0]->venta->factura->consecutivo.'.pdf'); // imprimir factura de cliente
+        
+        } catch (\Exception $e) {
+            Log::debug('Error imprimiendo la factura del cliente.Error: '.json_encode($e));
+        }
 
     }
 
+
+
     public function showPdf(Request $request, $id)
     {
-        $productos = $this->productosOrder($id);
-    
+        
         // $users = $this->userPedido($id);
-
+        
         // $pdf = \PDF::loadView('user.pdf.pedido',['productos'=>$productos, 'users'=>$users])
         // ->setPaper('a4', 'landscape');
         
         // return $pdf->download('pedido-'.$users[0]->pedido.'.pdf');
 
-        $pdf = \PDF::loadView('user.pdf.pedido',['productos'=>$productos])
-        ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('pedido-'.$productos[0]->venta->pedido->id.'.pdf');
+        try {
+           
+            $productos = $this->productosOrder($id);
+    
+            $pdf = \PDF::loadView('user.pdf.pedido',['productos'=>$productos])
+            ->setPaper('a4', 'landscape');
+            
+            return $pdf->download('pedido-'.$productos[0]->venta->pedido->id.'.pdf');
+
+        } catch (\Exception $e) {
+            Log::debug('Error imprimiendo el detalle de la orden del cliente.Error: '.json_encode($e));
+        }
     }
+
+
 
     public function productosOrder($id) //esta función se reutiliza
     {
@@ -231,7 +254,7 @@ class OrdersController extends Controller
                 ->get();
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error en la función productosOrder en ordenes del cliente.Error: '.json_encode($e));
         }
     }
 

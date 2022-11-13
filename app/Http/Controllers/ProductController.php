@@ -30,6 +30,7 @@ class ProductController extends Controller
         // $this->middleware('auth')->except('setVisitas');
     }
 
+    
     public function show($slug)
     {
         // $producto = Producto::join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
@@ -53,10 +54,11 @@ class ProductController extends Controller
             return view('tienda.product', compact('producto', 'related_products'));
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando la información del producto.Error: '.json_encode($e));
         }
 
     }
+
 
     //implementado en api/productController
     public function setVisitas(Request $request, $id)

@@ -14,6 +14,7 @@ use App\Venta;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class InformesController extends Controller
 {
@@ -27,6 +28,7 @@ class InformesController extends Controller
     {
         $this->middleware('auth');
     }
+
 
     public function informeVentas(Request $request)
     {
@@ -57,10 +59,11 @@ class InformesController extends Controller
             return view('admin.informes.ventas.index',compact('ventas'));
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando el informe de ventas.Error: '.json_encode($e));
         }
 
     }
+
 
     public function pdfInformeVentas(Request $request)
     {
@@ -87,10 +90,11 @@ class InformesController extends Controller
             return $pdf->download('ventas.pdf');
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error imprimiendo el informe de ventas.Error: '.json_encode($e));
         }
 
     }
+
 
     public function mostrarVentas(Request $request,$mes)
     {
@@ -138,7 +142,7 @@ class InformesController extends Controller
             return view('admin.informes.ventas.show',compact('ventas'));
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando el show de informe de ventas.Error: '.json_encode($e));
         }
         
     }
@@ -182,8 +186,9 @@ class InformesController extends Controller
             ->setPaper('a4', 'landscape');
             
             return $pdf->download('ventas_mes.pdf');
+
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error imprimiendo el show de informe de ventas.Error: '.json_encode($e));
         }
 
     }
@@ -213,19 +218,27 @@ class InformesController extends Controller
         //     return $query->where('users.'.$criterio, 'like', '%'. $buscar . '%');
         // })
 
-        $productos = ProductoVenta::whereHas('productoReferencia.colorProducto.producto', 
-        function (Builder $query) use ($busqueda) {
-            $query->orWhere('nombre','like',"%$busqueda%");//no funciona el filtro
-        })
-        ->with('productoReferencia')
-        ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
-        ->orderBy('cantidad', 'DESC')
-        ->groupBy('producto_referencia_id')
-        ->paginate(5);
+        try {
 
-        
-        return view('admin.informes.productos.index',compact('productos'));
+            $productos = ProductoVenta::whereHas('productoReferencia.colorProducto.producto', 
+                function (Builder $query) use ($busqueda) {
+                    $query->orWhere('nombre','like',"%$busqueda%");//no funciona el filtro
+                })
+                ->with('productoReferencia')
+                ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
+                ->orderBy('cantidad', 'DESC')
+                ->groupBy('producto_referencia_id')
+                ->paginate(5);
+    
+            
+            return view('admin.informes.productos.index',compact('productos'));
+           
+        } catch (\Exception $e) {
+            Log::debug('Error consultando el informe de ventas de productos.Error: '.json_encode($e));
+        }
+
     }
+
 
     public function pdfInformeProductos(Request $request)
     {
@@ -242,22 +255,28 @@ class InformesController extends Controller
         // ->orderBy('cantidad', 'DESC')
         // ->get();
 
-        $productos = ProductoVenta::with('productoReferencia')
-        ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
-        ->groupBy('producto_referencia_id')
-        ->orderBy('cantidad', 'DESC')
-        ->get();
-        
-        $count = 0;
-        foreach ($productos as $producto) {
-            // $count = $count + 1;
-            $count += 1;
+        try {
+            
+            $productos = ProductoVenta::with('productoReferencia')
+            ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
+            ->groupBy('producto_referencia_id')
+            ->orderBy('cantidad', 'DESC')
+            ->get();
+            
+            $count = 0;
+            foreach ($productos as $producto) {
+                // $count = $count + 1;
+                $count += 1;
+            }
+    
+            $pdf = \PDF::loadView('admin.pdf.informeproductos',['productos'=>$productos, 'count'=>$count])
+            ->setPaper('a4', 'landscape');
+    
+            return $pdf->download('productos.pdf');
+
+        } catch (\Exception $e) {
+            Log::debug('Error imprimiendo el informe de ventas de productos.Error: '.json_encode($e));
         }
-
-        $pdf = \PDF::loadView('admin.pdf.informeproductos',['productos'=>$productos, 'count'=>$count])
-        ->setPaper('a4', 'landscape');
-
-        return $pdf->download('productos.pdf');
 
     }
     
@@ -281,23 +300,31 @@ class InformesController extends Controller
         // ->orderBy('cantidad', 'DESC')
         // ->paginate(5);
 
-        $clientes = Venta::when($busqueda, function ($query) use ($busqueda) {
-            return $query->whereHas('cliente.user',  function (Builder $query) use ($busqueda) {
-                $query->orWhere('id','like',"%$busqueda%")
-                ->orWhere('nombres','like',"%$busqueda%")
-                ->orWhere('apellidos','like',"%$busqueda%")
-                ->orWhere('users.telefono','like',"%$busqueda%");//no funcionan los filtros
-            });
-        })
-        ->with('cliente.user')
-        ->select('cliente_id', DB::raw('COUNT(id) as cantidad'))
-        ->groupBy('cliente_id')
-        ->orderBy('cantidad', 'DESC')
-        ->paginate(5);
+        try {
+           
+            $clientes = Venta::when($busqueda, function ($query) use ($busqueda) {
+                return $query->whereHas('cliente.user',  function (Builder $query) use ($busqueda) {
+                    $query->orWhere('id','like',"%$busqueda%")
+                    ->orWhere('nombres','like',"%$busqueda%")
+                    ->orWhere('apellidos','like',"%$busqueda%")
+                    ->orWhere('users.telefono','like',"%$busqueda%");//no funcionan los filtros
+                });
+            })
+            ->with('cliente.user')
+            ->select('cliente_id', DB::raw('COUNT(id) as cantidad'))
+            ->groupBy('cliente_id')
+            ->orderBy('cantidad', 'DESC')
+            ->paginate(5);
+    
+            return view('admin.informes.clientes.index',compact('clientes'));
 
-        return view('admin.informes.clientes.index',compact('clientes'));
+        } catch (\Exception $e) {
+            Log::debug('Error consultando el informe de clientes.Error: '.json_encode($e));
+        }
 
     }
+
+
 
     public function pdfInformeClientes(Request $request)
     {
@@ -311,21 +338,29 @@ class InformesController extends Controller
         // ->orderBy('cantidad', 'DESC')
         // ->get();
 
-        $clientes = Venta::with('cliente.user')
-        ->select('cliente_id', DB::raw('COUNT(id) as cantidad'))
-        ->groupBy('cliente_id')
-        ->orderBy('cantidad', 'DESC')
-        ->get();
+        try {
+            
+            $clientes = Venta::with('cliente.user')
+            ->select('cliente_id', DB::raw('COUNT(id) as cantidad'))
+            ->groupBy('cliente_id')
+            ->orderBy('cantidad', 'DESC')
+            ->get();
+    
+            $count = 0;
+            foreach ($clientes as $cliente) {
+                // $count = $count + 1;
+                $count += 1;
+            }
+    
+            $pdf = \PDF::loadView('admin.pdf.informeclientes',['clientes'=>$clientes, 'count'=>$count])
+            ->setPaper('a4', 'landscape');
+    
+            return $pdf->download('clientes.pdf');
 
-        $count = 0;
-        foreach ($clientes as $cliente) {
-            // $count = $count + 1;
-            $count += 1;
+        } catch (\Exception $e) {
+            Log::debug('Error imprimiendo el informe de clientes.Error: '.json_encode($e));
         }
 
-        $pdf = \PDF::loadView('admin.pdf.informeclientes',['clientes'=>$clientes, 'count'=>$count])
-        ->setPaper('a4', 'landscape');
-        return $pdf->download('clientes.pdf');
     }
 
 
@@ -342,51 +377,82 @@ class InformesController extends Controller
         // ->groupBy(DB::raw('MONTH(p.fecha)'),DB::raw('YEAR(p.fecha)'))
         // ->paginate(5);
 
-        $pagos = Pago::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio,
-        COUNT(id) as cantidad, SUM(monto) as total')
-        ->whereYear('fecha',$anio)
-        ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
-        ->paginate(5);
+        try {
 
-        return view('admin.informes.pagos.index',compact('pagos'));
+            $pagos = Pago::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio,
+            COUNT(id) as cantidad, SUM(monto) as total')
+            ->whereYear('fecha',$anio)
+            ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
+            ->paginate(5);
+    
+            return view('admin.informes.pagos.index',compact('pagos'));
+            
+        } catch (\Exception $e) {
+            Log::debug('Error consultando el informe de pagos.Error: '.json_encode($e));
+        }
+
     }
+
 
     public function pdfInformePagos(Request $request)
     {
+
         $anio = date('Y');
 
-        $pagos = Pago::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio,
-        COUNT(id) as cantidad, SUM(monto) as total')
-        ->whereYear('fecha',$anio)
-        ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
-        ->get();
-        
-        $count = 0;
-        foreach ($pagos as $pago) {
-            $count += 1;
+        try {
+            
+            $pagos = Pago::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio,
+            COUNT(id) as cantidad, SUM(monto) as total')
+            ->whereYear('fecha',$anio)
+            ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
+            ->get();
+            
+            $count = 0;
+            foreach ($pagos as $pago) {
+                $count += 1;
+            }
+    
+            $pdf = \PDF::loadView('admin.pdf.informepagos',['pagos'=>$pagos, 'count'=>$count])
+            ->setPaper('a4', 'landscape');
+    
+            return $pdf->download('pagos.pdf');
+
+        } catch (\Exception $e) {
+            Log::debug('Error imprimiendo el informe de pagos.Error: '.json_encode($e));
         }
 
-        $pdf = \PDF::loadView('admin.pdf.informepagos',['pagos'=>$pagos, 'count'=>$count])
-        ->setPaper('a4', 'landscape');
-
-        return $pdf->download('pagos.pdf');
-
     }
+
 
     public function mostrarPagos(Request $request,$mes)
     {
 
-        $fecha_de = $request->get('fecha_de');
-        $fecha_a = $request->get('fecha_a');
+        try {
+           
+            $fecha_de = $request->get('fecha_de');
+            $fecha_a = $request->get('fecha_a');
+    
+            $anio = date('Y');
+    
+            if ($fecha_de == '') {
+               $fecha_de = '01/01/'.$anio;
+            }
+    
+            if ($fecha_a == '') {
+                $fecha_a = \Carbon\Carbon::now();
+            }
+    
+            
+            $pagos = Pago::whereMonth('fecha',$mes)
+            ->whereBetween('fecha',[$fecha_de, $fecha_a])
+            ->groupBy('id')
+            ->orderBy('created_at', 'DESC')
+            ->paginate(5);
+    
+            return view('admin.informes.pagos.show',compact('pagos'));
 
-        $anio = date('Y');
-
-        if ($fecha_de == '') {
-           $fecha_de = '01/01/'.$anio;
-        }
-
-        if ($fecha_a == '') {
-            $fecha_a = \Carbon\Carbon::now();
+        } catch (\Exception $e) {
+            Log::debug('Error mostrando el show de informe de pagos.Error: '.json_encode($e));
         }
 
         // $pagos=DB::table('pagos')
@@ -398,80 +464,100 @@ class InformesController extends Controller
         // ->orderBy('pagos.created_at', 'DESC')
         // ->paginate(5);
 
-        $pagos = Pago::whereMonth('fecha',$mes)
-        ->whereBetween('fecha',[$fecha_de, $fecha_a])
-        ->groupBy('id')
-        ->orderBy('created_at', 'DESC')
-        ->paginate(5);
-
-        return view('admin.informes.pagos.show',compact('pagos'));
     }
+
 
     public function pdfPagosShow(Request $request)
     {
         //informe de pagos en el mes
 
-        $mes = date('m', strtotime($request->mes));
+        try {
+           
+            $mes = date('m', strtotime($request->mes));
+    
+            $pagos = Pago::whereMonth('fecha',$mes)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+            
+            $count = 0;
+            foreach ($pagos as $pago) {
+                $count += 1;
+            }
+    
+            $pdf = \PDF::loadView('admin.pdf.informepagosmes',['pagos'=>$pagos, 'count'=>$count])
+            ->setPaper('a4', 'landscape');
+    
+            return $pdf->download('pagos_mes.pdf');
 
-        $pagos = Pago::whereMonth('fecha',$mes)
-        ->orderBy('created_at', 'DESC')
-        ->get();
-        
-        $count = 0;
-        foreach ($pagos as $pago) {
-            $count += 1;
+        } catch (\Exception $e) {
+            Log::debug('Error imprimiendo el show de informe de pagos.Error: '.json_encode($e));
         }
 
-        $pdf = \PDF::loadView('admin.pdf.informepagosmes',['pagos'=>$pagos, 'count'=>$count])
-        ->setPaper('a4', 'landscape');
-
-        return $pdf->download('pagos_mes.pdf');
     }
 
     public function informe_saldos_clientes()
     {
-        $saldos_pendientes = Venta::with('cliente')
-        ->where('saldo', '>', '0')
-        ->where('estado', '=', '2')
-        ->select('cliente_id', DB::raw('COUNT(id) as facturas'),
-        DB::raw('SUM(saldo) as saldos'))
-        ->groupBy('cliente_id')
-        ->paginate(5);
+        try {
+            
+            $saldos_pendientes = Venta::with('cliente')
+            ->where('saldo', '>', '0')
+            ->where('estado', '=', '2')
+            ->select('cliente_id', DB::raw('COUNT(id) as facturas'),
+            DB::raw('SUM(saldo) as saldos'))
+            ->groupBy('cliente_id')
+            ->paginate(5);
+    
+            return view('admin.informes.saldos.index',compact('saldos_pendientes'));
 
-        return view('admin.informes.saldos.index',compact('saldos_pendientes'));
+        } catch (\Exception $e) {
+            Log::debug('Error consultando el informe de saldos.Error: '.json_encode($e));
+        }
     }
 
     public function informeSaldosClientesPdf()
     {
-        $saldos_pendientes = Venta::with('cliente')
-        ->where('saldo', '>', '0')
-        ->where('estado', '=', '2')
-        ->select('cliente_id', DB::raw('COUNT(id) as facturas'),
-        DB::raw('SUM(saldo) as saldos'))
-        ->groupBy('cliente_id')
-        ->get();
+        try {
+            
+            $saldos_pendientes = Venta::with('cliente')
+            ->where('saldo', '>', '0')
+            ->where('estado', '=', '2')
+            ->select('cliente_id', DB::raw('COUNT(id) as facturas'),
+            DB::raw('SUM(saldo) as saldos'))
+            ->groupBy('cliente_id')
+            ->get();
+    
+            $count = 0;
+            foreach ($saldos_pendientes as $saldos_pendiente) {
+                $count += 1;
+            }
+    
+            $pdf = \PDF::loadView('admin.pdf.informesaldos',['saldos_pendientes'=>$saldos_pendientes,
+             'count'=>$count])->setPaper('a4', 'landscape');
+            return $pdf->download('saldosclientes.pdf');
 
-        $count = 0;
-        foreach ($saldos_pendientes as $saldos_pendiente) {
-            $count += 1;
+        } catch (\Exception $e) {
+            Log::debug('Error imprimiendo el informe de saldos.Error: '.json_encode($e));
         }
-
-        $pdf = \PDF::loadView('admin.pdf.informesaldos',['saldos_pendientes'=>$saldos_pendientes,
-         'count'=>$count])->setPaper('a4', 'landscape');
-        return $pdf->download('saldosclientes.pdf');
 
     }
 
     public function facturasPendientesCliente(Cliente $cliente)
     {
-        $saldos_pendientes = Venta::with('cliente')
-        ->where('saldo', '>', '0')
-        ->where('estado', '=', '2')
-        ->where('cliente_id', $cliente->id)
-        ->orderBy('fecha', 'DESC')
-        ->paginate(5);
 
-        return view('admin.informes.saldos.show',compact('saldos_pendientes'));
+        try {
+            
+            $saldos_pendientes = Venta::with('cliente')
+            ->where('saldo', '>', '0')
+            ->where('estado', '=', '2')
+            ->where('cliente_id', $cliente->id)
+            ->orderBy('fecha', 'DESC')
+            ->paginate(5);
+    
+            return view('admin.informes.saldos.show',compact('saldos_pendientes'));
+            
+        } catch (\Exception $e) {
+            Log::debug('Error consultando el informe de facturas pendientes.Error: '.json_encode($e));
+        }
     }
 
 }

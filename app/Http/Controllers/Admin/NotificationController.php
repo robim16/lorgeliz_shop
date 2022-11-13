@@ -7,6 +7,7 @@ use App\Notification;
 use App\Cliente;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class NotificationController extends Controller
 {
@@ -57,6 +58,7 @@ class NotificationController extends Controller
             $notification->save();
 
         } catch (\Exception $e) {
+            Log::debug('Error leyendo la notificación del admin.Error: '.json_encode($e));
             return $e;
         }
 

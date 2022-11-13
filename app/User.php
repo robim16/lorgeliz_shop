@@ -5,9 +5,11 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
-use Spatie\Dropbox\Client;
+// use Intervention\Image\Facades\Image;
+// use Spatie\Dropbox\Client;
 use Laravel\Passport\HasApiTokens;
 //use Illuminate\Support\Str;
 
@@ -17,15 +19,23 @@ class User extends Authenticatable
 
         parent::boot();
 
+
         static::creating(function(User $user) {
-      
-           $slug = \Str::slug($user->nombres. " " . $user->apellidos);
+
+            try {
                 
-            $count = static::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
-            
-            $user->slug = $count ? "{$slug}-{$count}" : $slug;
+                $slug = \Str::slug($user->nombres. " " . $user->apellidos);
+                    
+                $count = static::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+                
+                $user->slug = $count ? "{$slug}-{$count}" : $slug;
+
+            } catch (\Exception $e) {
+               Log::debug('Error creando el slug del usuario.Error: '.json_encode($e));
+            }
             
         });
+
 
         static::created(function(User $user) {
 
@@ -67,6 +77,9 @@ class User extends Authenticatable
                     // ]);
                 
                 // }
+
+                DB::beginTransaction();
+
     
                 if (request()->file('imagen')) {
         
@@ -84,6 +97,7 @@ class User extends Authenticatable
                     //$imageName = $response['name'];
                     $path = Storage::disk('public')->putFileAs("imagenes/users/" . $user->id, $imagen, $nombre);
     
+
                     $img = new Imagene();
                     //$img->nombre = $imageName;
                     // $img->nombre = $nombre;
@@ -97,12 +111,16 @@ class User extends Authenticatable
                 Cliente::create([
                     'user_id' => $user->id,
                 ]);
+
+                DB::commit();
                 
             } catch (\Exception $e) {
-               
+                Log::debug('Error creando el usuario.Error: '.json_encode($e));
+                DB::rollBack();
             }
 			
 		});
+
 
         //implementar con dropbox
 		static::saving(function(User $user) {
@@ -112,6 +130,9 @@ class User extends Authenticatable
                 try {
                    
                     if (request()->file('imagen')) {
+
+                        DB::beginTransaction();
+
         
                         $imagen = request()->file('imagen');
                         $nombre = time().'_'.$imagen->getClientOriginalName();
@@ -147,6 +168,8 @@ class User extends Authenticatable
                             }
     
                         } 
+
+                        DB::commit();
                         // else {
                         //     Cliente::create([
                         //         'user_id' => $user->id,
@@ -155,8 +178,10 @@ class User extends Authenticatable
                         // }
                        
                     }
+
                 } catch (\Exception $e) {
-                    //throw $th;
+                    Log::debug('Error editando el slug del usuario.Error: '.json_encode($e));
+                    DB::rollBack();
                 }
 
 			}

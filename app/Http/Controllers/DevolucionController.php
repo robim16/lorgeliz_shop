@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Mail\AdminDevolucionMail;
 use App\Notifications\NotificationAdminNewDevolution;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -67,10 +68,12 @@ class DevolucionController extends Controller
             return view('user.devoluciones.index',compact('productos'));
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando las devoluciones del cliente.Error: '.json_encode($e));
         }
 
     }
+
+
 
     public function show(Request $request, $id)
     {
@@ -110,7 +113,7 @@ class DevolucionController extends Controller
             return view('user.devoluciones.show',compact('productos'));
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando la devolución del cliente.Error: '.json_encode($e));
         }
 
     }
@@ -189,10 +192,11 @@ class DevolucionController extends Controller
             return response()->json($response);
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error creando la devolución del cliente.Error: '.json_encode($e));
         }
         
     }
+
 
     //implementado en rutas api/devolucion
     public function verificar(Request $request){
@@ -206,4 +210,5 @@ class DevolucionController extends Controller
         ->where('producto_referencia_id',$request->producto)
         ->first();
     }
+    
 }

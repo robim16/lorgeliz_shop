@@ -4,6 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Events\SalesEvent;
+use App\Mail\ClienteMessageMail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class Venta extends Model
 {
@@ -55,6 +59,9 @@ class Venta extends Model
 
             try {
                 
+
+                DB::beginTransaction();
+
                 $cart = Carrito::estado()
                     ->cliente(auth()->user()->cliente->id)
                     ->firstOrFail();
@@ -88,15 +95,19 @@ class Venta extends Model
                 $pedido->venta_id = $venta->id;
                 $pedido->save();
     
+
+                DB::commit();
+
                 $cliente = auth()->user()->cliente->id;
     
-                //$details = [
-                    //'title' => 'Hemos recibido tu pedido',
-                    //'cliente' => $cliente,
-                    //'url' => url('/pedidos/'. $venta->id),
-                //];
+                $details = [
+                    'title' => 'Hemos recibido tu pedido',
+                    'cliente' => $cliente,
+                    'url' => url('/pedidos/'. $venta->id),
+                ];
                 
-                //Mail::to(Auth()->user()->email)->send(new ClienteMessageMail($details));
+
+                Mail::to(Auth()->user()->email)->send(new ClienteMessageMail($details));
     
     
                 $productos = array();
@@ -116,7 +127,9 @@ class Venta extends Model
 
 
             } catch (\Exception $e) {
-                //throw $th;
+                Log::debug('Error creando el pedido y los detalles de la venta.Error: '.json_encode($e));
+                DB::rollBack();
+
             }
             
         });

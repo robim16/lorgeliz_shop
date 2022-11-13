@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\ClienteMessageMail;
 use App\Mail\AdminVentaMail;
 use App\Notifications\NotificationAdmin;
-
+use Illuminate\Support\Facades\Log;
 
 class VentaController extends Controller
 {
@@ -259,6 +259,8 @@ class VentaController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::debug('Error guardando la venta.Error: '.json_encode($e));
+            
         }
     }
 

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 class OrdersController extends Controller
 {
@@ -65,20 +66,27 @@ class OrdersController extends Controller
             return view('admin.pedidos.index', compact('pedidos', 'estados'));
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando el index de pedidos en el panel de admin
+            .Error: '.json_encode($e));
         }
 
     }
 
     public function show($id)
     {
-        $productos = $this->productosOrder($id);
+        try {
+           
+            $productos = $this->productosOrder($id);
+    
+            return view('admin.pedidos.show',compact('productos'));
+
+        } catch (\Exception $e) {
+            Log::debug('Error consultando el pedido.Error: '.json_encode($e));
+        }
 
         // $users = $this->userPedido($id);
 
         // return view('admin.pedidos.show',compact('productos','users'));
-
-        return view('admin.pedidos.show',compact('productos'));
 
     }
 
@@ -98,13 +106,14 @@ class OrdersController extends Controller
             $pedido->estado = $request->estado;
     
             $pedido->save(); // se actualiza el estado
+
     
-            //$details = [
-                //'cliente' => $pedido->venta->cliente->user->nombres,
-                //'fecha' => date('d/m/Y', strtotime($pedido->fecha)),
-                //'estado' => $pedido->estado,
-                //'url' => url('/pedidos/'. $pedido->id),
-            //];
+            $details = [
+                'cliente' => $pedido->venta->cliente->user->nombres,
+                'fecha' => date('d/m/Y', strtotime($pedido->fecha)),
+                'estado' => $pedido->estado,
+                'url' => url('/pedidos/'. $pedido->id),
+            ];
     
             if ($pedido->estado == 2) {
                $mensaje = 'Tu pedido está siendo preparado';
@@ -126,35 +135,44 @@ class OrdersController extends Controller
     
             Cliente::findOrFail($pedido->venta->cliente->id)->notify(new NotificationClient($arrayData));
     
-            //Mail::to($pedido->venta->cliente->user->email)->send(new OrderStatusMail($details));
+            Mail::to($pedido->venta->cliente->user->email)->send(new OrderStatusMail($details));
     
             session()->flash('message', ['success', ("Se ha actualizado el estado del pedido")]);
 
             return back();
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error editando el pedido.Error: '.json_encode($e));
         }
 
     }
 
+
     public function imprimirPedido(Request $request, $id)
     {   
 
-        $productos = $this->productosOrder($id);
+        try {
+          
+            $productos = $this->productosOrder($id);
+    
+            
+            $pdf = \PDF::loadView('admin.pdf.pedido',['productos'=>$productos])
+            ->setPaper('a4', 'landscape');
+            
+            return $pdf->download('pedido-'.$productos[0]->venta->pedido->id.'.pdf');//imprimir pedido en pdf
+        
+        } catch (\Exception $e) {
+            Log::debug('Error imprimiendo el pedido.Error: '.json_encode($e));
+        }
 
         // $users = $this->userPedido($id);
-
+    
         // $pdf = \PDF::loadView('admin.pdf.pedido',['productos'=>$productos, 'users'=>$users])
         // ->setPaper('a4', 'landscape');
         
         // return $pdf->download('pedido-'.$users[0]->pedido.'.pdf'); //imprimir pedido en pdf
-
-        $pdf = \PDF::loadView('admin.pdf.pedido',['productos'=>$productos])
-        ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('pedido-'.$productos[0]->venta->pedido->id.'.pdf'); //imprimir pedido en pdf
     }
+
 
     public function reportePedidosPdf()
     {
@@ -175,11 +193,15 @@ class OrdersController extends Controller
             ->with('venta.cliente.user')
             ->orderBy('created_at', 'DESC')
             ->get();
+
     
-            $count = 0;
-            foreach ($pedidos as $pedido) {
-                $count = $count + 1;
-            }
+            // $count = 0;
+            // foreach ($pedidos as $pedido) {
+            //     $count = $count + 1;
+            // }
+
+            $count = $pedidos->count();
+           
     
             $pdf = \PDF::loadView('admin.pdf.listadopedidos',['pedidos'=>$pedidos, 'count'=>$count])
             ->setPaper('a4', 'landscape');
@@ -187,10 +209,12 @@ class OrdersController extends Controller
             return $pdf->download('listadopedidos.pdf'); //listado de pedidos en pdf
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error imprimiendo el reporte de pedidos.Error: '.json_encode($e));
         }
 
     }
+
+
 
     public function productosOrder($id) //esta función se reutiliza
     {
@@ -211,12 +235,19 @@ class OrdersController extends Controller
         // ->groupBy('producto_referencia.id')
         // ->get();
 
-        return ProductoVenta::whereHas('venta.pedido',
-        function (Builder $query) use ($id) {
-           $query->where('id', $id);
-        })
-        ->with(['venta.pedido', 'venta.cliente.user'])
-        ->get();
+        try {
+            
+            return ProductoVenta::whereHas('venta.pedido',
+            function (Builder $query) use ($id) {
+               $query->where('id', $id);
+            })
+            ->with(['venta.pedido', 'venta.cliente.user'])
+            ->get();
+
+        } catch (\Exception $e) {
+            Log::debug('Error en la función productosOrder.Error: '.json_encode($e));
+        }
+
     }
 
     // public function userPedido($id)

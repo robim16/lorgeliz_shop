@@ -47,7 +47,7 @@ class DevolucionController extends Controller
             return view('admin.devoluciones.index',compact('devoluciones', 'estados'));
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error obteniendo el listado de devoluciones.Error: '.json_encode($e));
         }
     }
 
@@ -88,7 +88,7 @@ class DevolucionController extends Controller
             return view('admin.devoluciones.show',compact('producto_devolucion'));
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error en el método show de devoluciones.Error: '.json_encode($e));
         }
 
     }
@@ -112,6 +112,7 @@ class DevolucionController extends Controller
                 ->get();
     
             $count = 0;
+
             foreach ($devoluciones as $devolucion) {
                 // $count = $count + 1;
                 $count += 1;
@@ -123,7 +124,7 @@ class DevolucionController extends Controller
             return $pdf->download('listado_devoluciones.pdf');
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error imprimiendo las devoluciones.Error: '.json_encode($e));
         }
         
     }

@@ -11,6 +11,7 @@ use App\ProductoReferencia;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -98,7 +99,7 @@ class HomeController extends Controller
 
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error obteniendo los productos del index.Error: '.json_encode($e));
         }
 
 
@@ -157,7 +158,9 @@ class HomeController extends Controller
         // ->take(5)
         // ->get();
     }
-    // función para implementar index con ajax
+
+
+    // función para implementar productos nuevos en el index con ajax
     public function productsIndex(Request $request)
     {
         // if (!$request->ajax()) return redirect('/');
@@ -213,7 +216,7 @@ class HomeController extends Controller
             return ['nuevos' => $nuevos];
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error obteniendo los productos nuevos en el index.Error: '.json_encode($e));
         }
 
         // $populares = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
@@ -249,11 +252,15 @@ class HomeController extends Controller
 
         // return ['slider' => $slider, 'nuevos' => $nuevos, 'populares' => $populares, 'vendidos' => $vendidos, 'ofertas' => $ofertas];
     }
+
     
+
     public function categorias()
     {
         return view('tienda.categoria');
     }
+
+
 
     public function checkout()
     {
@@ -267,8 +274,10 @@ class HomeController extends Controller
 
 
             return view('tienda.checkout', compact('carrito'));
+
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando los productos del carrito en checkout.
+            Error: '.json_encode($e));
         }
         
         // ->where('estado', 1)
@@ -319,6 +328,7 @@ class HomeController extends Controller
             'productos' => $productos
         ];
     }
+
 
     public function getProductosByState(Request $request)
     {
@@ -371,6 +381,7 @@ class HomeController extends Controller
 
     }
 
+
     public function getProductosSales(Request $request)
     {
         // if (!$request->ajax()) return redirect('/');
@@ -422,6 +433,7 @@ class HomeController extends Controller
         
     }
 
+
     public function getProductosVisitas(Request $request)
     {
         // if (!$request->ajax()) return redirect('/');
@@ -471,6 +483,8 @@ class HomeController extends Controller
 
     }
 
+
+
     public function getProductsByOrder(Request $request)
     {
 
@@ -519,6 +533,8 @@ class HomeController extends Controller
             'productos' => $productos
         ];
     }
+
+
 
     public function getProductsByTipo(Request $request)
     {
@@ -571,6 +587,8 @@ class HomeController extends Controller
 
     }
 
+
+
     public function getProductsByGenre(Request $request)
     {
     //    if (!$request->ajax()) return redirect('/');
@@ -622,6 +640,8 @@ class HomeController extends Controller
 
     }
 
+
+    
     public function getProductsByKeyword(Request $request)
     {
         // if (!$request->ajax()) return redirect('/');

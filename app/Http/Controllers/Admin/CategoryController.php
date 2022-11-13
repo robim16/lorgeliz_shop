@@ -6,6 +6,7 @@ use App\Categoria;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoriaRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 
 class CategoryController extends Controller
@@ -67,7 +68,7 @@ class CategoryController extends Controller
             return redirect()->route('category.index');
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error creando la categoría.Error: '.json_encode($e));
         }
     }
 
@@ -118,7 +119,7 @@ class CategoryController extends Controller
             return redirect()->route('category.index');
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error editando la categoría.Error: '.json_encode($e));
         }
     }
 
@@ -142,9 +143,11 @@ class CategoryController extends Controller
             return redirect()->route('category.index');
         }
 
-        catch (\Exception $exception){
+        catch (\Exception $e){
 
             session()->flash('message', ['warning', ("No puedes eliminar la categoría porque está en uso")]);
+
+            Log::debug('Error eliminando la categoría.Error: '.json_encode($e));
 
             return redirect()->route('category.index');
         }

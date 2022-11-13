@@ -11,6 +11,7 @@ use App\Mail\ClientePrivateMail;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class ClienteController extends Controller
@@ -58,7 +59,7 @@ class ClienteController extends Controller
 
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error obteniendo el index de clientes.Error: '.json_encode($e));
         }
 
     }
@@ -103,7 +104,7 @@ class ClienteController extends Controller
             return view('admin.clientes.show', compact('pedidos', 'total_general', 'total_pagina'));
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error mostrando el cliente.Error: '.json_encode($e));
         }
 
 
@@ -147,7 +148,9 @@ class ClienteController extends Controller
             // return new ClientePrivateMail($cliente->user->nombres, $data['mensaje']);
 
 
-        } catch (\Exception $exception) {
+        } catch (\Exception $e) {
+
+            Log::debug('Error enviando el mensaje al cliente.Error: '.json_encode($e));
             $success = false;
         }
 
@@ -177,7 +180,7 @@ class ClienteController extends Controller
 
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error imprimiendo el listado de clientes.Error: '.json_encode($e));
         }
 
     }

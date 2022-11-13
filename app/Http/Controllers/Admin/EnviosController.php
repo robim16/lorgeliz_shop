@@ -6,6 +6,7 @@ use App\Cliente;
 use App\Envio;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class EnviosController extends Controller
 {
@@ -47,11 +48,17 @@ class EnviosController extends Controller
      */
     public function store(Request $request)
     {
-        $envio = Envio::create($request->except('cliente_id'));
-
-        session()->flash('message', ['success', ("Se registrado la guía de envío exitosamente")]);
-
-        return back();
+        try {
+           
+            $envio = Envio::create($request->except('cliente_id'));
+    
+            session()->flash('message', ['success', ("Se registrado la guía de envío exitosamente")]);
+    
+            return back();
+            
+        } catch (\Exception $e) {
+            Log::debug('Error guardando el envío.Error: '.json_encode($e));
+        }
     }
 
     /**

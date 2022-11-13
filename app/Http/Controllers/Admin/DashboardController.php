@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
@@ -90,7 +91,7 @@ class DashboardController extends Controller
             ];
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error obteniendo la información del dashboard.Error: '.json_encode($e));
         }
 
     }

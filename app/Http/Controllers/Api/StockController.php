@@ -6,6 +6,7 @@ use App\CarritoProducto;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class StockController extends Controller
 {
@@ -39,7 +40,8 @@ class StockController extends Controller
 
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error verificando el stock de los productos comprados.
+            Error: '.json_encode($e));
         }
 
     }

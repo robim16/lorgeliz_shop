@@ -6,13 +6,16 @@ use Illuminate\Http\Request;
 use App\Notification;
 use App\Cliente;
 use Auth;
+use Illuminate\Support\Facades\Log;
 
 class NotificationController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth');
     }
+
 
     public function index()
     {
@@ -25,7 +28,8 @@ class NotificationController extends Controller
         return $unreadNotifications;
         
     }
-    
+
+
     public function setClientRead(Request $request, $id)
     {
         // if (!$request->ajax()) return redirect('/');
@@ -41,7 +45,7 @@ class NotificationController extends Controller
             $notification->save();
            
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error leyendo la notificación del cliente.Error: '.json_encode($e));
         }
 
     }

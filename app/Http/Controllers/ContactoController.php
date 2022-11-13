@@ -22,10 +22,12 @@ class ContactoController extends Controller
     }
 
 
+    
     public function contacto()
     {
         return view('user.contact');
     }
+
 
     public function sendMail(Request $request)
     {

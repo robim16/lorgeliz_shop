@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Subcategoria;
 use App\Http\Requests\SubcategoriaRequest;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 
 class SubcategoryController extends Controller
 {
@@ -39,7 +39,7 @@ class SubcategoryController extends Controller
             return view('admin.subcategorias.index',compact('subcategorias'));
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando el index de subcategorías.Error: '.json_encode($e));
         }
 
     }
@@ -77,7 +77,7 @@ class SubcategoryController extends Controller
             return redirect()->route('subcategory.index');
            
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error guardando la subcategoría.Error: '.json_encode($e));
         }
     }
 
@@ -130,7 +130,7 @@ class SubcategoryController extends Controller
             return redirect()->route('subcategory.index');
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error editando la subcategoría.Error: '.json_encode($e));
         }
     }
 
@@ -156,6 +156,8 @@ class SubcategoryController extends Controller
         catch (\Exception $e){
 
             session()->flash('message', ['warning', ("No es posible eliminar la subcategoría porque está en uso")]);
+
+            Log::debug('Error eliminando la subcategoría.Error: '.json_encode($e));
 
             return redirect()->route('subcategory.index');
         }

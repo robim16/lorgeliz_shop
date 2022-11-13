@@ -73774,28 +73774,6 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "./resources/js/admin/factura_venta.js":
-/*!*********************************************!*\
-  !*** ./resources/js/admin/factura_venta.js ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var product = new Vue({
-  el: '#factura_venta',
-  data: {
-    venta: 0
-  },
-  methods: {
-    facturaVenta: function facturaVenta(id) {
-      // window.open('/lorgeliz_tienda_copia/public/admin/ventas/factura/'+ id + ',' + '_blank');
-      window.open('http://dev.lorenzogeliztienda.com/admin/ventas/factura/' + id + ',' + '_blank');
-    }
-  }
-});
-
-/***/ }),
-
 /***/ "./resources/js/admin/imprimir_pedidos.js":
 /*!************************************************!*\
   !*** ./resources/js/admin/imprimir_pedidos.js ***!
@@ -74332,6 +74310,109 @@ var product = new Vue({
       this.precioanterior = data.datos.precioanterior;
       this.porcentajededescuento = data.datos.porcentajededescuento;
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/admin/ventas_show.js":
+/*!*******************************************!*\
+  !*** ./resources/js/admin/ventas_show.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var pagos_venta = new Vue({
+  el: '#venta_show',
+  data: {
+    alertShow: false,
+    valor: '',
+    venta: 0,
+    modal: 0,
+    modal_epayco: 0,
+    x_transaction_date: '',
+    x_amount: '',
+    x_response: '',
+    x_response_reason_text: '',
+    x_cod_response: '',
+    x_transaction_id: ''
+  },
+  methods: {
+    facturaVenta: function facturaVenta(id) {
+      window.open('/lorgeliz_tienda_copia/public/admin/ventas/factura/' + id + ',' + '_blank'); // window.open('http://dev.lorenzogeliztienda.com/admin/ventas/factura/'+ id + ',' + '_blank')
+    },
+    registrar_pago: function registrar_pago(venta) {
+      var _this = this;
+
+      var url = "/lorgeliz_tienda_copia/public/admin/ventas/pagar/".concat(venta);
+      document.getElementById("valor-error").innerHTML = '';
+      axios.put(url, {
+        'valor': this.valor
+      }).then(function (response) {
+        if (response.data.data == 'success') {
+          _this.alertShow = true;
+          _this.valor = '';
+        }
+      })["catch"](function (error) {
+        for (var _i = 0, _Object$entries = Object.entries(error.response.data); _i < _Object$entries.length; _i++) {
+          var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+              el = _Object$entries$_i[0],
+              message = _Object$entries$_i[1];
+
+          document.getElementById("".concat(el, "-error")).innerHTML = message;
+        }
+      });
+    },
+    pdfListPagos: function pdfListPagos() {
+      var url = '/lorgeliz_tienda_copia/public/admin/payments/list'; // let url = 'http://dev.lorenzogeliztienda.com/admin/payments/list'
+
+      window.open(url);
+    },
+    imprimirPago: function imprimirPago(id) {
+      // window.open('/lorgeliz_tienda_copia/public/admin/payments/payment/'+ id + ',' + '_blank');
+      var url = "/lorgeliz_tienda_copia/public/admin/payments/".concat(id, ",_blank/pdf"); // let url = `http://dev.lorenzogeliztienda.com/admin/payments/${id},_blank/pdf`
+
+      window.open(url);
+    },
+    getResponse: function getResponse(ref_payco) {
+      var _this2 = this;
+
+      var url = "https://secure.epayco.co/validation/v1/reference/" + ref_payco;
+      axios.get(url).then(function (response) {
+        if (response.success) {
+          _this2.x_transaction_date = response.data.x_transaction_date;
+          _this2.x_amount = response.data.x_amount;
+          _this2.x_response = response.data.x_response;
+          _this2.x_response_reason_text = response.data.x_response_reason_text;
+          _this2.x_cod_response = response.data.x_cod_response;
+          _this2.x_transaction_id = response.data.x_transaction_id;
+        }
+      });
+      this.abrirModalEpayco();
+    },
+    cerrarModal: function cerrarModal() {
+      this.modal = 0;
+    },
+    abrirModal: function abrirModal() {
+      this.modal = 1;
+    },
+    cerrarModalEpayco: function cerrarModalEpayco() {
+      this.modal_epayco = 0;
+    },
+    abrirModalEpayco: function abrirModalEpayco() {
+      this.modal_epayco = 1;
+    }
+  },
+  mounted: function mounted() {
+    this.valor = data.datos.valor;
   }
 });
 
@@ -76062,10 +76143,13 @@ if (document.getElementById('payments')) {
 
 if (document.getElementById('user_cart')) {
   __webpack_require__(/*! ./tienda/userCart */ "./resources/js/tienda/userCart.js");
-}
+} // if (document.getElementById('factura_venta')) {
+//     require('./admin/factura_venta');
+// }
 
-if (document.getElementById('factura_venta')) {
-  __webpack_require__(/*! ./admin/factura_venta */ "./resources/js/admin/factura_venta.js");
+
+if (document.getElementById('venta_show')) {
+  __webpack_require__(/*! ./admin/ventas_show */ "./resources/js/admin/ventas_show.js");
 }
 
 /***/ }),

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Configuracion;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ConfiguracionController extends Controller
 {
@@ -82,7 +83,7 @@ class ConfiguracionController extends Controller
             return redirect()->route('configuracion.index');
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error editando la configuración.Error: '.json_encode($e));
         }
     }
 

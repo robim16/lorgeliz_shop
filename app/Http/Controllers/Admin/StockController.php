@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StockRequest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class StockController extends Controller
@@ -24,6 +25,7 @@ class StockController extends Controller
     {
         $this->middleware('auth');
     }
+
     
     public function index(Request $request)
     {
@@ -67,10 +69,11 @@ class StockController extends Controller
             return view('admin.stocks.index',compact('productos'));
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando el inventario.Error: '.json_encode($e));
         }
 
     }
+
 
     public function store(Request $request)
     {
@@ -136,10 +139,13 @@ class StockController extends Controller
 
 
         } catch (\Exception $e) {
+            Log::debug('Error ingresando el inventario.Error: '.json_encode($e));
             session()->flash('message', ['warning', ("Ha ocurrido un error".$e)]);
+
         }
 
     }
+
 
     public function pdfInventarios()
     {
@@ -176,7 +182,7 @@ class StockController extends Controller
             return $pdf->download('inventarioproductos.pdf');
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error imprimiendo los inventarios.Error: '.json_encode($e));
         }
 
     }

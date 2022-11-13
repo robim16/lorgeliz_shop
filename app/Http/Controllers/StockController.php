@@ -22,6 +22,7 @@ class StockController extends Controller
         
     }
 
+    
     public function verificarStock(Request $request)
     {  
         

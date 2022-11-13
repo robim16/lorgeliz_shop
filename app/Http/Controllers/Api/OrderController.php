@@ -7,12 +7,14 @@ use App\Pedido;
 use App\ProductoVenta;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
    
     public function productos(Request $request, Pedido $pedido) {
 
+        //obtener productos del pedido en componente orderShow
 
         $cliente = $request->user()->cliente->id; 
 
@@ -40,7 +42,8 @@ class OrderController extends Controller
             return ['productos' => $productos];
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando los productos en el show del pedido del cliente
+            .Error: '.json_encode($e));
         }
 
     }

@@ -4,6 +4,7 @@ namespace App;
 
 // use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Facades\Log;
 
 class ProductoReferencia extends Pivot
 {
@@ -41,6 +42,7 @@ class ProductoReferencia extends Pivot
     public function ventas (){
         return $this->belongsToMany(Venta::class, 'producto_venta');
     }
+    
 
     public static function obtenerProducto ($producto,$talla){
 
@@ -51,16 +53,30 @@ class ProductoReferencia extends Pivot
         // ->select('producto_referencia.id as referencia', 'productos.precio_actual', 'producto_referencia.stock')
         // ->get();
 
-        return ProductoReferencia::with('colorProducto.producto:id,precio_actual')
-        ->where('color_producto_id', $producto)
-        ->where('talla_id', $talla)
-        ->get();
+        try {
+            
+            return ProductoReferencia::with('colorProducto.producto:id,precio_actual')
+                ->where('color_producto_id', $producto)
+                ->where('talla_id', $talla)
+                ->get();
+
+        } catch (\Exception $e) {
+            Log::debug('Error obteniendo la referencia en obtenerProducto.Error: '.json_encode($e));
+        }
+
     }
 
     public static function disponibles(){
-        return ProductoReferencia::where('stock', '>' , '0')
-        ->groupBy('color_producto_id')
-        ->select('color_producto_id')
-        ->get();
+
+        try {
+          
+            return ProductoReferencia::where('stock', '>' , '0')
+                ->groupBy('color_producto_id')
+                ->select('color_producto_id')
+                ->get();
+
+        } catch (\Exception $e) {
+            Log::debug('Error obteniendo la referencias disponibles.Error: '.json_encode($e));
+        }
     }
 }

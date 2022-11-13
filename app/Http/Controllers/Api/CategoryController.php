@@ -8,10 +8,11 @@ use App\ProductoReferencia;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
+
     public function getProductos(Request $request)
     {
         //obtener todos los productos, en vista categorías
@@ -43,10 +44,11 @@ class CategoryController extends Controller
             ];
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando las categorías.Error: '.json_encode($e));
         }
 
     }
+
 
     public function getProductosByState(Request $request)
     {
@@ -87,13 +89,15 @@ class CategoryController extends Controller
 
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando las categorías por estado.Error: '.json_encode($e));
         }
 
     }
 
+
     public function getProductosSales(Request $request)
     {
+
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -126,10 +130,11 @@ class CategoryController extends Controller
 
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando la categoría más vendidos.Error: '.json_encode($e));
         }
 
     }
+
 
     public function getProductosVisitas(Request $request)
     {
@@ -161,10 +166,11 @@ class CategoryController extends Controller
             ];
            
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando la categoría más vistos.Error: '.json_encode($e));
         }
 
     }
+
 
     public function getProductsByOrder(Request $request)
     {
@@ -203,10 +209,11 @@ class CategoryController extends Controller
             ];
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando las categoría por orden.Error: '.json_encode($e));
         }
 
     }
+
 
     public function getProductsByTipo(Request $request)
     {
@@ -244,10 +251,11 @@ class CategoryController extends Controller
             ];
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando la categoría tipos de productos.Error: '.json_encode($e));
         }
 
     }
+
 
     public function getProductsByGender(Request $request)
     {
@@ -286,10 +294,11 @@ class CategoryController extends Controller
 
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando la categoría género.Error: '.json_encode($e));
         }
 
     }
+
 
     public function getProductsByKeyword(Request $request)
     {
@@ -335,7 +344,7 @@ class CategoryController extends Controller
             ];
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error en el buscador de productos.Error: '.json_encode($e));
         }
 
     }

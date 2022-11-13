@@ -6,6 +6,8 @@ use App\Events\ChatEvent;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 // use Illuminate\Support\Collection;
 
 class ChatController extends Controller
@@ -53,7 +55,7 @@ class ChatController extends Controller
             return ['chats'=> $chats, 'user' => $user];
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando el chat del cliente.Error: '.json_encode($e));
         }
 
     }
@@ -92,7 +94,7 @@ class ChatController extends Controller
             return ['chats'=> $chats];
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando las notificaciones de mensajes del cliente.Error: '.json_encode($e));
         }
 
     }
@@ -136,7 +138,7 @@ class ChatController extends Controller
 
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error guardando el mensaje del cliente.Error: '.json_encode($e));
         }
 
         // $data = $this->index($request);
@@ -165,7 +167,7 @@ class ChatController extends Controller
             $chat->save();
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error leyendo el mensaje del chat del cliente.Error: '.json_encode($e));
         }
 
     }

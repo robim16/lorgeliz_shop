@@ -7,7 +7,7 @@ use App\Pago;
 use App\User;
 use App\Notifications\NotificationPay;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
@@ -20,6 +20,7 @@ class PaymentController extends Controller
     {
         $this->middleware('auth');
     }
+
 
     public function index(Request $request)
     {
@@ -37,10 +38,11 @@ class PaymentController extends Controller
             return view('admin.pagos.index', compact('pagos'));
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error consultando los pagos.Error: '.json_encode($e));
         }
         
     }
+
 
     public function store($x_ref_payco, $total, $venta_id, $x_cod_response)
     {
@@ -57,10 +59,11 @@ class PaymentController extends Controller
             $pago->save();//guardar el pago
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error guardando el pago.Error: '.json_encode($e));
         }
 
     }
+
 
     public function printPay(Request $request, $id)
     {
@@ -77,9 +80,11 @@ class PaymentController extends Controller
             return $pdf->download('pago-'.$pago->id.'.pdf');
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error imprimiendo el pago.Error: '.json_encode($e));
         }
+
     }
+
 
     public function pdfPagosReporte()
     {
@@ -101,10 +106,12 @@ class PaymentController extends Controller
             return $pdf->download('listadopagos.pdf');
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error imprimiendo el reporte de pagos.Error: '.json_encode($e));
         }
 
     }
+
+
 
     public function anular(Pago $pago)
     {
@@ -132,7 +139,7 @@ class PaymentController extends Controller
             return back();
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error anulando el pago.Error: '.json_encode($e));
         }
         
     }

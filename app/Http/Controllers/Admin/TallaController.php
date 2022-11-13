@@ -8,6 +8,7 @@ use App\ProductoReferencia;
 use App\Talla;
 use App\Tipo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TallaController extends Controller
 {
@@ -21,6 +22,7 @@ class TallaController extends Controller
     {
         $this->middleware('auth');
     }
+
 
     public function getTalla(Request $request, $id)
     { //implementada en admin/api/tallaController. En desuso
@@ -41,6 +43,7 @@ class TallaController extends Controller
 
     }
 
+
     public function tallasTipoId(Request $request)
     //implementada en admin/api/tallaController. En desuso
     //obtener las tallas de un tipo de producto para mostrar en el select las que ya han sido seleccionadas, en la vista index de tipo de producto
@@ -58,6 +61,7 @@ class TallaController extends Controller
         return response()->json($response);
     }
 
+
     public function store(Request $request)
     {
 
@@ -71,6 +75,7 @@ class TallaController extends Controller
             if ($tallas) {
     
                 $tipo->tallas()->detach();
+
                 foreach($tallas as $talla){
                     $tipo->tallas()->attach($talla);
                 }
@@ -78,6 +83,7 @@ class TallaController extends Controller
                 session()->flash('message', ['success', ("Se han creado las tallas")]);
     
                 return back();
+                
             }else {
                 session()->flash('message', ['danger', ("Debes indicar las tallas")]);
     
@@ -86,7 +92,7 @@ class TallaController extends Controller
 
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error guardando la subcategoría.Error: '.json_encode($e));
         }
        
     }
