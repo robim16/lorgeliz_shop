@@ -19,8 +19,8 @@
 
                 <div class="card-body">
 
-                    <form action="{{ route('contact.mail')}}">
-
+                    <form action="{{ route('contact.mail')}}" method="POST">
+                        @csrf
                         <div class="form-group">
                             <textarea name="mensaje" id="mensaje" class="form-control" placeholder="Escribe tu mensaje" cols="30" rows="5"></textarea>
                         </div>

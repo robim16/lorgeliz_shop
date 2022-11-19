@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 // use Spatie\Dropbox\Client;
 use Laravel\Passport\HasApiTokens;
 //use Illuminate\Support\Str;
+use App\Notifications\ResetPassword;
 
 class User extends Authenticatable
 {
@@ -237,5 +238,16 @@ class User extends Authenticatable
 
     public function chats (){
         return $this->hasMany(Chat::class, 'from_id');
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token));
     }
 }
