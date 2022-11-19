@@ -18,15 +18,19 @@ const pagos_venta = new Vue({
 
 
         facturaVenta(id){
-            window.open('/lorgeliz_tienda_copia/public/admin/ventas/factura/'+ id + ',' + '_blank');
+            // window.open('/lorgeliz_tienda_copia/public/admin/ventas/factura/'+ id + ',' + '_blank');
            
-            // window.open('http://dev.lorenzogeliztienda.com/admin/ventas/factura/'+ id + ',' + '_blank')
+            window.open('http://dev.lorenzogeliztienda.com/admin/ventas/factura/'+ id + ',' + '_blank')
             
         },
 
         registrar_pago(venta){
 
-            let url = `/lorgeliz_tienda_copia/public/admin/ventas/pagar/${venta}`;
+            // let url = `/lorgeliz_tienda_copia/public/admin/ventas/pagar/${venta}`;
+
+            let url = `http://dev.lorenzogeliztienda.com/admin/ventas/pagar/${venta}`;
+
+            
 
             document.getElementById(`valor-error`).innerHTML = '';
             
@@ -56,18 +60,18 @@ const pagos_venta = new Vue({
 
 
         pdfListPagos(){
-            let url = '/lorgeliz_tienda_copia/public/admin/payments/list';
+            // let url = '/lorgeliz_tienda_copia/public/admin/payments/list';
 
-            // let url = 'http://dev.lorenzogeliztienda.com/admin/payments/list'
+            let url = 'http://dev.lorenzogeliztienda.com/admin/payments/list'
             window.open(url);
         },
 
 
         imprimirPago(id){
             // window.open('/lorgeliz_tienda_copia/public/admin/payments/payment/'+ id + ',' + '_blank');
-            let url = `/lorgeliz_tienda_copia/public/admin/payments/${id},_blank/pdf`;
+            // let url = `/lorgeliz_tienda_copia/public/admin/payments/${id},_blank/pdf`;
             
-            // let url = `http://dev.lorenzogeliztienda.com/admin/payments/${id},_blank/pdf`
+            let url = `http://dev.lorenzogeliztienda.com/admin/payments/${id},_blank/pdf`
             window.open(url)
             
         },

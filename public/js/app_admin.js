@@ -10632,7 +10632,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.product_color[data-v-b7f93bea]{\n    padding-left: 67px;\n}\n.product_size[data-v-b7f93bea]{\n    padding-left: 67px;\n}\n.product_price[data-v-b7f93bea]{\n    padding-left: 66px;\n}\n.product_quantity_container[data-v-b7f93bea]{\n    padding-left: 69px;\n}\n.product_total[data-v-b7f93bea]{\n    padding-left: 65px;\n}\n.remove[data-v-b7f93bea]{\n    padding-left: 28px;\n}\n@media only screen and (max-width: 991px)\n{\n.product_color[data-v-b7f93bea]{\n        padding-left: 0;\n}\n.product_size[data-v-b7f93bea]{\n        padding-left: 0;\n}\n.product_price[data-v-b7f93bea]{\n        padding-left: 0;\n}\n.product_quantity_container[data-v-b7f93bea]{\n        padding-left: 0;\n}\n.product_total[data-v-b7f93bea]{\n        padding-left: 0;\n}\n.remove[data-v-b7f93bea]{\n        padding-left: 0; \n        margin: 5px 0;\n        font-size: 30px;\n}\n}\n", ""]);
+exports.push([module.i, "\n.product_color[data-v-b7f93bea]{\n    padding-left: 67px;\n}\n.product_size[data-v-b7f93bea]{\n    padding-left: 67px;\n}\n.product_price[data-v-b7f93bea]{\n    padding-left: 66px;\n}\n.product_quantity_container[data-v-b7f93bea]{\n    /* padding-left: 69px; */\n    padding: 0 9px 0 41.5px\n}\n.product_total[data-v-b7f93bea]{\n    padding-left: 65px;\n}\n.remove[data-v-b7f93bea]{\n    padding-left: 39px;\n}\n@media only screen and (max-width: 991px)\n{\n.product_color[data-v-b7f93bea]{\n        padding-left: 0;\n}\n.product_size[data-v-b7f93bea]{\n        padding-left: 0;\n}\n.product_price[data-v-b7f93bea]{\n        padding-left: 0;\n}\n.product_quantity_container[data-v-b7f93bea]{\n        padding-left: 0;\n}\n.product_total[data-v-b7f93bea]{\n        padding-left: 0;\n}\n.remove[data-v-b7f93bea]{\n        padding-left: 0; \n        margin: 5px 0;\n        font-size: 30px;\n}\n\n\n    /* .cart_bar {\n        width: 101.5%; nuevo valor \n        padding-bottom: 28px;\n        border-bottom: solid 1px #ededed;\n    } */\n}\n", ""]);
 
 // exports
 
@@ -48795,8 +48795,7 @@ var render = function() {
                                     _c(
                                       "span",
                                       {
-                                        staticClass: "product_text product_num",
-                                        attrs: { id: "" }
+                                        staticClass: "product_text product_num"
                                       },
                                       [_vm._v(_vm._s(producto.cantidad))]
                                     ),
@@ -48806,7 +48805,6 @@ var render = function() {
                                       {
                                         staticClass:
                                           "qty_sub qty_button trans_200 text-center",
-                                        attrs: { id: "" },
                                         on: {
                                           click: function($event) {
                                             $event.preventDefault()
@@ -48825,7 +48823,6 @@ var render = function() {
                                       {
                                         staticClass:
                                           "qty_add qty_button trans_200 text-center",
-                                        attrs: { id: "" },
                                         on: {
                                           click: function($event) {
                                             $event.preventDefault()
@@ -49181,7 +49178,9 @@ var staticRenderFns = [
           _vm._v(" "),
           _c("li", [_vm._v("Precio")]),
           _vm._v(" "),
-          _c("li", [_vm._v("Cantidad")]),
+          _c("li", { staticStyle: { "padding-left": "-10px" } }, [
+            _vm._v("Cantidad")
+          ]),
           _vm._v(" "),
           _c("li", [_vm._v("Total")])
         ]
@@ -74347,12 +74346,14 @@ var pagos_venta = new Vue({
   },
   methods: {
     facturaVenta: function facturaVenta(id) {
-      window.open('/lorgeliz_tienda_copia/public/admin/ventas/factura/' + id + ',' + '_blank'); // window.open('http://dev.lorenzogeliztienda.com/admin/ventas/factura/'+ id + ',' + '_blank')
+      // window.open('/lorgeliz_tienda_copia/public/admin/ventas/factura/'+ id + ',' + '_blank');
+      window.open('http://dev.lorenzogeliztienda.com/admin/ventas/factura/' + id + ',' + '_blank');
     },
     registrar_pago: function registrar_pago(venta) {
       var _this = this;
 
-      var url = "/lorgeliz_tienda_copia/public/admin/ventas/pagar/".concat(venta);
+      // let url = `/lorgeliz_tienda_copia/public/admin/ventas/pagar/${venta}`;
+      var url = "http://dev.lorenzogeliztienda.com/admin/ventas/pagar/".concat(venta);
       document.getElementById("valor-error").innerHTML = '';
       axios.put(url, {
         'valor': this.valor
@@ -74372,14 +74373,14 @@ var pagos_venta = new Vue({
       });
     },
     pdfListPagos: function pdfListPagos() {
-      var url = '/lorgeliz_tienda_copia/public/admin/payments/list'; // let url = 'http://dev.lorenzogeliztienda.com/admin/payments/list'
-
+      // let url = '/lorgeliz_tienda_copia/public/admin/payments/list';
+      var url = 'http://dev.lorenzogeliztienda.com/admin/payments/list';
       window.open(url);
     },
     imprimirPago: function imprimirPago(id) {
       // window.open('/lorgeliz_tienda_copia/public/admin/payments/payment/'+ id + ',' + '_blank');
-      var url = "/lorgeliz_tienda_copia/public/admin/payments/".concat(id, ",_blank/pdf"); // let url = `http://dev.lorenzogeliztienda.com/admin/payments/${id},_blank/pdf`
-
+      // let url = `/lorgeliz_tienda_copia/public/admin/payments/${id},_blank/pdf`;
+      var url = "http://dev.lorenzogeliztienda.com/admin/payments/".concat(id, ",_blank/pdf");
       window.open(url);
     },
     getResponse: function getResponse(ref_payco) {

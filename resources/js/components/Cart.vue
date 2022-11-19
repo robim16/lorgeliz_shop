@@ -14,7 +14,7 @@
                                         <li>Color</li>
                                         <li>Talla</li>
                                         <li>Precio</li>
-                                        <li>Cantidad</li>
+                                        <li style="padding-left: -10px;">Cantidad</li>
                                         <li>Total</li>
                                     </ul>
                                 </div>
@@ -116,11 +116,11 @@
                                             </div>
                                             <div class="product_quantity_container">
                                                 <div class="product_quantity ml-lg-auto mr-lg-auto text-center">
-                                                    <span class="product_text product_num" id="">{{ producto.cantidad }}</span>
-                                                    <div class="qty_sub qty_button trans_200 text-center" id="" @click.prevent="updateCart(producto.producto_referencia.id,2)">
+                                                    <span class="product_text product_num">{{ producto.cantidad }}</span>
+                                                    <div class="qty_sub qty_button trans_200 text-center" @click.prevent="updateCart(producto.producto_referencia.id,2)">
                                                         <span>-</span>
                                                     </div>
-                                                    <div class="qty_add qty_button trans_200 text-center" id="" @click.prevent="updateCart(producto.producto_referencia.id,1)">
+                                                    <div class="qty_add qty_button trans_200 text-center" @click.prevent="updateCart(producto.producto_referencia.id,1)">
                                                         <span>+</span>
                                                     </div>
                                                 </div>
@@ -412,7 +412,8 @@
     }
 
     .product_quantity_container{
-        padding-left: 69px;
+        /* padding-left: 69px; */
+        padding: 0 9px 0 41.5px
     }
 
     .product_total{
@@ -420,7 +421,7 @@
     }
 
     .remove{
-        padding-left: 28px; 
+        padding-left: 39px; 
     }
 
     @media only screen and (max-width: 991px)
@@ -450,5 +451,13 @@
             margin: 5px 0;
             font-size: 30px;
         }
+
+
+        /* .cart_bar {
+            width: 101.5%; nuevo valor 
+            padding-bottom: 28px;
+            border-bottom: solid 1px #ededed;
+        } */
+        
     }
 </style>

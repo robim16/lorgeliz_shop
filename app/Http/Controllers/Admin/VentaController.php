@@ -109,6 +109,8 @@ class VentaController extends Controller
                 ->orderBy('pagos.fecha', 'DESC')
                 ->paginate(5);
 
+            
+            // $total_pagos = $pagos()->sum('monto');
     
             $devoluciones = $venta->devoluciones()->paginate(5);
     

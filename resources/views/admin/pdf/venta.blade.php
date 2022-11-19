@@ -163,8 +163,9 @@
                 </p>
             </div>
             <div id="fact">
-                <p>Comprobante de compra<br>
-                {{$productos[0]->venta->factura->prefijo}}-{{$productos[0]->venta->factura->consecutivo}}</p>
+                <p>
+                    {{$productos[0]->venta->factura->prefijo}}-{{$productos[0]->venta->factura->consecutivo}}
+                </p>
             </div>
         </header>
         <br>
@@ -285,7 +286,7 @@
                             <th>SUBTOTAL</th>
                             <td>${{ floatval($producto->venta->subtotal)}}</td>
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -293,7 +294,7 @@
                             <th></th>
                             <th>Impuesto</th>
                             <td>$0</td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <th></th>
                             <th></th>
