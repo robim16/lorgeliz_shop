@@ -45,6 +45,11 @@ class ContactoController extends Controller
     
             // return new ClientToAdminMail($details);
 
+            session()->flash('message', ['success', ("Se ha enviado el email exitosamente")]);
+
+            return back();
+
+
         } catch (\Exception $e) {
 
             Log::debug('Error el email desde el formulario de contacto'.'error:'.' '.json_encode($e));

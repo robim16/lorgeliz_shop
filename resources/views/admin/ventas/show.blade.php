@@ -264,7 +264,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="7" class="text-right">Total pagos:</td>
-                                            <td colspan="5" class="text-left">${{ $pagos[0] ? floatval($pagos[0]->total) : 0 }}</td>
+                                            <td colspan="5" class="text-left">${{ $pagos ? $pagos->sum('monto') : 0}}</td>
                                         </tr>
                                         <tr>
                                             <td colspan="7" class="text-right">Total devoluciones:</td>

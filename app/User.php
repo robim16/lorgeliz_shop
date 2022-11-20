@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Notifications\ResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -197,19 +198,38 @@ class User extends Authenticatable
     	//return auth()->check() ? auth()->user()->role->nombre : 'guest';
     //}
 
-    public function role (){
+    public function role()
+    {
         return $this->belongsTo(Role::class);
     }
 
-    public function cliente (){
+
+    public function cliente()
+    {
         return $this->hasOne(Cliente::class);
     }
 
-    public function imagene (){
+    
+    public function imagene()
+    {
         return $this->morphOne('App\Imagene','imageable');
     }
 
-    public function chats (){
+
+    public function chats()
+    {
         return $this->hasMany(Chat::class, 'from_id');
+    }
+
+    
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token));
     }
 }
