@@ -3347,15 +3347,10 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     alert: vue_strap__WEBPACK_IMPORTED_MODULE_0__["alert"]
   },
-  // props: ['role_id'],
-  props: {// role_id:{
-    //     required:true,
-    //     type:Number
-    // }
-  },
   data: function data() {
     return {
-      showAlert: false
+      showAlert: false,
+      location: ''
     };
   },
   methods: {
@@ -3368,6 +3363,7 @@ __webpack_require__.r(__webpack_exports__);
 
     window.Echo.channel('chat-added').listen('ChatEvent', function (e) {
       _this.showAlert = true;
+      _this.location = window.location.pathname;
     });
   }
 });
@@ -49952,165 +49948,172 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-md-3 ml-auto mr-5" }, [
-    _c(
-      "div",
-      {
-        staticClass:
-          "card card-primary card-outline direct-chat direct-chat-primary"
-      },
-      [
-        _vm._m(0),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-body" }, [
-          _c(
-            "div",
-            { staticClass: "direct-chat-messages" },
-            _vm._l(_vm.arrayMensajes, function(message) {
-              return _c(
-                "div",
-                {
-                  key: message.id,
-                  class:
-                    message.from_id == _vm.user
-                      ? "direct-chat-msg"
-                      : "direct-chat-msg right"
-                },
-                [
-                  _c("div", { staticClass: "direct-chat-infos clearfix" }, [
-                    _c(
-                      "span",
-                      {
-                        class:
-                          message.from_id === _vm.user
-                            ? "direct-chat-name float-left"
-                            : "direct-chat-name float-right"
-                      },
-                      [_vm._v(_vm._s(message.user.nombres))]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "span",
-                      {
-                        class:
-                          message.from_id === _vm.user
-                            ? "direct-chat-timestamp float-right"
-                            : "direct-chat-timestamp float-left"
-                      },
-                      [_vm._v(_vm._s(message.fecha))]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("img", {
-                    staticClass: "direct-chat-img",
-                    attrs: {
-                      src:
-                        _vm.urlLength === 4
-                          ? "storage/" + message.user.imagene.url
-                          : "../storage/" + message.user.imagene.url,
-                      alt: "Message User Image"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "direct-chat-text" }, [
-                    _vm._v(
-                      "\n                                " +
-                        _vm._s(message.mensaje) +
-                        "\n                                "
-                    )
-                  ])
-                ]
-              )
-            }),
-            0
-          ),
+  return _c(
+    "div",
+    { staticClass: "col-md-3 ml-auto mr-5", attrs: { id: "chat_form" } },
+    [
+      _c(
+        "div",
+        {
+          staticClass:
+            "card card-primary card-outline direct-chat direct-chat-primary"
+        },
+        [
+          _vm._m(0),
           _vm._v(" "),
-          _c("div", { staticClass: "direct-chat-contacts" }, [
-            _c("ul", { staticClass: "contacts-list" }, [
-              _c("li", [
-                _c("a", { attrs: { href: "#" } }, [
-                  _c("img", {
-                    staticClass: "contacts-list-img",
-                    attrs: {
-                      src: "../adminlte/dist/img/user1-128x128.jpg",
-                      alt: "User Avatar"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _vm._m(1)
-                ])
-              ])
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-footer" }, [
-          _c("form", { attrs: { action: "#", method: "post" } }, [
-            _c("div", { staticClass: "input-group" }, [
-              _c("input", {
-                directives: [
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "div",
+              { staticClass: "direct-chat-messages" },
+              _vm._l(_vm.arrayMensajes, function(message) {
+                return _c(
+                  "div",
                   {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.mensaje,
-                    expression: "mensaje"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  name: "message",
-                  placeholder: "Escribe tu mensaje"
-                },
-                domProps: { value: _vm.mensaje },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.mensaje = $event.target.value
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("span", { staticClass: "input-group-append" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    attrs: { type: "submit" },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.sendMessage($event)
-                      }
-                    }
+                    key: message.id,
+                    class:
+                      message.from_id == _vm.user
+                        ? "direct-chat-msg"
+                        : "direct-chat-msg right"
                   },
-                  [_vm._v("Enviar")]
+                  [
+                    _c("div", { staticClass: "direct-chat-infos clearfix" }, [
+                      _c(
+                        "span",
+                        {
+                          class:
+                            message.from_id === _vm.user
+                              ? "direct-chat-name float-left"
+                              : "direct-chat-name float-right"
+                        },
+                        [_vm._v(_vm._s(message.user.nombres))]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        {
+                          class:
+                            message.from_id === _vm.user
+                              ? "direct-chat-timestamp float-right"
+                              : "direct-chat-timestamp float-left"
+                        },
+                        [_vm._v(_vm._s(message.fecha))]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("img", {
+                      staticClass: "direct-chat-img",
+                      attrs: {
+                        src:
+                          _vm.urlLength === 4
+                            ? "storage/" + message.user.imagene.url
+                            : "../storage/" + message.user.imagene.url,
+                        alt: "Message User Image"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "direct-chat-text" }, [
+                      _vm._v(
+                        "\n                                " +
+                          _vm._s(message.mensaje) +
+                          "\n                                "
+                      )
+                    ])
+                  ]
                 )
+              }),
+              0
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "direct-chat-contacts" }, [
+              _c("ul", { staticClass: "contacts-list" }, [
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("img", {
+                      staticClass: "contacts-list-img",
+                      attrs: {
+                        src: "../adminlte/dist/img/user1-128x128.jpg",
+                        alt: "User Avatar"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm._m(1)
+                  ])
+                ])
               ])
             ])
           ]),
           _vm._v(" "),
-          _c(
-            "span",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.error,
-                  expression: "error"
+          _c("div", { staticClass: "card-footer" }, [
+            _c("form", { attrs: { action: "#", method: "post" } }, [
+              _c("div", { staticClass: "input-group" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.mensaje,
+                      expression: "mensaje"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    name: "message",
+                    placeholder: "Escribe tu mensaje"
+                  },
+                  domProps: { value: _vm.mensaje },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.mensaje = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "input-group-append" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "submit" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.sendMessage($event)
+                        }
+                      }
+                    },
+                    [_vm._v("Enviar")]
+                  )
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.error,
+                    expression: "error"
+                  }
+                ],
+                staticStyle: {
+                  color: "rgb(243, 61, 61)",
+                  "font-weight": "bold"
                 }
-              ],
-              staticStyle: { color: "rgb(243, 61, 61)", "font-weight": "bold" }
-            },
-            [_vm._v("¡Escribe un mensaje!")]
-          )
-        ])
-      ]
-    )
-  ])
+              },
+              [_vm._v("¡Escribe un mensaje!")]
+            )
+          ])
+        ]
+      )
+    ]
+  )
 }
 var staticRenderFns = [
   function() {
@@ -50118,7 +50121,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "card-header" }, [
-      _c("h3", { staticClass: "card-title" }, [_vm._v("Direct Chat")]),
+      _c("h3", { staticClass: "card-title" }, [_vm._v("Lorgeliz Chat")]),
       _vm._v(" "),
       _c("div", { staticClass: "card-tools" }, [
         _c(
@@ -50235,7 +50238,9 @@ var render = function() {
               _vm._v(" "),
               _c("strong", [_vm._v("Has recibido un mensaje!")]),
               _vm._v(" "),
-              _c("a", { attrs: { href: "" } }, [_vm._v("Ver mensaje")])
+              _c("a", { attrs: { href: _vm.location + "#chat_form" } }, [
+                _vm._v("Ver mensaje")
+              ])
             ]
           )
         ],

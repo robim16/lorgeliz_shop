@@ -3,11 +3,11 @@
     <!-- <div id=""> -->
         <!-- <div class="container-fluid">
             <div class="row"> -->
-                <div class="col-md-3 ml-auto mr-5">
+                <div class="col-md-3 ml-auto mr-5" id="chat_form">
                     <!-- DIRECT CHAT PRIMARY -->
                     <div class="card card-primary card-outline direct-chat direct-chat-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Direct Chat</h3>
+                        <h3 class="card-title">Lorgeliz Chat</h3>
     
                         <div class="card-tools">
                         <span title="3 New Messages" class="badge bg-primary">3</span>
