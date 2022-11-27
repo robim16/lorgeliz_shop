@@ -204,6 +204,14 @@
 
                                 <tfoot>
                                     <tr>
+                                        <td colspan="7" class="text-right">Subtotal:</td>
+                                        <td colspan="2" class="text-left">${{ floatval($producto->venta->subtotal) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7" class="text-right">Envío:</td>
+                                        <td colspan="2" class="text-left">${{ floatval($producto->venta->envio) }}</td>
+                                    </tr>
+                                    <tr>
                                         <td colspan="7" class="text-right">Total pedido:</td>
                                         {{-- <td colspan="2" class="text-left">${{ floatval($producto->valor) }}</td> --}}
                                         <td colspan="2" class="text-left">${{ floatval($producto->venta->valor) }}</td>
@@ -211,7 +219,7 @@
 
                                 </tfoot>
                             </table>
-                            {{-- {{ $productos->appends($_GET)->links() }} --}}
+                           
                         </div>
                         <!-- /.card-body -->
                     </div>

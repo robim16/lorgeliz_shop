@@ -96,6 +96,8 @@
                 <tr>
                     <th>Cliente</th>
                     <th>Cédula</th>
+                    <th>Departamento</th>
+                    <th>Municipio</th>
                     <th>Dirección</th>
                     <th>Teléfono</th>
                     <th>Email</th>
@@ -111,6 +113,8 @@
                     <td>{{ $user->email }}</td> --}}
 
                     <td>{{ $productos[0]->venta->cliente->user->nombres }} {{ $productos[0]->venta->cliente->user->apellidos }}</td>
+                    <td>{{ $productos[0]->venta->cliente->user->departamento }}</td>
+                    <td>{{ $productos[0]->venta->cliente->user->municipio }}</td>
                     <td>{{ $productos[0]->venta->cliente->user->identificacion }}</td>
                     <td>{{ $productos[0]->venta->cliente->user->direccion }}</td>
                     <td>{{ $productos[0]->venta->cliente->user->telefono }}</td>
@@ -157,7 +161,16 @@
             </tbody>
         </table>
     </div> 
-    <div class="izquierda">
+
+    <div class="">
+        <p><strong>Subtotal: </strong>${{ floatval($producto->venta->subtotal)}}</p>
+    </div> 
+
+    <div class="">
+        <p><strong>Envío: </strong>${{ floatval($producto->venta->envio)}}</p>
+    </div> 
+    
+    <div>
         <p><strong>Total pedido: </strong>${{ floatval($producto->venta->valor)}}</p>
     </div> 
 </body>

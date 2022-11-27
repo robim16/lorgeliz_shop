@@ -181,9 +181,11 @@
                                     <th>Fecha</th>
                                     <th>Cliente</th>
                                     <th>Factura</th>
-                                    <th>Valor</th>
-                                    <th>Pagos</th>
-                                    <th>Devoluciones</th>
+                                    <th>Subtotal</th>
+                                    <th>Envío</th>
+                                    <th>Total</th>
+                                    {{-- <th>Pagos</th>
+                                    <th>Devoluciones</th> --}}
                                     <th>Saldo</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
@@ -198,9 +200,11 @@
                                     <td>{{ date('d/m/Y h:i:s A', strtotime($venta->fecha)) }}</td>
                                     <td><a href="{{ route('cliente.show', $venta->cliente->id)}}">{{ $venta->cliente->user->nombres }} {{ $venta->cliente->user->apellidos}}</a></td>
                                     <td>{{ ($venta->factura->prefijo) }}{{ ($venta->factura->consecutivo) }}</td>
+                                    <td>${{ floatval($venta->subtotal) }}</td>
+                                    <td>${{ floatval($venta->envio) }}</td>
                                     <td>${{ floatval($venta->valor) }}</td>
-                                    <td>${{ $pagos[0] ? floatval($pagos[0]->total) : 0 }}</td>
-                                    <td>${{ floatval($valor_devolucion)}}</td>
+                                    {{-- <td>${{ $pagos[0] ? floatval($pagos[0]->total) : 0 }}</td>
+                                    <td>${{ floatval($valor_devolucion)}}</td> --}}
                                     <td>${{ floatval($venta->saldo) }}</td>
                                     <td>
                                         @if ($venta->estado == 1)

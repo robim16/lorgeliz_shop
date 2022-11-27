@@ -167,8 +167,18 @@
             </tbody>
         </table>
     </div> 
-    <div class="izquierda">
-        <p><strong>Total pedido: </strong>${{ floatval($producto->venta->valor)}}</p>
-    </div> 
+    {{-- <div class="izquierda"> --}}
+
+        <div class="">
+            <p><strong>Subtotal: </strong>${{ floatval($producto->venta->subtotal)}}</p>
+        </div> 
+    
+        <div class="">
+            <p><strong>Envío: </strong>${{ floatval($producto->venta->envio)}}</p>
+        </div> 
+        
+        <div>
+            <p><strong>Total pedido: </strong>${{ floatval($producto->venta->valor)}}</p>
+        </div> 
 </body>
 </html>

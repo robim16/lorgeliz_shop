@@ -11,13 +11,16 @@ class Venta extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     
-    protected $fillable = ['fecha', 'factura', 'valor', 'cliente_id'];
+    // protected $fillable = ['fecha', 'factura', 'valor', 'cliente_id'];
+    protected $fillable = ['fecha', 'factura', 'subtotal', 'envio', 'valor', 'cliente_id'];
     
-    public function pedido (){
+    public function pedido()
+    {
         return $this->hasOne(Pedido::class);
     }
 
-    public function devoluciones (){
+    public function devoluciones()
+    {
         return $this->hasMany(Devolucione::class);
     }
 
@@ -25,27 +28,32 @@ class Venta extends Model implements Auditable
         //return $this->belongsToMany(Producto::class);
     //}
 
-    public function productoReferencias (){
+    public function productoReferencias()
+    {
         return $this->belongsToMany(ProductoReferencia::class);
     }
 
-    public function cliente (){
+    public function cliente()
+    {
         return $this->belongsTo(Cliente::class);
     }
 
-    public function factura (){
+    public function factura()
+    {
         return $this->belongsTo(Factura::class);
     }
 
-    public function pagos (){
+    public function pagos()
+    {
         return $this->hasMany(Pago::class);
     }
 
-    public function productoVentas(){
+    public function productoVentas()
+    {
         return $this->hasMany(ProductoVenta::class, 'venta_id');
     }
 
-    public static function boot () {
+    public static function boot() {
         parent::boot();
             
         static::created(function(Venta $venta) {
@@ -112,7 +120,8 @@ class Venta extends Model implements Auditable
 
     }
 
-    public function scopeEstado($query){
+    public function scopeEstado($query)
+    {
         return $query->where('estado', '!=', '3');
     }
 

@@ -20,7 +20,7 @@
         <div class="home">
             <div class="home_container d-flex flex-column align-items-center justify-content-end">
                 <div class="home_content text-center">
-                    <div class="home_title">Página del Producto </div>
+                    <div class="home_title">Características del Producto </div>
                     <div class="breadcrumbs d-flex flex-column align-items-center justify-content-center">
                         <ul class="d-flex flex-row align-items-start justify-content-start text-center">
                         {{-- <li><a href="{{ route('home')}}">Inicio</a></li>
