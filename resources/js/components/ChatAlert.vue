@@ -7,7 +7,7 @@
             
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Has recibido un mensaje!</strong>
-            <a :href="''">Ver mensaje</a>
+            <a :href="`${location}#chat_form`">Ver mensaje</a>
         </alert>
     </div>
     <!-- <alert placement="top-right" :duration="4000" type="success" width="400px" dismissable> -->
@@ -20,16 +20,11 @@
         components: {
             alert
         },
-        // props: ['role_id'],
-        props: {
-            // role_id:{
-            //     required:true,
-            //     type:Number
-            // }
-        },
+       
         data() {
             return {
                 showAlert: false,
+                location: ''
             }
         },
 
@@ -42,6 +37,7 @@
         mounted() {
             window.Echo.channel('chat-added').listen('ChatEvent', (e) => {
                 this.showAlert = true;
+                this.location = window.location.pathname;
             });
         }
     }

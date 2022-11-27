@@ -3347,15 +3347,10 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     alert: vue_strap__WEBPACK_IMPORTED_MODULE_0__["alert"]
   },
-  // props: ['role_id'],
-  props: {// role_id:{
-    //     required:true,
-    //     type:Number
-    // }
-  },
   data: function data() {
     return {
-      showAlert: false
+      showAlert: false,
+      location: ''
     };
   },
   methods: {
@@ -3368,6 +3363,7 @@ __webpack_require__.r(__webpack_exports__);
 
     window.Echo.channel('chat-added').listen('ChatEvent', function (e) {
       _this.showAlert = true;
+      _this.location = window.location.pathname;
     });
   }
 });
@@ -50115,7 +50111,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "card-header" }, [
-      _c("h3", { staticClass: "card-title" }, [_vm._v("Direct Chat")]),
+      _c("h3", { staticClass: "card-title" }, [_vm._v("Lorgeliz Chat")]),
       _vm._v(" "),
       _c("div", { staticClass: "card-tools" }, [
         _c(
@@ -50232,7 +50228,9 @@ var render = function() {
               _vm._v(" "),
               _c("strong", [_vm._v("Has recibido un mensaje!")]),
               _vm._v(" "),
-              _c("a", { attrs: { href: "" } }, [_vm._v("Ver mensaje")])
+              _c("a", { attrs: { href: _vm.location + "#chat_form" } }, [
+                _vm._v("Ver mensaje")
+              ])
             ]
           )
         ],
