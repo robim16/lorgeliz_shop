@@ -3,27 +3,35 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Pedido;
 use App\ProductoVenta;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function show(Request $request, $id) {
+    public function productos(Request $request, Pedido $pedido) {
+
+        $cliente = $request->user()->cliente->id; 
 
         $productos = ProductoVenta::whereHas('venta.pedido',
-        function (Builder $query) use ($id) {
-           $query->where('id', $id);
-        })
-        ->whereHas('venta',
-        function (Builder $query) use ($id) {
-           $query->where('cliente_id', auth()->user()->cliente->id);
-        })
-        ->with(['productoReferencia.colorProducto.color', 'productoReferencia.colorProducto.producto',
-        'productoReferencia.talla','venta.pedido', 'productoReferencia.colorProducto.imagenes'])
-        ->get();
+            function (Builder $query) use ($pedido) {
+                $query->where('id', $pedido->id);
+            })
+            ->whereHas('venta',function (Builder $query) use ($pedido, $cliente) {
+                $query->where('cliente_id', $cliente);
+            })
+            ->with(['productoReferencia.colorProducto.color',
+                'productoReferencia.colorProducto.producto',
+                'productoReferencia.talla','venta.pedido',
+                'productoReferencia.colorProducto.imagenes',
+                'productoReferencia.devoluciones'=> function($query) use($pedido){
+                    $query->where('venta_id', $pedido->venta_id);
+                }
+            ])
+            ->get();
 
-        return $productos;
+        return ['productos' => $productos];
 
     }
 }

@@ -25,6 +25,7 @@ class ClienteController extends Controller
         $this->middleware('auth');
     }
 
+
     public function index(Request $request)
     {
         $keyword = $request->get('keyword');
@@ -52,6 +53,8 @@ class ClienteController extends Controller
         return view('admin.clientes.index', compact('clientes'));
     }
 
+
+
     public function show($id)
     {
         // $cliente = User::with('imagene')
@@ -69,26 +72,41 @@ class ClienteController extends Controller
         // ->paginate(10);
 
         try {
+
            
             $pedidos = Venta::with(['pedido', 'factura', 'cliente.user.imagene'])
-            ->where('cliente_id', $id)
-            // ->where('estado', '!=', '3')
-            ->estado()
-            ->paginate(10);
+                ->where('cliente_id', $id)
+                ->where('cliente_id', $id)
+                // ->where('estado', '!=', '3')
+                ->estado();
+                // ->paginate(10);
+
+
+            $total_general = $pedidos->sum('valor');
+
+            $pedidos = $pedidos->paginate(10);
+
+
+            $total_pagina = $pedidos->sum('valor');
+
     
-            $total = 0;
+            // $total = 0;
     
-            foreach ($pedidos as $key => $value) {
-              $total = $total + $value->valor;
-            }
+            // foreach ($pedidos as $key => $value) {
+            //   $total = $total + $value->valor;
+            // }
             
-            return view('admin.clientes.show', compact('pedidos', 'total'));
+            // return view('admin.clientes.show', compact('pedidos', 'total'));
+
+            return view('admin.clientes.show', compact('pedidos', 'total_general', 'total_pagina'));
 
         } catch (\Exception $e) {
             //throw $th;
         }
 
     }
+
+
 
     public function sendMessage()
     {
@@ -102,7 +120,9 @@ class ClienteController extends Controller
         try {
             
             $info = \request('info');
+
             $data = [];
+            
             parse_str($info, $data);
 
 
@@ -129,6 +149,8 @@ class ClienteController extends Controller
     
     }
 
+
+
     public function pdfListadoClientes()
     {
 
@@ -154,6 +176,7 @@ class ClienteController extends Controller
         }
 
     }
+
 
     //en desuso, se implemento en /api/clienteController
     public function clientesChat(Request $request)

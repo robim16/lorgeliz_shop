@@ -30,20 +30,6 @@ class StockController extends Controller
     {
         $busqueda = $request->get('busqueda');
 
-        // $productos = Producto::orWhere('productos.nombre','like',"%$busqueda%")
-        // //->orWhere('colores.nombre','like',"%$busqueda%")
-        // //->orWhere('tallas.nombre','like',"%$busqueda%")
-        // ->join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
-        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        // ->join('tallas','producto_referencia.talla_id', '=', 'tallas.id')
-        // ->where('producto_referencia.stock', '>', '0')
-        // ->where('color_producto.activo', 'Si')
-        // ->select('productos.*', 'producto_referencia.talla_id', 'color_producto.id as cop',
-        // 'producto_referencia.stock', 'color_producto.slug as slug', 'colores.nombre as color',
-        // 'tallas.nombre as talla', 'colores.id as color_id')
-        // ->orderBy('productos.id')
-        // ->paginate(5);
 
         try {
 
@@ -52,6 +38,14 @@ class StockController extends Controller
             })
             ->with(['talla', 'colorProducto'])//faltan los filtros
             ->where('stock', '>', '0')
+            ->when($busqueda, function ($query) use ($busqueda) {
+                return $query->whereHas('colorProducto.producto', function (Builder $query) use($busqueda){
+                    $query->where('nombre','like',"%$busqueda%");
+                })
+                ->orWhereHas('colorProducto.color', function (Builder $query) use($busqueda){
+                    $query->where('nombre','like',"%$busqueda%");
+                });
+            })
             ->orderBy('color_producto_id')
             ->paginate(5);
     

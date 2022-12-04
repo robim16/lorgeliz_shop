@@ -20,10 +20,12 @@ class ContactoController extends Controller
         $this->middleware('auth');
     }
 
+    
     public function contacto()
     {
         return view('user.contact');
     }
+
 
     public function sendMail(Request $request)
     {

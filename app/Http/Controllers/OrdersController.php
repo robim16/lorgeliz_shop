@@ -112,7 +112,7 @@ class OrdersController extends Controller
 
     }
 
-    //envía la data al componente orderDetail
+    //envía la data al componente orderDetail. Implementado en api
     public function productos(Pedido $pedido) {
 
         // $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')

@@ -53,6 +53,13 @@ class Venta extends Model implements Auditable
         return $this->hasMany(ProductoVenta::class, 'venta_id');
     }
 
+
+    public function envio()
+    {
+        return $this->hasOne(Envio::class, 'venta_id');
+    }
+
+
     public static function boot() {
         parent::boot();
             

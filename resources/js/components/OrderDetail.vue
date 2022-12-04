@@ -167,9 +167,9 @@ export default {
     methods: {
         getProductos(){
             
-            // let url = `${this.ruta}/api/orders/${this.id}/productos`;
+            // let url = `${this.ruta}/pedidos/productos/${this.id}`
 
-            let url = `${this.ruta}/pedidos/productos/${this.id}`
+            let url = `${this.ruta}/api/pedidos/productos/${this.id}`
 
             axios.get(url).then(response => {
                 this.arrayProductos = response.data.productos;

@@ -285,7 +285,8 @@
                         // this.total = parseInt(this.arrayProductos[0].carrito.total);
                         // this.totalneto = parseInt(this.arrayProductos[0].carrito.total) + this.envio;
                         this.subtotal = parseInt(this.arrayProductos[0].carrito.subtotal);
-                        this.total = parseInt(this.arrayProductos[0].carrito.subtotal) + this.envio;
+                        this.total = parseInt(this.arrayProductos[0].carrito.total);
+                        this.envio = parseInt(this.arrayProductos[0].carrito.envio);
                     }
                 }).catch(error => {
                     console.log(error);

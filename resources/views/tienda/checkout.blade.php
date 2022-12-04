@@ -158,13 +158,13 @@
 												<span class="radio_text">Pagar contra entrega</span>
 											</label>
 										</li>
-										<li class="shipping_option d-flex flex-row align-items-center justify-content-start">
+										{{-- <li class="shipping_option d-flex flex-row align-items-center justify-content-start">
 											<label class="radio_container">
 												<input type="radio" id="radio_3" name="payment_radio" class="payment_radio">
 												<span class="radio_mark"></span>
 												<span class="radio_text">Pagar con epayco</span>
 											</label>
-										</li>
+										</li> --}}
 									</ul>
 								</div> 
 								<div class="cart_text">
