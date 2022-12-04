@@ -120,6 +120,8 @@ class VentaController extends Controller
 
     }
 
+
+
     public function anular(Venta $venta)
     {
         try {
@@ -160,6 +162,8 @@ class VentaController extends Controller
         }
     }
 
+
+    
     public function registrarPago(Request $request, Venta $venta)
     {
 

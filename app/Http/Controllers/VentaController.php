@@ -84,7 +84,9 @@ class VentaController extends Controller
         }
                 
     }
-//esta función es para probar la confirmación por el método post
+
+
+    //esta función es para probar la confirmación por el método post
     public function epaycoConfirm(Request $request)
     {
         $p_cust_id_cliente = '71480';
@@ -127,6 +129,8 @@ class VentaController extends Controller
         }
     }
 
+
+
     public function store(Request $request)
     {
         if(!$request->ajax()) return back();
@@ -162,6 +166,8 @@ class VentaController extends Controller
                 $venta->fecha = \Carbon\Carbon::now();
                 $venta->factura_id = $factura->id;
                 //$venta->valor = $request->total;
+                $venta->subtotal =  $car->subtotal;
+                $venta->envio =  $car->envio;
                 $venta->valor =  $car->total;
                 $venta->cliente_id = auth()->user()->cliente->id;
                 $venta->saldo = $car->total - $x_amount; // si el pago no fue por epayco o está pendiente, la venta queda con saldo
