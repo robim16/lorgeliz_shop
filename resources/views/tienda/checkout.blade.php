@@ -263,12 +263,15 @@ $(document).ready(function () {
 		setMunicipios(JSONFinal);
 	});
 
+
 	$(document).on('change', '#checkout_province', function(e) { 
 		e.preventDefault();
 		
 		$('#checkout_city').html('');
 		setMunicipios(JSONFinal);
 	});
+
+
 
 	$("#btnCheckout").click(function (e) { 
 		e.preventDefault();
@@ -362,7 +365,9 @@ $(document).ready(function () {
 						handler.open(data)
 					}
 				}
+
 				else{
+
 					swal(
 						'Uno de tus productos está agotado!',
 						'Te informamos que uno de los productos que pusiste en el carrito se agotó!',
@@ -374,6 +379,7 @@ $(document).ready(function () {
 						let ruta = 'http://lorenzogeliztienda.com'
 						window.location.href = `${ruta}/cart`
 					}, 4000);
+					
 				}
 			}
 

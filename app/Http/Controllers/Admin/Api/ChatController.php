@@ -13,40 +13,49 @@ class ChatController extends Controller
 {
     public function index(Request $request){
 
-        if (!$request->ajax()) return redirect('/chats/admin');
-        $buscar = $request->buscar;
-        
-        $user = auth()->user()->id;
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
-        $chats = User::has('chats')
-        ->addSelect([
-            'mensaje' => Chat::select('mensaje')
-            ->whereColumn('from_id', 'users.id')
-            ->orderBy('created_at', 'DESC')
-            ->limit(1)
-        ])
-        ->addSelect([
-            'fecha' => Chat::select('created_at')
-            ->whereColumn('from_id', 'users.id')
-            ->orderBy('created_at', 'DESC')
-            ->limit(1)
-        ])
-        ->where('users.nombres', 'like',"%$buscar%")
-        ->whereNotIn('users.id', [$user])
-        ->with('imagene')
-        ->orderBy('fecha', 'DESC')
-        ->paginate(5);
-
-        return [
-            'pagination' => [
-                'total'        => $chats->total(),
-                'current_page' => $chats->currentPage(),
-                'per_page'     => $chats->perPage(),
-                'last_page'    => $chats->lastPage(),
-                'from'         => $chats->firstItem(),
-                'to'           => $chats->lastItem(),
-            ],
-            'chats' => $chats
-        ];
+        try {
+    
+            $buscar = $request->buscar;
+            
+            $user = auth()->user()->id;
+    
+            $chats = User::has('chats')
+            ->addSelect([
+                'mensaje' => Chat::select('mensaje')
+                ->whereColumn('from_id', 'users.id')
+                ->orderBy('created_at', 'DESC')
+                ->limit(1)
+            ])
+            ->addSelect([
+                'fecha' => Chat::select('created_at')
+                ->whereColumn('from_id', 'users.id')
+                ->orderBy('created_at', 'DESC')
+                ->limit(1)
+            ])
+            ->where('users.nombres', 'like',"%$buscar%")
+            ->whereNotIn('users.id', [$user])
+            ->with('imagene')
+            ->orderBy('fecha', 'DESC')
+            ->paginate(5);
+    
+            return [
+                'pagination' => [
+                    'total'        => $chats->total(),
+                    'current_page' => $chats->currentPage(),
+                    'per_page'     => $chats->perPage(),
+                    'last_page'    => $chats->lastPage(),
+                    'from'         => $chats->firstItem(),
+                    'to'           => $chats->lastItem(),
+                ],
+                'chats' => $chats
+            ];
+            
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 }

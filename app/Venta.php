@@ -14,10 +14,12 @@ class Venta extends Model implements Auditable
     // protected $fillable = ['fecha', 'factura', 'valor', 'cliente_id'];
     protected $fillable = ['fecha', 'factura', 'subtotal', 'envio', 'valor', 'cliente_id'];
     
+
     public function pedido()
     {
         return $this->hasOne(Pedido::class);
     }
+
 
     public function devoluciones()
     {
@@ -33,20 +35,24 @@ class Venta extends Model implements Auditable
         return $this->belongsToMany(ProductoReferencia::class);
     }
 
+
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);
     }
+
 
     public function factura()
     {
         return $this->belongsTo(Factura::class);
     }
 
+
     public function pagos()
     {
         return $this->hasMany(Pago::class);
     }
+
 
     public function productoVentas()
     {
@@ -61,6 +67,7 @@ class Venta extends Model implements Auditable
 
 
     public static function boot() {
+
         parent::boot();
             
         static::created(function(Venta $venta) {
@@ -76,6 +83,7 @@ class Venta extends Model implements Auditable
 
             $carritos = CarritoProducto::where('carrito_id', $cart->id)
             ->get();
+
         
             foreach ($carritos as $carrito) {
                 
@@ -116,10 +124,11 @@ class Venta extends Model implements Auditable
                 return $carrito->producto_referencia_id;
             });
 
+            
             $vendidos = ProductoReferencia::whereIn('id', $productos)
-            ->groupBy('color_producto_id')
-            ->select('color_producto_id')
-            ->get();
+                ->groupBy('color_producto_id')
+                ->select('color_producto_id')
+                ->get();
 
             // broadcast(new SalesEvent($vendidos));
             

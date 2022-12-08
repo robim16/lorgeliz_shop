@@ -11,10 +11,12 @@ use Log;
 
 class NotificationController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth');
     }
+
 
     //notificaciones del admin
     public function index(Request $request)
@@ -35,6 +37,7 @@ class NotificationController extends Controller
 
         return Auth::user()->unreadNotifications;
     }
+
 
     //leer notificación del admin
     public function update(Request $request, $id)
@@ -58,4 +61,5 @@ class NotificationController extends Controller
         }
 
     }
+    
 }

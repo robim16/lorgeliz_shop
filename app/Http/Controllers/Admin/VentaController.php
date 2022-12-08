@@ -26,6 +26,7 @@ class VentaController extends Controller
         $this->middleware('auth');
     }
 
+
     public function index(Request $request)
     {
         $busqueda = $request->busqueda;
@@ -56,6 +57,8 @@ class VentaController extends Controller
         }
 
     }
+
+
 
     public function show($id)
     {
@@ -174,6 +177,8 @@ class VentaController extends Controller
         }
     }
 
+
+
     public function listadoVentasPdf()
     {
 
@@ -199,6 +204,8 @@ class VentaController extends Controller
 
     }
 
+
+    
     public function facturaVentaAdmin(Request $request, $id)
     {
 

@@ -111,12 +111,6 @@ class ClienteController extends Controller
     public function sendMessage()
     {
         
-        // $cliente = User::join('clientes', 'users.id', '=', 'clientes.user_id')
-        // ->where('clientes.id', $data['cliente_id'])
-        // ->select('users.*')
-        // ->first();
-        
-        
         try {
             
             $info = \request('info');
@@ -131,7 +125,6 @@ class ClienteController extends Controller
                 ->first();
 
 
-            // Mail::to($cliente->email)->send(new ClientePrivateMail($cliente->nombres, $data['mensaje']));
             Mail::to($cliente->user->email)->send(new ClientePrivateMail($cliente->user->nombres, $data['mensaje']));
             
             $success = true;
@@ -142,10 +135,9 @@ class ClienteController extends Controller
 
             return response()->json(['response' => $success]);
 
-        } catch (\Exception $exception) {
+        } catch (\Exception $e) {
             $success = false;
         }
-
     
     }
 

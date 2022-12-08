@@ -16,20 +16,21 @@ use Illuminate\Support\Facades\Validator;
 
 class StockController extends Controller
 {
-     /**
+    /**
      * Create a new controller instance.
      *
      * @return void
-     */
+    */
     public function __construct()
     {
         $this->middleware('auth');
     }
     
+
     public function index(Request $request)
     {
+        
         $busqueda = $request->get('busqueda');
-
 
         try {
 
@@ -57,6 +58,8 @@ class StockController extends Controller
         }
 
     }
+
+
 
     public function store(Request $request)
     {
@@ -125,6 +128,7 @@ class StockController extends Controller
        
     }
 
+
     public function pdfInventarios()
     {
         // $productos = Producto::join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
@@ -165,4 +169,5 @@ class StockController extends Controller
 
         }
     }
+
 }

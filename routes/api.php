@@ -32,10 +32,12 @@ Route::group(['prefix' => '/'], function ($router) {
         Route::get('/productos/keyword', 'Api\CategoryController@getProductsByKeyword');
     });
     
+
     //requiere auth
     Route::group(['prefix' => '/orders'], function (){
         Route::get('/{id}/productos', 'Api\OrderController@show');
     });
+    
 
     Route::group(['prefix' => '/productos'], function (){
         Route::put('{id}/update/visitas', 'Api\ProductController@setVisitas');

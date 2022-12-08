@@ -18,7 +18,10 @@ class NotificationController extends Controller
     //notificaciones del admin
     public function index(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
+
         
         $unreadNotifications = Auth::user()->unreadNotifications;
 
@@ -28,11 +31,20 @@ class NotificationController extends Controller
     //leer notificación del admin
     public function update(Request $request, $id)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
-        $notification = Notification::where('id', $request->id)->firstOrFail();
-        $notification->read_at =  \Carbon\Carbon::now();
+        try {
+            
+            $notification = Notification::where('id', $request->id)->firstOrFail();
+            $notification->read_at =  \Carbon\Carbon::now();
+    
+            $notification->save();
 
-        $notification->save();
+        } catch (\Exception $e) {
+            return $e;
+        }
+
     }
 }

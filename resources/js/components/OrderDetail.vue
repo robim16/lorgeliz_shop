@@ -165,6 +165,7 @@ export default {
         
     }, 
     methods: {
+        
         getProductos(){
             
             // let url = `${this.ruta}/pedidos/productos/${this.id}`
