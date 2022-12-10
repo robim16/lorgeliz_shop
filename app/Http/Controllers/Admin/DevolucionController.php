@@ -17,7 +17,7 @@ use App\Notifications\NotificationDevolution;
 
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class DevolucionController extends Controller
 {
@@ -34,13 +34,7 @@ class DevolucionController extends Controller
     public function index()
     {
         //devoluciones en panel de admin
-        // join('ventas','devoluciones.venta_id','ventas.id')
-        // ->join('clientes','ventas.cliente_id','clientes.id')
-        // ->join('users','clientes.user_id','users.id')
-        // ->select('devoluciones.id','devoluciones.estado', 'devoluciones.fecha', 'ventas.id as venta', 
-        // 'users.nombres', 'users.apellidos'
-        // ,'clientes.id as cliente')
-
+        
         try {
             
             $devoluciones = Devolucione::with('venta.cliente.user')
@@ -52,9 +46,10 @@ class DevolucionController extends Controller
             return view('admin.devoluciones.index',compact('devoluciones', 'estados'));
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error obteniendo el index de devoluciones en admin'.json_encode($e));
         }
-        // return $devoluciones;
+       
 
     }
 
@@ -66,25 +61,7 @@ class DevolucionController extends Controller
      */
     public function show($id)
     {
-        // $producto_devolucion = Producto::join('color_producto','productos.id','color_producto.producto_id')
-        // ->join('imagenes','color_producto.id','imagenes.imageable_id')
-        // ->join('colores','color_producto.color_id','colores.id') 
-        // ->join('producto_referencia','color_producto.id','producto_referencia.color_producto_id')
-        // ->join('tallas','producto_referencia.talla_id','tallas.id')
-        // ->join('devoluciones','producto_referencia.id','devoluciones.producto_referencia_id')
-        // ->join('ventas','devoluciones.venta_id','ventas.id')
-        // ->join('clientes','ventas.cliente_id','clientes.id')
-        // ->join('users','clientes.user_id','users.id')
-        // ->select('productos.id', 'productos.nombre', 'colores.nombre as color', 'tallas.nombre as talla',
-        // 'color_producto.id as cop', 'color_producto.slug as slug', 'imagenes.url as imagen',
-        // 'devoluciones.id as devolucion','devoluciones.estado', 'devoluciones.cantidad',
-        // 'devoluciones.fecha', 'ventas.id as venta', 'users.nombres', 'users.apellidos'
-        // ,'clientes.id as cliente')
-        // ->where('devoluciones.id', $id)
-        // ->where('imagenes.imageable_type', 'App\ColorProducto')
-        // ->groupBy('color_producto.id')
-        // ->paginate(5);
-
+       
         try {
            
             $producto_devolucion = Devolucione::with(['venta', 'productoReferencia'])
@@ -95,37 +72,42 @@ class DevolucionController extends Controller
             return view('admin.devoluciones.show',compact('producto_devolucion'));
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error mostrando la devolucion.Error :'.json_encode($e));
         }
 
     }
+
+
 
     public function pdfListarDevoluciones(Request $request)
     {
         //if (!$request->ajax()) return redirect('/');
         
-        $devoluciones = Devolucione::with('venta')
-            ->get();
+        try {
+            
+            $devoluciones = Devolucione::with('venta')
+                ->get();
+    
+    
+            $count = 0;
 
-        // with('venta.cliente.user','venta.pedido')
-        // join('ventas', 'devoluciones.venta_id', '=', 'ventas.id')
-        // ->join('pedidos', 'ventas.id', '=', 'pedidos.venta_id')
-        // ->join('clientes', 'ventas.cliente_id', '=', 'clientes.id')
-        // ->join('users', 'clientes.user_id', '=', 'users.id')
-        // ->select('devoluciones.id','devoluciones.estado', 'devoluciones.fecha','pedidos.id as pedido',
-        // 'ventas.id as venta', 'users.nombres', 'users.apellidos'
-        // ,'clientes.id as cliente')
+            foreach ($devoluciones as $devolucion) {
+                // $count = $count + 1;
+                $count += 1;
+            }
 
-        $count = 0;
-        foreach ($devoluciones as $devolucion) {
-            // $count = $count + 1;
-            $count += 1;
+    
+            $pdf = \PDF::loadView('admin.pdf.listado_devoluciones', ['devoluciones'=>$devoluciones, 
+                'count'=>$count
+            ])
+            ->setPaper('a4', 'landscape');
+            
+            return $pdf->download('listado_devoluciones.pdf');
+
+        } catch (\Exception $e) {
+            
+            Log::debug('Error imprimiendo el listado de devoluciones. Error: '.json_encode($e));
         }
-
-        $pdf = \PDF::loadView('admin.pdf.listado_devoluciones',['devoluciones'=>$devoluciones, 'count'=>$count])
-        ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('listado_devoluciones.pdf');
     }
 
     

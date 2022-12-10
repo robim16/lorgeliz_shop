@@ -22,10 +22,16 @@ class NotificationController extends Controller
 			abort(401, 'Acceso denegado');
 		}
 
-        
-        $unreadNotifications = Auth::user()->unreadNotifications;
+        try {
+           
+            $unreadNotifications = Auth::user()->unreadNotifications;
+    
+            return Auth::user()->unreadNotifications;
+            
+        } catch (\Exception $e) {
+            return $e;
+        }
 
-        return Auth::user()->unreadNotifications;
     }
 
     //leer notificación del admin

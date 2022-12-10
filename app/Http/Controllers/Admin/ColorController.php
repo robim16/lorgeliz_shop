@@ -32,6 +32,7 @@ class ColorController extends Controller
         $nombre = $request->get('nombre');
        
         $colores = Color::where('nombre','like',"%$nombre%")->orderBy('created_at')->paginate(5);
+
         return view('admin.colores.index',compact('colores'));
     }
 
@@ -63,6 +64,7 @@ class ColorController extends Controller
             $color->save();
     
             session()->flash('message', ['success', ("Se ha creado el color exitosamente")]);
+
             return redirect()->route('color.index');
 
         } catch (\Exception $e) {
@@ -162,7 +164,6 @@ class ColorController extends Controller
 			abort(401, 'Acceso denegado');
 		}
 
-        //$id  = $request->producto;
         
         $colores = Color::join('color_producto', 'colores.id', 'color_producto.color_id')
             ->where('color_producto.producto_id', $id)
@@ -170,9 +171,8 @@ class ColorController extends Controller
 
         return ['colores' => $colores];
         
-        //$response = ['data' => $colores];
-        
-        //return response()->json($response); //obtener colores al actualizar stock en el modal
+       //obtener colores al actualizar stock en el modal
 
     }
+    
 }

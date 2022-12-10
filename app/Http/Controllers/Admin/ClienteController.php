@@ -11,6 +11,7 @@ use App\Mail\ClientePrivateMail;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class ClienteController extends Controller
@@ -28,48 +29,35 @@ class ClienteController extends Controller
 
     public function index(Request $request)
     {
+
         $keyword = $request->get('keyword');
 
-        $clientes = User::with('cliente')
-        ->where('users.nombres','like',"%$keyword%")
-        ->orWhere('users.apellidos','like',"%$keyword%")
-        ->orWhere('users.identificacion','like',"%$keyword%")
-        ->orWhere('users.direccion','like',"%$keyword%")
-        ->orWhere('users.telefono','like',"%$keyword%")
-        ->orWhere('users.email','like',"%$keyword%")
-        // join('users','clientes.user_id', '=', 'users.id')
-        // ->where('users.nombres','like',"%$keyword%")
-        // ->orWhere('users.apellidos','like',"%$keyword%")
-        // ->orWhere('users.identificacion','like',"%$keyword%")
-        // ->orWhere('users.direccion','like',"%$keyword%")
-        // ->orWhere('users.telefono','like',"%$keyword%")
-        // ->orWhere('users.email','like',"%$keyword%")
-        // ->select('clientes.id','users.nombres', 'users.apellidos', 'users.identificacion',
-        // 'users.direccion','users.telefono','users.email', 'users.departamento', 'users.municipio')
-        ->paginate(5);
+        try {
+            
 
-        // return $clientes;
+            $clientes = User::with('cliente')
+                ->where('users.nombres','like',"%$keyword%")
+                ->orWhere('users.apellidos','like',"%$keyword%")
+                ->orWhere('users.identificacion','like',"%$keyword%")
+                ->orWhere('users.direccion','like',"%$keyword%")
+                ->orWhere('users.telefono','like',"%$keyword%")
+                ->orWhere('users.email','like',"%$keyword%")
+                ->paginate(5);
+    
+            // return $clientes;
+    
+            return view('admin.clientes.index', compact('clientes'));
 
-        return view('admin.clientes.index', compact('clientes'));
+        } catch (\Exception $e) {
+            return $e;
+        }
+
     }
 
 
 
     public function show($id)
     {
-        // $cliente = User::with('imagene')
-        // ->join('clientes','users.id', 'clientes.user_id')
-        // ->where('clientes.id', $id)
-        // ->select('clientes.id','users.*')
-        // ->firstOrFail();
-
-        // $pedidos = Pedido::join('ventas','pedidos.venta_id','ventas.id')
-        // ->join('clientes','ventas.cliente_id','clientes.id')
-        // ->join('facturas','ventas.factura_id', 'facturas.id')
-        // ->where('clientes.id',$id)
-        // ->where('ventas.estado', '!=', '3')
-        // ->select('pedidos.id','pedidos.fecha', 'ventas.valor', 'facturas.prefijo','facturas.consecutivo')
-        // ->paginate(10);
 
         try {
 
@@ -164,7 +152,8 @@ class ClienteController extends Controller
             return $pdf->download('listadoclientes.pdf');
             
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error imprimiendo el listado de clientes. Error: '.json_encode($e));
         }
 
     }
@@ -173,7 +162,7 @@ class ClienteController extends Controller
     //en desuso, se implemento en /api/clienteController
     public function clientesChat(Request $request)
     {
-        // if (!$request->ajax()) return back();
+       
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -181,56 +170,14 @@ class ClienteController extends Controller
         $buscar = $request->buscar;
         $criterio = $request->criterio;
 
-        // $user = Auth::id();
-
-        // if ($buscar=='') {
-
-        //     $clientes = User::with('imagene')
-        //     ->join('clientes','users.id', 'clientes.user_id')
-        //     ->select('clientes.id as cliente','users.id','users.nombres', 'users.apellidos',
-        //     'users.telefono', 'users.email')
-        //     ->paginate(5);
-
-        //     return [
-        //         'pagination' => [
-        //             'total'        => $clientes->total(),
-        //             'current_page' => $clientes->currentPage(),
-        //             'per_page'     => $clientes->perPage(),
-        //             'last_page'    => $clientes->lastPage(),
-        //             'from'         => $clientes->firstItem(),
-        //             'to'           => $clientes->lastItem(),
-        //         ],
-        //         'clientes' => $clientes
-        //     ];
-
-        // } else {
-
-        //     $clientes = User::with('imagene')
-        //     ->join('clientes','users.id', 'clientes.user_id')
-        //     ->select('clientes.id as cliente','users.id','users.nombres', 'users.apellidos',
-        //     'users.telefono', 'users.email')
-        //     ->where('users.'.$criterio, 'like', '%'. $buscar . '%')
-        //     ->paginate(5);
-
-        //     return [
-        //         'pagination' => [
-        //             'total'        => $clientes->total(),
-        //             'current_page' => $clientes->currentPage(),
-        //             'per_page'     => $clientes->perPage(),
-        //             'last_page'    => $clientes->lastPage(),
-        //             'from'         => $clientes->firstItem(),
-        //             'to'           => $clientes->lastItem(),
-        //         ],
-        //         'clientes' => $clientes
-        //     ];
-            
-        // }
+        
 
         $clientes = User::when($buscar, function ($query) use ($buscar, $criterio) {
             return $query->where('users.'.$criterio, 'like', '%'. $buscar . '%');
         })
         ->with('imagene', 'cliente')
         ->paginate(5);
+        
 
         return [
             'pagination' => [

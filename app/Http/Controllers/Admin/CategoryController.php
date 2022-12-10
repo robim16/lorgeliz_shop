@@ -29,13 +29,19 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $nombre = $request->get('nombre');
-       
-        $categorias = Categoria::where('nombre','like',"%$nombre%")
-        ->orderBy('created_at')
-        ->paginate(5);
-        
-        return view('admin.categorias.index',compact('categorias'));
+        try {
+           
+            $nombre = $request->get('nombre');
+           
+            $categorias = Categoria::where('nombre','like',"%$nombre%")
+            ->orderBy('created_at')
+            ->paginate(5);
+            
+            return view('admin.categorias.index',compact('categorias'));
+
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 
     /**
@@ -69,11 +75,12 @@ class CategoryController extends Controller
     
             return redirect()->route('category.index');
 
+
         } catch (\Exception $e) {
 
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
 
-            Log::debug('Error creando la categoría. categoría: '.json_encode($categoria));
+            Log::debug('Error creando la categoría. Error: '.json_encode($e));
 
             return redirect()->back();
 
@@ -89,6 +96,7 @@ class CategoryController extends Controller
     public function show($slug)
     {
         $categoria = Categoria::where('slug',$slug)->firstOrFail();
+
         return view('admin.categorias.show',compact('categoria'));
     }
 
@@ -101,6 +109,7 @@ class CategoryController extends Controller
     public function edit($slug)
     {
         $categoria = Categoria::where('slug',$slug)->firstOrFail();
+
         return view('admin.categorias.edit',compact('categoria'));
     }
 
@@ -127,11 +136,12 @@ class CategoryController extends Controller
             
             return redirect()->route('category.index');
 
+
         } catch (\Exception $e) {
 
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
 
-            Log::debug('Error editando la categoría. categoría: '.json_encode($categoria));
+            Log::debug('Error editando la categoría. Error: '.json_encode($e));
 
             return redirect()->back();
         }
@@ -148,7 +158,6 @@ class CategoryController extends Controller
     {
         try{
 
-            //$categoria->delete();
             $categoria = Categoria::where('id', $id)->first();
             $categoria->delete();
 
@@ -157,9 +166,9 @@ class CategoryController extends Controller
             return redirect()->route('category.index');
         }
 
-        catch (\Exception $exception){
+        catch (\Exception $e){
 
-            Log::debug('Error eliminando la categoría. categoría: '.json_encode($categoria));
+            Log::debug('Error eliminando la categoría. Error: '.json_encode($e));
 
             session()->flash('message', ['warning', ("No puedes eliminar la categoría porque está en uso")]);
 

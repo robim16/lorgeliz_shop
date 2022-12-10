@@ -11,7 +11,11 @@ class ClienteController extends Controller
 
     public function index(Request $request)
     {
-        // if (!$request->ajax()) return back();
+        
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
+
 
         try {
            
