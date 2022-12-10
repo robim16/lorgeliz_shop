@@ -14,6 +14,7 @@ use App\Venta;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class InformesController extends Controller
 {
@@ -28,21 +29,14 @@ class InformesController extends Controller
         $this->middleware('auth');
     }
 
+
+
     public function informeVentas(Request $request)
     {
         //obtener ventas por meses
 
         $anio = date('Y');
 
-        // $ventas=DB::table('ventas as v')
-        // ->select(DB::raw('MONTH(v.fecha) as mes'),
-        // DB::raw('YEAR(v.fecha) as anio'),
-        // DB::raw('COUNT(v.id) as cantidad'),
-        // DB::raw('SUM(v.valor) as total'))
-        // ->whereYear('v.fecha',$anio)
-        // ->where('v.estado', '!=', '3')
-        // ->groupBy(DB::raw('MONTH(v.fecha)'),DB::raw('YEAR(v.fecha)'))
-        // ->paginate(5); 
 
         try {
            
@@ -57,10 +51,13 @@ class InformesController extends Controller
             return view('admin.informes.ventas.index',compact('ventas'));
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en la vista del informe de ventas. Error: '.json_encode($e));
         }
 
     }
+
+
 
     public function pdfInformeVentas(Request $request)
     {
@@ -70,20 +67,7 @@ class InformesController extends Controller
 
         $anio = date('Y');
 
-        // if ( $fecha_de =='' && $fecha_a =='') {
-
-            // $ventas=DB::table('ventas as v')
-            // ->select(DB::raw('MONTH(v.fecha) as mes'),
-            // DB::raw('YEAR(v.fecha) as anio'),
-            // DB::raw('COUNT(v.id) as cantidad'),
-            // DB::raw('SUM(v.valor) as total'))
-            // ->whereYear('v.fecha',$anio)
-            // ->groupBy(DB::raw('MONTH(v.fecha)'),DB::raw('YEAR(v.fecha)'))
-            // ->get();
-
-
-            
-            // }
+        
         
         try {
            
@@ -99,20 +83,25 @@ class InformesController extends Controller
                 $count += 1;
             }
     
-            $pdf = \PDF::loadView('admin.pdf.informeventas',['ventas'=>$ventas, 'count'=>$count])->setPaper('a4', 'landscape');
+            $pdf = \PDF::loadView('admin.pdf.informeventas', ['ventas'=>$ventas, 'count'=>$count])
+                ->setPaper('a4', 'landscape');
             
             return $pdf->download('ventas.pdf');
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error imprimiendo el informe de ventas. Error: '.json_encode($e));
         }
 
     }
+
+
 
     public function mostrarVentas(Request $request,$mes)
     {
 
         $fecha_de = $request->get('fecha_de');
+
         $fecha_a = $request->get('fecha_a');
 
         $anio = date('Y');
@@ -125,18 +114,9 @@ class InformesController extends Controller
             $fecha_a = \Carbon\Carbon::now();
         }
 
-        // $ventas=DB::table('ventas')
-        // ->join('producto_venta', 'ventas.id', '=', 'producto_venta.venta_id')
-        // ->join('facturas', 'ventas.factura_id', '=', 'facturas.id')
-        // ->join('clientes', 'ventas.cliente_id', '=', 'clientes.id')
-        // ->join('users', 'clientes.user_id', '=', 'users.id')
-        // ->select('ventas.*','users.nombres', 'clientes.id as cliente', 'facturas.prefijo', 'facturas.consecutivo',
-        // DB::raw('SUM(producto_venta.cantidad) as cantidad'))
-        // ->whereMonth('ventas.fecha',$mes)
-        // ->whereBetween('ventas.fecha',[$fecha_de, $fecha_a])
-        // ->groupBy('ventas.id')
-        // ->orderBy('ventas.created_at', 'DESC')
-        // ->paginate(5); //obtener ventas en el mes seleccionado
+
+        //obtener ventas en el mes seleccionado
+
 
         try {
 
@@ -155,26 +135,20 @@ class InformesController extends Controller
             return view('admin.informes.ventas.show',compact('ventas'));
            
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en show del informe de ventas. Error: '.json_encode($e));
         }
         
     }
+
+
 
     public function pdfVentaShow(Request $request)
     {
         $mes = date('m', strtotime($request->mes));
         $anio = date('Y');
 
-        // $ventas=DB::table('ventas')
-        // ->join('producto_venta', 'ventas.id', '=', 'producto_venta.venta_id')
-        // ->join('facturas', 'ventas.factura_id', '=', 'facturas.id')
-        // ->join('clientes', 'ventas.cliente_id', '=', 'clientes.id')
-        // ->join('users', 'clientes.user_id', '=', 'users.id')
-        // ->select('ventas.*','users.nombres', 'clientes.id as cliente', 'facturas.prefijo', 'facturas.consecutivo',
-        // DB::raw('SUM(producto_venta.cantidad) as cantidad'))
-        // ->whereMonth('ventas.fecha',$mes)
-        // ->groupBy('ventas.id')
-        // ->get();
+      
 
         try {
             
@@ -200,7 +174,8 @@ class InformesController extends Controller
             return $pdf->download('ventas_mes.pdf');
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en el show pdf del informe de ventas. Error: '.json_encode($e));
         }
 
     }
@@ -210,25 +185,6 @@ class InformesController extends Controller
     {
        
         $busqueda = $request->busqueda;
-
-        // $productos = DB::table('productos')
-        // ->orWhere('productos.nombre','like',"%$busqueda%")
-        // ->orWhere('colores.nombre','like',"%$busqueda%")
-        // ->orWhere('tallas.nombre','like',"%$busqueda%")
-        // ->join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
-        // ->join('colores', 'color_producto.color_id', '=', 'colores.id')
-        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        // ->join('tallas', 'tallas.id', '=', 'producto_referencia.talla_id')
-        // ->join('producto_venta', 'producto_referencia.id', '=', 'producto_venta.producto_referencia_id')
-        // ->select('color_producto.id as cop', 'productos.id as codigo', 'productos.nombre', 'colores.nombre as color',
-        // 'tallas.nombre as talla', DB::raw('SUM(producto_venta.cantidad) as cantidad')
-        // )->groupBy('producto_referencia.id')
-        // ->orderBy('cantidad', 'DESC')
-        // ->paginate(5); //informe de productos más vendidos
-
-        // when($buscar, function ($query) use ($buscar, $criterio) {
-        //     return $query->where('users.'.$criterio, 'like', '%'. $buscar . '%');
-        // })
 
         try {
            
@@ -246,25 +202,17 @@ class InformesController extends Controller
             return view('admin.informes.productos.index',compact('productos'));
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en la vista del informe de ventas de productos. Error: '.json_encode($e));
         }
 
     }
 
+
+
     public function pdfInformeProductos(Request $request)
     {
 
-        // $productos = DB::table('productos')
-        // ->join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
-        // ->join('colores', 'color_producto.color_id', '=', 'colores.id')
-        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        // ->join('tallas', 'tallas.id', '=', 'producto_referencia.talla_id')
-        // ->join('producto_venta', 'producto_referencia.id', '=', 'producto_venta.producto_referencia_id')
-        // ->select('color_producto.id as cop','productos.id as codigo','productos.nombre','colores.nombre as color',
-        // 'tallas.nombre as talla',DB::raw('SUM(producto_venta.cantidad) as cantidad')
-        // )->groupBy('producto_referencia.id')
-        // ->orderBy('cantidad', 'DESC')
-        // ->get();
 
         try {
            
@@ -275,6 +223,7 @@ class InformesController extends Controller
             ->get();
             
             $count = 0;
+
             foreach ($productos as $producto) {
                 // $count = $count + 1;
                 $count += 1;
@@ -286,30 +235,19 @@ class InformesController extends Controller
             return $pdf->download('productos.pdf');
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en el pdf del informe de ventas de productos. Error: '.json_encode($e));
         }
 
     }
     
 
+
+
     public function informeClientes(Request $request)
     {
         $busqueda = $request->busqueda;
 
-        // $clientes = DB::table('clientes')
-        // ->orWhere('users.id','like',"%$busqueda%")
-        // ->orWhere('users.nombres','like',"%$busqueda%")
-        // ->orWhere('users.apellidos','like',"%$busqueda%")
-        // ->orWhere('users.telefono','like',"%$busqueda%")
-        // ->orWhere('users.email','like',"%$busqueda%")
-        // ->join('ventas', 'clientes.id', '=', 'ventas.cliente_id')
-        // ->join('users', 'clientes.user_id', '=', 'users.id')
-        // ->select('users.id as user','users.nombres', 'users.apellidos', 'users.telefono', 'users.email',
-        // 'clientes.id as id_cliente',
-        // DB::raw('COUNT(ventas.id) as cantidad'))
-        // ->groupBy('ventas.cliente_id')
-        // ->orderBy('cantidad', 'DESC')
-        // ->paginate(5);
 
         try {
            
@@ -330,23 +268,17 @@ class InformesController extends Controller
             return view('admin.informes.clientes.index',compact('clientes'));
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en la vista del informe de clientes. Error: '.json_encode($e));
         }
 
     }
 
+
+
     public function pdfInformeClientes(Request $request)
     {
-        // $clientes = DB::table('clientes')
-        // ->join('ventas', 'clientes.id', '=', 'ventas.cliente_id')
-        // ->join('users', 'clientes.user_id', '=', 'users.id')
-        // ->select('users.id as user','users.nombres', 'users.telefono', 'users.email',
-        // 'clientes.id as id_cliente',
-        // DB::raw('COUNT(ventas.id) as cantidad'))
-        // ->groupBy('ventas.cliente_id')
-        // ->orderBy('cantidad', 'DESC')
-        // ->get();
-
+       
         try {
            
             $clientes = Venta::with('cliente.user')
@@ -367,24 +299,19 @@ class InformesController extends Controller
             return $pdf->download('clientes.pdf');
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en el pdf del informe de clientes. Error: '.json_encode($e));
         }
 
     }
 
 
+
     public function informePagos(Request $request)
     {
+
         $anio = date('Y');
 
-        // $pagos=DB::table('pagos as p')
-        // ->select(DB::raw('MONTH(p.fecha) as mes'),
-        // DB::raw('YEAR(p.fecha) as anio'),
-        // DB::raw('COUNT(p.id) as cantidad'),
-        // DB::raw('SUM(p.monto) as total'))
-        // ->whereYear('p.fecha',$anio)
-        // ->groupBy(DB::raw('MONTH(p.fecha)'),DB::raw('YEAR(p.fecha)'))
-        // ->paginate(5);
 
         try {
             
@@ -397,13 +324,17 @@ class InformesController extends Controller
             return view('admin.informes.pagos.index',compact('pagos'));
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en la vista del informe de pagos. Error: '.json_encode($e));
         }
 
     }
 
+
+
     public function pdfInformePagos(Request $request)
     {
+
         $anio = date('Y');
 
         try {
@@ -425,11 +356,13 @@ class InformesController extends Controller
             return $pdf->download('pagos.pdf');
             
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en el pdf del informe de pagos. Error: '.json_encode($e));
         }
 
-
     }
+
+
 
     public function mostrarPagos(Request $request,$mes)
     {
@@ -447,15 +380,7 @@ class InformesController extends Controller
             $fecha_a = \Carbon\Carbon::now();
         }
 
-        // $pagos=DB::table('pagos')
-        // ->join('ventas', 'pagos.venta_id', '=', 'ventas.id')
-        // ->select('pagos.*')
-        // ->whereMonth('pagos.fecha',$mes)
-        // ->whereBetween('pagos.fecha',[$fecha_de, $fecha_a])
-        // ->groupBy('pagos.id')
-        // ->orderBy('pagos.created_at', 'DESC')
-        // ->paginate(5);
-
+       
         try {
 
             $pagos = Pago::whereMonth('fecha',$mes)
@@ -467,10 +392,13 @@ class InformesController extends Controller
             return view('admin.informes.pagos.show',compact('pagos'));
            
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en show del informe de pagos. Error: '.json_encode($e));
         }
 
     }
+
+
 
     public function pdfPagosShow(Request $request)
     {
@@ -495,10 +423,13 @@ class InformesController extends Controller
             return $pdf->download('pagos_mes.pdf');
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en el pdf del show del informe de pagos. Error: '.json_encode($e));
         }
 
     }
+
+
 
     public function informe_saldos_clientes()
     {
@@ -515,9 +446,12 @@ class InformesController extends Controller
             return view('admin.informes.saldos.index',compact('saldos_pendientes'));
            
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error la vista del informe de saldos de clientes. Error: '.json_encode($e));
         }
     }
+
+
 
     public function informeSaldosClientesPdf()
     {
@@ -542,10 +476,13 @@ class InformesController extends Controller
             return $pdf->download('saldosclientes.pdf');
 
         } catch (\Exception $e) {
-            //throw $th;
+           
+            Log::debug('Error el pdf del informe de saldos de clientes. Error: '.json_encode($e));
         }
         
     }
+
+
 
     public function facturasPendientesCliente(Cliente $cliente)
     {
@@ -561,10 +498,12 @@ class InformesController extends Controller
             return view('admin.informes.saldos.show',compact('saldos_pendientes'));
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error la vista del informe de facturas pendientes. Error: '.json_encode($e));
         }
         
     }
+
 
 
     public function inventarios(Request $request)
@@ -588,7 +527,8 @@ class InformesController extends Controller
             return view('admin.informes.inventarios.index',compact('productos'));
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error la vista del informe de inventarios. Error: '.json_encode($e));
         }
 
     }

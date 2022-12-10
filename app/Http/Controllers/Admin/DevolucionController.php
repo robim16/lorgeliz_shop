@@ -122,15 +122,14 @@ class DevolucionController extends Controller
     {
 
         try {
+            
 
             DB::beginTransaction();
 
             $devolucion = Devolucione::where('id', $request->devolucion_id)->firstOrFail();
-    
             $devolucion->estado = $request->estado;
     
             $devolucion->save();
-
     
             $details = [
                 'cliente' => $devolucion->venta->cliente->user->nombres,
@@ -139,10 +138,10 @@ class DevolucionController extends Controller
                 'url' => url('/devoluciones/'. $devolucion->id),
             ];
 
+
+
+            if ($request->estado == 4) { // comprobamos si la devolución ha sido efectuada completamente
     
-            if ($request->estado == 4) {
-    
-                // comprobamos si la devolución ha sido efectuada completamente
     
                 $producto = ProductoVenta::where('producto_referencia_id', $devolucion->producto_referencia_id)
                     ->where('venta_id', $devolucion->venta_id)
@@ -182,27 +181,45 @@ class DevolucionController extends Controller
                 // }
                 // else{
     
-                    if ($pagos[0]->total == 0) {
-                       
-                        $venta->saldo = $venta->saldo - $totalproducto; // a la venta se resta el subtotal del producto y los pagos
-                    } else {
-                        if ($totalproducto <= $venta->saldo) {
-                            $saldo = $venta->saldo - $totalproducto;
-    
-                            $venta->saldo = $saldo;
-    
-                            $deducciones = $pagos[0]->total + $totalproducto;
-    
-                            if ($saldo == 0 && $deducciones > $venta->total) {
-                                //anular pagos
-                            }
-                        }
-                        else{
-                            $venta->saldo = 0;//$venta->valor
+                if ($pagos[0]->total == 0) {
+                    
+                    $venta->saldo = $venta->saldo - $totalproducto; //al saldo de la venta se resta el subtotal del producto 
+                
+                } else {
+                    //sumatoria de pagos es > 0
+                    
+                    if ($totalproducto <= $venta->saldo) {
+                        //si el subtotal del producto  es <= al saldo restante
+
+                        $saldo = $venta->saldo - $totalproducto;
+
+                        $venta->saldo = $saldo;
+
+                        $deducciones = $pagos[0]->total + $totalproducto;//se suman los pagos totales y el subtotal del producto
+
+                        if ($saldo == 0 && $deducciones > $venta->total) {
                             //anular pagos
                         }
                     }
-                // }
+
+                    else {//subtotal del producto > saldo de la venta
+                        if ($venta->saldo > 0) {//si queda saldo aún
+                            //190 150 40 170
+
+                            //si total pagos > total producto
+                            //saldo = (total venta - subtotal producto) - (total pagos - subtotal producto)
+                        
+                            //si no, saldo = saldo si se devuelve el dinero
+                        }
+
+                        else{
+                            //anular todos los pagos si el subtotal del producto + 
+                            //envío es igual al total de la venta
+
+                        } 
+                    }
+                }
+                
     
                 $venta->save();
     
@@ -224,28 +241,33 @@ class DevolucionController extends Controller
                 // $producto->delete(); // se borra de la venta el producto
     
                 $product = array();
-
+                
                 $product['data'] = array();
     
                 $product['data'] = $producto_data->colorProducto->id;
-    
+
                 broadcast(new AddProductEvent($product));
     
-                
-            }
     
+            }
+            
+
+            DB::commit();
+
+
             if ($devolucion->estado == 2) {
                 $mensaje = 'La devolución está en estudio';
             }
-
+    
             if ($devolucion->estado == 3) {
                 $mensaje = 'La devolución fue rechazada';
             }
-
+    
             if ($devolucion->estado == 4) {
                 $mensaje = 'La devolución fue aprobada';
             }
     
+                
             //notificacion para el cliente
             $arrayData = [
                 'notificacion' => [
@@ -253,29 +275,24 @@ class DevolucionController extends Controller
                     'url' => url('/devoluciones/'. $devolucion->id)
                 ]
             ];
-    
+
+
             Cliente::findOrFail($devolucion->venta->cliente->id)->notify(new NotificationDevolution($arrayData));
-            
+    
             //return new DevolucionStatusMail($details);
-            
+    
             Mail::to($devolucion->venta->cliente->user->email)->send(new DevolucionStatusMail($details));
-            
+    
             session()->flash('message', ['success', ("Se ha actualizado el estado de la solicitud")]);
-            
-            DB::commit();
     
             return back();
 
+
         } catch (\Exception $e) {
-
-            session()->flash('message', ['warning', ("ha ocurrido un error")]);
-
-            Log::debug('Error editando la devolucion. devolucion: '.json_encode($devolucion));
 
             DB::rollBack();
 
-            return redirect()->back();
-
+            Log::debug('Error editando la devolución. Error: '.json_encode($e));
         }
 
     }
