@@ -34,30 +34,36 @@ class ProductController extends Controller
         $this->middleware('auth');
     }
 
+
+
     public function index(Request $request)
     {
-        $busqueda = $request->get('busqueda');
 
-        $productos = Producto::orWhere('productos.nombre','like',"%$busqueda%")
-        ->orWhere('productos.id','like',"%$busqueda%")
-        ->paginate(10);
+        try {
+            
+            $busqueda = $request->get('busqueda');
+    
+            $productos = Producto::orWhere('productos.nombre','like',"%$busqueda%")
+            ->orWhere('productos.id','like',"%$busqueda%")
+            ->paginate(10);
+    
+            return view('admin.productos.index',compact('productos')); //index de productos en admin
 
-        return view('admin.productos.index',compact('productos')); //index de productos en admin
+        } catch (\Exception $e) {
+
+            Log::debug('Error en index de productos. Error: '.json_encode($e));
+        }
 
     }
+
+
 
     public function product(Request $request, $id)
     {
        
         $busqueda = $request->get('busqueda');
        
-        // $productos = Producto::where('productos.nombre','like',"%$busqueda%")
-        // ->join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
-        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        // ->select('productos.*','color_producto.id as cop','color_producto.slug as slug','colores.nombre as color', 'color_producto.activo')
-        // ->where('productos.id', $id)
-        // ->orderBy('productos.created_at')
-        // ->paginate(5); //obtener todos los colores de un producto por id
+        //obtener todos los colores de un producto por id
 
         try {
            
@@ -72,11 +78,15 @@ class ProductController extends Controller
             
             return view('admin.productos.coloresproducto',compact('productos'));
 
+
         } catch (\Exception $e) {
-           
+
+            Log::debug('Error al obtener los colores del producto. Error: '.json_encode($e));
         }
 
     }   
+
+
 
     public function create()
     {
@@ -127,6 +137,7 @@ class ProductController extends Controller
             if ($request->hasFile('imagenes')) {
     
                 $imagenes = $request->file('imagenes');
+
     
                 foreach ($imagenes as $imagen) {
     
@@ -202,6 +213,7 @@ class ProductController extends Controller
     
             return redirect()->route('product.index');
 
+
         } catch (Exception $e) {
 
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
@@ -236,10 +248,13 @@ class ProductController extends Controller
             return view('admin.productos.show',compact('producto','estados')); //mostrar el producto
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error al mostrar el producto. Error: '.json_encode($e));
         }
 
     }
+
+
 
     public function showColor($slug)
     {
@@ -257,7 +272,8 @@ class ProductController extends Controller
             return view('admin.productos.showcolor',compact('producto','estados')); //mostrar un color de un producto
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error show de productos. Error: '.json_encode($e));
         }
     }
 
@@ -285,6 +301,8 @@ class ProductController extends Controller
         }
     }
 
+
+
     public function editColor($slug)
     {
         try {
@@ -300,7 +318,8 @@ class ProductController extends Controller
             return view('admin.productos.editcolor',compact('producto','estados'));
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en editColor de productos. Error: '.json_encode($e));
         }
     }
 
@@ -408,6 +427,8 @@ class ProductController extends Controller
             DB::rollBack();
         }
     }
+
+
 
     public function updateColor(Request $request, $slug)
     {
@@ -558,6 +579,8 @@ class ProductController extends Controller
         }
     }
 
+
+
     public function activate($id)
     {
         try {
@@ -582,6 +605,8 @@ class ProductController extends Controller
         }
     }
 
+
+
     public function createColor($id)
     {
         try {
@@ -592,9 +617,13 @@ class ProductController extends Controller
             return view('admin.productos.createcolor',compact('producto', 'estados'));
             
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en createColor de productos. Error: '.json_encode($e));
         }
+
     }
+
+
 
     public function storeColor(Request $request)
     {
@@ -690,6 +719,8 @@ class ProductController extends Controller
 
     }
 
+
+
     //reemplazado por ruta api imagenController
     public function eliminarImagen(Request $request,$id)
     {
@@ -717,6 +748,8 @@ class ProductController extends Controller
 
     }
 
+
+    
     public function estado_productos()
     {
         return [

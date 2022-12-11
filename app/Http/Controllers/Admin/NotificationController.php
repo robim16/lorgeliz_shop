@@ -35,7 +35,14 @@ class NotificationController extends Controller
             //}
         //}
 
-        return Auth::user()->unreadNotifications;
+        try {
+          
+            return Auth::user()->unreadNotifications;
+
+        } catch (\Exception $e) {
+            return $e;
+        }
+
     }
 
 

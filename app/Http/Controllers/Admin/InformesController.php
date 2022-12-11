@@ -90,7 +90,7 @@ class InformesController extends Controller
 
         } catch (\Exception $e) {
 
-            Log::debug('Error imprimiendo el informe de ventas. Error: '.json_encode($e));
+            Log::debug('Error imprimiendo el pdf del informe de ventas. Error: '.json_encode($e));
         }
 
     }
@@ -145,6 +145,7 @@ class InformesController extends Controller
 
     public function pdfVentaShow(Request $request)
     {
+
         $mes = date('m', strtotime($request->mes));
         $anio = date('Y');
 
@@ -179,6 +180,7 @@ class InformesController extends Controller
         }
 
     }
+
 
 
     public function ventaProductos(Request $request)
@@ -368,6 +370,7 @@ class InformesController extends Controller
     {
 
         $fecha_de = $request->get('fecha_de');
+        
         $fecha_a = $request->get('fecha_a');
 
         $anio = date('Y');

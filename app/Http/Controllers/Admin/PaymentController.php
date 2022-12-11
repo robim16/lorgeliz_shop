@@ -22,19 +22,32 @@ class PaymentController extends Controller
         $this->middleware('auth');
     }
 
+
+
     public function index(Request $request)
     {
-        $busqueda = $request->get('busqueda');
-        
-        $pagos = Pago::orWhere('pagos.venta_id','like',"%$busqueda%")
-        ->orWhere('pagos.estado','like',"%$busqueda%")
-        ->orWhere('pagos.id', $busqueda)
-        ->orWhere('pagos.monto', $busqueda)
-        ->orderBy('pagos.fecha', 'DESC')
-        ->paginate(5);
 
-        return view('admin.pagos.index', compact('pagos'));
+        try {
+            
+            $busqueda = $request->get('busqueda');
+            
+            $pagos = Pago::orWhere('pagos.venta_id','like',"%$busqueda%")
+            ->orWhere('pagos.estado','like',"%$busqueda%")
+            ->orWhere('pagos.id', $busqueda)
+            ->orWhere('pagos.monto', $busqueda)
+            ->orderBy('pagos.fecha', 'DESC')
+            ->paginate(5);
+    
+            return view('admin.pagos.index', compact('pagos'));
+
+        } catch (\Exception $e) {
+
+            Log::debug('Error en index de pagos. Error: '.json_encode($e));
+        }
+
     }
+
+
 
     public function store($x_ref_payco, $total, $venta_id, $x_cod_response)
     {
@@ -51,12 +64,15 @@ class PaymentController extends Controller
             $pago->save();//guardar el pago
 
         } catch (\Exception $e) {
-            Log::debug('Error guardando el pago. error: '.json_encode($e));
+
+            Log::debug('Error guardando el pago. Error: '.json_encode($e));
 
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
         }
 
     }
+
+
 
     public function printPay(Request $request, $id)
     {
@@ -72,19 +88,24 @@ class PaymentController extends Controller
             return $pdf->download('pago-'.$pago->id.'.pdf');
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error imprimiendo el pago. Error: '.json_encode($e));
         }
 
     }
 
+
+
     public function pdfPagosReporte()
     {
+
         try {
             
             $pagos = Pago::orderBy('pagos.fecha')
             ->get();
     
             $count = 0;
+
             foreach ($pagos as $pago) {
                 // $count = $count + 1;
                 $count += 1;
@@ -96,12 +117,16 @@ class PaymentController extends Controller
             return $pdf->download('listadopagos.pdf');
             
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error generando reporte de pagos. Error: '.json_encode($e));
         }
     }
 
+
+
     public function anular(Pago $pago)
     {
+
         try {
            
             $monto = $pago->monto;
@@ -126,9 +151,10 @@ class PaymentController extends Controller
 
         } catch (\Exception $e) {
 
-            Log::debug('Error anulando el pago. error: '.json_encode($e));
+            Log::debug('Error anulando el pago. Error: '.json_encode($e));
 
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
         }
+
     }
 }

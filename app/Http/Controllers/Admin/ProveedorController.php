@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Proveedore;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProveedorController extends Controller
 {
@@ -27,7 +28,10 @@ class ProveedorController extends Controller
     {
         $nombre = $request->get('nombre');
        
-        $proveedores = Proveedore::where('nombre','like',"%$nombre%")->orderBy('created_at')->paginate(5);
+        $proveedores = Proveedore::where('nombre','like',"%$nombre%")
+            ->orderBy('created_at')
+            ->paginate(5);
+
         return view('admin.proveedores.index',compact('proveedores'));
     }
 
@@ -49,18 +53,28 @@ class ProveedorController extends Controller
      */
     public function store(Request $request)
     {
-        $proveedor = new Proveedore();
-        $proveedor->nombre = $request->nombre;
-        $proveedor->nit = $request->nit;
-        $proveedor->razon_social = $request->razon_social;
-        $proveedor->direccion = $request->direccion;
-        $proveedor->telefono = $request->telefono;
-        $proveedor->email = $request->email;
 
-        $proveedor->save();
+        try {
 
-        session()->flash('message', ['success', ("Se ha creado el proveedor exitosamente")]);
-        return redirect()->route('proveedor.index');
+            $proveedor = new Proveedore();
+            $proveedor->nombre = $request->nombre;
+            $proveedor->nit = $request->nit;
+            $proveedor->razon_social = $request->razon_social;
+            $proveedor->direccion = $request->direccion;
+            $proveedor->telefono = $request->telefono;
+            $proveedor->email = $request->email;
+    
+            $proveedor->save();
+    
+            session()->flash('message', ['success', ("Se ha creado el proveedor exitosamente")]);
+    
+            return redirect()->route('proveedor.index');
+           
+        } catch (\Exception $e) {
+
+            Log::debug('Error al guardar el proveedor. Error: '.json_encode($e));
+        }
+
     }
 
     /**
@@ -98,17 +112,25 @@ class ProveedorController extends Controller
      */
     public function update(Request $request, Proveedore $proveedor)
     {
-        $proveedor->nombre = $request->nombre;
-        $proveedor->nit = $request->nit;
-        $proveedor->razon_social = $request->razon_social;
-        $proveedor->direccion = $request->direccion;
-        $proveedor->telefono = $request->telefono;
-        $proveedor->email = $request->email;
 
-        $proveedor->save();
+        try {
+            
+            $proveedor->nombre = $request->nombre;
+            $proveedor->nit = $request->nit;
+            $proveedor->razon_social = $request->razon_social;
+            $proveedor->direccion = $request->direccion;
+            $proveedor->telefono = $request->telefono;
+            $proveedor->email = $request->email;
+    
+            $proveedor->save();
+    
+            session()->flash('message', ['success', ("Se ha editado el proveedor exitosamente")]);
+    
+            return redirect()->route('proveedor.index');
 
-        session()->flash('message', ['success', ("Se ha editado el proveedor exitosamente")]);
-        return redirect()->route('proveedor.index');
+        } catch (\Exception $e) {
+            Log::debug('Error al editar el proveedor. Error: '.json_encode($e));
+        }
     }
 
     /**
@@ -117,7 +139,7 @@ class ProveedorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy( Proveedor $proveedor)
+    public function destroy(Proveedore $proveedor)
     {
         try{
 
@@ -128,9 +150,11 @@ class ProveedorController extends Controller
             return redirect()->route('proveedor.index');
         }
 
-        catch (\Exception $exception){
+        catch (\Exception $e){
 
             session()->flash('message', ['warning', ("Ha ocurrido un error al eliminar el proveedor")]);
+
+            Log::debug('Error al elimnar el proveedor. Error: '.json_encode($e));
 
             return redirect()->route('proveedor.index');
         }
