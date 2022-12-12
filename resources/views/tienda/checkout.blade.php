@@ -323,7 +323,7 @@ $(document).ready(function () {
 							test: true
 						})  
 
-						let ruta = 'http://dev.lorenzogeliztienda.com'
+						let ruta = 'http://localhost/lorgeliz_tienda_copia/public'
 
 						var data={
 						//Parametros compra (obligatorio)
