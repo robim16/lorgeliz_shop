@@ -603,11 +603,12 @@
 
                 if (categoria != 0) {
 
+                    ///lorgeliz_tienda_copia/public/api/admin/subcategorias
                     $.ajax({
                         type: "GET",
-                        url: '/lorgeliz_tienda_copia/public/api/admin/subcategorias',
+                        url:"{{ url('/api/admin/subcategorias') }}",
                         data:{categoria:categoria},
-                        dataType: 'json',
+                        dataType: "json",
                         success: function (response) {
                             
                             $('#subcategory_id').html('');
@@ -634,11 +635,13 @@
 
                 if (subcategoria != 0) {
 
+                    //"/lorgeliz_tienda_copia/public/api/admin/tipos"
+
                     $.ajax({
                         type: "GET",
-                        url: "/lorgeliz_tienda_copia/public/api/admin/tipos",
+                        url:"{{ url('/api/admin/tipos') }}",
                         data:{subcategoria:subcategoria},
-                        dataType: 'json',
+                        dataType: "json",
                         success: function (response) {
 
                             $('#tipo_id').html('');
