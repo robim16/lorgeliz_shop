@@ -608,11 +608,10 @@
 
                     $.ajax({
                         type: "GET",
-                        // "route('subcategory.get')",
                         // url: 'http://dev.lorenzogeliztienda.com/api/admin/subcategorias',
-                        url:"{{ route('api.subcategorias.get') }}",
+                        url:"{{ url('/api/admin/subcategorias') }}",
                         data:{categoria:categoria},
-                        dataType: 'json',
+                        dataType: "json",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
@@ -644,9 +643,8 @@
 
                     $.ajax({
                         type: "GET",
-                        // url: "/lorgeliz_tienda_copia/public/api/admin/tipos",
                         // url: "http://dev.lorenzogeliztienda.com/api/admin/tipos",
-                        url:"{{ route('api.tipos.get') }}",
+                        url:"{{ url('/api/admin/tipos') }}",
                         data:{subcategoria:subcategoria},
                         dataType: 'json',
                         headers: {
