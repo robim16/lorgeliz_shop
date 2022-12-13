@@ -605,7 +605,6 @@
 
                     $.ajax({
                         type: "GET",
-                        // "route('subcategory.get')",
                         url: '/lorgeliz_tienda_copia/public/api/admin/subcategorias',
                         data:{categoria:categoria},
                         dataType: 'json',
