@@ -11,8 +11,7 @@ use App\Venta;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
-
+use Illuminate\Support\Facades\Log;
 
 class VentaController extends Controller
 {
@@ -29,6 +28,7 @@ class VentaController extends Controller
 
     public function index(Request $request)
     {
+
         $busqueda = $request->busqueda;
         
         $estado = $request->estado;
@@ -53,7 +53,8 @@ class VentaController extends Controller
             return view('admin.ventas.index', compact('ventas'));
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en index de ventas.Error: '.json_encode($e));
         }
 
     }
@@ -62,8 +63,6 @@ class VentaController extends Controller
 
     public function show($id)
     {
-
-
 
         try {
             
@@ -89,10 +88,12 @@ class VentaController extends Controller
             $estados = $devolucion->estados_devolucion();
 
             return view('admin.ventas.show', compact('venta', 'pagos', 'valor_devolucion',
-            'devoluciones', 'estados'));
+                'devoluciones', 'estados'));
+
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error mostrando la venta.Error: '.json_encode($e));
         }
 
     }
@@ -101,20 +102,25 @@ class VentaController extends Controller
 
     public function anular(Venta $venta)
     {
+
         try {
             
             $venta->estado = 3;
+
             $venta->save();
     
             $pagos = Pago::where('venta_id', $venta->id)->get();
     
             if (count($pagos) > 0) {
+
                 foreach ($pagos as $pago) {
                     $pago->estado = 5; // se anula el pago
                     $pago->save();
                 }
+
             }
     
+
             $venta->pedido()->update(['estado' => 5]);
 
             $productoVenta = ProductoVenta::where('venta_id', $venta->id)->get();
@@ -136,9 +142,13 @@ class VentaController extends Controller
     
             return back();
 
-        } catch (\Exception $ex) {
+        } catch (\Exception $e) {
+
             DB::rollBack();
+
+            Log::debug('Error anulando la venta.Error: '.json_encode($e));
         }
+
     }
 
 
@@ -148,6 +158,8 @@ class VentaController extends Controller
 
         try {
            
+            DB::beginTransaction();
+
             $valor = $request->valor;
             
             if ($venta->saldo == $valor) {
@@ -166,14 +178,20 @@ class VentaController extends Controller
             $x_cod_response = 1;
     
             $payment =  new PaymentController();
+
             $payment->store($x_ref_payco, $total, $venta_id, $x_cod_response);// se envían las variables al método store de pagos
     
+            DB::commit();
+
             session()->flash('message', ['success', ("Se ha registrado el pago exitosamente")]);
     
             return back();
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error registrando el pago.Error: '.json_encode($e));
+
+            DB::rollBack();
         }
     }
 
@@ -199,7 +217,8 @@ class VentaController extends Controller
             return $pdf->download('listadoventas.pdf');
 
         } catch (\Exception $e) {
-            //throw $th;
+
+           Log::debug('Error generando el pdf.Error: '.json_encode($e));
         }
 
     }
@@ -220,7 +239,8 @@ class VentaController extends Controller
             return $pdf->download('factura-'.$productos[0]->venta->factura->consecutivo.'.pdf');
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error imprimiendo la factura en admin.Error: '.json_encode($e));
         }
 
     }

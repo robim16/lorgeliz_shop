@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Subcategoria;
 use App\Http\Requests\SubcategoriaRequest;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 
 class SubcategoryController extends Controller
 {
@@ -27,13 +27,22 @@ class SubcategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $nombre = $request->get('nombre');
-       
-        $subcategorias = Subcategoria::where('nombre','like',"%$nombre%")
-        ->orderBy('created_at')
-        ->paginate(5);
-        
-        return view('admin.subcategorias.index',compact('subcategorias'));
+
+        try {
+            
+            $nombre = $request->get('nombre');
+           
+            $subcategorias = Subcategoria::where('nombre','like',"%$nombre%")
+            ->orderBy('created_at')
+            ->paginate(5);
+            
+            return view('admin.subcategorias.index',compact('subcategorias'));
+
+
+        } catch (\Exception $e) {
+          
+            Log::debug('Error en index de subcategorías.Error :'.json_encode($e));
+        }
     }
 
     /**
@@ -68,7 +77,8 @@ class SubcategoryController extends Controller
             return redirect()->route('subcategory.index');
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error creando la subcategoría.Error: '.json_encode($e));
         }
         
     }
@@ -82,6 +92,7 @@ class SubcategoryController extends Controller
     public function show($slug)
     {
         $subcategoria = Subcategoria::where('slug',$slug)->firstOrFail();
+
         return view('admin.subcategorias.show',compact('subcategoria'));
     }
 
@@ -94,6 +105,7 @@ class SubcategoryController extends Controller
     public function edit($slug)
     {
         $subcategoria = Subcategoria::where('slug',$slug)->firstOrFail();
+
         return view('admin.subcategorias.edit',compact('subcategoria'));
     }
 
@@ -122,8 +134,10 @@ class SubcategoryController extends Controller
             return redirect()->route('subcategory.index');
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error editando la subcategoría. Error: '.json_encode($e));
         }
+
     }
 
     /**
@@ -145,18 +159,26 @@ class SubcategoryController extends Controller
             return redirect()->route('subcategory.index');
         }
 
-        catch (\Exception $exception){
+        catch (\Exception $e){
 
-            session()->flash('message', ['warning', ("No es posible eliminar la subcategoría porque está en uso")]);
+            session()->flash('message', ['warning', ("No es posible eliminar la subcategoría 
+                porque está en uso")]);
+
+            Log::debug('Error al eliminar la subcategoría.Error: '.json_encode($e));
 
             return redirect()->route('subcategory.index');
         }
+
     }
+
 
     //implementada con api/subcategoryController
     public function getSubcategoria(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+       
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         try {
           

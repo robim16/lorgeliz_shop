@@ -54,7 +54,8 @@ class StockController extends Controller
             return view('admin.stocks.index',compact('productos'));
           
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en index de stocks. Error: '.json_encode($e));
         }
 
     }
@@ -95,7 +96,9 @@ class StockController extends Controller
                 $producto->stock = $request->cantidad;
         
                 $producto->save();  
+
             }
+
             else{
     
                 if ($request->operacion == 1) {
@@ -131,17 +134,6 @@ class StockController extends Controller
 
     public function pdfInventarios()
     {
-        // $productos = Producto::join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
-        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        // ->join('tallas','producto_referencia.talla_id', '=', 'tallas.id')
-        // ->where('color_producto.activo', 'Si')
-        // ->where('producto_referencia.stock', '>', '0')
-        // ->select('productos.*', 'producto_referencia.talla_id', 'color_producto.id as cop',
-        // 'producto_referencia.stock', 'color_producto.slug as slug', 'colores.nombre as color',
-        // 'tallas.nombre as talla')
-        // ->orderBy('productos.id')
-        // ->get();
 
         try {
     

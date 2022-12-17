@@ -8,6 +8,7 @@ use App\ProductoReferencia;
 use App\Talla;
 use App\Tipo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TallaController extends Controller
 {
@@ -22,11 +23,15 @@ class TallaController extends Controller
         $this->middleware('auth');
     }
 
+
     public function getTalla(Request $request, $id)
     { //implementada en admin/api/tallaController. En desuso
-        if (!$request->ajax()) return redirect('/');
+        
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
-        //$id  = $request->producto;
+        
         $tipo = Producto::where('id', $id)->firstOrFail(); 
 
         $tallas = Talla::join('talla_tipo', 'tallas.id', 'talla_tipo.talla_id')
@@ -35,17 +40,19 @@ class TallaController extends Controller
 
         return ['tallas' => $tallas];
         
-        //$response = ['data' => $tallas];
-        
-        //return response()->json($response); //obtener tallas al actualizar stock en el modal
+        //obtener tallas al actualizar stock en el modal
 
     }
+
 
     public function tallasTipoId(Request $request)
     //implementada en admin/api/tallaController. En desuso
     //obtener las tallas de un tipo de producto para mostrar en el select las que ya han sido seleccionadas, en la vista index de tipo de producto
     {   
-        if (!$request->ajax()) return redirect('/');
+       
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $id  = $request->id;
 
@@ -57,6 +64,8 @@ class TallaController extends Controller
         
         return response()->json($response);
     }
+
+
 
     public function store(Request $request)
     {
@@ -77,6 +86,7 @@ class TallaController extends Controller
                 session()->flash('message', ['success', ("Se han creado las tallas")]);
     
                 return back();
+                
             }else {
                 session()->flash('message', ['danger', ("Debes indicar las tallas")]);
     
@@ -84,7 +94,8 @@ class TallaController extends Controller
             }
             
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error creando el tipo.Error :'.json_encode($e));
         }
         
     }

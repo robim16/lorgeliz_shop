@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TipoRequest;
 use App\Tipo;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 
 class TipoProductoController extends Controller
 {
@@ -20,6 +20,8 @@ class TipoProductoController extends Controller
     {
         $this->middleware('auth');
     }
+
+
 
     public function index(Request $request)
     {
@@ -64,7 +66,8 @@ class TipoProductoController extends Controller
             return redirect()->route('tipo.index');
 
         } catch (\Exception $e) {
-            //throw $th;
+
+           Log::debug('Error creando el tipo de producto.Error: '.json_encode($e));
         }
     }
 
@@ -117,7 +120,8 @@ class TipoProductoController extends Controller
             return redirect()->route('tipo.index');
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error editando el tipo de producto.Error: '.json_encode($e));
         }
         
     }
@@ -147,14 +151,21 @@ class TipoProductoController extends Controller
 
             session()->flash('message', ['warning', ("No se puede eliminar la subcategoría porque está en uso")]);
 
+            Log::debug('Error eliminando el tipo de producto.Error: '.json_encode($e));
+
             return redirect()->route('tipo.index');
         }
     }
 
+
+    
     //ruta api, en desuso. obtiene los tipos de productos de acuerdo a una subcategoría, al crear un producto
     public function getTipo(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
+
 
         $id  = $request->subcategoria;
         $tipos = Tipo::where('subcategoria_id', $id)->get(); 
