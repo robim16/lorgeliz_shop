@@ -60,6 +60,8 @@ if (document.getElementById('app')) {
     });
 }
 
+
+
 if (document.getElementById('product_cart')) {
     require('./tienda/product');
 }
@@ -156,8 +158,12 @@ if (document.getElementById('user_cart')) {
     require('./tienda/userCart');
 }
 
-if (document.getElementById('factura_venta')) {
-    require('./admin/factura_venta');
+// if (document.getElementById('factura_venta')) {
+//     require('./admin/factura_venta');
+// }
+    
+if (document.getElementById('venta_show')) {
+    require('./admin/ventas_show');
 }
-
+    
 

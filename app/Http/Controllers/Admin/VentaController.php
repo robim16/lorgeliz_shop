@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+
+
 
 class VentaController extends Controller
 {
@@ -28,14 +31,14 @@ class VentaController extends Controller
 
     public function index(Request $request)
     {
-
+        
         $busqueda = $request->busqueda;
         
         $estado = $request->estado;
 
-        
+
         try {
-            
+
             $ventas = Venta::when($estado, function ($query) use ($estado) {
                 return $query->orWhere('estado', $estado)
                 ->with('cliente');
@@ -51,11 +54,11 @@ class VentaController extends Controller
             
     
             return view('admin.ventas.index', compact('ventas'));
-
+           
         } catch (\Exception $e) {
-
-            Log::debug('Error en index de ventas.Error: '.json_encode($e));
+            Log::debug('Error consultando el index de ventas.Error: '.json_encode($e));
         }
+
 
     }
 
@@ -64,37 +67,46 @@ class VentaController extends Controller
     public function show($id)
     {
 
+
         try {
+
             
             $venta = Venta::with('cliente.user', 'factura')
-            ->where('id', $id)
-            ->firstOrFail();
+                ->where('id', $id)
+                ->firstOrFail();
 
-            $pagos = $venta->pagos()->select('*', DB::raw('SUM(monto) as total'))
-            ->orderBy('pagos.fecha', 'DESC')
-            ->paginate(5);
+    
+           // $pagos = $venta->pagos()->select('*', DB::raw('SUM(monto) as total'))
+            //     ->orderBy('pagos.fecha', 'DESC')
+            //     ->paginate(5);
 
+            $pagos = $venta->pagos()
+                ->orderBy('pagos.fecha', 'DESC')
+                ->paginate(5);
 
+            
+            // $total_pagos = $pagos()->sum('monto');
+    
             $devoluciones = $venta->devoluciones()->paginate(5);
-
+    
             $valor_devolucion = 0;
-
+    
             foreach ($devoluciones as $devolucion) {
                 $valor_devolucion += $devolucion->productoReferencia->colorProducto->producto->precio_actual;
             };
-
+    
             $devolucion =  new DevolucionController();
-
+    
             $estados = $devolucion->estados_devolucion();
-
+    
             return view('admin.ventas.show', compact('venta', 'pagos', 'valor_devolucion',
                 'devoluciones', 'estados'));
 
 
         } catch (\Exception $e) {
-
-            Log::debug('Error mostrando la venta.Error: '.json_encode($e));
+            Log::debug('Error consultando la venta.Error: '.json_encode($e));
         }
+
 
     }
 
@@ -105,28 +117,25 @@ class VentaController extends Controller
 
         try {
             
-            $venta->estado = 3;
+            DB::beginTransaction();
 
+            $venta->estado = 3;
             $venta->save();
     
             $pagos = Pago::where('venta_id', $venta->id)->get();
     
             if (count($pagos) > 0) {
-
                 foreach ($pagos as $pago) {
                     $pago->estado = 5; // se anula el pago
                     $pago->save();
                 }
-
             }
     
-
             $venta->pedido()->update(['estado' => 5]);
 
             $productoVenta = ProductoVenta::where('venta_id', $venta->id)->get();
 
             foreach ($productoVenta as $key => $producto) {
-
                $prod = $producto->producto_referencia_id;
                $cantidad = $producto->cantidad; // se obtiene la cantidad del producto vendida
     
@@ -138,29 +147,47 @@ class VentaController extends Controller
                $prof->save();
             }
     
+            DB::commit();
+
             session()->flash('message', ['success', ("Se ha anulado la venta exitosamente")]);
     
             return back();
 
         } catch (\Exception $e) {
-
             DB::rollBack();
-
             Log::debug('Error anulando la venta.Error: '.json_encode($e));
         }
 
     }
 
 
-    
+
     public function registrarPago(Request $request, Venta $venta)
     {
 
         try {
-           
-            DB::beginTransaction();
+            
 
             $valor = $request->valor;
+
+            $validator = Validator::make($request->all(), [
+                'valor' => ['required', function ($attribute, $value, $fail) use ($request, $venta) {
+                    if (!($request->valor <= $venta->saldo)) {
+                       $fail('El valor del pago no puede ser mayor al saldo de la venta');
+                    }
+                }],
+            ]);
+    
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 422);
+            }
+
+
+            // $estado_devolucion = $venta->estado;
+
+            DB::beginTransaction();
+
             
             if ($venta->saldo == $valor) {
                 $venta->estado = 1;
@@ -169,6 +196,7 @@ class VentaController extends Controller
                 $venta->estado = 2;
             }
     
+
             $venta->saldo = $venta->saldo - $valor;
             $venta->save();
     
@@ -178,30 +206,33 @@ class VentaController extends Controller
             $x_cod_response = 1;
     
             $payment =  new PaymentController();
-
             $payment->store($x_ref_payco, $total, $venta_id, $x_cod_response);// se envían las variables al método store de pagos
     
+
             DB::commit();
+            
+            $response = ['data' => 'success'];
+            
+            return response()->json($response);
 
-            session()->flash('message', ['success', ("Se ha registrado el pago exitosamente")]);
-    
-            return back();
+            // session()->flash('message', ['success', ("Se ha registrado el pago exitosamente")]);
 
+            // return back();
+           
         } catch (\Exception $e) {
-
-            Log::debug('Error registrando el pago.Error: '.json_encode($e));
-
             DB::rollBack();
-        }
-    }
+            Log::debug('Error registrando el pago.Error: '.json_encode($e));
+            return $e;
 
+        }
+
+    }
 
 
     public function listadoVentasPdf()
     {
-
         try {
-            
+           
             $ventas = Venta::with('cliente.user')
             ->orderBy('id', 'DESC')
             ->get();
@@ -217,8 +248,7 @@ class VentaController extends Controller
             return $pdf->download('listadoventas.pdf');
 
         } catch (\Exception $e) {
-
-           Log::debug('Error generando el pdf.Error: '.json_encode($e));
+            Log::debug('Error imprimiendo el listado de ventas.Error: '.json_encode($e));
         }
 
     }
@@ -229,20 +259,19 @@ class VentaController extends Controller
     {
 
         try {
-         
+
             $productos = ProductoVenta::where('venta_id', $id)
             ->with('venta', 'productoReferencia')
             ->get();
     
             $pdf = \PDF::loadView('admin.pdf.venta',['productos'=>$productos]);
-
             return $pdf->download('factura-'.$productos[0]->venta->factura->consecutivo.'.pdf');
-
+           
         } catch (\Exception $e) {
-
-            Log::debug('Error imprimiendo la factura en admin.Error: '.json_encode($e));
+            Log::debug('Error imprimiendo la factura.Error: '.json_encode($e));
         }
 
     }
+    
 
 }
