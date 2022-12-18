@@ -296,6 +296,7 @@ class DevolucionController extends Controller
         }
 
     }
+    
 
     public function estados_devolucion()
     {
