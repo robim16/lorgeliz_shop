@@ -31,30 +31,11 @@ class VentaController extends Controller
 
     public function index(Request $request)
     {
+        
         $busqueda = $request->busqueda;
         
         $estado = $request->estado;
 
-        // if (!$estado) {
-
-        //    $ventas = Venta::join('clientes','ventas.cliente_id', '=','clientes.id')
-        //    ->join('users','clientes.user_id', '=','users.id')
-        //    ->select('ventas.id','ventas.fecha','ventas.valor','ventas.estado','users.nombres',
-        //    'users.apellidos','clientes.id as cliente')
-        //    ->orderBy('ventas.id', 'DESC')
-        //    ->orWhere('ventas.valor', 'like',"%$busqueda%")
-        //    ->orWhere('users.nombres', 'like',"%$busqueda%") //buscar ventas por valor a clientes
-        //    ->paginate(5);
-
-        // } else {
-        //     $ventas = Venta::join('clientes','ventas.cliente_id', '=','clientes.id')
-        //     ->join('users','clientes.user_id', '=','users.id')
-        //     ->select('ventas.id','ventas.fecha','ventas.valor', 'ventas.estado','users.nombres',
-        //     'users.apellidos','clientes.id as cliente')
-        //     ->orderBy('ventas.id', 'DESC')
-        //     ->orWhere('ventas.estado', $estado) //buscar ventas por estado
-        //     ->paginate(5);
-        // }
 
         try {
 
@@ -78,6 +59,7 @@ class VentaController extends Controller
             Log::debug('Error consultando el index de ventas.Error: '.json_encode($e));
         }
 
+
     }
 
 
@@ -85,13 +67,6 @@ class VentaController extends Controller
     public function show($id)
     {
 
-        // $venta = Venta::join('clientes','ventas.cliente_id', '=','clientes.id')
-        // ->join('facturas','ventas.factura_id', '=','facturas.id')
-        // ->join('users','clientes.user_id', '=','users.id')
-        // ->select('ventas.id','ventas.fecha','ventas.valor','ventas.saldo','ventas.estado',
-        // 'users.nombres', 'users.apellidos','facturas.prefijo','facturas.consecutivo','clientes.id as cliente')
-        // ->where('ventas.id', $id)
-        // ->firstOrFail();
 
         try {
 
@@ -256,14 +231,6 @@ class VentaController extends Controller
 
     public function listadoVentasPdf()
     {
-
-        // $ventas = Venta::join('clientes','ventas.cliente_id', '=','clientes.id')
-        // ->join('users','clientes.user_id', '=','users.id')
-        // ->select('ventas.id','ventas.fecha','ventas.valor', 'ventas.estado','users.nombres',
-        // 'clientes.id as cliente')
-        // ->orderBy('ventas.id', 'DESC')
-        // ->get();
-
         try {
            
             $ventas = Venta::with('cliente.user')
@@ -287,6 +254,7 @@ class VentaController extends Controller
     }
 
 
+    
     public function facturaVentaAdmin(Request $request, $id)
     {
 
