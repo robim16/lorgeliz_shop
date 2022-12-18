@@ -53,6 +53,7 @@ class DevolucionController extends Controller
         }
     }
 
+
     public function show(Request $request, $id)
     {
         $busqueda = $request->busqueda;
@@ -159,6 +160,7 @@ class DevolucionController extends Controller
         
     }
 
+    
     //implementado en rutas api/devolucion
     public function verificar(Request $request)
     {

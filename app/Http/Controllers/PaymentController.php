@@ -17,7 +17,7 @@ class PaymentController extends Controller
         $this->middleware('auth');
     }
 
-     public function response()
+    public function response()
     {
         return view('epayco.response');
     }

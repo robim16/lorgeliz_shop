@@ -38,18 +38,6 @@ class OrdersController extends Controller
     public function index(Request $request)
     {
         $busqueda = $request->get('busqueda');
-
-    //     $pedidos = Pedido::orWhere('pedidos.id','like',"%$busqueda%")
-    //    //->orWhere('pedidos.fecha','like',"%$busqueda%")
-    //     //orWhere('facturas.id','like',"%$busqueda%")
-    //     ->orWhere('ventas.valor','like',"%$busqueda%")
-    //     ->join('ventas','pedidos.venta_id', '=','ventas.id')
-    //     ->join('facturas','ventas.factura_id', '=', 'facturas.id')
-    //     ->select('ventas.valor','facturas.prefijo','facturas.consecutivo', 'pedidos.*')
-    //     ->where('ventas.cliente_id', auth()->user()->cliente->id)
-    //     ->where('ventas.estado', '!=', 3)
-    //     ->orderBy('pedidos.created_at', 'DESC')
-    //     ->paginate(5);
         
         try {
            
@@ -112,6 +100,7 @@ class OrdersController extends Controller
 
     }
 
+
     //envía la data al componente orderDetail. Implementado en api
     public function productos(Pedido $pedido) {
 
@@ -159,6 +148,8 @@ class OrdersController extends Controller
 
     }
 
+
+
     public function facturas(Request $request, $id)
     {
         $productos = $this->productosOrder($id);
@@ -187,6 +178,8 @@ class OrdersController extends Controller
 
     }
 
+
+
     public function showPdf(Request $request, $id)
     {
         $productos = $this->productosOrder($id);
@@ -204,6 +197,8 @@ class OrdersController extends Controller
         return $pdf->download('pedido-'.$productos[0]->venta->pedido->id.'.pdf');
     }
 
+
+    
     public function productosOrder($id) //esta función se reutiliza
     {
         // return Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')

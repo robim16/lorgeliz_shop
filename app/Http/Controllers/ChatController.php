@@ -22,6 +22,7 @@ class ChatController extends Controller
         $this->middleware('auth');
     }
 
+
     //retorna en el messenger los mensajes recibidos por el usuario
     public function index(Request $request)
     {
@@ -32,17 +33,7 @@ class ChatController extends Controller
 
         $user = auth()->user()->id;
 
-        // $chats = Chat::where('chats.from_id', $user)
-        // ->orWhere('chats.to_id',$user)
-        // ->join('users', 'chats.from_id', 'users.id')
-        // ->join('imagenes', function ($join) {
-        //     $join->on('users.id', '=', 'imagenes.imageable_id')
-        //     ->where('imagenes.imageable_type','App\User');
-        // })
-        // ->select('chats.*','users.nombres', 'imagenes.url')
-        // ->orderBy('chats.fecha')
-        // ->get();
-
+      
         try {
            
             $chats = Chat::with('user.imagene')
@@ -59,6 +50,8 @@ class ChatController extends Controller
         }
 
     }
+
+
 
     //obtiene los mensajes recibidos para mostrar en las notificaciones de mensajes del usuario
     public function messages(Request $request)
@@ -88,19 +81,9 @@ class ChatController extends Controller
                 json_encode(auth()->user()->id).' '.'Error:'.json_encode($e));
         }
 
-        
-        // $chats = DB::table('chats')
-        // ->where('chats.to_id', $user)
-        // ->join('users', 'chats.from_id', '=', 'users.id')
-        // ->join('imagenes', function ($join) {
-        //     $join->on('users.id', '=', 'imagenes.imageable_id')
-        //     ->where('imagenes.imageable_type','App\User');
-        // })
-        // ->whereNull('chats.read_at')
-        // ->select('chats.*','users.nombres', 'users.apellidos', 'imagenes.url', 'users.id as user')
-        // ->orderBy('chats.fecha', 'DESC')
-        // ->get();
     }
+
+
 
     public function store(Request $request)
     {
@@ -156,6 +139,8 @@ class ChatController extends Controller
 
     }
 
+
+
     public function read_at(Request $request, $chat)
     {
         // if (!$request->ajax()) return back();
@@ -172,9 +157,11 @@ class ChatController extends Controller
             $chat->save();
 
         } catch (\Exception $e) {
+            
             Log::debug('Error leyendo el mensaje del usuario'.'Usuario:'.' '.
                 json_encode(auth()->user()->id).' '.'Error:'.json_encode($e));
         }
 
     }
+
 }

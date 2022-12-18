@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\ClienteMessageMail;
 use App\Mail\AdminVentaMail;
 use App\Notifications\NotificationAdmin;
-
+use Illuminate\Support\Facades\Log;
 
 class VentaController extends Controller
 {
@@ -133,7 +133,9 @@ class VentaController extends Controller
 
     public function store(Request $request)
     {
-        if(!$request->ajax()) return back();
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         try {
             $x_ref_payco = ($this->x_ref_payco) ? $this->x_ref_payco : 0; // si no viene la ref. se pone 0
@@ -253,11 +255,14 @@ class VentaController extends Controller
                 // broadcast(new SalesEvent());
 
                 $response = ['data' => 'success', 'pedido' => $venta->pedido->id];
+
                 return response()->json($response);//$response
             }
 
         } catch (\Exception $e) {
+
             DB::rollBack();
+            Log::debug('Error al guardar la venta.Error: '.json_encode($e));
         }
     }
 

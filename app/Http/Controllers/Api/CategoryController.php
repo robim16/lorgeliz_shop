@@ -130,7 +130,9 @@ class CategoryController extends Controller
             ];
          
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error obteniendo los productos más vendidos en 
+                api/categoryCtrl.Error: '.json_encode($e));
         }
         
     }
@@ -167,7 +169,9 @@ class CategoryController extends Controller
             ];
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error obteniendo los productos más vistos en 
+                api/categoryCtrl.Error: '.json_encode($e));
         }
 
     }
@@ -210,7 +214,9 @@ class CategoryController extends Controller
             ];
 
         } catch (\Exception $e) {
-            //throw $th;
+            
+            Log::debug('Error obteniendo los productos por orden en 
+                api/categoryCtrl.Error: '.json_encode($e));
         }
 
     }
@@ -254,7 +260,9 @@ class CategoryController extends Controller
             ];
 
         } catch (\Exception $e) {
-            //throw $th;
+            
+            Log::debug('Error obteniendo los productos por tipo 
+                api/categoryCtrl.Error: '.json_encode($e));
         }
 
     }
@@ -296,7 +304,9 @@ class CategoryController extends Controller
             ];
 
         } catch (\Exception $e) {
-            //throw $th;
+            
+            Log::debug('Error obteniendo los productos por género 
+                api/categoryCtrl.Error: '.json_encode($e));
         }
 
     }
@@ -344,7 +354,9 @@ class CategoryController extends Controller
             ];
             
         } catch (\Exception $e) {
-            //throw $th;
+            
+            Log::debug('Error obteniendo los productos por keyword en 
+                api/categoryCtrl.Error: '.json_encode($e));
         }
 
     }

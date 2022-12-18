@@ -8,8 +8,9 @@ use App\Http\Requests\UserRequest;
 use App\Rules\StrengthPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Log;
+
 
 
 class UserController extends Controller
@@ -64,11 +65,18 @@ class UserController extends Controller
      */
     public function show($slug)
     {
-        $user = User::where('slug', $slug)
-        ->where('id', auth()->user()->id)
-        ->first();
-        
-        return view('user.show', compact('user'));
+        try {
+      
+            $user = User::where('slug', $slug)
+            ->where('id', auth()->user()->id)
+            ->first();
+            
+            return view('user.show', compact('user'));
+
+        } catch (\Exception $e) {
+
+           Log::debug('Error en user show.Error: '.json_encode($e));
+        }
     }
 
     /**
