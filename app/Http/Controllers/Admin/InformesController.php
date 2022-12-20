@@ -96,10 +96,12 @@ class InformesController extends Controller
                 ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
                 ->get();
     
-            $count = 0;
-            foreach ($ventas as $venta) {
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($ventas as $venta) {
+            //     $count += 1;
+            // }
+
+            $count = $ventas->count();
     
             $pdf = \PDF::loadView('admin.pdf.informeventas',['ventas'=>$ventas, 'count'=>$count])
                 ->setPaper('a4', 'landscape');
@@ -194,11 +196,13 @@ class InformesController extends Controller
             ->get();
     
     
-            $count = 0;
-            foreach ($ventas as $venta) {
-                // $count = $count + 1;
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($ventas as $venta) {
+            //     // $count = $count + 1;
+            //     $count += 1;
+            // }
+
+            $count = $ventas->count();
     
             $pdf = \PDF::loadView('admin.pdf.informeventashow',['ventas'=>$ventas, 'count'=>$count])
             ->setPaper('a4', 'landscape');
@@ -281,12 +285,14 @@ class InformesController extends Controller
             ->orderBy('cantidad', 'DESC')
             ->get();
             
-            $count = 0;
-            foreach ($productos as $producto) {
-                // $count = $count + 1;
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($productos as $producto) {
+            //     // $count = $count + 1;
+            //     $count += 1;
+            // }
     
+            $count = $productos->count();
+
             $pdf = \PDF::loadView('admin.pdf.informeproductos',['productos'=>$productos, 'count'=>$count])
             ->setPaper('a4', 'landscape');
     
