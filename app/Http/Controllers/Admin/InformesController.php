@@ -369,11 +369,13 @@ class InformesController extends Controller
             ->orderBy('cantidad', 'DESC')
             ->get();
     
-            $count = 0;
-            foreach ($clientes as $cliente) {
-                // $count = $count + 1;
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($clientes as $cliente) {
+            //     // $count = $count + 1;
+            //     $count += 1;
+            // }
+
+            $count = $clientes->count();
     
             $pdf = \PDF::loadView('admin.pdf.informeclientes',['clientes'=>$clientes, 'count'=>$count])
             ->setPaper('a4', 'landscape');
@@ -430,10 +432,12 @@ class InformesController extends Controller
             ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
             ->get();
             
-            $count = 0;
-            foreach ($pagos as $pago) {
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($pagos as $pago) {
+            //     $count += 1;
+            // }
+
+            $count = $pagos->count();
     
             $pdf = \PDF::loadView('admin.pdf.informepagos',['pagos'=>$pagos, 'count'=>$count])
             ->setPaper('a4', 'landscape');
@@ -502,11 +506,13 @@ class InformesController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
             
-            $count = 0;
-            foreach ($pagos as $pago) {
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($pagos as $pago) {
+            //     $count += 1;
+            // }
     
+            $count = $pagos->count();
+
             $pdf = \PDF::loadView('admin.pdf.informepagosmes',['pagos'=>$pagos, 'count'=>$count])
             ->setPaper('a4', 'landscape');
     
@@ -540,6 +546,7 @@ class InformesController extends Controller
         
     }
 
+
     public function informeSaldosClientesPdf()
     {
 
@@ -553,10 +560,11 @@ class InformesController extends Controller
             ->groupBy('cliente_id')
             ->get();
     
-            $count = 0;
-            foreach ($saldos_pendientes as $saldos_pendiente) {
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($saldos_pendientes as $saldos_pendiente) {
+            //     $count += 1;
+            // }
+            $count = $saldos_pendientes->count();
     
             $pdf = \PDF::loadView('admin.pdf.informesaldos',['saldos_pendientes'=>$saldos_pendientes,
              'count'=>$count])->setPaper('a4', 'landscape');
