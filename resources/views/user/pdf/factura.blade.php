@@ -6,115 +6,115 @@
     <title>Reporte de Venta</title>
     <style>
         body {
-        /*position: relative;*/
-        /*width: 16cm;  */
-        /*height: 29.7cm; */
-        /*margin: 0 auto; */
-        /*color: #555555;*/
-        /*background: #FFFFFF; */
-        font-family: Arial, sans-serif; 
-        font-size: 14px;
-        /*font-family: SourceSansPro;*/
+            /*position: relative;*/
+            /*width: 16cm;  */
+            /*height: 29.7cm; */
+            /*margin: 0 auto; */
+            /*color: #555555;*/
+            /*background: #FFFFFF; */
+            font-family: Arial, sans-serif; 
+            font-size: 14px;
+            /*font-family: SourceSansPro;*/
         }
 
         #logo{
-        float: left;
-        margin-top: 1%;
-        margin-left: 2%;
-        margin-right: 2%;
+            float: left;
+            margin-top: 1%;
+            margin-left: 2%;
+            margin-right: 2%;
         }
 
         #imagen{
-        width: 100px;
+            width: 100px;
         }
 
         #datos{
-        float: left;
-        margin-top: 0%;
-        margin-left: 2%;
-        margin-right: 2%;
-        /*text-align: justify;*/
+            float: left;
+            margin-top: 0%;
+            margin-left: 2%;
+            margin-right: 2%;
+            /*text-align: justify;*/
         }
 
         #encabezado{
-        text-align: center;
-        margin-left: 10%;
-        margin-right: 35%;
-        font-size: 15px;
+            text-align: center;
+            margin-left: 10%;
+            margin-right: 35%;
+            font-size: 15px;
         }
 
         #fact{
-        /*position: relative;*/
-        float: right;
-        margin-top: 2%;
-        margin-left: 2%;
-        margin-right: 2%;
-        font-size: 20px;
+            /*position: relative;*/
+            float: right;
+            margin-top: 2%;
+            margin-left: 2%;
+            margin-right: 2%;
+            font-size: 20px;
         }
 
         section{
-        clear: left;
+            clear: left;
         }
 
         #cliente{
-        text-align: left;
+            text-align: left;
         }
 
         #facliente{
-        width: 40%;
-        border-collapse: collapse;
-        border-spacing: 0;
-        margin-bottom: 15px;
+            width: 40%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin-bottom: 15px;
         }
 
         #fac, #fv, #fa{
-        color: #FFFFFF;
-        font-size: 15px;
+            color: #FFFFFF;
+            font-size: 15px;
         }
 
         #facliente thead{
-        padding: 20px;
-        background: #2183E3;
-        text-align: left;
-        border-bottom: 1px solid #FFFFFF;  
+            padding: 20px;
+            background: #2183E3;
+            text-align: left;
+            border-bottom: 1px solid #FFFFFF;  
         }
 
         #facvendedor{
-        width: 100%;
-        border-collapse: collapse;
-        border-spacing: 0;
-        margin-bottom: 15px;
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin-bottom: 15px;
         }
 
         #facvendedor thead{
-        padding: 20px;
-        background: #2183E3;
-        text-align: center;
-        border-bottom: 1px solid #FFFFFF;  
+            padding: 20px;
+            background: #2183E3;
+            text-align: center;
+            border-bottom: 1px solid #FFFFFF;  
         }
 
         #facarticulo{
-        width: 100%;
-        border-collapse: collapse;
-        border-spacing: 0;
-        margin-bottom: 15px;
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin-bottom: 15px;
         }
 
         #facarticulo thead{
-        padding: 20px;
-        background: #2183E3;
-        text-align: center;
-        border-bottom: 1px solid #FFFFFF;  
+            padding: 20px;
+            background: #2183E3;
+            text-align: center;
+            border-bottom: 1px solid #FFFFFF;  
         }
 
         tfoot tr{
-        float: right;
-        margin-left: 20%;
-        margin-right: 2%;
+            float: right;
+            margin-left: 20%;
+            margin-right: 2%;
         }
 
         #gracias{
-        text-align: center; 
+            text-align: center; 
         }
 
     </style>
@@ -126,14 +126,15 @@
             </div>
             <div id="datos">
                 <p id="encabezado">
-                    <b>Lorgeliz Tienda</b><br>José Gálvez 1368, Montería - Córdoba, Colombia<br>Telefono:(+57)   3138645929<br>Email: lorgeliztienda@gmail.com
+                    <b>Lorgeliz Tienda</b><br>José Gálvez 1368, Montería - Córdoba, Colombia<br>Telefono:(+57)   
+                    3138645929<br>Email: lorgeliztienda@gmail.com
                 </p>
             </div>
             <div id="fact">
-            <p>Factura<br>
-                {{-- {{$user->factura->prefijo}}-{{$user->factura->consecutivo}}</p> --}}
-                {{$productos[0]->venta->factura->prefijo}}-{{$productos[0]->venta->factura->consecutivo}}
-            </p>
+                <p>
+                    {{-- {{$user->factura->prefijo}}-{{$user->factura->consecutivo}}</p> --}}
+                    {{$productos[0]->venta->factura->prefijo}}-{{$productos[0]->venta->factura->consecutivo}}
+                </p>
             </div>
         </header>
         <br>
@@ -147,22 +148,17 @@
                     </thead>
                     <tbody>
                         <tr>
-                            {{-- <th><p id="cliente">Sr(a). {{ $user->cliente->user->nombres}} {{ $user->cliente->user->apellidos}}<br>
-                            {{ "identificacion"}}: {{$user->cliente->user->identificacion}}<br>
-                            Departamento: {{$user->cliente->user->departamento}}<br>
-                            Municipio: {{$user->cliente->user->municipio}}<br>
-                            Dirección: {{$user->cliente->user->direccion}}<br>
-                            Teléfono: {{$user->cliente->user->telefono}}<br>
-                            Email: {{$user->cliente->user->email}}</</p></th> --}}
-
+                           
                             <th>
-                                <p id="cliente">Sr(a). {{ $productos[0]->venta->cliente->user->nombres}} {{ $productos[0]->venta->cliente->user->apellidos}}<br>
-                                {{ "identificacion"}}: {{$productos[0]->venta->cliente->user->identificacion}}<br>
-                                Departamento: {{$productos[0]->venta->cliente->user->departamento}}<br>
-                                Municipio: {{$productos[0]->venta->cliente->user->municipio}}<br>
-                                Dirección: {{$productos[0]->venta->cliente->user->direccion}}<br>
-                                Teléfono: {{$productos[0]->venta->cliente->user->telefono}}<br>
-                                Email: {{$productos[0]->venta->cliente->user->email}}</</p>
+                                <p id="cliente">
+                                    Sr(a). {{ $productos[0]->venta->cliente->user->nombres}} {{ $productos[0]->venta->cliente->user->apellidos}} <br>
+                                    Identificación: {{$productos[0]->venta->cliente->user->identificacion}}<br>
+                                    Departamento: {{$productos[0]->venta->cliente->user->departamento}}<br>
+                                    Municipio: {{$productos[0]->venta->cliente->user->municipio}}<br>
+                                    Dirección: {{$productos[0]->venta->cliente->user->direccion}}<br>
+                                    Teléfono: {{$productos[0]->venta->cliente->user->telefono}}<br>
+                                    Email: {{$productos[0]->venta->cliente->user->email}}
+                                </p>
                             </th>
                         </tr>
                     </tbody>
@@ -242,21 +238,13 @@
                             <th>SUBTOTAL</th>
                             <td>${{ floatval($producto->venta->subtotal)}}</td>
                         </tr>
+                        
                         <tr>
                             <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th>Impuesto</th>
-                            <td>$0</td>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>       
                             <th>Envío</th>
                             <td>${{ floatval($producto->venta->envio)}}</td>
                         </tr>
