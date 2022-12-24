@@ -136,23 +136,6 @@ class UserController extends Controller
             Log::debug('Error actualizando el usuario'.'Error:'.' '.json_encode($e));
         }
 
-        //if ($request->hasFile('imagen')) {
-
-            //$imagen = $request->file('imagen');
-
-            //$nombre = time().'_'.$imagen->getClientOriginalName();
-
-            //$path = Storage::disk('public')->putFileAs("imagenes/users/" . $user->id, $imagen, $nombre);
-           
-        //}
-
-        //$img = new Imagene();
-        //$img->url = $path;
-        //$img->imageable_type = 'App\User';
-        //$img->imageable_id = $user->id;
-
-        //$img->save();
-
     }
 
     /**
