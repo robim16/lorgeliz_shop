@@ -113,45 +113,6 @@
 
     </style>
     <body>
-        {{-- @foreach ($users as $user)
-        <header>
-            <div id="logo">
-                <img src="{{ url('storage/imagenes/logo/lorgeliz2.jpeg') }}" alt="lorgeliz" id="imagen">
-            </div>
-            <div id="datos">
-                <p id="encabezado">
-                    <b>Lorgeliz Tienda</b><br>José Gálvez 1368, Montería - Córdoba, Colombia<br>Telefono:(+57)3138645929<br>Email:lorgeliztienda@gmail.com
-                </p>
-            </div>
-            <div id="fact">
-                <p>Factura<br>
-                {{$user->prefijo}}-{{$user->consecutivo}}</p>
-            </div>
-        </header>
-        <br>
-        <section>
-            <div>
-                <table id="facliente">
-                    <thead>                        
-                        <tr>
-                            <th id="fac">Cliente</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th><p id="cliente">Sr(a). {{ $user->nombres}}<br>
-                            Identificación: {{$user->identificacion}}<br>
-                            Departamento: {{$user->departamento}}<br>
-                            Municipio: {{$user->municipio}}<br>
-                            Dirección: {{$user->direccion}}<br>
-                            Teléfono: {{$user->telefono}}<br>
-                            Email: {{$user->email}}</</p></th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-        @endforeach --}}
 
         <header>
             <div id="logo">
@@ -238,45 +199,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($productos as $producto)
-                        <tr>
-                            <td>{{ $producto->cantidad }}</td>
-                            <td>{{ $producto->nombre }}</td>
-                            <td>{{ $producto->talla }}</td>
-                            <td>{{ $producto->color }}</td>
-                            <td>${{ floatval($producto->precio_actual) }}</td>
-                            <td>{{ $producto->porcentaje_descuento }}</td>
-                            <td>${{ $producto->cantidad*$producto->precio_actual-$producto->porcentaje_descuento }}</td>
-                        </tr>
-                        @endforeach --}}
-
+                       
                         @foreach ($productos as $producto)
-                        <tr>
-                            <td>{{ $producto->cantidad }}</td>
-                            <td>{{ $producto->productoReferencia->colorProducto->producto->nombre }}</td>
-                            <td>{{ $producto->productoReferencia->talla->nombre }}</td>
-                            <td>{{ $producto->productoReferencia->colorProducto->color->nombre }}</td>
-                            {{-- <td>${{ floatval($producto->productoReferencia->colorProducto->producto->precio_actual) }}</td> --}}
-                            <td>${{ floatval($producto->precio_venta) }}</td>
-                            {{-- <td>{{ $producto->productoReferencia->colorProducto->producto->porcentaje_descuento }}</td> --}}
-                            <td>{{ $producto->porcentaje_descuento }}</td>
+                            <tr>
+                                <td>{{ $producto->cantidad }}</td>
+                                <td>{{ $producto->productoReferencia->colorProducto->producto->nombre }}</td>
+                                <td>{{ $producto->productoReferencia->talla->nombre }}</td>
+                                <td>{{ $producto->productoReferencia->colorProducto->color->nombre }}</td>
+                                {{-- <td>${{ floatval($producto->productoReferencia->colorProducto->producto->precio_actual) }}</td> --}}
+                                <td>${{ floatval($producto->precio_venta) }}</td>
+                                {{-- <td>{{ $producto->productoReferencia->colorProducto->producto->porcentaje_descuento }}</td> --}}
+                                <td>{{ $producto->porcentaje_descuento }}</td>
 
-                            {{-- @php
-                                $descuento += ($producto->porcentaje_descuento * $producto->precio_venta)/100
-                            @endphp --}}
-
-                            {{-- <td>${{ $producto->cantidad*
-                                $producto->productoReferencia->colorProducto->producto->precio_actual
-                                -$producto->productoReferencia->colorProducto->producto->porcentaje_descuento }}
-                            </td> --}}
-                            <td>${{ floatval($producto->cantidad *
-                                $producto->precio_venta-$producto->porcentaje_descuento) }}
-                            </td>
-                        </tr>
+                                <td>${{ floatval($producto->cantidad *
+                                    $producto->precio_venta-$producto->porcentaje_descuento) }}
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
+                    
                     <tfoot>
-                        {{--@foreach ($venta as $v)--}}
                         <tr>
                             <th></th>
                             <th></th>
@@ -286,15 +228,7 @@
                             <th>SUBTOTAL</th>
                             <td>${{ floatval($producto->venta->subtotal)}}</td>
                         </tr>
-                        {{-- <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>Impuesto</th>
-                            <td>$0</td>
-                        </tr> --}}
+                       
                         <tr>
                             <th></th>
                             <th></th>
@@ -313,7 +247,6 @@
                             <th>TOTAL</th>      
                             <td>${{ floatval($producto->venta->valor)}}</td>
                         </tr>
-                       {{-- @endforeach--}}
                     </tfoot>
                 </table>
             </div>
