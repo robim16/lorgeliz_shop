@@ -146,10 +146,12 @@ class ClienteController extends Controller
                 ->paginate(10);
                 
     
-            $count = 0;
-            foreach ($clientes as $cliente) {
-                $count = $count + 1;
-            }
+            // $count = 0;
+            // foreach ($clientes as $cliente) {
+            //     $count = $count + 1;
+            // }
+
+            $count = $clientes->count();
     
             $pdf = \PDF::loadView('admin.pdf.listadoclientes',['clientes'=>$clientes, 'count'=>$count])
             ->setPaper('a4', 'landscape');
@@ -163,10 +165,14 @@ class ClienteController extends Controller
 
     }
 
+
     //en desuso, se implemento en /api/clienteController
     public function clientesChat(Request $request)
     {
-        if (!$request->ajax()) return back();
+        
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $buscar = $request->buscar;
         $criterio = $request->criterio;

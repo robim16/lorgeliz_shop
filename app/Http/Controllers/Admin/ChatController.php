@@ -59,6 +59,7 @@ class ChatController extends Controller
 
         try {
 
+
             $chats = User::has('chats')
             ->addSelect([
                 'mensaje' => Chat::select('mensaje')
@@ -280,6 +281,8 @@ class ChatController extends Controller
         
     }
 
+
+
     public function readMessage(Request $request, $chat)
     {
         // if (!$request->ajax()) return redirect('/chats/admin');
@@ -312,4 +315,5 @@ class ChatController extends Controller
         }
 
     }
+    
 }

@@ -167,6 +167,8 @@ class InformesController extends Controller
         
     }
 
+
+
     public function pdfVentaShow(Request $request)
     {
         $mes = date('m', strtotime($request->mes));
@@ -216,6 +218,7 @@ class InformesController extends Controller
     }
 
 
+
     public function ventaProductos(Request $request)
     {
        
@@ -262,6 +265,8 @@ class InformesController extends Controller
 
     }
 
+
+
     public function pdfInformeProductos(Request $request)
     {
 
@@ -304,6 +309,7 @@ class InformesController extends Controller
 
     }
     
+
 
     public function informeClientes(Request $request)
     {
@@ -349,6 +355,8 @@ class InformesController extends Controller
 
     }
 
+
+
     public function pdfInformeClientes(Request $request)
     {
         // $clientes = DB::table('clientes')
@@ -388,6 +396,7 @@ class InformesController extends Controller
     }
 
 
+
     public function informePagos(Request $request)
     {
         $anio = date('Y');
@@ -417,6 +426,8 @@ class InformesController extends Controller
 
 
     }
+
+
 
     public function pdfInformePagos(Request $request)
     {
@@ -494,6 +505,8 @@ class InformesController extends Controller
 
     }
 
+
+
     public function pdfPagosShow(Request $request)
     {
         //informe de pagos en el mes
@@ -525,6 +538,8 @@ class InformesController extends Controller
 
     }
 
+
+
     public function informe_saldos_clientes()
     {
 
@@ -545,6 +560,7 @@ class InformesController extends Controller
         }
         
     }
+
 
 
     public function informeSaldosClientesPdf()
@@ -577,6 +593,8 @@ class InformesController extends Controller
 
     }
 
+
+
     public function facturasPendientesCliente(Cliente $cliente)
     {
 
@@ -596,5 +614,6 @@ class InformesController extends Controller
         }
 
     }
+    
 
 }

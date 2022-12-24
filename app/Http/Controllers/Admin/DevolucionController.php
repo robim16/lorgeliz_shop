@@ -84,6 +84,8 @@ class DevolucionController extends Controller
         return view('admin.devoluciones.show',compact('producto_devolucion'));
     }
 
+
+    
     public function pdfListarDevoluciones(Request $request)
     {
         //if (!$request->ajax()) return redirect('/');
@@ -100,11 +102,13 @@ class DevolucionController extends Controller
         // ,'clientes.id as cliente')
         ->get();
 
-        $count = 0;
-        foreach ($devoluciones as $devolucion) {
-            // $count = $count + 1;
-            $count += 1;
-        }
+        // $count = 0;
+        // foreach ($devoluciones as $devolucion) {
+        //     // $count = $count + 1;
+        //     $count += 1;
+        // }
+
+        $count = $devoluciones->count();
 
         $pdf = \PDF::loadView('admin.pdf.listado_devoluciones',['devoluciones'=>$devoluciones, 'count'=>$count])
         ->setPaper('a4', 'landscape');

@@ -232,6 +232,8 @@ class ProductController extends Controller
         return view('admin.productos.show',compact('producto','estados')); //mostrar el producto
     }
 
+
+
     public function showColor($slug)
     {
         $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
@@ -262,6 +264,8 @@ class ProductController extends Controller
 
         return view('admin.productos.edit',compact('producto', 'estados')); // editar el producto
     }
+
+
 
     public function editColor($slug)
     {
@@ -380,6 +384,8 @@ class ProductController extends Controller
             DB::rollBack();
         }
     }
+
+
 
     public function updateColor(Request $request, $slug)
     {
@@ -531,6 +537,8 @@ class ProductController extends Controller
         }
     }
 
+
+
     public function activate($id)
     {
         try {
@@ -555,6 +563,8 @@ class ProductController extends Controller
         }
     }
 
+
+
     public function createColor($id)
     {
         $producto = Producto::where('id',$id)->firstOrFail();
@@ -562,6 +572,8 @@ class ProductController extends Controller
         $estados = $this->estado_productos();
         return view('admin.productos.createcolor',compact('producto', 'estados'));
     }
+
+
 
     public function storeColor(Request $request)
     {
@@ -657,6 +669,8 @@ class ProductController extends Controller
 
     }
 
+
+
     //reemplazado por ruta api imagenController
     public function eliminarImagen(Request $request,$id)
     {
@@ -683,6 +697,7 @@ class ProductController extends Controller
         }
 
     }
+
 
     public function estado_productos()
     {

@@ -117,6 +117,7 @@ class OrdersController extends Controller
 
     }
 
+
     //envía la data al componente orderDetail. Implementado en api
     public function productos(Pedido $pedido) {
 
@@ -164,6 +165,8 @@ class OrdersController extends Controller
 
     }
 
+
+
     public function facturas(Request $request, $id)
     {
         $productos = $this->productosOrder($id);
@@ -192,6 +195,8 @@ class OrdersController extends Controller
 
     }
 
+
+
     public function showPdf(Request $request, $id)
     {
         $productos = $this->productosOrder($id);
@@ -208,6 +213,8 @@ class OrdersController extends Controller
         
         return $pdf->download('pedido-'.$productos[0]->venta->pedido->id.'.pdf');
     }
+
+    
 
     public function productosOrder($id) //esta función se reutiliza
     {

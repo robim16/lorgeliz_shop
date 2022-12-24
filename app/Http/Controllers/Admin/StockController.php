@@ -67,6 +67,8 @@ class StockController extends Controller
 
     }
 
+
+
     public function store(Request $request)
     {
         // $colorproducto = ColorProducto::where('color_id', $request->color_id)
@@ -139,6 +141,8 @@ class StockController extends Controller
 
     }
 
+
+
     public function pdfInventarios()
     {
         // $productos = Producto::join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
@@ -161,10 +165,12 @@ class StockController extends Controller
         ->orderBy('color_producto_id')
         ->get();
 
-        $count = 0;
-        foreach ($productos as $producto) {
-            $count = $count + 1;
-        }
+        // $count = 0;
+        // foreach ($productos as $producto) {
+        //     $count = $count + 1;
+        // }
+
+        $count = $productos->count();
 
         $pdf = \PDF::loadView('admin.pdf.inventarios',['productos'=>$productos, 'count'=>$count])
         ->setPaper('a4', 'landscape');
