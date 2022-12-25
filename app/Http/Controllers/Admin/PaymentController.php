@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Pago;
-use App\User;
-use App\Notifications\NotificationPay;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Log;
 
 
@@ -32,11 +31,11 @@ class PaymentController extends Controller
             $busqueda = $request->get('busqueda');
             
             $pagos = Pago::orWhere('pagos.venta_id','like',"%$busqueda%")
-            ->orWhere('pagos.estado','like',"%$busqueda%")
-            ->orWhere('pagos.id', $busqueda)
-            ->orWhere('pagos.monto', $busqueda)
-            ->orderBy('pagos.fecha', 'DESC')
-            ->paginate(5);
+                ->orWhere('pagos.estado','like',"%$busqueda%")
+                ->orWhere('pagos.id', $busqueda)
+                ->orWhere('pagos.monto', $busqueda)
+                ->orderBy('pagos.fecha', 'DESC')
+                ->paginate(5);
     
             return view('admin.pagos.index', compact('pagos'));
 
@@ -129,6 +128,9 @@ class PaymentController extends Controller
 
         try {
            
+            
+            DB::beginTransaction();
+
             $monto = $pago->monto;
     
             $venta = $pago->venta;
@@ -144,12 +146,17 @@ class PaymentController extends Controller
             $pago->estado = 5;
     
             $pago->save();
+
+
+            DB::commit();
     
             session()->flash('message', ['success', ("Se ha anulado el pago exitosamente")]);
     
             return back();
 
         } catch (\Exception $e) {
+
+            DB::rollBack();
 
             Log::debug('Error anulando el pago. Error: '.json_encode($e));
 

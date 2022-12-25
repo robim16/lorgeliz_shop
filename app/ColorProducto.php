@@ -4,6 +4,7 @@ namespace App;
 
 // use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Facades\Log;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class ColorProducto extends Pivot implements Auditable
@@ -26,16 +27,24 @@ class ColorProducto extends Pivot implements Auditable
         
         static::creating(function(ColorProducto $colorproducto) {
 
-            $nombre = request()->nombre;
-            $id = request()->color;
+            try {
+               
+                $nombre = request()->nombre;
+    
+                $id = request()->color;
+    
+                $color = Color::where('id', $id)->first();
+                
+                $slug = \Str::slug($nombre);
+                
+                //$count = static::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+                
+                $colorproducto->slug = "{$slug}-{$color['nombre']}";
 
-            $color = Color::where('id', $id)->first();
-            
-            $slug = \Str::slug($nombre);
-            
-            //$count = static::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
-            
-            $colorproducto->slug = "{$slug}-{$color['nombre']}";
+            } catch (\Exception $e) {
+                
+                Log::debug('Error creando el slug del color_producto.Error: '.json_encode($e));
+            }
           
         });
 

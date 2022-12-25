@@ -29,11 +29,19 @@ class ColorController extends Controller
      */
     public function index(Request $request)
     {
-        $nombre = $request->get('nombre');
-       
-        $colores = Color::where('nombre','like',"%$nombre%")->orderBy('created_at')->paginate(5);
 
-        return view('admin.colores.index',compact('colores'));
+        try {
+            
+            $nombre = $request->get('nombre');
+           
+            $colores = Color::where('nombre','like',"%$nombre%")
+                ->orderBy('created_at')->paginate(5);
+    
+            return view('admin.colores.index',compact('colores'));
+
+        } catch (\Exception $e) {
+            Log::debug('Error obteniendo los colores. error: '.json_encode($e));
+        }
     }
 
     /**
@@ -84,6 +92,7 @@ class ColorController extends Controller
     public function show($slug)
     {
         $color = Color::where('slug',$slug)->firstOrFail();
+
         return view('admin.colores.show',compact('color'));
     }
 
@@ -96,6 +105,7 @@ class ColorController extends Controller
     public function edit($slug)
     {
         $color = Color::where('slug',$slug)->firstOrFail();
+
         return view('admin.colores.edit',compact('color'));
     }
 
@@ -156,6 +166,7 @@ class ColorController extends Controller
             return redirect()->route('color.index');
         }
     }
+    
 
     //implementada en index de Admin/Api/ColorController
     public function getColores(Request $request, $id)

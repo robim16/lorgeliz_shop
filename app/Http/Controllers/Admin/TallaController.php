@@ -79,6 +79,7 @@ class TallaController extends Controller
             if ($tallas) {
     
                 $tipo->tallas()->detach();
+                
                 foreach($tallas as $talla){
                     $tipo->tallas()->attach($talla);
                 }

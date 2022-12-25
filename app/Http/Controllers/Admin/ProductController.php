@@ -297,7 +297,8 @@ class ProductController extends Controller
             return view('admin.productos.edit',compact('producto', 'estados')); // editar el producto
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error en función editar productos. Error: '.json_encode($e));
         }
     }
 
@@ -724,7 +725,9 @@ class ProductController extends Controller
     //reemplazado por ruta api imagenController
     public function eliminarImagen(Request $request,$id)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         try {
           

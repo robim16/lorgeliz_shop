@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Cliente;
 Use App\Devolucione;
 use App\Events\AddProductEvent;
-Use App\Producto;
 Use App\ProductoVenta;
 Use App\ProductoReferencia;
-Use App\User;
 Use App\Venta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +28,8 @@ class DevolucionController extends Controller
     {
         $this->middleware('auth');
     }
+
+
 
     public function index()
     {
@@ -65,8 +65,8 @@ class DevolucionController extends Controller
         try {
            
             $producto_devolucion = Devolucione::with(['venta', 'productoReferencia'])
-            ->where('id', $id)
-            ->paginate(5);
+                ->where('id', $id)
+                ->paginate(5);
             
     
             return view('admin.devoluciones.show',compact('producto_devolucion'));
@@ -81,7 +81,6 @@ class DevolucionController extends Controller
 
     public function pdfListarDevoluciones(Request $request)
     {
-        //if (!$request->ajax()) return redirect('/');
         
         try {
             

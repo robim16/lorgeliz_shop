@@ -17,10 +17,17 @@ class EnviosController extends Controller
      */
     public function index()
     {
-        $envios = Envio::with('venta.cliente.user:id,nombres,apellidos')
-            ->orderBy('id')->get();
+        try {
 
-        return view('admin.envios.index', compact('envios'));
+            $envios = Envio::with('venta.cliente.user:id,nombres,apellidos')
+                ->orderBy('id')->get();
+    
+            return view('admin.envios.index', compact('envios'));
+      
+        } catch (\Exception $e) {
+
+            Log::debug('Error en index de envíos'.' '.json_encode($e));
+        }
     }
 
     /**
@@ -57,6 +64,7 @@ class EnviosController extends Controller
             return back();
 
         } catch (\Exception $e) {
+            
             Log::debug('Error registrando el envío'.' '.json_encode($e));
         }
     }

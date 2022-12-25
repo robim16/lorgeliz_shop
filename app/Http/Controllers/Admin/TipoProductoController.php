@@ -25,13 +25,19 @@ class TipoProductoController extends Controller
 
     public function index(Request $request)
     {
-        $nombre = $request->get('nombre');
-       
-        $tipos = Tipo::where('nombre','like',"%$nombre%")
-        ->orderBy('id')
-        ->paginate(5);
-        
-        return view('admin.tipo_producto.index',compact('tipos'));
+        try {
+
+            $nombre = $request->get('nombre');
+           
+            $tipos = Tipo::where('nombre','like',"%$nombre%")
+            ->orderBy('id')
+            ->paginate(5);
+            
+            return view('admin.tipo_producto.index',compact('tipos'));
+           
+        } catch (\Exception $e) {
+            Log::debug('Error consultando el index de tipos de productos.Error: '.json_encode($e));
+        }
     }
 
     /**

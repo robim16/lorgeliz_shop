@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Cliente;
-use App\Pedido;
 use App\User;
 use App\Venta;
 use App\Http\Controllers\Controller;
 use App\Mail\ClientePrivateMail;
-use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -44,12 +41,12 @@ class ClienteController extends Controller
                 ->orWhere('users.email','like',"%$keyword%")
                 ->paginate(5);
     
-            // return $clientes;
+     
     
             return view('admin.clientes.index', compact('clientes'));
 
         } catch (\Exception $e) {
-            return $e;
+            Log::debug('Error obteniendo el index de clientes.Error: '.json_encode($e));
         }
 
     }
@@ -77,19 +74,12 @@ class ClienteController extends Controller
 
             $total_pagina = $pedidos->sum('valor');
 
-    
-            // $total = 0;
-    
-            // foreach ($pedidos as $key => $value) {
-            //   $total = $total + $value->valor;
-            // }
-            
-            // return view('admin.clientes.show', compact('pedidos', 'total'));
 
             return view('admin.clientes.show', compact('pedidos', 'total_general', 'total_pagina'));
 
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error mostrando el cliente.Error: '.json_encode($e));
         }
 
     }
@@ -113,17 +103,19 @@ class ClienteController extends Controller
                 ->first();
 
 
-            Mail::to($cliente->user->email)->send(new ClientePrivateMail($cliente->user->nombres, $data['mensaje']));
+            Mail::to($cliente->user->email)->send(new ClientePrivateMail
+                ($cliente->user->nombres, $data['mensaje']));
             
-            $success = true;
 
-            
-            // return new ClientePrivateMail($cliente->user->nombres, $data['mensaje']);
+            $success = true;
 
 
             return response()->json(['response' => $success]);
 
         } catch (\Exception $e) {
+
+            Log::debug('Error enviando el mensaje al cliente.Error: '.json_encode($e));
+
             $success = false;
         }
     

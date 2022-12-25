@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Cliente;
 use App\Pedido;
-use App\Producto;
-use App\User;
-use App\Venta;
 use App\ProductoVenta;
 use App\Mail\OrderStatusMail;
 use App\Notifications\NotificationClient;
@@ -79,9 +76,6 @@ class OrdersController extends Controller
             return $e;
         }
 
-        // $users = $this->userPedido($id);
-
-        // return view('admin.pedidos.show',compact('productos','users'));
     }
 
 
@@ -188,11 +182,7 @@ class OrdersController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
     
-            $count = 0;
-
-            foreach ($pedidos as $pedido) {
-                $count = $count + 1;
-            }
+            $count = $pedidos->count();
     
             $pdf = \PDF::loadView('admin.pdf.listadopedidos',['pedidos'=>$pedidos, 'count'=>$count])
                 ->setPaper('a4', 'landscape');

@@ -5,15 +5,23 @@ namespace App\Http\Controllers\Admin;
 use App\Configuracion;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ConfiguracionController extends Controller
 {
     public function index()
     {
-        return view('admin.configuracion.index');
-        $configuracion = Configuracion::where('nit', '78900765')->first();
+        try {
+           
+            $configuracion = Configuracion::where('nit', '78900765')->first();
+    
+            return view('admin.configuracion.index', compact('configuracion'));
 
-        return view('admin.configuracion.index', compact('configuracion'));
+        } catch (\Exception $e) {
+            
+            Log::debug('Error editando la configuración.Error: '.json_encode($e));
+        }
+
     }
 
 
@@ -28,7 +36,8 @@ class ConfiguracionController extends Controller
             return redirect()->route('configuracion.index');
             
         } catch (\Exception $e) {
-            //throw $th;
+
+            Log::debug('Error editando la configuración.Error: '.json_encode($e));
         }
     }
 }

@@ -67,7 +67,6 @@ class VentaController extends Controller
     public function show($id)
     {
 
-
         try {
 
             
@@ -76,10 +75,6 @@ class VentaController extends Controller
                 ->firstOrFail();
 
     
-           // $pagos = $venta->pagos()->select('*', DB::raw('SUM(monto) as total'))
-            //     ->orderBy('pagos.fecha', 'DESC')
-            //     ->paginate(5);
-
             $pagos = $venta->pagos()
                 ->orderBy('pagos.fecha', 'DESC')
                 ->paginate(5);
