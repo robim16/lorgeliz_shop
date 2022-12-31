@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StockRequest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -78,6 +79,7 @@ class StockController extends Controller
 
         try {
 
+
             $colorproducto = ColorProducto::where('color_id', $request->color_id)
                 ->where('producto_id', $request->producto_id)
                 ->with('producto:id,slider_principal,estado')
@@ -88,6 +90,10 @@ class StockController extends Controller
                 ->first(); // buscar la referencia
 
             
+
+            DB::beginTransaction();
+
+
             if ($referencia == '') {//si no existe la referencia, se crea
     
                 $producto = new ProductoReferencia();
@@ -115,15 +121,24 @@ class StockController extends Controller
             session()->flash('message', ['success', ("Se ha actualizado el inventario exitosamente")]);
     
             $product = array();
+
             $product['data'] = array();
     
             $product['data'] = $colorproducto;
+
             broadcast(new AddProductEvent($product));
+
+
+            DB::commit();
     
             return back();
 
+
         } catch (\Exception $e) {
+
             Log::debug('Error actualizando el stock. error: '.json_encode($e));
+
+            DB::rollBack();
 
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
         }

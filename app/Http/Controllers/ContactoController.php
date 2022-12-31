@@ -50,7 +50,6 @@ class ContactoController extends Controller
             Log::debug('Error enviando el email del cliente'.'Error:'.' '.json_encode($e));
         }
 
-        // return new ClientToAdminMail($details);
     }
 
 }

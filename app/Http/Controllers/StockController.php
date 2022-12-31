@@ -25,7 +25,6 @@ class StockController extends Controller
     public function verificarStock(Request $request)
     {   
         //requiere auth
-        // if (!$request->ajax()) return redirect('/');
 
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
@@ -35,11 +34,11 @@ class StockController extends Controller
            
 
             $productos = CarritoProducto::whereHas('carrito', function (Builder $query) {
-            $query->where('estado', 1)
-            ->where('cliente_id', auth()->user()->cliente->id);
-            })
-            ->with('productoReferencia')
-            ->get();
+                $query->where('estado', 1)
+                ->where('cliente_id', auth()->user()->cliente->id);
+                })
+                ->with('productoReferencia')
+                ->get();
 
 
             foreach ($productos as $producto) {
@@ -57,27 +56,6 @@ class StockController extends Controller
 
             Log::debug('Error verificando el stock al realizar venta'.'Error:'.' '.json_encode($e));
         }
-
-
-
-        // $carrito = Carrito::where('cliente_id', auth()->user()->cliente->id)
-        // ->where('carritos.estado', '1')
-        // ->first(); // se obtiene el carrito del cliente
-        
-        // $productos = ProductoReferencia::join('carrito_producto', 'producto_referencia.id',
-        // 'carrito_producto.producto_referencia_id')
-        // ->join('carritos', 'carrito_producto.carrito_id', 'carritos.id')
-        // ->where('carritos.id', $carrito->id)
-        // ->get();
-
-
-        // foreach ($productos as $producto) {
-        //    if ($producto->cantidad > $producto->stock) {
-        //         $response = ['data' => 'error'];
-        //         return response()->json($response); // si un producto está agotado o la cantidad supera el stock
-        //    }
-        // }
-
 
     }
 }

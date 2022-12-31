@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
+    
     public function setVisitas(Request $request, $id)
     {
 

@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Spatie\Dropbox\Client;
@@ -17,14 +19,22 @@ class User extends Authenticatable
         parent::boot();
 
         static::creating(function(User $user) {
-      
-           $slug = \Str::slug($user->nombres. " " . $user->apellidos);
-                
-            $count = static::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
             
-            $user->slug = $count ? "{$slug}-{$count}" : $slug;
+            try {
+
+                $slug = \Str::slug($user->nombres. " " . $user->apellidos);
+                    
+                $count = static::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+                
+                $user->slug = $count ? "{$slug}-{$count}" : $slug;
+                
+            } catch (\Exception $e) {
+                Log::debug('Error creando el slug del usuario.
+                    Error: '.json_encode($e));
+            }
             
         });
+
 
         static::created(function(User $user) {
 
@@ -66,6 +76,8 @@ class User extends Authenticatable
                     // ]);
                 
                 // }
+
+                DB::beginTransaction();
     
                 if (request()->file('imagen')) {
         
@@ -97,11 +109,15 @@ class User extends Authenticatable
                     'user_id' => $user->id,
                 ]);
                 
+                DB::commit();
+
             } catch (\Exception $e) {
-               
+                Log::debug('Error creando el usuario.Error: '.json_encode($e));
+                DB::rollBack();
             }
 			
 		});
+
 
         //implementar con dropbox
 		static::saving(function(User $user) {
@@ -111,6 +127,8 @@ class User extends Authenticatable
                 try {
                    
                     if (request()->file('imagen')) {
+
+                        DB::beginTransaction();
         
                         $imagen = request()->file('imagen');
                         $nombre = time().'_'.$imagen->getClientOriginalName();
@@ -146,6 +164,9 @@ class User extends Authenticatable
                             }
     
                         } 
+
+                        DB::commit();
+
                         // else {
                         //     Cliente::create([
                         //         'user_id' => $user->id,
@@ -154,8 +175,10 @@ class User extends Authenticatable
                         // }
                        
                     }
+
                 } catch (\Exception $e) {
-                    //throw $th;
+                    Log::debug('Error editando el slug del usuario.Error: '.json_encode($e));
+                    DB::rollBack();
                 }
 
 			}
@@ -196,19 +219,23 @@ class User extends Authenticatable
     	//return auth()->check() ? auth()->user()->role->nombre : 'guest';
     //}
 
-    public function role (){
+    public function role()
+    {
         return $this->belongsTo(Role::class);
     }
 
-    public function cliente (){
+    public function cliente()
+    {
         return $this->hasOne(Cliente::class);
     }
 
-    public function imagene (){
+    public function imagene()
+    {
         return $this->morphOne('App\Imagene','imageable');
     }
 
-    public function chats (){
+    public function chats()
+    {
         return $this->hasMany(Chat::class, 'from_id');
     }
 }

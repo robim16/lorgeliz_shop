@@ -2,20 +2,11 @@
 
 namespace App\Http\Controllers;
 
-
-// use App\Color;
 use App\ColorProducto;
-// use App\Imagene;
 use App\Producto;
-// use App\ProductoReferencia;
-// use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
 use App\Events\VisitEvent;
 use Illuminate\Support\Facades\Log;
-
-// use Illuminate\Support\Facades\Storage;
-// use Intervention\Image\Facades\Image;
-// use Spatie\Dropbox\Client;
 
 
 class ProductController extends Controller
@@ -49,7 +40,8 @@ class ProductController extends Controller
 
         } catch (\Exception $e) {
             
-            Log::debug('Error obteniendo el producto en producto show'.'Error:'.' '.json_encode($e));
+            Log::debug('Error consultando la información del producto.
+                Error: '.json_encode($e));
         }
 
     }
@@ -59,7 +51,7 @@ class ProductController extends Controller
     //implementado en api/productController
     public function setVisitas(Request $request, $id)
     {
-        // if (!$request->ajax()) return redirect('/');
+    
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -82,9 +74,6 @@ class ProductController extends Controller
 
             Log::debug('Error actualizando las visitas del producto'.'Error:'.' '.json_encode($e));
         }
-
-        // $visitas = $producto->visitas;
-        // $producto->visitas = $visitas + 1;
 
     }
 

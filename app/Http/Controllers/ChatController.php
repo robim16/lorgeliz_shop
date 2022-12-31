@@ -26,7 +26,7 @@ class ChatController extends Controller
     //retorna en el messenger los mensajes recibidos por el usuario
     public function index(Request $request)
     {
-        // if (!$request->ajax()) return back();
+
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -57,7 +57,6 @@ class ChatController extends Controller
     public function messages(Request $request)
     {
 
-        // if (!$request->ajax()) return redirect('/cuenta');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -68,10 +67,10 @@ class ChatController extends Controller
     
             
             $chats = Chat::with('user.imagene')
-            ->where('to_id', $user)
-            ->whereNull('read_at')
-            ->orderBy('created_at', 'DESC')
-            ->get();
+                ->where('to_id', $user)
+                ->whereNull('read_at')
+                ->orderBy('created_at', 'DESC')
+                ->get();
             
             return ['chats'=> $chats];
 
@@ -88,7 +87,6 @@ class ChatController extends Controller
     public function store(Request $request)
     {
 
-        // if (!$request->ajax()) return redirect('/cuenta');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -127,23 +125,12 @@ class ChatController extends Controller
                 json_encode(auth()->user()->id).' '.'Error:'.json_encode($e));
         }
 
-
-        // $data = $this->index($request);
-
-
-        // foreach ($data['chats'] as $key => $value) {
-        //    if ($value->id == $chat->id) {
-        //         $data['chats'] = $data['chats'][$key];
-        //    }
-        // }
-
     }
 
 
 
     public function read_at(Request $request, $chat)
     {
-        // if (!$request->ajax()) return back();
 
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');

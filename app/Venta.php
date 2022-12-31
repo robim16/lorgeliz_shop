@@ -4,8 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Events\SalesEvent;
+use App\Mail\ClienteMessageMail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Venta extends Model implements Auditable
@@ -82,8 +84,7 @@ class Venta extends Model implements Auditable
                 $cart = Carrito::estado()
                 ->cliente(auth()->user()->cliente->id)
                 ->firstOrFail();
-                // where('cliente_id', auth()->user()->cliente->id)
-                // ->where('estado', 1)
+                
     
                 $cart->estado = '0';
                 $cart->save();
@@ -111,16 +112,17 @@ class Venta extends Model implements Auditable
                 $pedido->direccion_entrega = Auth()->user()->direccion;
                 $pedido->venta_id = $venta->id;
                 $pedido->save();
+
     
-                //$cliente = auth()->user()->cliente->id;
+                $cliente = auth()->user()->cliente->id;
     
-                //$details = [
-                    //'title' => 'Hemos recibido tu pedido',
-                    //'cliente' => $cliente,
-                    //'url' => url('/pedidos/'. $venta->id),
-                //];
+                $details = [
+                    'title' => 'Hemos recibido tu pedido',
+                    'cliente' => $cliente,
+                    'url' => url('/pedidos/'. $venta->id),
+                ];
                 
-                //Mail::to(Auth()->user()->email)->send(new ClienteMessageMail($details));
+                Mail::to(Auth()->user()->email)->send(new ClienteMessageMail($details));
     
     
                 $productos = array();

@@ -91,14 +91,12 @@ class DevolucionController extends Controller
     {   
         
         //podría implementare en api
-        // if (!$request->ajax()) return redirect('/');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
 
         try {
            
-            // $ref = $request->ref;
             $producto = $request->producto;
             $venta = $request->venta;
             $cantidad = $request->cantidad;
@@ -119,8 +117,7 @@ class DevolucionController extends Controller
                 $admin = User::where('role_id', 2)->first();
                 $user = auth()->user();
     
-                // return $admin->nombres;
-            
+               
                 $details = [
                     'title' => 'Se ha solicitado una nueva devolucion',
                     'user' => $admin->nombres,
@@ -165,7 +162,6 @@ class DevolucionController extends Controller
     public function verificar(Request $request)
     {
 
-        // if (!$request->ajax()) return redirect('/');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}

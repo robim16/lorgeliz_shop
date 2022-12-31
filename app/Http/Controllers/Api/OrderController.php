@@ -41,7 +41,8 @@ class OrderController extends Controller
 
         } catch (\Exception $e) {
 
-           Log::debug('Error obteniendo los productos de las ordenes.Error: '.json_encode($e));
+            Log::debug('Error consultando los productos en el show del pedido del cliente
+                .Error: '.json_encode($e));
         }
 
     }

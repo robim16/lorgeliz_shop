@@ -65,22 +65,6 @@ class OrdersController extends Controller
      */
     public function show($id)
     {
-        // $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        // ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        // ->join('tallas','producto_referencia.talla_id', '=', 'tallas.id')
-        // ->join('producto_venta','producto_referencia.id', '=', 'producto_venta.producto_referencia_id')
-        // ->join('ventas','ventas.id', '=', 'producto_venta.venta_id')
-        // ->join('pedidos','ventas.id', '=', 'pedidos.venta_id')
-        // ->select('productos.precio_actual', 'productos.nombre', 'producto_venta.cantidad',
-        // 'ventas.valor', 'colores.nombre as color', 'tallas.nombre as talla', 'producto_referencia.id as referencia',
-        // 'color_producto.id as cop', 'color_producto.slug as slug','pedidos.id as pedido', 'ventas.id as venta', 'imagenes.url as imagen') 
-        // ->where('pedidos.id', '=', $id)
-        // ->where('ventas.cliente_id', auth()->user()->cliente->id)
-        // ->where('imagenes.imageable_type', 'App\ColorProducto')
-        // ->groupBy('producto_referencia.id')
-        // ->get();
 
 
         // $productos = ProductoVenta::whereHas('venta.pedido',
@@ -104,23 +88,7 @@ class OrdersController extends Controller
     //envía la data al componente orderDetail. Implementado en api
     public function productos(Pedido $pedido) {
 
-        // $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        // ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        // ->join('tallas','producto_referencia.talla_id', '=', 'tallas.id')
-        // ->join('producto_venta','producto_referencia.id', '=', 'producto_venta.producto_referencia_id')
-        // ->join('ventas','ventas.id', '=', 'producto_venta.venta_id')
-        // ->join('pedidos','ventas.id', '=', 'pedidos.venta_id')
-        // ->select('productos.precio_actual', 'productos.nombre', 'producto_venta.cantidad',
-        // 'ventas.valor', 'colores.nombre as color', 'tallas.nombre as talla', 'producto_referencia.id as referencia',
-        // 'color_producto.id as cop', 'color_producto.slug as slug','pedidos.id as pedido', 'ventas.id as venta', 'imagenes.url as imagen') 
-        // ->where('pedidos.id', '=', $id)
-        // ->where('ventas.cliente_id', auth()->user()->cliente->id)
-        // ->where('imagenes.imageable_type', 'App\ColorProducto')
-        // ->groupBy('producto_referencia.id')
-        // ->get();
-
+       
         try {
             
             $productos = ProductoVenta::whereHas('venta.pedido',
@@ -152,29 +120,28 @@ class OrdersController extends Controller
 
     public function facturas(Request $request, $id)
     {
-        $productos = $this->productosOrder($id);
 
-        // $users = Venta::join('clientes','ventas.cliente_id', '=', 'clientes.id')
-        // ->join('pedidos','ventas.id', '=', 'pedidos.venta_id')
-        // ->join('users','clientes.user_id', '=', 'users.id')
-        // ->join('facturas', 'ventas.factura_id', '=', 'facturas.id')
-        // ->select('users.nombres','users.apellidos','users.identificacion','users.departamento',
-        // 'users.municipio','users.direccion','users.telefono','users.email', 'pedidos.id','ventas.fecha',
-        // 'facturas.prefijo', 'facturas.consecutivo', 'ventas.id as venta')
-        // ->where('pedidos.id', '=', $id)
-        // ->get();
+        try {
+            
+            $productos = $this->productosOrder($id);
+            // $users = Venta::with('cliente.user','pedido:id','factura')
+            // ->whereHas('pedido', function (Builder $query) use ($id) {
+            //    $query->where('id', $id);
+            // })
+            // ->get();
+    
+            // $pdf = \PDF::loadView('user.pdf.factura',['productos'=>$productos,'users'=>$users]);
+            // return $pdf->download('factura-'.$users[0]->factura->consecutivo.'.pdf');
+    
+            $pdf = \PDF::loadView('user.pdf.factura',['productos'=>$productos]);
+            return $pdf->download('factura-'.$productos[0]->venta->factura->consecutivo.'.pdf'); // imprimir factura de cliente
+    
+            
+        } catch (\Exception $e) {
 
-        // $users = Venta::with('cliente.user','pedido:id','factura')
-        // ->whereHas('pedido', function (Builder $query) use ($id) {
-        //    $query->where('id', $id);
-        // })
-        // ->get();
+            Log::debug('Error imprimiendo la factura del cliente.Error: '.json_encode($e));
 
-        // $pdf = \PDF::loadView('user.pdf.factura',['productos'=>$productos,'users'=>$users]);
-        // return $pdf->download('factura-'.$users[0]->factura->consecutivo.'.pdf');
-
-        $pdf = \PDF::loadView('user.pdf.factura',['productos'=>$productos]);
-        return $pdf->download('factura-'.$productos[0]->venta->factura->consecutivo.'.pdf'); // imprimir factura de cliente
+        }
 
     }
 
@@ -182,42 +149,35 @@ class OrdersController extends Controller
 
     public function showPdf(Request $request, $id)
     {
-        $productos = $this->productosOrder($id);
+
+        try {
+            
+            $productos = $this->productosOrder($id);
+        
+            // $users = $this->userPedido($id);
     
-        // $users = $this->userPedido($id);
+            // $pdf = \PDF::loadView('user.pdf.pedido',['productos'=>$productos, 'users'=>$users])
+            // ->setPaper('a4', 'landscape');
+            
+            // return $pdf->download('pedido-'.$users[0]->pedido.'.pdf');
+    
+            $pdf = \PDF::loadView('user.pdf.pedido',['productos'=>$productos])
+            ->setPaper('a4', 'landscape');
+            
+            return $pdf->download('pedido-'.$productos[0]->venta->pedido->id.'.pdf');
 
-        // $pdf = \PDF::loadView('user.pdf.pedido',['productos'=>$productos, 'users'=>$users])
-        // ->setPaper('a4', 'landscape');
-        
-        // return $pdf->download('pedido-'.$users[0]->pedido.'.pdf');
+        } catch (\Exception $e) {
 
-        $pdf = \PDF::loadView('user.pdf.pedido',['productos'=>$productos])
-        ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('pedido-'.$productos[0]->venta->pedido->id.'.pdf');
+            Log::debug('Error imprimiendo el detalle de la orden del cliente.
+                Error: '.json_encode($e));
+        }
     }
 
 
     
     public function productosOrder($id) //esta función se reutiliza
     {
-        // return Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        // ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        // ->join('tallas','producto_referencia.talla_id', '=', 'tallas.id')
-        // ->join('producto_venta','producto_referencia.id', '=', 'producto_venta.producto_referencia_id')
-        // ->join('ventas','ventas.id', '=', 'producto_venta.venta_id')
-        // ->join('pedidos','ventas.id', '=', 'pedidos.venta_id')
-        // ->select('productos.id','productos.nombre', 'productos.precio_anterior', 'productos.precio_actual',
-        // 'productos.porcentaje_descuento', 'producto_venta.cantidad', 'ventas.valor', 'colores.nombre as color',
-        // 'tallas.nombre as talla', 'producto_referencia.id as referencia','color_producto.id as cop',
-        // 'color_producto.slug as slug','pedidos.id as pedido', 'imagenes.url as imagen') 
-        // ->where('pedidos.id', '=', $id)
-        // ->where('imagenes.imageable_type', 'App\ColorProducto')
-        // ->groupBy('producto_referencia.id')
-        // ->get();
-
+      
         try {
   
             return ProductoVenta::whereHas('venta.pedido',
@@ -228,11 +188,14 @@ class OrdersController extends Controller
             ->get();
 
         } catch (\Exception $e) {
-            Log::debug('Error obteniendo el pdf del detalle de la orden'.'Error:'.' '.json_encode($e));
+            Log::debug('Error en la función productosOrder en ordenes del cliente.
+                Error: '.json_encode($e));
         }
 
     }
 
+
+    
     // public function userPedido($id)
     // {
     //     return Venta::join('clientes','ventas.cliente_id', '=', 'clientes.id')

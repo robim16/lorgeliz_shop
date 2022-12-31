@@ -24,7 +24,7 @@ class NotificationController extends Controller
             return $unreadNotifications;
             
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error en index de notificaciones del cliente'.'Error:'.' '.json_encode($e));
         }
         
     }
@@ -32,7 +32,6 @@ class NotificationController extends Controller
     
     public function setClientRead(Request $request, $id)
     {
-        // if (!$request->ajax()) return redirect('/');
 
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');

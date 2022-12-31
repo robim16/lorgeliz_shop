@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\CarritoProducto;
 use App\Carrito;
 use App\Events\ProductoAgotado;
+use App\Events\SalesEvent;
 // use App\Events\SalesEvent;
 use App\Factura;
 use App\Pago;
@@ -167,7 +168,6 @@ class VentaController extends Controller
                 $venta = new Venta();
                 $venta->fecha = \Carbon\Carbon::now();
                 $venta->factura_id = $factura->id;
-                //$venta->valor = $request->total;
                 $venta->subtotal =  $car->subtotal;
                 $venta->envio =  $car->envio;
                 $venta->valor =  $car->total;
@@ -210,9 +210,7 @@ class VentaController extends Controller
                     ]
                 ];
 
-                // foreach ($admin as $user) {
-                //     User::findOrFail($user->id)->notify(new NotificationAdmin($arrayData));
-                // }
+
 
                 User::findOrFail($admin->id)->notify(new NotificationAdmin($arrayData));
 

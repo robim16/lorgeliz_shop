@@ -102,6 +102,7 @@ class UserController extends Controller
 
         try {
 
+
             DB::beginTransaction();
             
             $user = User::where('id', $id)->first();
@@ -117,9 +118,9 @@ class UserController extends Controller
     
             if (request('password')) { //si se envía el password se somete a la rule
     
-                $this->validate(request(), 
-                 ['password' => ['confirmed', new StrengthPassword]]);
-                 $user->password = bcrypt(request('password'));
+                $this->validate(request(), ['password' => ['confirmed', new StrengthPassword]]);
+                
+                $user->password = bcrypt(request('password'));
             }
            
             $user->save();

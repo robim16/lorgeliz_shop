@@ -12,12 +12,18 @@ class Subcategoria extends Model
         parent::boot();
         
         static::creating(function(Subcategoria $subcategoria) {
-          
-          $slug = \Str::slug($subcategoria->descripcion);
-          
-          $count = static::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
-          
-          $subcategoria->slug = $count ? "{$slug}-{$count}" : $slug;
+
+            try {
+               
+                $slug = \Str::slug($subcategoria->descripcion);
+                
+                $count = static::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+                
+                $subcategoria->slug = $count ? "{$slug}-{$count}" : $slug;
+
+            } catch (\Exception $e) {
+                //throw $th;
+            }
           
         });
 

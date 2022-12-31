@@ -98,7 +98,7 @@ class HomeController extends Controller
     // función para implementar index con ajax
     public function productsIndex(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/');
+       
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -212,8 +212,7 @@ class HomeController extends Controller
             Log::debug('Error en función checkout de homeCtrl.Error: '.json_encode($e));
         }
         
-        // ->where('estado', 1)
-        // ->where('cliente_id', auth()->user()->cliente->id)
+    
     }
 
 
@@ -223,7 +222,6 @@ class HomeController extends Controller
     public function getProductos(Request $request)
     {
         //obtener todos los productos, en vista categorías
-        // if (!$request->ajax()) return redirect('/');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -262,8 +260,7 @@ class HomeController extends Controller
 
     public function getProductosByState(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/');
-
+    
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -311,14 +308,12 @@ class HomeController extends Controller
 
     public function getProductosSales(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/');
 
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
 
        
-
         try {
 
 
@@ -357,7 +352,7 @@ class HomeController extends Controller
 
     public function getProductosVisitas(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/');
+       
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -445,7 +440,6 @@ class HomeController extends Controller
     public function getProductsByTipo(Request $request)
     {
         
-        // if (!$request->ajax()) return redirect('/');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -489,7 +483,7 @@ class HomeController extends Controller
     
     public function getProductsByGenre(Request $request)
     {
-    //    if (!$request->ajax()) return redirect('/');
+    
         if ( ! request()->ajax()) {
             abort(401, 'Acceso denegado');
         }
@@ -533,8 +527,7 @@ class HomeController extends Controller
 
     public function getProductsByKeyword(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/');
-
+      
         $keyword = $request->keyword;
 
 
