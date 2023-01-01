@@ -148,7 +148,14 @@
                     </thead>
                     <tbody>
                         <tr>
-                           
+                            {{-- <th><p id="cliente">Sr(a). {{ $user->cliente->user->nombres}} {{ $user->cliente->user->apellidos}}<br>
+                            {{ "identificacion"}}: {{$user->cliente->user->identificacion}}<br>
+                            Departamento: {{$user->cliente->user->departamento}}<br>
+                            Municipio: {{$user->cliente->user->municipio}}<br>
+                            Dirección: {{$user->cliente->user->direccion}}<br>
+                            Teléfono: {{$user->cliente->user->telefono}}<br>
+                            Email: {{$user->cliente->user->email}}</</p></th> --}}
+
                             <th>
                                 <p id="cliente">
                                     Sr(a). {{ $productos[0]->venta->cliente->user->nombres}} {{ $productos[0]->venta->cliente->user->apellidos}} <br>
@@ -238,7 +245,6 @@
                             <th>SUBTOTAL</th>
                             <td>${{ floatval($producto->venta->subtotal)}}</td>
                         </tr>
-                        
                         <tr>
                             <th></th>
                             <th></th>

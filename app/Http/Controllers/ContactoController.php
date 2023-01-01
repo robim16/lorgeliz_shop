@@ -45,6 +45,11 @@ class ContactoController extends Controller
     
             Mail::to($admin->email)->send(new ClientToAdminMail($details));
 
+            session()->flash('message', ['success', ("Se ha enviado el email exitosamente")]);
+
+            return back();
+
+
         } catch (\Exception $e) {
 
             Log::debug('Error enviando el email del cliente'.'Error:'.' '.json_encode($e));
