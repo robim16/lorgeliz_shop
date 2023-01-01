@@ -40,10 +40,15 @@ Route::group(['prefix' => '/perfil'], function (){
     Route::get('/{slug}', 'UserController@show')->name('users.show');
 });
 
+
+
 Route::group(['prefix' => '/contacto'], function (){
     Route::get('/', 'ContactoController@contacto')->name('contact');
-    Route::get('/mail', 'ContactoController@sendMail')->name('contact.mail');
+    // Route::get('/mail', 'ContactoController@sendMail')->name('contact.mail');
+    Route::post('/mail', 'ContactoController@sendMail')->name('contact.mail');
 });
+
+
 
 Route::group(['prefix' => '/chats'], function () {
     Route::get('/', 'ChatController@index');
