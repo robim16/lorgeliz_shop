@@ -308,7 +308,7 @@ $(document).ready(function () {
 									)
 									// window.location.href = `/lorgeliz_tienda_copia/public/pedidos/` + pedido;
 
-									let ruta = 'http://dev.lorenzogeliztienda.com'
+									let ruta = '/lorgeliz_tienda_copia/public'
 									window.location.href = `${ruta}/pedidos/${pedido}`;
 								}
 							}
@@ -371,10 +371,12 @@ $(document).ready(function () {
 					setTimeout(() => {
 						// window.location.href = `/lorgeliz_tienda_copia/public/cart`;
 
-						let ruta = 'http://dev.lorenzogeliztienda.com'
+						let ruta = '/lorgeliz_tienda_copia/public'
 						window.location.href = `${ruta}/cart`
 					}, 4000);
 				}
+
+				console.log(response)
 			}
 
 		});
