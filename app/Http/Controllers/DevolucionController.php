@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Cliente;
 Use App\Devolucione;
+use App\Jobs\SendEmail;
 Use App\Producto;
 Use App\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -121,9 +122,9 @@ class DevolucionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   //podría implementare en api
-        // if (!$request->ajax()) return redirect('/');
-
+    {   
+        //podría implementare en api
+        
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -139,10 +140,12 @@ class DevolucionController extends Controller
             $cantidad = $request->cantidad;
     
             $devoluciones = Devolucione::where('producto_referencia_id', $producto)//$ref
-            ->where('venta_id', $venta)
-            ->count(); // verificamos que no se haya solicitado la devolución anteriormente
+                ->where('venta_id', $venta)
+                ->count(); // verificamos que no se haya solicitado la devolución anteriormente
+
     
             if ($devoluciones == 0) {
+                
                 $devolucion = new Devolucione();
                 $devolucion->fecha = \Carbon\Carbon::now();
                 $devolucion->cantidad = $cantidad;
@@ -163,10 +166,12 @@ class DevolucionController extends Controller
                     'url' => url('/admin/devoluciones/'. $devolucion->id),
                 ];
     
-                //return new AdminDevolucionMail($details);
-                Mail::to($admin->email)->send(new AdminDevolucionMail($details));
+                
+                SendEmail::dispatch($details, $admin);
+
+                // Mail::to($admin->email)->send(new AdminDevolucionMail($details));
     
-                User::findOrFail($admin->id)->notify(new AdminDevolucionMail($details));
+                // User::findOrFail($admin->id)->notify(new AdminDevolucionMail($details));
     
             } 
     
