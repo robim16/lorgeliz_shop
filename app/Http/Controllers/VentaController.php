@@ -8,11 +8,8 @@ use App\Carrito;
 use App\Events\ProductoAgotado;
 // use App\Events\SalesEvent;
 use App\Factura;
-use App\Pago;
-use App\Pedido;
-use App\Producto;
+use App\Jobs\SendVentaMail;
 use App\ProductoReferencia;
-use App\ProductoVenta;
 use App\User;
 use App\Venta;
 use Illuminate\Http\Request;
@@ -37,6 +34,8 @@ class VentaController extends Controller
     {
         $this->middleware('auth')->except('epaycoConfirm');
     }
+
+
 
     public function epayco_register(Request $request)
     {
@@ -66,14 +65,14 @@ class VentaController extends Controller
         switch ((int) $this->x_cod_response) {
         case 1:
         # code transacción aceptada
-            $this->store();
+            $this->store($request);
         break;
         case 2:
         # code transacción rechazada
         break;
         case 3:
         # code transacción pendiente
-            $this->store();
+            $this->store($request);
         break;
         case 4:
         # code transacción fallida
@@ -84,7 +83,9 @@ class VentaController extends Controller
         }
                 
     }
-//esta función es para probar la confirmación por el método post
+
+
+    //esta función es para probar la confirmación por el método post
     public function epaycoConfirm(Request $request)
     {
         $p_cust_id_cliente = '71480';
@@ -107,7 +108,7 @@ class VentaController extends Controller
         switch ((int) $this->x_cod_response) {
         case 1:
         # code transacción aceptada
-        $this->store();
+        $this->store($request);
         break;
         case 2:
         # code transacción rechazada
@@ -126,12 +127,17 @@ class VentaController extends Controller
         die("Firma no valida");
         }
     }
+    
 
     public function store(Request $request)
     {
-        if(!$request->ajax()) return back();
+
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         try {
+
             $x_ref_payco = ($this->x_ref_payco) ? $this->x_ref_payco : 0; // si no viene la ref. se pone 0
             $x_cod_response = ($this->x_cod_response) ? $this->x_cod_response : 3;
             $x_amount = ($this->x_amount) ? $this->x_amount : 0;
@@ -169,6 +175,7 @@ class VentaController extends Controller
                 $venta->saldo = $car->total - $x_amount; // si el pago no fue por epayco o está pendiente, la venta queda con saldo
 
                 if ($x_cod_response == 1) {
+
                     $venta->estado = 1; // si el pago fue exitoso, la venta queda pagada
                     $venta->save();
 
@@ -192,7 +199,9 @@ class VentaController extends Controller
                     'url' => url('/admin/ventas/'. $venta->id),
                 ];
                 
-                Mail::to($admin->email)->send(new AdminVentaMail($details));
+                // Mail::to($admin->email)->send(new AdminVentaMail($details));
+
+
 
                 $numVentas = DB::table('ventas')->where('id', $venta->id)->count();
 
@@ -204,15 +213,16 @@ class VentaController extends Controller
                     ]
                 ];
 
-                // foreach ($admin as $user) {
-                //     User::findOrFail($user->id)->notify(new NotificationAdmin($arrayData));
-                // }
+                
+
+                SendVentaMail::dispatch($details, $admin);
 
                 User::findOrFail($admin->id)->notify(new NotificationAdmin($arrayData));
 
                 DB::commit();
 
                 $products = array();
+
                 $products['data'] = array();
 
                 // $carritos = CarritoProducto::join('producto_referencia', 
@@ -249,6 +259,7 @@ class VentaController extends Controller
                 // broadcast(new SalesEvent());
 
                 $response = ['data' => 'success', 'pedido' => $venta->pedido->id];
+
                 return response()->json($response);//$response
             }
 

@@ -17,6 +17,7 @@ use App\Notifications\NotificationDevolution;
 
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendDevolucionStatusMail;
 
 class DevolucionController extends Controller
 {
@@ -126,6 +127,8 @@ class DevolucionController extends Controller
      */
     public function update(Request $request)
     {
+
+        
         $devolucion = Devolucione::where('id', $request->devolucion_id)->firstOrFail();
         $devolucion->estado = $request->estado;
 
@@ -247,6 +250,7 @@ class DevolucionController extends Controller
                 // $producto->delete(); // se borra de la venta el producto
 
                 $product = array();
+
                 $product['data'] = array();
 
                 $product['data'] = $producto_data->colorProducto->id;
@@ -280,16 +284,22 @@ class DevolucionController extends Controller
             ]
         ];
 
+
         Cliente::findOrFail($devolucion->venta->cliente->id)->notify(new NotificationDevolution($arrayData));
 
         //return new DevolucionStatusMail($details);
 
-        Mail::to($devolucion->venta->cliente->user->email)->send(new DevolucionStatusMail($details));
+        // Mail::to($devolucion->venta->cliente->user->email)->send(new DevolucionStatusMail($details));
+
+        SendDevolucionStatusMail::dispatch($details, $devolucion->venta->cliente->user);
 
         session()->flash('message', ['success', ("Se ha actualizado el estado de la solicitud")]);
 
         return back();
+
     }
+
+
 
     public function estados_devolucion()
     {

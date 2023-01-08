@@ -73,6 +73,8 @@ class DevolucionController extends Controller
 
     }
 
+
+    
     public function show(Request $request, $id)
     {
         $busqueda = $request->busqueda;

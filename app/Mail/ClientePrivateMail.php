@@ -32,9 +32,8 @@ class ClientePrivateMail extends Mailable
      */
     public function build()
     {
-        return $this
-        ->subject("mensaje para :cliente", ['cliente' => $this->cliente])
-        ->markdown('emails.clientePrivateMail')
-        ->with('message', $this->message);
+        return $this->subject("mensaje para :cliente", ['cliente' => $this->cliente])
+            ->markdown('emails.clientePrivateMail')
+            ->with('message', $this->message);
     }
 }

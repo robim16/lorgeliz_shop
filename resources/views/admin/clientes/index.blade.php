@@ -142,6 +142,9 @@
                     'x-csrf-token': $("meta[name=csrf-token]").attr('content')
                     },
                     success: function (response) {
+
+                        console.log(response)
+                        
                         if (response.response) {
                             modal.find('#modalAction').hide();
                             modal.find('.modal-body').html('<div class="alert alert-success">Mensaje enviado</div>')

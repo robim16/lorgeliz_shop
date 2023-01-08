@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendClientToAdminMail;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -41,9 +42,12 @@ class ContactoController extends Controller
                 'url' => url('/admin/clientes/'. $user->cliente->id),
             ];
     
-            Mail::to($admin->email)->send(new ClientToAdminMail($details));
+
+            // Mail::to($admin->email)->send(new ClientToAdminMail($details));
     
             // return new ClientToAdminMail($details);
+
+            SendClientToAdminMail::dispatch($details, $admin);
 
             session()->flash('message', ['success', ("Se ha enviado el email exitosamente")]);
 

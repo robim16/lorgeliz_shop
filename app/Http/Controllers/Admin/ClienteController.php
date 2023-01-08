@@ -7,6 +7,7 @@ use App\Pedido;
 use App\User;
 use App\Venta;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendClientePrivateMail;
 use App\Mail\ClientePrivateMail;
 use Auth;
 use Illuminate\Http\Request;
@@ -24,6 +25,7 @@ class ClienteController extends Controller
     {
         $this->middleware('auth');
     }
+
 
     public function index(Request $request)
     {
@@ -103,34 +105,36 @@ class ClienteController extends Controller
     {
 
         $info = \request('info');
+
         $data = [];
+
         parse_str($info, $data);
 
-        // $cliente = User::join('clientes', 'users.id', '=', 'clientes.user_id')
-        // ->where('clientes.id', $data['cliente_id'])
-        // ->select('users.*')
-        // ->first();
-
-        $cliente = Cliente::with('user')
-        ->where('id', $data['cliente_id'])
-        ->first();
+       
+        $cliente = Cliente::with('user')->where('id', $data['cliente_id'])
+            ->first();
 
         try {
             
-            // Mail::to($cliente->email)->send(new ClientePrivateMail($cliente->nombres, $data['mensaje']));
-            Mail::to($cliente->user->email)->send(new ClientePrivateMail($cliente->user->nombres, $data['mensaje']));
+           
+            // Mail::to($cliente->user->email)->send(new ClientePrivateMail($cliente->user->nombres, 
+            //     $data['mensaje']));
+
+            SendClientePrivateMail::dispatch($data['mensaje'], $cliente->user);
+
             $success = true;
 
             
             // return new ClientePrivateMail($cliente->user->nombres, $data['mensaje']);
 
+            return response()->json(['response' => $success]);
 
         } catch (\Exception $exception) {
             $success = false;
+
+            return response()->json(['response' => $success]);
         }
 
-        return response()->json(['response' => $success]);
-    
     }
 
 
