@@ -588,15 +588,16 @@
 
     </script>
 
+
     <script>
         $(document).ready(function () {
             
-            $.ajaxSetup({
+            // $.ajaxSetup({
 
-                headers: {
-                    'X-CSRF-TOKEN': $("input[name= _token]").val()
-                }
-            });
+            //     headers: {
+            //         'X-CSRF-TOKEN': $("input[name= _token]").val()
+            //     }
+            // });
 
             $(document).on('change', '#category_id', function(e) { 
                 e.preventDefault();
@@ -607,9 +608,8 @@
 
                     $.ajax({
                         type: "GET",
-                        // "route('subcategory.get')",
-                        // url: '/lorgeliz_tienda_copia/public/api/admin/subcategorias',
-                        url: 'http://lorenzogeliztienda.com/api/admin/subcategorias',
+                        // url: 'http://lorenzogeliztienda.com/api/admin/subcategorias',
+                        url:"{{ url('/api/admin/subcategorias') }}",
                         data:{categoria:categoria},
                         dataType: 'json',
                         success: function (response) {
@@ -630,7 +630,7 @@
 
             });
 
-            // url: " route('tipo.get') }",
+
             $(document).on('change', '#subcategory_id', function(e) { 
                 e.preventDefault();
 
@@ -640,9 +640,8 @@
 
                     $.ajax({
                         type: "GET",
-                        // url: "/lorgeliz_tienda_copia/public/api/admin/tipos",
-                    
-                        url: "http://lorenzogeliztienda.com/api/admin/tipos",
+                        // url: "http://lorenzogeliztienda.com/api/admin/tipos",
+                        url:"{{ url('/api/admin/tipos') }}",
                         data:{subcategoria:subcategoria},
                         dataType: 'json',
                         success: function (response) {
