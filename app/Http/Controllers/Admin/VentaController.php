@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Pago;
-use App\Producto;
 use App\ProductoReferencia;
 use App\ProductoVenta;
 use App\Venta;
@@ -13,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-
 
 
 class VentaController extends Controller
@@ -67,6 +65,7 @@ class VentaController extends Controller
     public function show($id)
     {
 
+
         try {
 
             
@@ -75,6 +74,10 @@ class VentaController extends Controller
                 ->firstOrFail();
 
     
+           // $pagos = $venta->pagos()->select('*', DB::raw('SUM(monto) as total'))
+            //     ->orderBy('pagos.fecha', 'DESC')
+            //     ->paginate(5);
+
             $pagos = $venta->pagos()
                 ->orderBy('pagos.fecha', 'DESC')
                 ->paginate(5);
@@ -124,7 +127,7 @@ class VentaController extends Controller
                     $pago->estado = 5; // se anula el pago
                     $pago->save();
                 }
-            }
+            }//update
     
             $venta->pedido()->update(['estado' => 5]);
 
@@ -224,6 +227,7 @@ class VentaController extends Controller
     }
 
 
+
     public function listadoVentasPdf()
     {
         try {
@@ -248,7 +252,6 @@ class VentaController extends Controller
 
     }
 
-
     
     public function facturaVentaAdmin(Request $request, $id)
     {
@@ -268,5 +271,4 @@ class VentaController extends Controller
 
     }
     
-
 }
