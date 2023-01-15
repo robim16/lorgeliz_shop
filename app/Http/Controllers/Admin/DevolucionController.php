@@ -111,12 +111,14 @@ class DevolucionController extends Controller
             $devoluciones = Devolucione::with('venta')
                 ->get();
     
-            $count = 0;
+            // $count = 0;
 
-            foreach ($devoluciones as $devolucion) {
-                // $count = $count + 1;
-                $count += 1;
-            }
+            // foreach ($devoluciones as $devolucion) {
+            //     // $count = $count + 1;
+            //     $count += 1;
+            // }
+
+            $count = $devoluciones->count();
     
             $pdf = \PDF::loadView('admin.pdf.listado_devoluciones',['devoluciones'=>$devoluciones, 'count'=>$count])
             ->setPaper('a4', 'landscape');
