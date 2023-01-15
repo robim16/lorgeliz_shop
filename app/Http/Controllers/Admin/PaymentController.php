@@ -100,15 +100,16 @@ class PaymentController extends Controller
 
         try {
             
-            $pagos = Pago::orderBy('pagos.fecha')
-            ->get();
+            $pagos = Pago::orderBy('pagos.fecha')->get();
     
-            $count = 0;
+            // $count = 0;
 
-            foreach ($pagos as $pago) {
-                // $count = $count + 1;
-                $count += 1;
-            }
+            // foreach ($pagos as $pago) {
+            //     // $count = $count + 1;
+            //     $count += 1;
+            // }
+
+            $count = $pagos->count();
     
             $pdf = \PDF::loadView('admin.pdf.listadopagos',['pagos'=>$pagos, 'count'=>$count])
             ->setPaper('a4', 'landscape');

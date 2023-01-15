@@ -133,13 +133,15 @@ class ClienteController extends Controller
                 'users.municipio','users.direccion','users.telefono','users.email')
                 ->paginate(10);
     
-            $count = 0;
-            foreach ($clientes as $cliente) {
-                $count = $count + 1;
-            }
+            // $count = 0;
+            // foreach ($clientes as $cliente) {
+            //     $count = $count + 1;
+            // }
+
+            $count = $clientes->count();
     
             $pdf = \PDF::loadView('admin.pdf.listadoclientes',['clientes'=>$clientes, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
+                ->setPaper('a4', 'landscape');
             
             return $pdf->download('listadoclientes.pdf');
             
