@@ -41,13 +41,14 @@ class InformesController extends Controller
         try {
            
             $ventas = Venta::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio,
-            COUNT(id) as cantidad, SUM(valor) as total')
-            ->whereYear('fecha',$anio)
-            // ->where('estado', '!=', '3')
-            ->estado()
-            ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
-            ->paginate(5);
-    
+                COUNT(id) as cantidad, SUM(valor) as total')
+                ->whereYear('fecha',$anio)
+                // ->where('estado', '!=', '3')
+                ->estado()
+                ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
+                ->paginate(5);
+
+        
             return view('admin.informes.ventas.index',compact('ventas'));
 
         } catch (\Exception $e) {
@@ -72,16 +73,18 @@ class InformesController extends Controller
         try {
            
             $ventas = Venta::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio
-            , COUNT(id) as cantidad, SUM(valor) as total')
-            ->whereYear('fecha',$anio)
-            ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
-            ->get();
+                , COUNT(id) as cantidad, SUM(valor) as total')
+                ->whereYear('fecha',$anio)
+                ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
+                ->get();
     
     
-            $count = 0;
-            foreach ($ventas as $venta) {
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($ventas as $venta) {
+            //     $count += 1;
+            // }
+
+            $count = $ventas->count();
     
             $pdf = \PDF::loadView('admin.pdf.informeventas', ['ventas'=>$ventas, 'count'=>$count])
                 ->setPaper('a4', 'landscape');
@@ -117,20 +120,20 @@ class InformesController extends Controller
 
         //obtener ventas en el mes seleccionado
 
-
         try {
 
             $ventas = ProductoVenta::whereHas('venta', function (Builder $query) 
-            use ($mes, $anio, $fecha_de, $fecha_a) {
-                $query->whereMonth('fecha',$mes)
-                ->whereYear('fecha',$anio)
-                ->whereBetween('fecha',[$fecha_de, $fecha_a])
-                ->orderBy('created_at', 'DESC');
-            })
-            ->with('venta.factura')
-            ->select('id','venta_id', DB::raw('SUM(cantidad) as cantidad'))
-            ->groupBy('venta_id')
-            ->paginate(5);
+                use ($mes, $anio, $fecha_de, $fecha_a) {
+                    $query->whereMonth('fecha',$mes)
+                    ->whereYear('fecha',$anio)
+                    ->whereBetween('fecha',[$fecha_de, $fecha_a])
+                    ->orderBy('created_at', 'DESC');
+                })
+                ->with('venta.factura')
+                ->select('id','venta_id', DB::raw('SUM(cantidad) as cantidad'))
+                ->groupBy('venta_id')
+                ->paginate(5);
+
     
             return view('admin.informes.ventas.show',compact('ventas'));
            
@@ -149,29 +152,31 @@ class InformesController extends Controller
         $mes = date('m', strtotime($request->mes));
         $anio = date('Y');
 
-      
-
         try {
             
             $ventas = ProductoVenta::whereHas('venta', function (Builder $query) 
-            use ($mes,$anio) {
-                $query->whereMonth('fecha',$mes)
-                ->whereYear('fecha',$anio);
-            })
-            ->with('venta.factura')
-            ->select('id','venta_id', DB::raw('SUM(cantidad) as cantidad'))
-            ->groupBy('venta_id')
-            ->get();
+                use ($mes,$anio) {
+                    $query->whereMonth('fecha',$mes)
+                    ->whereYear('fecha',$anio);
+                })
+                ->with('venta.factura')
+                ->select('id','venta_id', DB::raw('SUM(cantidad) as cantidad'))
+                ->groupBy('venta_id')
+                ->get();
     
     
-            $count = 0;
-            foreach ($ventas as $venta) {
-                // $count = $count + 1;
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($ventas as $venta) {
+            //     // $count = $count + 1;
+            //     $count += 1;
+            // }
+
+            $count = $ventas->count();
+
     
             $pdf = \PDF::loadView('admin.pdf.informeventashow',['ventas'=>$ventas, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
+                ->setPaper('a4', 'landscape');
+
             return $pdf->download('ventas_mes.pdf');
 
         } catch (\Exception $e) {
@@ -191,14 +196,14 @@ class InformesController extends Controller
         try {
            
             $productos = ProductoVenta::whereHas('productoReferencia.colorProducto.producto', 
-            function (Builder $query) use ($busqueda) {
-                $query->orWhere('nombre','like',"%$busqueda%");//no funciona el filtro
-            })
-            ->with('productoReferencia')
-            ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
-            ->orderBy('cantidad', 'DESC')
-            ->groupBy('producto_referencia_id')
-            ->paginate(5);
+                function (Builder $query) use ($busqueda) {
+                    $query->orWhere('nombre','like',"%$busqueda%");//no funciona el filtro
+                })
+                ->with('productoReferencia')
+                ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
+                ->orderBy('cantidad', 'DESC')
+                ->groupBy('producto_referencia_id')
+                ->paginate(5);
     
             
             return view('admin.informes.productos.index',compact('productos'));
@@ -219,20 +224,23 @@ class InformesController extends Controller
         try {
            
             $productos = ProductoVenta::with('productoReferencia')
-            ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
-            ->groupBy('producto_referencia_id')
-            ->orderBy('cantidad', 'DESC')
-            ->get();
+                ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
+                ->groupBy('producto_referencia_id')
+                ->orderBy('cantidad', 'DESC')
+                ->get();
             
-            $count = 0;
+            // $count = 0;
 
-            foreach ($productos as $producto) {
-                // $count = $count + 1;
-                $count += 1;
-            }
+            // foreach ($productos as $producto) {
+            //     // $count = $count + 1;
+            //     $count += 1;
+            // }
+
+            $count = $productos->count();
+
     
             $pdf = \PDF::loadView('admin.pdf.informeproductos',['productos'=>$productos, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
+                ->setPaper('a4', 'landscape');
     
             return $pdf->download('productos.pdf');
 
@@ -289,14 +297,17 @@ class InformesController extends Controller
             ->orderBy('cantidad', 'DESC')
             ->get();
     
-            $count = 0;
-            foreach ($clientes as $cliente) {
-                // $count = $count + 1;
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($clientes as $cliente) {
+            //     // $count = $count + 1;
+            //     $count += 1;
+            // }
+
+            $count = $clientes->count();
+
     
             $pdf = \PDF::loadView('admin.pdf.informeclientes',['clientes'=>$clientes, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
+                ->setPaper('a4', 'landscape');
     
             return $pdf->download('clientes.pdf');
 
@@ -342,18 +353,20 @@ class InformesController extends Controller
         try {
 
             $pagos = Pago::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio,
-            COUNT(id) as cantidad, SUM(monto) as total')
-            ->whereYear('fecha',$anio)
-            ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
-            ->get();
+                COUNT(id) as cantidad, SUM(monto) as total')
+                ->whereYear('fecha',$anio)
+                ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
+                ->get();
             
-            $count = 0;
-            foreach ($pagos as $pago) {
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($pagos as $pago) {
+            //     $count += 1;
+            // }
+
+            $count = $pagos->count();
     
             $pdf = \PDF::loadView('admin.pdf.informepagos',['pagos'=>$pagos, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
+                ->setPaper('a4', 'landscape');
     
             return $pdf->download('pagos.pdf');
             
@@ -387,10 +400,10 @@ class InformesController extends Controller
         try {
 
             $pagos = Pago::whereMonth('fecha',$mes)
-            ->whereBetween('fecha',[$fecha_de, $fecha_a])
-            ->groupBy('id')
-            ->orderBy('created_at', 'DESC')
-            ->paginate(5);
+                ->whereBetween('fecha',[$fecha_de, $fecha_a])
+                ->groupBy('id')
+                ->orderBy('created_at', 'DESC')
+                ->paginate(5);
     
             return view('admin.informes.pagos.show',compact('pagos'));
            
@@ -412,16 +425,18 @@ class InformesController extends Controller
             $mes = date('m', strtotime($request->mes));
     
             $pagos = Pago::whereMonth('fecha',$mes)
-            ->orderBy('created_at', 'DESC')
-            ->get();
+                ->orderBy('created_at', 'DESC')
+                ->get();
             
-            $count = 0;
-            foreach ($pagos as $pago) {
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($pagos as $pago) {
+            //     $count += 1;
+            // }
+
+            $count = $pagos->count();
     
             $pdf = \PDF::loadView('admin.pdf.informepagosmes',['pagos'=>$pagos, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
+                ->setPaper('a4', 'landscape');
     
             return $pdf->download('pagos_mes.pdf');
 
@@ -462,20 +477,23 @@ class InformesController extends Controller
         try {
            
             $saldos_pendientes = Venta::with('cliente')
-            ->where('saldo', '>', '0')
-            ->where('estado', '=', '2')
-            ->select('cliente_id', DB::raw('COUNT(id) as facturas'),
-            DB::raw('SUM(saldo) as saldos'))
-            ->groupBy('cliente_id')
-            ->get();
+                ->where('saldo', '>', '0')
+                ->where('estado', '=', '2')
+                ->select('cliente_id', DB::raw('COUNT(id) as facturas'),
+                DB::raw('SUM(saldo) as saldos'))
+                ->groupBy('cliente_id')
+                ->get();
     
-            $count = 0;
-            foreach ($saldos_pendientes as $saldos_pendiente) {
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($saldos_pendientes as $saldos_pendiente) {
+            //     $count += 1;
+            // }
+
+            $count = $saldos_pendientes->count();
     
             $pdf = \PDF::loadView('admin.pdf.informesaldos',['saldos_pendientes'=>$saldos_pendientes,
              'count'=>$count])->setPaper('a4', 'landscape');
+
             return $pdf->download('saldosclientes.pdf');
 
         } catch (\Exception $e) {
@@ -517,15 +535,16 @@ class InformesController extends Controller
             $busqueda = $request->busqueda;
             
             $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
-                $query->where('activo', 'Si');
-            })
-            ->whereHas('colorProducto.producto', function (Builder $query) use($busqueda) {
-                $query->where('nombre', 'like',"%$busqueda%");
-            })
-            ->with(['talla', 'colorProducto'])//faltan los filtros
-            ->where('stock', '<=', '5')
-            ->orderBy('stock', 'ASC')
-            ->paginate(10);
+                    $query->where('activo', 'Si');
+                })
+                ->whereHas('colorProducto.producto', function (Builder $query) use($busqueda) {
+                    $query->where('nombre', 'like',"%$busqueda%");
+                })
+                ->with(['talla', 'colorProducto'])//faltan los filtros
+                ->where('stock', '<=', '5')
+                ->orderBy('stock', 'ASC')
+                ->paginate(10);
+                
     
             return view('admin.informes.inventarios.index',compact('productos'));
 
