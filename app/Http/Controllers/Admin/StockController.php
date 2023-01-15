@@ -30,20 +30,6 @@ class StockController extends Controller
 
         $busqueda = $request->get('busqueda');
 
-        // $productos = Producto::orWhere('productos.nombre','like',"%$busqueda%")
-        // //->orWhere('colores.nombre','like',"%$busqueda%")
-        // //->orWhere('tallas.nombre','like',"%$busqueda%")
-        // ->join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
-        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        // ->join('tallas','producto_referencia.talla_id', '=', 'tallas.id')
-        // ->where('producto_referencia.stock', '>', '0')
-        // ->where('color_producto.activo', 'Si')
-        // ->select('productos.*', 'producto_referencia.talla_id', 'color_producto.id as cop',
-        // 'producto_referencia.stock', 'color_producto.slug as slug', 'colores.nombre as color',
-        // 'tallas.nombre as talla', 'colores.id as color_id')
-        // ->orderBy('productos.id')
-        // ->paginate(5);
 
         $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
             $query->where('activo', 'Si');
@@ -71,9 +57,7 @@ class StockController extends Controller
 
     public function store(Request $request)
     {
-        // $colorproducto = ColorProducto::where('color_id', $request->color_id)
-        // ->where('producto_id', $request->producto_id)
-        // ->first(); //obtener el color
+        
 
         $validator = Validator::make($request->all(), [
             'producto_id'   => 'required',
@@ -145,17 +129,7 @@ class StockController extends Controller
 
     public function pdfInventarios()
     {
-        // $productos = Producto::join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
-        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        // ->join('tallas','producto_referencia.talla_id', '=', 'tallas.id')
-        // ->where('color_producto.activo', 'Si')
-        // ->where('producto_referencia.stock', '>', '0')
-        // ->select('productos.*', 'producto_referencia.talla_id', 'color_producto.id as cop',
-        // 'producto_referencia.stock', 'color_producto.slug as slug', 'colores.nombre as color',
-        // 'tallas.nombre as talla')
-        // ->orderBy('productos.id')
-        // ->get();
+       
 
         $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
             $query->where('activo', 'Si');
@@ -176,5 +150,6 @@ class StockController extends Controller
         ->setPaper('a4', 'landscape');
         
         return $pdf->download('inventarioproductos.pdf');
+        
     }
 }

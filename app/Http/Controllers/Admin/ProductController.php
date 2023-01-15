@@ -51,14 +51,7 @@ class ProductController extends Controller
        
         $busqueda = $request->get('busqueda');
        
-        // $productos = Producto::where('productos.nombre','like',"%$busqueda%")
-        // ->join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
-        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        // ->select('productos.*','color_producto.id as cop','color_producto.slug as slug','colores.nombre as color', 'color_producto.activo')
-        // ->where('productos.id', $id)
-        // ->orderBy('productos.created_at')
-        // ->paginate(5); //obtener todos los colores de un producto por id
-
+       
         try {
            
             $productos = ColorProducto::whereHas('producto', 
@@ -184,6 +177,7 @@ class ProductController extends Controller
                 'color_id' => $request->color,
                 'activo' => $activo 
             ]);
+            
 
             $color_producto = ColorProducto::where('slug', $colorproducto->slug)
                 ->where('color_id', $colorproducto->color_id)

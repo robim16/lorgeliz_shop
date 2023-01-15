@@ -141,7 +141,10 @@ class SubcategoryController extends Controller
     //implementada con api/subcategoryController
     public function getSubcategoria(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $id  = $request->categoria;
         $subcategorias = Subcategoria::where('categoria_id', $id)->get(); 

@@ -32,20 +32,10 @@ class OrdersController extends Controller
     {
 
         $keyword = $request->get('keyword');
+
         $tipo = $request->get('tipo');
 
-        // $pedidos = Pedido::orWhere('pedidos.fecha','like',"%$keyword%")
-        // ->orWhere('pedidos.id','like',"%$keyword%")
-        // ->orWhere('users.nombres','like',"%$keyword%")
-        // ->orWhere('ventas.valor','like',"%$keyword%")
-        // ->join('ventas','pedidos.venta_id', '=','ventas.id')
-        // ->join('clientes','ventas.cliente_id', '=','clientes.id')
-        // ->join('users','clientes.user_id', '=','users.id')
-        // ->select('pedidos.id','pedidos.fecha', 'ventas.id as venta','ventas.valor','users.nombres',
-        // 'users.apellidos','pedidos.estado', 'clientes.id as cliente')
-        // ->orderBy('pedidos.created_at', 'DESC')
-        // ->where('ventas.estado', '!=', '3')
-        // ->paginate(5); //listado de pedidos admin
+       
 
         try {
             
@@ -165,14 +155,6 @@ class OrdersController extends Controller
 
     public function reportePedidosPdf()
     {
-        // $pedidos = Pedido::join('ventas','pedidos.venta_id','=','ventas.id')
-        // ->join('clientes','ventas.cliente_id','=','clientes.id')
-        // ->join('users','clientes.user_id','=','users.id')
-        // ->where('ventas.estado', '!=', '3')
-        // ->select('pedidos.*','ventas.valor','users.nombres','users.apellidos')
-        // ->orderBy('pedidos.fecha')
-        // ->get();
-
 
         try {
             
@@ -201,24 +183,9 @@ class OrdersController extends Controller
 
     }
 
+    
     public function productosOrder($id) //esta función se reutiliza
     {
-        // return Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        // ->join('imagenes', 'color_producto.id', '=', 'imagenes.imageable_id')
-        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        // ->join('tallas','producto_referencia.talla_id', '=', 'tallas.id')
-        // ->join('producto_venta','producto_referencia.id', '=', 'producto_venta.producto_referencia_id')
-        // ->join('ventas','ventas.id', '=', 'producto_venta.venta_id')
-        // ->join('pedidos','ventas.id', '=', 'pedidos.venta_id')
-        // ->select('productos.id','productos.nombre', 'productos.precio_anterior', 'productos.precio_actual',
-        // 'productos.porcentaje_descuento', 'producto_venta.cantidad', 'ventas.valor', 'colores.nombre as color',
-        // 'tallas.nombre as talla', 'producto_referencia.id as referencia','color_producto.id as cop',
-        // 'color_producto.slug as slug','pedidos.id as pedido', 'imagenes.url as imagen') 
-        // ->where('pedidos.id', '=', $id)
-        // ->where('imagenes.imageable_type', 'App\ColorProducto')
-        // ->groupBy('producto_referencia.id')
-        // ->get();
 
         return ProductoVenta::whereHas('venta.pedido',
         function (Builder $query) use ($id) {
@@ -226,6 +193,7 @@ class OrdersController extends Controller
         })
         ->with(['venta.pedido', 'venta.cliente.user'])
         ->get();
+
     }
 
     // public function userPedido($id)

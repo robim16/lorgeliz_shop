@@ -181,56 +181,14 @@ class ClienteController extends Controller
         $buscar = $request->buscar;
         $criterio = $request->criterio;
 
-        // $user = Auth::id();
 
-        // if ($buscar=='') {
-
-        //     $clientes = User::with('imagene')
-        //     ->join('clientes','users.id', 'clientes.user_id')
-        //     ->select('clientes.id as cliente','users.id','users.nombres', 'users.apellidos',
-        //     'users.telefono', 'users.email')
-        //     ->paginate(5);
-
-        //     return [
-        //         'pagination' => [
-        //             'total'        => $clientes->total(),
-        //             'current_page' => $clientes->currentPage(),
-        //             'per_page'     => $clientes->perPage(),
-        //             'last_page'    => $clientes->lastPage(),
-        //             'from'         => $clientes->firstItem(),
-        //             'to'           => $clientes->lastItem(),
-        //         ],
-        //         'clientes' => $clientes
-        //     ];
-
-        // } else {
-
-        //     $clientes = User::with('imagene')
-        //     ->join('clientes','users.id', 'clientes.user_id')
-        //     ->select('clientes.id as cliente','users.id','users.nombres', 'users.apellidos',
-        //     'users.telefono', 'users.email')
-        //     ->where('users.'.$criterio, 'like', '%'. $buscar . '%')
-        //     ->paginate(5);
-
-        //     return [
-        //         'pagination' => [
-        //             'total'        => $clientes->total(),
-        //             'current_page' => $clientes->currentPage(),
-        //             'per_page'     => $clientes->perPage(),
-        //             'last_page'    => $clientes->lastPage(),
-        //             'from'         => $clientes->firstItem(),
-        //             'to'           => $clientes->lastItem(),
-        //         ],
-        //         'clientes' => $clientes
-        //     ];
-            
-        // }
 
         $clientes = User::when($buscar, function ($query) use ($buscar, $criterio) {
             return $query->where('users.'.$criterio, 'like', '%'. $buscar . '%');
         })
         ->with('imagene', 'cliente')
         ->paginate(5);
+        
 
         return [
             'pagination' => [

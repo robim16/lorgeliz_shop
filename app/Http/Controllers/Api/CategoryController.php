@@ -15,7 +15,9 @@ class CategoryController extends Controller
     public function getProductos(Request $request)
     {
         //obtener todos los productos, en vista categorías
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $disponibles = ProductoReferencia::disponibles();
 
@@ -39,9 +41,13 @@ class CategoryController extends Controller
         ];
     }
 
+
+
     public function getProductosByState(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $estado = $request->estado;
 
@@ -72,9 +78,13 @@ class CategoryController extends Controller
 
     }
 
+
+
     public function getProductosSales(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $productos = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
         ->join('producto_referencia', 'color_producto.id', 'producto_referencia.color_producto_id')
@@ -102,9 +112,14 @@ class CategoryController extends Controller
         
     }
 
+
+
     public function getProductosVisitas(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $disponibles = ProductoReferencia::disponibles();
 
@@ -129,10 +144,14 @@ class CategoryController extends Controller
 
     }
 
+
+
     public function getProductsByOrder(Request $request)
     {
 
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $criterio = $request->criterio;
 
@@ -161,10 +180,14 @@ class CategoryController extends Controller
         ];
     }
 
+
+
     public function getProductsByTipo(Request $request)
     {
         
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $tipo = $request->tipo;
 
@@ -194,9 +217,13 @@ class CategoryController extends Controller
 
     }
 
+
+
     public function getProductsByGender(Request $request)
     {
-       if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $genero = $request->genero;
 
@@ -225,6 +252,8 @@ class CategoryController extends Controller
         ];
 
     }
+
+    
 
     public function getProductsByKeyword(Request $request)
     {

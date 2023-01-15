@@ -134,7 +134,9 @@ class ColorController extends Controller
     //implementada en index de Admin/Api/ColorController
     public function getColores(Request $request, $id)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         //$id  = $request->producto;
         

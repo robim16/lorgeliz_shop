@@ -26,14 +26,10 @@ class NotificationController extends Controller
         
         $fechaActual = date('Y-m-d');
 
-        //foreach ($unreadNotifications as $notification) {
-            //if ($fechaActual != $notification->created_at->toDateString()) {
-            //$notification->markAsRead();
-            //}
-        //}
-
         return Auth::user()->unreadNotifications;
     }
+
+
 
     //leer notificación del admin
     public function update(Request $request, $id)
@@ -55,4 +51,5 @@ class NotificationController extends Controller
         }
 
     }
+    
 }

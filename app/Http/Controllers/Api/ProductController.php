@@ -12,7 +12,9 @@ class ProductController extends Controller
 {
     public function setVisitas(Request $request, $id)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $producto = ColorProducto::where('id', $id)->first();
     

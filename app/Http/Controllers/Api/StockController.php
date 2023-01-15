@@ -11,7 +11,9 @@ class StockController extends Controller
 {
     public function verify(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
         
         $productos = CarritoProducto::whereHas('carrito', function (Builder $query) {
            $query->where('estado', 1)

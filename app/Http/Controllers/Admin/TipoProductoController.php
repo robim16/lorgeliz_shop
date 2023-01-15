@@ -143,6 +143,7 @@ class TipoProductoController extends Controller
 			abort(401, 'Acceso denegado');
 		}
 
+        
         $id  = $request->subcategoria;
         $tipos = Tipo::where('subcategoria_id', $id)->get(); 
         

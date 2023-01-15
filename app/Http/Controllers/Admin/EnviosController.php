@@ -33,8 +33,6 @@ class EnviosController extends Controller
     {
         $clientes = Cliente::with('user')
             ->whereHas('ventas')
-            // ->orderBy('nombres')
-            // ->orderBy('apellidos')
             ->get();
 
         return view('admin.envios.create', compact('clientes'));

@@ -89,25 +89,10 @@ class DevolucionController extends Controller
     
     public function pdfListarDevoluciones(Request $request)
     {
-        //if (!$request->ajax()) return redirect('/');
         
-        $devoluciones = Devolucione::
-        with('venta')
-        // with('venta.cliente.user','venta.pedido')
-        // join('ventas', 'devoluciones.venta_id', '=', 'ventas.id')
-        // ->join('pedidos', 'ventas.id', '=', 'pedidos.venta_id')
-        // ->join('clientes', 'ventas.cliente_id', '=', 'clientes.id')
-        // ->join('users', 'clientes.user_id', '=', 'users.id')
-        // ->select('devoluciones.id','devoluciones.estado', 'devoluciones.fecha','pedidos.id as pedido',
-        // 'ventas.id as venta', 'users.nombres', 'users.apellidos'
-        // ,'clientes.id as cliente')
-        ->get();
+        $devoluciones = Devolucione:: with('venta')->get();
 
-        // $count = 0;
-        // foreach ($devoluciones as $devolucion) {
-        //     // $count = $count + 1;
-        //     $count += 1;
-        // }
+       
 
         $count = $devoluciones->count();
 
