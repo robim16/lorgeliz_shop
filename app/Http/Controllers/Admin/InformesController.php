@@ -14,7 +14,6 @@ use App\Venta;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class InformesController extends Controller
 {
@@ -47,7 +46,7 @@ class InformesController extends Controller
         // ->paginate(5); 
 
         try {
-          
+           
             $ventas = Venta::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio,
             COUNT(id) as cantidad, SUM(valor) as total')
             ->whereYear('fecha',$anio)
@@ -57,12 +56,13 @@ class InformesController extends Controller
             ->paginate(5);
     
             return view('admin.informes.ventas.index',compact('ventas'));
-            
+
         } catch (\Exception $e) {
-            Log::debug('Error consultando el informe de ventas.Error: '.json_encode($e));
+            //throw $th;
         }
 
     }
+
 
 
     public function pdfInformeVentas(Request $request)
@@ -73,27 +73,47 @@ class InformesController extends Controller
 
         $anio = date('Y');
 
+        // if ( $fecha_de =='' && $fecha_a =='') {
+
+            // $ventas=DB::table('ventas as v')
+            // ->select(DB::raw('MONTH(v.fecha) as mes'),
+            // DB::raw('YEAR(v.fecha) as anio'),
+            // DB::raw('COUNT(v.id) as cantidad'),
+            // DB::raw('SUM(v.valor) as total'))
+            // ->whereYear('v.fecha',$anio)
+            // ->groupBy(DB::raw('MONTH(v.fecha)'),DB::raw('YEAR(v.fecha)'))
+            // ->get();
+
+
+            
+            // }
+
         try {
             
             $ventas = Venta::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio
-            , COUNT(id) as cantidad, SUM(valor) as total')
-            ->whereYear('fecha',$anio)
-            ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
-            ->get();
+                ,COUNT(id) as cantidad, SUM(valor) as total')
+                ->whereYear('fecha',$anio)
+                ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
+                ->get();
     
-            $count = 0;
-            foreach ($ventas as $venta) {
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($ventas as $venta) {
+            //     $count += 1;
+            // }
+
+            $count = $ventas->count();
     
-            $pdf = \PDF::loadView('admin.pdf.informeventas',['ventas'=>$ventas, 'count'=>$count])->setPaper('a4', 'landscape');
+            $pdf = \PDF::loadView('admin.pdf.informeventas',['ventas'=>$ventas, 'count'=>$count])
+                ->setPaper('a4', 'landscape');
+
             return $pdf->download('ventas.pdf');
 
         } catch (\Exception $e) {
-            Log::debug('Error imprimiendo el informe de ventas.Error: '.json_encode($e));
+            //throw $th;
         }
 
     }
+
 
 
     public function mostrarVentas(Request $request,$mes)
@@ -126,7 +146,7 @@ class InformesController extends Controller
         // ->paginate(5); //obtener ventas en el mes seleccionado
 
         try {
-            
+        
             $ventas = ProductoVenta::whereHas('venta', function (Builder $query) 
             use ($mes, $anio, $fecha_de, $fecha_a) {
                 $query->whereMonth('fecha',$mes)
@@ -142,10 +162,12 @@ class InformesController extends Controller
             return view('admin.informes.ventas.show',compact('ventas'));
 
         } catch (\Exception $e) {
-            Log::debug('Error consultando el show de informe de ventas.Error: '.json_encode($e));
+            //throw $th;
         }
         
     }
+
+
 
     public function pdfVentaShow(Request $request)
     {
@@ -164,7 +186,7 @@ class InformesController extends Controller
         // ->get();
 
         try {
-    
+
             $ventas = ProductoVenta::whereHas('venta', function (Builder $query) 
             use ($mes,$anio) {
                 $query->whereMonth('fecha',$mes)
@@ -176,22 +198,25 @@ class InformesController extends Controller
             ->get();
     
     
-            $count = 0;
-            foreach ($ventas as $venta) {
-                // $count = $count + 1;
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($ventas as $venta) {
+            //     // $count = $count + 1;
+            //     $count += 1;
+            // }
+
+            $count = $ventas->count();
     
             $pdf = \PDF::loadView('admin.pdf.informeventashow',['ventas'=>$ventas, 'count'=>$count])
             ->setPaper('a4', 'landscape');
             
             return $pdf->download('ventas_mes.pdf');
-
+            
         } catch (\Exception $e) {
-            Log::debug('Error imprimiendo el show de informe de ventas.Error: '.json_encode($e));
+            //throw $th;
         }
 
     }
+
 
 
     public function ventaProductos(Request $request)
@@ -220,24 +245,26 @@ class InformesController extends Controller
 
         try {
 
+
             $productos = ProductoVenta::whereHas('productoReferencia.colorProducto.producto', 
-                function (Builder $query) use ($busqueda) {
-                    $query->orWhere('nombre','like',"%$busqueda%");//no funciona el filtro
-                })
-                ->with('productoReferencia')
-                ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
-                ->orderBy('cantidad', 'DESC')
-                ->groupBy('producto_referencia_id')
-                ->paginate(5);
+            function (Builder $query) use ($busqueda) {
+                $query->orWhere('nombre','like',"%$busqueda%");//no funciona el filtro
+            })
+            ->with('productoReferencia')
+            ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
+            ->orderBy('cantidad', 'DESC')
+            ->groupBy('producto_referencia_id')
+            ->paginate(5);
     
             
             return view('admin.informes.productos.index',compact('productos'));
            
         } catch (\Exception $e) {
-            Log::debug('Error consultando el informe de ventas de productos.Error: '.json_encode($e));
+            //throw $th;
         }
 
     }
+
 
 
     public function pdfInformeProductos(Request $request)
@@ -256,30 +283,33 @@ class InformesController extends Controller
         // ->get();
 
         try {
-            
+           
             $productos = ProductoVenta::with('productoReferencia')
             ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
             ->groupBy('producto_referencia_id')
             ->orderBy('cantidad', 'DESC')
             ->get();
             
-            $count = 0;
-            foreach ($productos as $producto) {
-                // $count = $count + 1;
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($productos as $producto) {
+            //     // $count = $count + 1;
+            //     $count += 1;
+            // }
     
+            $count = $productos->count();
+
             $pdf = \PDF::loadView('admin.pdf.informeproductos',['productos'=>$productos, 'count'=>$count])
             ->setPaper('a4', 'landscape');
     
             return $pdf->download('productos.pdf');
 
         } catch (\Exception $e) {
-            Log::debug('Error imprimiendo el informe de ventas de productos.Error: '.json_encode($e));
+            //throw $th;
         }
 
     }
     
+
 
     public function informeClientes(Request $request)
     {
@@ -301,7 +331,7 @@ class InformesController extends Controller
         // ->paginate(5);
 
         try {
-           
+            
             $clientes = Venta::when($busqueda, function ($query) use ($busqueda) {
                 return $query->whereHas('cliente.user',  function (Builder $query) use ($busqueda) {
                     $query->orWhere('id','like',"%$busqueda%")
@@ -319,8 +349,9 @@ class InformesController extends Controller
             return view('admin.informes.clientes.index',compact('clientes'));
 
         } catch (\Exception $e) {
-            Log::debug('Error consultando el informe de clientes.Error: '.json_encode($e));
+            //throw $th;
         }
+
 
     }
 
@@ -339,29 +370,31 @@ class InformesController extends Controller
         // ->get();
 
         try {
-            
+
             $clientes = Venta::with('cliente.user')
             ->select('cliente_id', DB::raw('COUNT(id) as cantidad'))
             ->groupBy('cliente_id')
             ->orderBy('cantidad', 'DESC')
             ->get();
     
-            $count = 0;
-            foreach ($clientes as $cliente) {
-                // $count = $count + 1;
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($clientes as $cliente) {
+            //     // $count = $count + 1;
+            //     $count += 1;
+            // }
+
+            $count = $clientes->count();
     
             $pdf = \PDF::loadView('admin.pdf.informeclientes',['clientes'=>$clientes, 'count'=>$count])
             ->setPaper('a4', 'landscape');
-    
             return $pdf->download('clientes.pdf');
-
+           
         } catch (\Exception $e) {
-            Log::debug('Error imprimiendo el informe de clientes.Error: '.json_encode($e));
+            //throw $th;
         }
 
     }
+
 
 
     public function informePagos(Request $request)
@@ -378,7 +411,7 @@ class InformesController extends Controller
         // ->paginate(5);
 
         try {
-
+           
             $pagos = Pago::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio,
             COUNT(id) as cantidad, SUM(monto) as total')
             ->whereYear('fecha',$anio)
@@ -386,73 +419,65 @@ class InformesController extends Controller
             ->paginate(5);
     
             return view('admin.informes.pagos.index',compact('pagos'));
-            
+
         } catch (\Exception $e) {
-            Log::debug('Error consultando el informe de pagos.Error: '.json_encode($e));
+            //throw $th;
         }
+
 
     }
 
 
+
     public function pdfInformePagos(Request $request)
     {
-
+        
         $anio = date('Y');
 
         try {
-            
+
+
             $pagos = Pago::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio,
             COUNT(id) as cantidad, SUM(monto) as total')
             ->whereYear('fecha',$anio)
             ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
             ->get();
             
-            $count = 0;
-            foreach ($pagos as $pago) {
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($pagos as $pago) {
+            //     $count += 1;
+            // }
+
+            $count = $pagos->count();
     
             $pdf = \PDF::loadView('admin.pdf.informepagos',['pagos'=>$pagos, 'count'=>$count])
             ->setPaper('a4', 'landscape');
     
             return $pdf->download('pagos.pdf');
-
+           
         } catch (\Exception $e) {
-            Log::debug('Error imprimiendo el informe de pagos.Error: '.json_encode($e));
+            //throw $th;
         }
 
+
     }
+
 
 
     public function mostrarPagos(Request $request,$mes)
     {
 
-        try {
-           
-            $fecha_de = $request->get('fecha_de');
-            $fecha_a = $request->get('fecha_a');
-    
-            $anio = date('Y');
-    
-            if ($fecha_de == '') {
-               $fecha_de = '01/01/'.$anio;
-            }
-    
-            if ($fecha_a == '') {
-                $fecha_a = \Carbon\Carbon::now();
-            }
-    
-            
-            $pagos = Pago::whereMonth('fecha',$mes)
-            ->whereBetween('fecha',[$fecha_de, $fecha_a])
-            ->groupBy('id')
-            ->orderBy('created_at', 'DESC')
-            ->paginate(5);
-    
-            return view('admin.informes.pagos.show',compact('pagos'));
+        $fecha_de = $request->get('fecha_de');
+        $fecha_a = $request->get('fecha_a');
 
-        } catch (\Exception $e) {
-            Log::debug('Error mostrando el show de informe de pagos.Error: '.json_encode($e));
+        $anio = date('Y');
+
+        if ($fecha_de == '') {
+           $fecha_de = '01/01/'.$anio;
+        }
+
+        if ($fecha_a == '') {
+            $fecha_a = \Carbon\Carbon::now();
         }
 
         // $pagos=DB::table('pagos')
@@ -464,39 +489,60 @@ class InformesController extends Controller
         // ->orderBy('pagos.created_at', 'DESC')
         // ->paginate(5);
 
+        try {
+
+            $pagos = Pago::whereMonth('fecha',$mes)
+            ->whereBetween('fecha',[$fecha_de, $fecha_a])
+            ->groupBy('id')
+            ->orderBy('created_at', 'DESC')
+            ->paginate(5);
+    
+            return view('admin.informes.pagos.show',compact('pagos'));
+           
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
     }
+
 
 
     public function pdfPagosShow(Request $request)
     {
         //informe de pagos en el mes
 
+        $mes = date('m', strtotime($request->mes));
+
         try {
            
-            $mes = date('m', strtotime($request->mes));
-    
             $pagos = Pago::whereMonth('fecha',$mes)
             ->orderBy('created_at', 'DESC')
             ->get();
             
-            $count = 0;
-            foreach ($pagos as $pago) {
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($pagos as $pago) {
+            //     $count += 1;
+            // }
     
+            $count = $pagos->count();
+
             $pdf = \PDF::loadView('admin.pdf.informepagosmes',['pagos'=>$pagos, 'count'=>$count])
             ->setPaper('a4', 'landscape');
     
             return $pdf->download('pagos_mes.pdf');
 
+
         } catch (\Exception $e) {
-            Log::debug('Error imprimiendo el show de informe de pagos.Error: '.json_encode($e));
+            //throw $th;
         }
 
     }
 
+
+
     public function informe_saldos_clientes()
     {
+
         try {
             
             $saldos_pendientes = Venta::with('cliente')
@@ -510,12 +556,16 @@ class InformesController extends Controller
             return view('admin.informes.saldos.index',compact('saldos_pendientes'));
 
         } catch (\Exception $e) {
-            Log::debug('Error consultando el informe de saldos.Error: '.json_encode($e));
+            //throw $th;
         }
+        
     }
+
+
 
     public function informeSaldosClientesPdf()
     {
+
         try {
             
             $saldos_pendientes = Venta::with('cliente')
@@ -526,26 +576,30 @@ class InformesController extends Controller
             ->groupBy('cliente_id')
             ->get();
     
-            $count = 0;
-            foreach ($saldos_pendientes as $saldos_pendiente) {
-                $count += 1;
-            }
+            // $count = 0;
+            // foreach ($saldos_pendientes as $saldos_pendiente) {
+            //     $count += 1;
+            // }
+            $count = $saldos_pendientes->count();
     
             $pdf = \PDF::loadView('admin.pdf.informesaldos',['saldos_pendientes'=>$saldos_pendientes,
              'count'=>$count])->setPaper('a4', 'landscape');
+
             return $pdf->download('saldosclientes.pdf');
 
         } catch (\Exception $e) {
-            Log::debug('Error imprimiendo el informe de saldos.Error: '.json_encode($e));
+            //throw $th;
         }
 
     }
+
+
 
     public function facturasPendientesCliente(Cliente $cliente)
     {
 
         try {
-            
+          
             $saldos_pendientes = Venta::with('cliente')
             ->where('saldo', '>', '0')
             ->where('estado', '=', '2')
@@ -554,10 +608,12 @@ class InformesController extends Controller
             ->paginate(5);
     
             return view('admin.informes.saldos.show',compact('saldos_pendientes'));
-            
+
         } catch (\Exception $e) {
-            Log::debug('Error consultando el informe de facturas pendientes.Error: '.json_encode($e));
+            //throw $th;
         }
+
     }
+    
 
 }
