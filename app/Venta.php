@@ -69,6 +69,26 @@ class Venta extends Model
     
                 $carritos = CarritoProducto::where('carrito_id', $cart->id)
                 ->get();
+
+
+                // $data = array();
+
+                // foreach ($carritos as $carrito) {
+                //     $item = array(
+                //         'producto_referencia_id' => $carrito->producto_referencia_id,
+                //         'venta_id' => $venta->id,
+                //         'cantidad' => $carrito->cantidad,
+                //         'precio_venta' => $carrito->productoReferencia->colorProducto->producto->precio_actual,
+                //         'porcentaje_descuento' => $carrito->productoReferencia->colorProducto->producto->porcentaje_descuento
+                //     );
+
+                //     array_push($data, $item);
+                // }
+
+
+                // ProductoVenta::insert($data);
+
+                
             
                 foreach ($carritos as $carrito) {
                     
