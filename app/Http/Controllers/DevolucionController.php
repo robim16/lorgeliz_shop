@@ -167,7 +167,7 @@ class DevolucionController extends Controller
                     'url' => url('/admin/devoluciones/'. $devolucion->id),
                 ];
     
-                //return new AdminDevolucionMail($details);
+                
                 // Mail::to($admin->email)->send(new AdminDevolucionMail($details));
 
                 SendEmail::dispatch($details, $admin);
