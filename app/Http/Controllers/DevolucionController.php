@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Cliente;
 Use App\Devolucione;
+use App\Jobs\SendEmail;
 Use App\Producto;
 Use App\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -167,7 +168,9 @@ class DevolucionController extends Controller
                 ];
     
                 //return new AdminDevolucionMail($details);
-                Mail::to($admin->email)->send(new AdminDevolucionMail($details));
+                // Mail::to($admin->email)->send(new AdminDevolucionMail($details));
+
+                SendEmail::dispatch($details, $admin);
     
     
                 $mensaje = 'nueva devolución solicitada';

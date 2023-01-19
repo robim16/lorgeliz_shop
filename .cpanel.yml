@@ -1,0 +1,8 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/u162198909/domains/lorenzogeliztienda.com/public_html/demo/laravel
+    - /bin/rsync -a --exclude 'public' * $DEPLOYPATH
+    - export DEPLOYPATH=/home/u162198909/domains/lorenzogeliztienda.com/public_html/demo
+    - /bin/cp -r ./public/ * $DEPLOYPATH
+    
