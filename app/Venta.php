@@ -119,9 +119,9 @@ class Venta extends Model
                 });
     
                 $vendidos = ProductoReferencia::whereIn('id', $productos)
-                ->groupBy('color_producto_id')
-                ->select('color_producto_id')
-                ->get();
+                    ->groupBy('color_producto_id')
+                    ->select('color_producto_id')
+                    ->get();
     
                 // broadcast(new SalesEvent($vendidos));
 
