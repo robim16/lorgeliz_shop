@@ -1,9 +1,11 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/u162198909/domains/lorenzogeliztienda.com/demo/laravel
+    # - export DEPLOYPATH=/home/u162198909/domains/lorenzogeliztienda.com/demo/laravel
     #- /bin/mkdir $DEPLOYPATH
+    - export DEPLOYPATH=/home/u162198909/public_html/demo/laravel
+    - /bin/cp .env.example * $DEPLOYPATH/.env
     - /bin/rsync -a --exclude 'public' * $DEPLOYPATH
-    - export DEPLOYPATH=/home/u162198909/domains/demo.lorenzogeliztienda.com/demo
+    - export DEPLOYPATH=/home/u162198909/public_html/demo
     - /bin/cp -r ./public/ * $DEPLOYPATH
     
