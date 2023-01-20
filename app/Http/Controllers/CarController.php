@@ -558,7 +558,7 @@ class CarController extends Controller
         } catch (\Exception $e) {
             Log::debug('Error eliminando el producto del carrito'.'carrito:'.' '.json_encode($carrito).
                 'producto:'.' '.json_encode($car_producto).' '.
-                'error:'.json_encode($e));
+                'Error:'.json_encode($e));
         }
     }
 
