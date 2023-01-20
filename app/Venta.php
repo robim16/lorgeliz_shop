@@ -129,7 +129,6 @@ class Venta extends Model
             } catch (\Exception $e) {
                 Log::debug('Error creando el pedido y los detalles de la venta.Error: '.json_encode($e));
                 DB::rollBack();
-
             }
             
         });
