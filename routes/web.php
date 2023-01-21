@@ -19,6 +19,7 @@ Route::get('/categorias', 'HomeController@categorias')->name('categorias');
 
 Route::get('/checkout', 'HomeController@checkout')->name('checkout')->middleware('auth');
 
+
 // api Route::get('/categorias/productos', 'HomeController@getProductos')->name('categorias.productos');
 // Route::get('/categorias/productos/estado', 'HomeController@getProductosByState')->name('productos.estados');
 // Route::get('/categorias/productos/vendidos', 'HomeController@getProductosSales')->name('productos.sale');
