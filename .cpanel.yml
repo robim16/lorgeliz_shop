@@ -6,6 +6,6 @@ deployment:
     - /bin/cp .env.example * $DEPLOYPATH/.env
     - /bin/rsync -a --exclude 'public' * $DEPLOYPATH
     # - export DEPLOYPATH=/home/u162198909/lorenzogeliztienda.com/public_html/demo
-     - export DEPLOYPATH=/home/u162198909/demo.lorenzogeliztienda.com/
+    - export DEPLOYPATH=/home/u162198909/demo.lorenzogeliztienda.com/
     - /bin/cp -r ./public/ * $DEPLOYPATH
     
