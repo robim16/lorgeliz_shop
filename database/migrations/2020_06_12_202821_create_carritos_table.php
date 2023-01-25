@@ -21,6 +21,9 @@ class CreateCarritosTable extends Migration
             $table->foreign('cliente_id')->references('id')->on('clientes');
             $table->string('estado');
             $table->timestamps();
+
+            // $table->index('estado');
+            $table->index(['cliente_id', 'estado']);
         });
     }
 

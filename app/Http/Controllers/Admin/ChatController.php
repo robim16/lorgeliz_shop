@@ -44,17 +44,7 @@ class ChatController extends Controller
         
         $user = auth()->user()->id;
 
-        // $chats = DB::table('chats')
-        // ->whereNotIn('chats.from_id', [$user])//obtenemos los mensajes escritos por los clientes al admin
-        // ->join('users', 'chats.from_id', '=', 'users.id')
-        // ->join('imagenes', function ($join) {
-        //     $join->on('users.id', '=', 'imagenes.imageable_id')
-        //     ->where('imagenes.imageable_type','App\User');
-        // })
-        // ->select('chats.*','users.nombres', 'users.apellidos', 'imagenes.url', 'users.id as cliente')
-        // ->orderBy('chats.fecha', 'DESC')
-        // ->groupBy('chats.from_id')
-        // ->paginate(5);
+      
 
         try {
 
@@ -105,7 +95,7 @@ class ChatController extends Controller
      */
     public function store(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/chats/admin');
+      
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -139,21 +129,10 @@ class ChatController extends Controller
         } catch (\Exception $e) {
             //throw $th;
         }
-
-        // if ($request->admin == true) {
-
-
-            // $data = $this->show($request, $request->cliente);//obtenemos los mensajes intercambiados con el cliente
-
-            // foreach ($data['chats'] as $key => $value) {
-            //     if ($value->id == $chat->id) {
-            //        $data['chats'] = $data['chats'][$key];
-            //     }
-            // }
-
-        // }
        
     }
+
+    
     /**
      * Display the specified resource.
      *

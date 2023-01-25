@@ -29,7 +29,8 @@ class ClientToAdminMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.clientToAdminMail')
+        return $this->subject("nuevo email recibido de un cliente")
+        ->markdown('emails.clientToAdminMail')
         ->with('details', $this->details);
     }
 }

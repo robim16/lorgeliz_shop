@@ -16,10 +16,7 @@ class NotificationController extends Controller
 
     public function index()
     {
-        //$orderNotifications = $unreadNotifications->filter(function ($value, $key){
-            //return $value->type == 'App\Notifications\NotificationClient';
-        //});
-
+       
         try {
           
             $unreadNotifications = Auth::user()->cliente->unreadNotifications;
@@ -31,6 +28,7 @@ class NotificationController extends Controller
         }
         
     }
+    
     
     public function setClientRead(Request $request, $id)
     {

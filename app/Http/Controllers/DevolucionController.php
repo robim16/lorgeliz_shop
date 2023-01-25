@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Cliente;
 Use App\Devolucione;
 use App\Jobs\SendEmail;
-Use App\Producto;
 Use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Mail\AdminDevolucionMail;
 
 use Illuminate\Support\Facades\Mail;
@@ -36,26 +33,7 @@ class DevolucionController extends Controller
     {
         $busqueda = $request->busqueda;
 
-        // $productos = Producto::
-        // //orWhere('pedidos.id','like',"%$busqueda%")
-        // join('color_producto','productos.id','color_producto.producto_id')
-        // ->join('colores','color_producto.color_id','colores.id') 
-        // ->join('imagenes','color_producto.id','imagenes.imageable_id')
-        // ->join('producto_referencia','color_producto.id','producto_referencia.color_producto_id')
-        // ->join('tallas','producto_referencia.talla_id','tallas.id')
-        // ->join('devoluciones','producto_referencia.id','devoluciones.producto_referencia_id')
-        // ->join('ventas','devoluciones.venta_id','ventas.id')
-        // ->join('pedidos','ventas.id','pedidos.venta_id')
-        // ->select('productos.nombre','devoluciones.id', 'devoluciones.cantidad',
-        // 'devoluciones.fecha', 'colores.nombre as color', 'tallas.nombre as talla',
-        // 'pedidos.id as pedido','color_producto.id as cop', 'color_producto.slug as slug',
-        // 'imagenes.url as imagen')
-        // ->where('ventas.cliente_id', auth()->user()->cliente->id)
-        // ->where('imagenes.imageable_type', 'App\ColorProducto')
-        // ->groupBy('devoluciones.id')
-        // ->orderBy('devoluciones.created_at','DESC')
-        // ->paginate(5);
-
+    
         try {
             
             $productos = Devolucione::whereHas('venta',
@@ -78,26 +56,6 @@ class DevolucionController extends Controller
     public function show(Request $request, $id)
     {
         $busqueda = $request->busqueda;
-
-        // $productos = Producto::
-        // //orWhere('pedidos.id','like',"%$busqueda%")
-        // join('color_producto','productos.id','color_producto.producto_id')
-        // ->join('colores','color_producto.color_id','colores.id') 
-        // ->join('imagenes','color_producto.id','imagenes.imageable_id')
-        // ->join('producto_referencia','color_producto.id','producto_referencia.color_producto_id')
-        // ->join('tallas','producto_referencia.talla_id','tallas.id')
-        // ->join('devoluciones','producto_referencia.id','devoluciones.producto_referencia_id')
-        // ->join('ventas','devoluciones.venta_id','ventas.id')
-        // ->join('pedidos','ventas.id','pedidos.venta_id')
-        // ->select('productos.nombre', 'devoluciones.id', 'devoluciones.cantidad', 'devoluciones.estado',
-        // 'devoluciones.fecha', 'colores.nombre as color', 'tallas.nombre as talla', 'pedidos.id as pedido',
-        // 'color_producto.id as cop', 'color_producto.slug as slug', 'imagenes.url as imagen')
-        // ->where('devoluciones.id', $id)
-        // ->where('ventas.cliente_id', auth()->user()->cliente->id)
-        // ->where('imagenes.imageable_type', 'App\ColorProducto')
-        // ->groupBy('devoluciones.id')
-        // ->orderBy('devoluciones.created_at','DESC')
-        // ->paginate(5);
 
         try {
 
@@ -186,6 +144,7 @@ class DevolucionController extends Controller
         }
         
     }
+
 
     //implementado en rutas api/devolucion
     public function verificar(Request $request){

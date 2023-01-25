@@ -30,11 +30,6 @@ class ProductController extends Controller
 
     public function show($slug)
     {
-        // $producto = Producto::join('color_producto', 'productos.id', '=', 'color_producto.producto_id')
-        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        // ->select('productos.*', 'color_producto.id as cop', 'colores.id as color', 'color_producto.slug as slug', 'color_producto.visitas as visitas', 'colores.nombre as colores')
-        // ->where('color_producto.slug',$slug)
-        // ->firstOrFail();
 
         try {
             
@@ -56,6 +51,7 @@ class ProductController extends Controller
         }
 
     }
+    
 
     //implementado en api/productController
     public function setVisitas(Request $request, $id)

@@ -12,11 +12,13 @@ class Venta extends Model
 {
     protected $fillable = ['fecha', 'factura', 'subtotal', 'envio', 'valor', 'cliente_id'];
     
-    public function pedido (){
+    public function pedido()
+    {
         return $this->hasOne(Pedido::class);
     }
 
-    public function devoluciones (){
+    public function devoluciones()
+    {
         return $this->hasMany(Devolucione::class);
     }
 
@@ -24,33 +26,39 @@ class Venta extends Model
         //return $this->belongsToMany(Producto::class);
     //}
 
-    public function productoReferencias (){
+    public function productoReferencias()
+    {
         return $this->belongsToMany(ProductoReferencia::class);
     }
 
-    public function cliente (){
+    public function cliente()
+    {
         return $this->belongsTo(Cliente::class);
     }
 
-    public function factura (){
+    public function factura()
+    {
         return $this->belongsTo(Factura::class);
     }
 
-    public function pagos (){
+    public function pagos()
+    {
         return $this->hasMany(Pago::class);
     }
 
-    public function productoVentas(){
+    public function productoVentas()
+    {
         return $this->hasMany(ProductoVenta::class, 'venta_id');
     }
 
 
-    public function envio(){
+    public function envio()
+    {
         return $this->hasOne(Envio::class, 'venta_id');
     }
 
 
-    public static function boot () {
+    public static function boot() {
         parent::boot();
             
         static::created(function(Venta $venta) {
@@ -71,37 +79,37 @@ class Venta extends Model
                 ->get();
 
 
-                // $data = array();
+                $data = array();
 
-                // foreach ($carritos as $carrito) {
-                //     $item = array(
-                //         'producto_referencia_id' => $carrito->producto_referencia_id,
-                //         'venta_id' => $venta->id,
-                //         'cantidad' => $carrito->cantidad,
-                //         'precio_venta' => $carrito->productoReferencia->colorProducto->producto->precio_actual,
-                //         'porcentaje_descuento' => $carrito->productoReferencia->colorProducto->producto->porcentaje_descuento
-                //     );
+                foreach ($carritos as $carrito) {
+                    $item = array(
+                        'producto_referencia_id' => $carrito->producto_referencia_id,
+                        'venta_id' => $venta->id,
+                        'cantidad' => $carrito->cantidad,
+                        'precio_venta' => $carrito->productoReferencia->colorProducto->producto->precio_actual,
+                        'porcentaje_descuento' => $carrito->productoReferencia->colorProducto->producto->porcentaje_descuento
+                    );
 
-                //     array_push($data, $item);
-                // }
+                    array_push($data, $item);
+                }
 
 
-                // ProductoVenta::insert($data);
+                ProductoVenta::insert($data);
 
                 
             
-                foreach ($carritos as $carrito) {
+                // foreach ($carritos as $carrito) {
                     
-                    $productoVenta = new ProductoVenta();
+                //     $productoVenta = new ProductoVenta();
     
-                    $productoVenta->producto_referencia_id = $carrito->producto_referencia_id;
-                    $productoVenta->venta_id = $venta->id;
-                    $productoVenta->cantidad = $carrito->cantidad;
-                    $productoVenta->precio_venta =  $carrito->productoReferencia->colorProducto->producto->precio_actual;
-                    $productoVenta->porcentaje_descuento = $carrito->productoReferencia->colorProducto->producto->porcentaje_descuento;
+                //     $productoVenta->producto_referencia_id = $carrito->producto_referencia_id;
+                //     $productoVenta->venta_id = $venta->id;
+                //     $productoVenta->cantidad = $carrito->cantidad;
+                //     $productoVenta->precio_venta =  $carrito->productoReferencia->colorProducto->producto->precio_actual;
+                //     $productoVenta->porcentaje_descuento = $carrito->productoReferencia->colorProducto->producto->porcentaje_descuento;
     
-                    $productoVenta->save();
-                }
+                //     $productoVenta->save();
+                // }
     
     
                 $pedido = new Pedido();

@@ -47,18 +47,9 @@ class ChatController extends Controller
             //throw $th;
         }
 
-        // $chats = Chat::where('chats.from_id', $user)
-        // ->orWhere('chats.to_id',$user)
-        // ->join('users', 'chats.from_id', 'users.id')
-        // ->join('imagenes', function ($join) {
-        //     $join->on('users.id', '=', 'imagenes.imageable_id')
-        //     ->where('imagenes.imageable_type','App\User');
-        // })
-        // ->select('chats.*','users.nombres', 'imagenes.url')
-        // ->orderBy('chats.fecha')
-        // ->get();
 
     }
+
 
     //obtiene los mensajes recibidos para mostrar en las notificaciones de mensajes del usuario
     public function messages(Request $request)
@@ -85,26 +76,13 @@ class ChatController extends Controller
             //throw $th;
         }
 
-
-        // $chats = DB::table('chats')
-        // ->where('chats.to_id', $user)
-        // ->join('users', 'chats.from_id', '=', 'users.id')
-        // ->join('imagenes', function ($join) {
-        //     $join->on('users.id', '=', 'imagenes.imageable_id')
-        //     ->where('imagenes.imageable_type','App\User');
-        // })
-        // ->whereNull('chats.read_at')
-        // ->select('chats.*','users.nombres', 'users.apellidos', 'imagenes.url', 'users.id as user')
-        // ->orderBy('chats.fecha', 'DESC')
-        // ->get();
-
-
     }
+
+
 
     public function store(Request $request)
     {
 
-        // if (!$request->ajax()) return redirect('/cuenta');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -143,16 +121,6 @@ class ChatController extends Controller
         } catch (\Exception $e) {
             //throw $th;
         }
-
-
-        // $data = $this->index($request);
-
-
-        // foreach ($data['chats'] as $key => $value) {
-        //    if ($value->id == $chat->id) {
-        //         $data['chats'] = $data['chats'][$key];
-        //    }
-        // }
 
     }
 

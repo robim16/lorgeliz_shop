@@ -29,7 +29,8 @@ class AdminDevolucionMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.adminDevolucionMail')
+        return $this->subject("nueva devolución")
+        ->markdown('emails.adminDevolucionMail')
         ->with('details', $this->details);
     }
 }

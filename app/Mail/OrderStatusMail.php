@@ -30,7 +30,8 @@ class OrderStatusMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.orderStatusMail')
+        return $this->subject("Novedades de tu pedido en lorgeliz shop")
+        ->markdown('emails.orderStatusMail')
         ->with('details', $this->details);
     }
 }

@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Carrito;
 use App\CarritoProducto;
 use App\Cliente;
-use App\ColorProducto;
 use App\Configuracion;
 use App\Events\UserCart;
-use App\Producto;
 use App\ProductoReferencia;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -37,33 +35,15 @@ class CarController extends Controller
 
         $cliente = auth()->user()->cliente;
        
-        // $productos = Producto::
-        // join('color_producto','productos.id', 'color_producto.producto_id')
-        // ->join('imagenes', 'color_producto.id', 'imagenes.imageable_id')
-        // ->join('colores', 'color_producto.color_id', 'colores.id') 
-        // ->join('producto_referencia', 'color_producto.id', 'producto_referencia.color_producto_id')
-        // ->join('tallas','producto_referencia.talla_id', 'tallas.id')
-        // ->join('carrito_producto', 'carrito_producto.producto_referencia_id','producto_referencia.id')
-        // ->join('carritos','carritos.id', 'carrito_producto.carrito_id')
-        // ->select('productos.id as codigo','productos.nombre', 'productos.precio_actual', 
-        // 'productos.descripcion_corta','color_producto.slug', 'carritos.total as total', 
-        // 'carrito_producto.cantidad', 'carritos.id as carrito', 'colores.nombre as color', 
-        // 'color_producto.id as cop','tallas.nombre as talla', 'producto_referencia.id as ref', 
-        // 'producto_referencia.stock', 'imagenes.url as imagen')
-        // ->where('carritos.estado', 1)
-        // ->where('carritos.cliente_id', $cliente->id)
-        // ->where('imagenes.imageable_type', 'App\ColorProducto')
-        // ->groupBy('producto_referencia.id')
-        // //->groupBy('color_producto.id')
-        // ->get();
+       
 
-        $productos = CarritoProducto::whereHas('carrito',
-        function (Builder $query) use ($cliente) {
-           $query->where('estado', 1)
-           ->where('cliente_id', $cliente->id);
-        })
-        ->with(['carrito', 'productoReferencia'])
-        ->get();
+        // $productos = CarritoProducto::whereHas('carrito',
+        // function (Builder $query) use ($cliente) {
+        //    $query->where('estado', 1)
+        //    ->where('cliente_id', $cliente->id);
+        // })
+        // ->with(['carrito', 'productoReferencia'])
+        // ->get();
 
         //return view('tienda.cart', compact('productos'));
         return view('tienda.cart');
@@ -77,27 +57,7 @@ class CarController extends Controller
 		}
 
         $cliente = Cliente::where('user_id',auth()->user()->id)->firstOrFail();
-        // $cliente = auth()->user()->cliente->id;
        
-        // $productos = Producto::
-        // join('color_producto','productos.id', 'color_producto.producto_id')
-        // ->join('imagenes', 'color_producto.id', 'imagenes.imageable_id')
-        // ->join('colores', 'color_producto.color_id', 'colores.id') 
-        // ->join('producto_referencia', 'color_producto.id', 'producto_referencia.color_producto_id')
-        // ->join('tallas','producto_referencia.talla_id', 'tallas.id')
-        // ->join('carrito_producto', 'carrito_producto.producto_referencia_id','producto_referencia.id')
-        // ->join('carritos','carritos.id', 'carrito_producto.carrito_id')
-        // ->select('productos.id as codigo','productos.nombre', 'productos.precio_actual',
-        // 'productos.descripcion_corta','color_producto.slug', 'carritos.total as total',
-        // 'carrito_producto.cantidad', 'carritos.id as carrito', 'colores.nombre as color',
-        // 'color_producto.id as cop','tallas.nombre as talla', 'producto_referencia.id as ref',
-        // 'producto_referencia.stock', 'imagenes.url as imagen')
-        // ->where('carritos.estado', 1)
-        // ->where('carritos.cliente_id', $cliente->id)
-        // ->where('imagenes.imageable_type', 'App\ColorProducto')
-        // ->groupBy('producto_referencia.id')
-        // //->groupBy('color_producto.id')
-        // ->get();
 
         try {
            
@@ -107,8 +67,9 @@ class CarController extends Controller
                     ->cliente($cliente->id);
                 })
                 ->with(['carrito', 'productoReferencia.colorProducto.color', 
-                'productoReferencia.colorProducto.producto',
-                'productoReferencia.talla', 'productoReferencia.colorProducto.imagenes'])
+                    'productoReferencia.colorProducto.producto',
+                    'productoReferencia.talla', 'productoReferencia.colorProducto.imagenes'
+                ])
                 ->get();
     
             return ['productos' => $productos];
@@ -119,11 +80,11 @@ class CarController extends Controller
                 $cliente->id.'Error: '.json_encode($e));
         }
     }
+
     
     public function buscarCarrito(Request $request)
     {
         //obtener el carrito del cliente autenticado antes de agregar nuevo producto
-        // if (!$request->ajax()) return redirect('/');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -144,10 +105,10 @@ class CarController extends Controller
         
     }
 
+
     public function store(Request $request)
     {
         
-        // if (!$request->ajax()) return redirect('/');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -187,6 +148,7 @@ class CarController extends Controller
     
                 $carrito->save();
     
+
                 $carritoProducto = new CarritoProducto();
                 // $carritoProducto->producto_referencia_id = $producto[0]->referencia;
                 $carritoProducto->producto_referencia_id = $producto[0]->id;
@@ -217,6 +179,7 @@ class CarController extends Controller
         }
 
     }
+
 
     //función que se ejecuta al agregar un producto a un carrito existente
     public function update(Request $request)
@@ -303,7 +266,6 @@ class CarController extends Controller
 
     public function destroy(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/cart');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -342,10 +304,10 @@ class CarController extends Controller
         }
     }
 
+
     public function updateProduct(Request $request)
     { 
         // se ejecuta al modificar la cantidad de producto en la página del carrito
-        // if (!$request->ajax()) return redirect('/')
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		};
@@ -457,7 +419,7 @@ class CarController extends Controller
     //public function userCart(Request $request)
     public function userCart(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/');
+
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -465,13 +427,6 @@ class CarController extends Controller
         try {
 
             if (auth()->user()) { // se obtiene el número de productos del carrito del usuario autenticado
-    
-                // $productos = DB::table('carrito_producto')
-                // ->join('carritos','carritos.id', '=', 'carrito_producto.carrito_id')
-                // ->where('carritos.cliente_id', auth()->user()->cliente->id)
-                // ->where('carritos.estado', 1)
-                // ->select( DB::raw('SUM(carrito_producto.cantidad) as cantidad'))
-                // ->get();
     
                 $productos = CarritoProducto::whereHas('carrito', function (Builder $query){
                 //     $query->where('estado', 1)
@@ -504,9 +459,9 @@ class CarController extends Controller
 
     }
 
+    
     public function remove(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/cart');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}

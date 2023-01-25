@@ -12,6 +12,7 @@ use App\Mail\ClientePrivateMail;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class ClienteController extends Controller
@@ -63,13 +64,6 @@ class ClienteController extends Controller
         // ->select('clientes.id','users.*')
         // ->firstOrFail();
 
-        // $pedidos = Pedido::join('ventas','pedidos.venta_id','ventas.id')
-        // ->join('clientes','ventas.cliente_id','clientes.id')
-        // ->join('facturas','ventas.factura_id', 'facturas.id')
-        // ->where('clientes.id',$id)
-        // ->where('ventas.estado', '!=', '3')
-        // ->select('pedidos.id','pedidos.fecha', 'ventas.valor', 'facturas.prefijo','facturas.consecutivo')
-        // ->paginate(10);
 
         $pedidos = Venta::with(['pedido', 'factura', 'cliente.user.imagene'])
             ->where('cliente_id', $id)
@@ -114,6 +108,7 @@ class ClienteController extends Controller
         $cliente = Cliente::with('user')->where('id', $data['cliente_id'])
             ->first();
 
+        
         try {
             
            
@@ -122,6 +117,7 @@ class ClienteController extends Controller
 
             SendClientePrivateMail::dispatch($data['mensaje'], $cliente->user);
 
+           
             $success = true;
 
             
@@ -129,7 +125,9 @@ class ClienteController extends Controller
 
             return response()->json(['response' => $success]);
 
-        } catch (\Exception $exception) {
+        } catch (\Exception $e) {
+
+            Log::debug('Error enviando email del admin al cliente.Error: '.$e);
             $success = false;
 
             return response()->json(['response' => $success]);
@@ -149,11 +147,7 @@ class ClienteController extends Controller
                 'users.municipio','users.direccion','users.telefono','users.email')
                 ->paginate(10);
                 
-    
-            // $count = 0;
-            // foreach ($clientes as $cliente) {
-            //     $count = $count + 1;
-            // }
+
 
             $count = $clientes->count();
     

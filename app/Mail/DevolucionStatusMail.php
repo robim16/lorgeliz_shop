@@ -30,7 +30,8 @@ class DevolucionStatusMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.devolucionStatusMail')
+        return $this->subject("Novedades de tu devolución en lorgeliz shop")
+        ->markdown('emails.devolucionStatusMail')
         ->with('details', $this->details);
     }
 }
