@@ -440,17 +440,31 @@
                     <div class="card-body">
                         <div class="row">
                             @foreach ($producto->colors as $product)
-                                @foreach (\App\Imagene::where('imageable_type', 'App\ColorProducto')
-                                ->where('imageable_id', $product->pivot->id)->pluck('url', 'id')->take(1) as $id => $imagen)
-                                <div id="idimagen-{{$id}}" class="col-sm-2">
-                                    <a href="{{ url('storage/' . $imagen)}}" data-toggle="lightbox" data-title="Id:{{ $id }}"
+
+                                {{-- @foreach (\App\Imagene::where('imageable_type', 'App\ColorProducto')
+                                    ->where('imageable_id', $product->pivot->id)->pluck('url', 'id')->take(1) as $id => $imagen)
+                                    <div id="idimagen-{{$id}}" class="col-sm-2">
+                                        <a href="{{ url('storage/' . $imagen)}}" data-toggle="lightbox" data-title="Id:{{ $id }}"
+                                            data-gallery="gallery">
+                                            <img style="width:150px; height:150px;" src="{{ url('storage/' . $imagen) }}"
+                                            class="img-fluid mb-2" />
+                                        </a>
+                                        <br>
+                                    </div>
+                                @endforeach --}}
+
+                                @php
+                                    $imagen = $product->pivot->imagenes[0];
+                                @endphp
+
+                                <div id="idimagen-{{$imagen->id}}" class="col-sm-2">
+                                    <a href="{{ url('storage/' . $imagen->url)}}" data-toggle="lightbox" data-title="Id:{{ $imagen->id }}"
                                         data-gallery="gallery">
-                                        <img style="width:150px; height:150px;" src="{{ url('storage/' . $imagen) }}"
-                                        class="img-fluid mb-2" />
+                                        <img src="{{ url('storage/' . $imagen->url) }}" 
+                                            alt="" style="width:150px; height:150px;" class="img-fluid mb-2">
                                     </a>
                                     <br>
                                 </div>
-                                @endforeach
                             @endforeach
 
                         </div>
@@ -471,15 +485,15 @@
                                     <label>Estado</label>
                                     <select name="estado" id="estado" class="form-control " style="width: 100%;" disabled>
                                         @foreach($estados as $estado)
-                                        <option @if ($producto->estado == $estado)
-                                            selected
-                                            @endif value="{{$estado}}">
-                                            @if ($estado == 1)
-                                            {{ "nuevo" }} 
-                                            @else
-                                            {{"En oferta"}}
-                                            @endif
-                                        </option>
+                                            <option @if ($producto->estado == $estado)
+                                                    selected
+                                                @endif value="{{$estado}}">
+                                                @if ($estado == 1)
+                                                    {{ "nuevo" }} 
+                                                @else
+                                                    {{"En oferta"}}
+                                                @endif
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>

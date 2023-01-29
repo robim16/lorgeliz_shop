@@ -86,6 +86,7 @@ class OrdersController extends Controller
 
         try {
             
+            
             $pedido = Pedido::where('id', $request->pedido_id)->firstOrFail();
             $pedido->estado = $request->estado;
     
@@ -165,10 +166,6 @@ class OrdersController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
     
-            // $count = 0;
-            // foreach ($pedidos as $pedido) {
-            //     $count = $count + 1;
-            // }
 
             $count = $pedidos->count();
     

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ColorProducto extends Pivot
 {
-    //protected $with = ['producto'];
+    // protected $with = ['imagenes'];
 
     protected $table = 'color_producto';
     protected $fillable = [

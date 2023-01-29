@@ -87,10 +87,6 @@ class InformesController extends Controller
                 ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
                 ->get();
     
-            // $count = 0;
-            // foreach ($ventas as $venta) {
-            //     $count += 1;
-            // }
 
             $count = $ventas->count();
     
@@ -454,10 +450,7 @@ class InformesController extends Controller
             ->groupBy('cliente_id')
             ->get();
     
-            // $count = 0;
-            // foreach ($saldos_pendientes as $saldos_pendiente) {
-            //     $count += 1;
-            // }
+          
             $count = $saldos_pendientes->count();
     
             $pdf = \PDF::loadView('admin.pdf.informesaldos',['saldos_pendientes'=>$saldos_pendientes,

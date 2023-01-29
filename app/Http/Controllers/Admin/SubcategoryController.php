@@ -85,7 +85,7 @@ class SubcategoryController extends Controller
      */
     public function edit($slug)
     {
-        $subcategoria= Subcategoria::where('slug',$slug)->firstOrFail();
+        $subcategoria = Subcategoria::where('slug',$slug)->firstOrFail();
         return view('admin.subcategorias.edit',compact('subcategoria'));
     }
 

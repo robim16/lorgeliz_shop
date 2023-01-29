@@ -70,7 +70,6 @@ class DevolucionController extends Controller
         
         $devoluciones = Devolucione:: with('venta')->get();
 
-       
 
         $count = $devoluciones->count();
 

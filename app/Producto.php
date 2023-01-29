@@ -35,7 +35,9 @@ class Producto extends Model
     //}
 
     public function colors() {
-        return $this->belongsToMany(Color::class)->withPivot('id');
+        return $this->belongsToMany(Color::class)
+            ->withPivot('id')
+            ->using(ColorProducto::class);
     }
 
    // public function imagenes (){

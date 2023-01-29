@@ -23,7 +23,7 @@
                             <div class="card-tools">
                                 <div class="input-group-append">
                                     {{-- <a class="btn btn-success" href="" v-on:click.prevent="imprimir({{ $users[0]->pedido}})" title="imprimir"><i class="fa fa-print"></i></a> --}}
-                                    <a class="btn btn-success" href="" v-on:click.prevent="imprimir({{ $productos[0]->venta->pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
+                                    <a class="btn btn-success" href="" @click.prevent="imprimir({{ $productos[0]->venta->pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
                                 </div>
                             </div>
                         </div>
