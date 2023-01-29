@@ -42,19 +42,11 @@ class ClienteController extends Controller
             ->orWhere('users.direccion','like',"%$keyword%")
             ->orWhere('users.telefono','like',"%$keyword%")
             ->orWhere('users.email','like',"%$keyword%")
-            // join('users','clientes.user_id', '=', 'users.id')
-            // ->where('users.nombres','like',"%$keyword%")
-            // ->orWhere('users.apellidos','like',"%$keyword%")
-            // ->orWhere('users.identificacion','like',"%$keyword%")
-            // ->orWhere('users.direccion','like',"%$keyword%")
-            // ->orWhere('users.telefono','like',"%$keyword%")
-            // ->orWhere('users.email','like',"%$keyword%")
             // ->select('clientes.id','users.nombres', 'users.apellidos', 'users.identificacion',
             // 'users.direccion','users.telefono','users.email', 'users.departamento', 'users.municipio')
             ->paginate(5);
     
-            // return $clientes;
-    
+         
             return view('admin.clientes.index', compact('clientes'));
 
 
@@ -66,23 +58,9 @@ class ClienteController extends Controller
 
 
 
-     public function show($id)
+    public function show($id)
     {
-        // $cliente = User::with('imagene')
-        // ->join('clientes','users.id', 'clientes.user_id')
-        // ->where('clientes.id', $id)
-        // ->select('clientes.id','users.*')
-        // ->firstOrFail();
-
-        // $pedidos = Pedido::join('ventas','pedidos.venta_id','ventas.id')
-        // ->join('clientes','ventas.cliente_id','clientes.id')
-        // ->join('facturas','ventas.factura_id', 'facturas.id')
-        // ->where('clientes.id',$id)
-        // ->where('ventas.estado', '!=', '3')
-        // ->select('pedidos.id','pedidos.fecha', 'ventas.valor', 'facturas.prefijo','facturas.consecutivo')
-        // ->paginate(10);
-
-
+       
         try {
 
            
@@ -106,14 +84,6 @@ class ClienteController extends Controller
         } catch (\Exception $e) {
             Log::debug('Error mostrando el cliente.Error: '.json_encode($e));
         }
-
-
-        // $total = 0;
-
-        // foreach ($pedidos as $key => $value) {
-        //   $total = $total + $value->valor;
-        // }
-
         
 
         // return view('admin.clientes.show', compact('cliente','pedidos', 'total'));
@@ -129,10 +99,7 @@ class ClienteController extends Controller
         $data = [];
         parse_str($info, $data);
 
-        // $cliente = User::join('clientes', 'users.id', '=', 'clientes.user_id')
-        // ->where('clientes.id', $data['cliente_id'])
-        // ->select('users.*')
-        // ->first();
+      
 
         $cliente = Cliente::with('user')
         ->where('id', $data['cliente_id'])
@@ -158,6 +125,7 @@ class ClienteController extends Controller
     
     }
 
+    
     public function pdfListadoClientes()
     {
 
