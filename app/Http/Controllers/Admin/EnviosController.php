@@ -32,10 +32,8 @@ class EnviosController extends Controller
     public function create()
     {
         $clientes = Cliente::with('user')
-        ->whereHas('ventas')
-        // ->orderBy('nombres')
-        // ->orderBy('apellidos')
-        ->get();
+            ->whereHas('ventas')
+            ->get();
 
         return view('admin.envios.create', compact('clientes'));
     }
@@ -61,6 +59,7 @@ class EnviosController extends Controller
         }
     }
 
+    
     /**
      * Display the specified resource.
      *

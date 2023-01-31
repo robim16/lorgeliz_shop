@@ -36,7 +36,6 @@ class ChatController extends Controller
     //obtener chats en el index de chats
     public function chatsAjax(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/chats/admin');
 
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
@@ -45,18 +44,6 @@ class ChatController extends Controller
         $buscar = $request->buscar;
         
         $user = auth()->user()->id;
-
-        // $chats = DB::table('chats')
-        // ->whereNotIn('chats.from_id', [$user])//obtenemos los mensajes escritos por los clientes al admin
-        // ->join('users', 'chats.from_id', '=', 'users.id')
-        // ->join('imagenes', function ($join) {
-        //     $join->on('users.id', '=', 'imagenes.imageable_id')
-        //     ->where('imagenes.imageable_type','App\User');
-        // })
-        // ->select('chats.*','users.nombres', 'users.apellidos', 'imagenes.url', 'users.id as cliente')
-        // ->orderBy('chats.fecha', 'DESC')
-        // ->groupBy('chats.from_id')
-        // ->paginate(5);
 
         try {
 
@@ -106,7 +93,6 @@ class ChatController extends Controller
      */
     public function store(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/chats/admin');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -140,21 +126,10 @@ class ChatController extends Controller
         } catch (\Exception $e) {
             Log::debug('Error guardando el mensaje.Error: '.json_encode($e));
         }
-
-        // if ($request->admin == true) {
-
-
-            // $data = $this->show($request, $request->cliente);//obtenemos los mensajes intercambiados con el cliente
-
-            // foreach ($data['chats'] as $key => $value) {
-            //     if ($value->id == $chat->id) {
-            //        $data['chats'] = $data['chats'][$key];
-            //     }
-            // }
-
-        // }
        
     }
+
+
     /**
      * Display the specified resource.
      *
@@ -164,7 +139,6 @@ class ChatController extends Controller
     public function show(Request $request, $cliente)
     {
         //chats en el messenger
-        // if (!$request->ajax()) return redirect('/chats/admin');
 
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
@@ -195,41 +169,6 @@ class ChatController extends Controller
         } catch (\Exception $e) {
             Log::debug('Error obteniendo los chats en el messenger.Error: '.json_encode($e));
         }
-
-        // $mensajes = Chat::whereIn('from_id', [$user, $cliente])
-        // ->whereIn('to_id', [$user, $cliente])//contamos los mensajes intercambiados por el cliente y el admin
-        // ->count();
-
-
-        // if ($mensajes > 0) {//si existen mensajes
-
-        //     $chats = Chat::whereIn('chats.from_id', [$user, $cliente])
-        //     ->whereIn('chats.to_id', [$user, $cliente])//mensajes intercambiados por ambos
-        //     ->join('users', 'chats.from_id', 'users.id')
-        //     ->join('imagenes', function ($join) {
-        //         $join->on('users.id', '=', 'imagenes.imageable_id')
-        //         ->where('imagenes.imageable_type','App\User');
-        //     })
-        //     ->select('chats.*','users.nombres', 'imagenes.url')
-        //     ->orderBy('chats.fecha')
-        //     ->get();
-        // }
-
-        // else{
-
-        //     $chats = Chat::where('chats.from_id', $cliente)//buscamos los mensajes enviados o recibidos del cliente
-        //     ->orWhere('chats.to_id',$cliente)
-        //     ->join('users', 'chats.from_id', 'users.id')
-        //     ->join('imagenes', function ($join) {
-        //         $join->on('users.id', '=', 'imagenes.imageable_id')
-        //         ->where('imagenes.imageable_type','App\User');
-        //     })
-        //     ->select('chats.*','users.nombres', 'imagenes.url')
-        //     ->orderBy('chats.fecha')
-        //     ->get();
-        // }
-
-        // return ['chats'=> $chats, 'user' => $user];
        
     }
 
@@ -237,7 +176,6 @@ class ChatController extends Controller
     public function lastMessage(Request $request)
     {
         //obtener los mensajes que se muestran en las notificaciones de chats del admin
-        // if (!$request->ajax()) return redirect('/chats/admin');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -264,27 +202,11 @@ class ChatController extends Controller
             Log::debug('Error obteniendo las notificaciones de mensajes.Error: '.json_encode($e));
         }
 
-
-        // $chats = DB::table('chats')
-        // ->whereNotIn('chats.from_id', [$user])//mensajes enviados por los clientes
-        // ->whereNull('chats.read_at')//sin leer
-        // ->join('users', 'chats.from_id', '=', 'users.id')
-        // // ->join('clientes', 'users.id', 'clientes.user_id')
-        // ->join('imagenes', function ($join) {
-        //     $join->on('users.id', '=', 'imagenes.imageable_id')
-        //     ->where('imagenes.imageable_type','App\User');
-        // })
-        // ->select('chats.*','users.nombres', 'users.apellidos', 'imagenes.url', 'users.id as cliente')
-        // ->orderBy('chats.fecha', 'DESC')
-        // ->groupBy('users.id')
-        // ->get();
-        
     }
 
     
     public function readMessage(Request $request, $chat)
     {
-        // if (!$request->ajax()) return redirect('/chats/admin');
 
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');

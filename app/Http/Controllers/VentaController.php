@@ -50,41 +50,46 @@ class VentaController extends Controller
         $x_signature = $request->x_signature;
         //$signature = hash('sha256', $p_cust_id_cliente. '^' . $p_key . '^' . $this->x_ref_payco . '^' . $x_transaction_id . '^' . $this->x_amount . '^' .$x_currency_code);
        
-        $signature=hash('sha256',
-                       $p_cust_id_cliente.'^'
-                      .$p_key.'^'
-                      .$this->x_ref_payco.'^'
-                      .$x_transaction_id.'^'
-                      .$this->x_amount.'^'
-                      .$x_currency_code
-                    );
+        $signature = hash('sha256',
+            $p_cust_id_cliente.'^'
+            .$p_key.'^'
+            .$this->x_ref_payco.'^'
+            .$x_transaction_id.'^'
+            .$this->x_amount.'^'
+            .$x_currency_code
+        );
+
         //Validamos la firma
         if ($x_signature == $signature) {
-        //if($this->x_cod_response = $request->x_cod_response) {
-        /*Si la firma esta bien podemos verificar los estado de la transacción*/
-        //$this->x_cod_response = $request->x_cod_response;
-        switch ((int) $this->x_cod_response) {
-        case 1:
-        # code transacción aceptada
-            $this->store();
-        break;
-        case 2:
-        # code transacción rechazada
-        break;
-        case 3:
-        # code transacción pendiente
-            $this->store();
-        break;
-        case 4:
-        # code transacción fallida
-        break;
-        }
+            //if($this->x_cod_response = $request->x_cod_response) {
+            /*Si la firma esta bien podemos verificar los estado de la transacción*/
+            //$this->x_cod_response = $request->x_cod_response;
+            switch ((int) $this->x_cod_response) {
+            case 1:
+            # code transacción aceptada
+                $this->store($request);
+            break;
+            case 2:
+            # code transacción rechazada
+            break;
+            case 3:
+            # code transacción pendiente
+                $this->store($request);
+            break;
+            case 4:
+            # code transacción fallida
+            break;
+            }
+            
         } else {
-        die("Firma no valida");
+
+            die("Firma no valida");
         }
                 
     }
-//esta función es para probar la confirmación por el método post
+
+
+    //esta función es para probar la confirmación por el método post
     public function epaycoConfirm(Request $request)
     {
         $p_cust_id_cliente = '71480';
@@ -103,33 +108,38 @@ class VentaController extends Controller
         //if ($x_signature == $signature) {
         /*Si la firma esta bien podemos verificar los estado de la transacción*/
         if($this->x_cod_response = $request->x_cod_response){
-        //$this->x_cod_response = $request->x_cod_response;
-        switch ((int) $this->x_cod_response) {
-        case 1:
-        # code transacción aceptada
-        $this->store();
-        break;
-        case 2:
-        # code transacción rechazada
-        //echo "transacción rechazada";
-        break;
-        case 3:
-        # code transacción pendiente
-        //echo "transacción pendiente";
-        break;
-        case 4:
-        # code transacción fallida
-        //echo "transacción fallida";
-        break;
-        }
+            //$this->x_cod_response = $request->x_cod_response;
+            switch ((int) $this->x_cod_response) {
+            case 1:
+            # code transacción aceptada
+            $this->store($request);
+            break;
+            case 2:
+            # code transacción rechazada
+            //echo "transacción rechazada";
+            break;
+            case 3:
+            # code transacción pendiente
+            //echo "transacción pendiente";
+            break;
+            case 4:
+            # code transacción fallida
+            //echo "transacción fallida";
+            break;
+            }
+
         } else {
-        die("Firma no valida");
+            die("Firma no valida");
         }
     }
 
+
     public function store(Request $request)
     {
-        if(!$request->ajax()) return back();
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
+
 
         try {
             
@@ -208,9 +218,7 @@ class VentaController extends Controller
                     ]
                 ];
 
-                // foreach ($admin as $user) {
-                //     User::findOrFail($user->id)->notify(new NotificationAdmin($arrayData));
-                // }
+             
 
                 User::findOrFail($admin->id)->notify(new NotificationAdmin($arrayData));
 

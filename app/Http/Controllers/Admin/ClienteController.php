@@ -7,6 +7,7 @@ use App\Pedido;
 use App\User;
 use App\Venta;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendClientePrivateMail;
 use App\Mail\ClientePrivateMail;
 use Auth;
 use Illuminate\Http\Request;
@@ -94,35 +95,42 @@ class ClienteController extends Controller
 
     public function sendMessage()
     {
-        
+
         $info = \request('info');
+
         $data = [];
+
         parse_str($info, $data);
 
-      
+       
+        $cliente = Cliente::with('user')->where('id', $data['cliente_id'])
+            ->first();
 
-        $cliente = Cliente::with('user')
-        ->where('id', $data['cliente_id'])
-        ->first();
-
+        
         try {
             
-            // Mail::to($cliente->email)->send(new ClientePrivateMail($cliente->nombres, $data['mensaje']));
-            Mail::to($cliente->user->email)->send(new ClientePrivateMail($cliente->user->nombres, $data['mensaje']));
+           
+            // Mail::to($cliente->user->email)->send(new ClientePrivateMail($cliente->user->nombres, 
+            //     $data['mensaje']));
+
+            SendClientePrivateMail::dispatch($data['mensaje'], $cliente->user);
+
+           
             $success = true;
 
             
             // return new ClientePrivateMail($cliente->user->nombres, $data['mensaje']);
 
+            return response()->json(['response' => $success]);
 
         } catch (\Exception $e) {
 
-            Log::debug('Error enviando el mensaje al cliente.Error: '.json_encode($e));
+            Log::debug('Error enviando email del admin al cliente.Error: '.$e);
             $success = false;
+
+            return response()->json(['response' => $success]);
         }
 
-        return response()->json(['response' => $success]);
-    
     }
 
     
@@ -165,51 +173,6 @@ class ClienteController extends Controller
 
         $buscar = $request->buscar;
         $criterio = $request->criterio;
-
-        // $user = Auth::id();
-
-        // if ($buscar=='') {
-
-        //     $clientes = User::with('imagene')
-        //     ->join('clientes','users.id', 'clientes.user_id')
-        //     ->select('clientes.id as cliente','users.id','users.nombres', 'users.apellidos',
-        //     'users.telefono', 'users.email')
-        //     ->paginate(5);
-
-        //     return [
-        //         'pagination' => [
-        //             'total'        => $clientes->total(),
-        //             'current_page' => $clientes->currentPage(),
-        //             'per_page'     => $clientes->perPage(),
-        //             'last_page'    => $clientes->lastPage(),
-        //             'from'         => $clientes->firstItem(),
-        //             'to'           => $clientes->lastItem(),
-        //         ],
-        //         'clientes' => $clientes
-        //     ];
-
-        // } else {
-
-        //     $clientes = User::with('imagene')
-        //     ->join('clientes','users.id', 'clientes.user_id')
-        //     ->select('clientes.id as cliente','users.id','users.nombres', 'users.apellidos',
-        //     'users.telefono', 'users.email')
-        //     ->where('users.'.$criterio, 'like', '%'. $buscar . '%')
-        //     ->paginate(5);
-
-        //     return [
-        //         'pagination' => [
-        //             'total'        => $clientes->total(),
-        //             'current_page' => $clientes->currentPage(),
-        //             'per_page'     => $clientes->perPage(),
-        //             'last_page'    => $clientes->lastPage(),
-        //             'from'         => $clientes->firstItem(),
-        //             'to'           => $clientes->lastItem(),
-        //         ],
-        //         'clientes' => $clientes
-        //     ];
-            
-        // }
         
 
         $clientes = User::when($buscar, function ($query) use ($buscar, $criterio) {
@@ -230,6 +193,5 @@ class ClienteController extends Controller
             'clientes' => $clientes
         ];
 
-        // return ['clientes' => $clientes];
     }
 }

@@ -146,16 +146,18 @@ class ColorController extends Controller
         }
     }
 
+    
     //implementada en index de Admin/Api/ColorController
     public function getColores(Request $request, $id)
     {
-        if (!$request->ajax()) return redirect('/');
 
-        //$id  = $request->producto;
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
         
         $colores = Color::join('color_producto', 'colores.id', 'color_producto.color_id')
-        ->where('color_producto.producto_id', $id)
-        ->get();
+            ->where('color_producto.producto_id', $id)
+            ->get();
 
         return ['colores' => $colores];
         
