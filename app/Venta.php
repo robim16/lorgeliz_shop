@@ -14,11 +14,13 @@ class Venta extends Model
     // protected $fillable = ['fecha', 'factura', 'valor', 'cliente_id'];
     protected $fillable = ['fecha', 'factura', 'subtotal', 'envio', 'valor', 'cliente_id'];
     
-    public function pedido (){
+    public function pedido()
+    {
         return $this->hasOne(Pedido::class);
     }
 
-    public function devoluciones (){
+    public function devoluciones()
+    {
         return $this->hasMany(Devolucione::class);
     }
 
@@ -26,28 +28,33 @@ class Venta extends Model
         //return $this->belongsToMany(Producto::class);
     //}
 
-    public function productoReferencias (){
+    public function productoReferencias()
+    {
         return $this->belongsToMany(ProductoReferencia::class);
     }
 
-    public function cliente (){
+    public function cliente()
+    {
         return $this->belongsTo(Cliente::class);
     }
 
-    public function factura (){
+    public function factura()
+    {
         return $this->belongsTo(Factura::class);
     }
 
-    public function pagos (){
+    public function pagos()
+    {
         return $this->hasMany(Pago::class);
     }
 
-    public function productoVentas(){
+    public function productoVentas()
+    {
         return $this->hasMany(ProductoVenta::class, 'venta_id');
     }
 
-
-    public function envio(){
+    public function envio()
+    {
         return $this->hasOne(Envio::class, 'venta_id');
     }
 
@@ -69,6 +76,7 @@ class Venta extends Model
                     // ->where('estado', 1)
     
                 $cart->estado = '0';
+                
                 $cart->save();
     
                 $carritos = CarritoProducto::where('carrito_id', $cart->id)
