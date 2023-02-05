@@ -25,24 +25,12 @@ class ChatController extends Controller
     //retorna en el messenger los mensajes recibidos por el usuario
     public function index(Request $request)
     {
-        // if (!$request->ajax()) return back();
 
         if ( ! request()->ajax()) {
             abort(401, 'Acceso denegado');
         }
 
         $user = auth()->user()->id;
-
-        // $chats = Chat::where('chats.from_id', $user)
-        // ->orWhere('chats.to_id',$user)
-        // ->join('users', 'chats.from_id', 'users.id')
-        // ->join('imagenes', function ($join) {
-        //     $join->on('users.id', '=', 'imagenes.imageable_id')
-        //     ->where('imagenes.imageable_type','App\User');
-        // })
-        // ->select('chats.*','users.nombres', 'imagenes.url')
-        // ->orderBy('chats.fecha')
-        // ->get();
 
         try {
             
@@ -63,7 +51,6 @@ class ChatController extends Controller
     //obtiene los mensajes recibidos para mostrar en las notificaciones de mensajes del usuario
     public function messages(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/cuenta');
 
         if ( ! request()->ajax()) {
             abort(401, 'Acceso denegado');
@@ -71,18 +58,7 @@ class ChatController extends Controller
 
         $user = auth()->user()->id;
 
-        // $chats = DB::table('chats')
-        // ->where('chats.to_id', $user)
-        // ->join('users', 'chats.from_id', '=', 'users.id')
-        // ->join('imagenes', function ($join) {
-        //     $join->on('users.id', '=', 'imagenes.imageable_id')
-        //     ->where('imagenes.imageable_type','App\User');
-        // })
-        // ->whereNull('chats.read_at')
-        // ->select('chats.*','users.nombres', 'users.apellidos', 'imagenes.url', 'users.id as user')
-        // ->orderBy('chats.fecha', 'DESC')
-        // ->get();
-
+        
         try {
             
             $chats = Chat::with('user.imagene')
@@ -99,9 +75,10 @@ class ChatController extends Controller
 
     }
 
+
+
     public function store(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/cuenta');
 
         if ( ! request()->ajax()) {
             abort(401, 'Acceso denegado');
@@ -141,20 +118,13 @@ class ChatController extends Controller
             Log::debug('Error guardando el mensaje del cliente.Error: '.json_encode($e));
         }
 
-        // $data = $this->index($request);
-
-
-        // foreach ($data['chats'] as $key => $value) {
-        //    if ($value->id == $chat->id) {
-        //         $data['chats'] = $data['chats'][$key];
-        //    }
-        // }
 
     }
 
+
     public function read_at(Request $request, $chat)
     {
-        // if (!$request->ajax()) return back();
+
         if ( ! request()->ajax()) {
             abort(401, 'Acceso denegado');
         }

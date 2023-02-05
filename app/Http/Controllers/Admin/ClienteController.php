@@ -85,9 +85,7 @@ class ClienteController extends Controller
         } catch (\Exception $e) {
             Log::debug('Error mostrando el cliente.Error: '.json_encode($e));
         }
-        
-
-        // return view('admin.clientes.show', compact('cliente','pedidos', 'total'));
+    
 
     }
 
@@ -144,15 +142,11 @@ class ClienteController extends Controller
                 'users.municipio','users.direccion','users.telefono','users.email')
                 ->paginate(10);
     
-            // $count = 0;
-            // foreach ($clientes as $cliente) {
-            //     $count = $count + 1;
-            // }
 
             $count = $clientes->count();
     
             $pdf = \PDF::loadView('admin.pdf.listadoclientes',['clientes'=>$clientes, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
+                ->setPaper('a4', 'landscape');
             
             return $pdf->download('listadoclientes.pdf');
 
@@ -162,6 +156,7 @@ class ClienteController extends Controller
         }
 
     }
+    
 
     //en desuso, se implemento en /api/clienteController
     public function clientesChat(Request $request)

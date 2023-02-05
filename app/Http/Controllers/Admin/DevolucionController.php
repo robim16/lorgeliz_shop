@@ -39,8 +39,8 @@ class DevolucionController extends Controller
         try {
           
             $devoluciones = Devolucione::with('venta.cliente.user')
-            ->orderBy('devoluciones.created_at','DESC')
-            ->paginate(5);
+                ->orderBy('devoluciones.created_at','DESC')
+                ->paginate(5);
     
             $estados = $this->estados_devolucion();
           
