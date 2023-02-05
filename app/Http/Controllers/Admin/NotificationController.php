@@ -20,22 +20,9 @@ class NotificationController extends Controller
     //notificaciones del admin
     public function index(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/');
-
-
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
-        
-        // $unreadNotifications = Auth::user()->unreadNotifications;
-        
-        // $fechaActual = date('Y-m-d');
-
-        //foreach ($unreadNotifications as $notification) {
-            //if ($fechaActual != $notification->created_at->toDateString()) {
-            //$notification->markAsRead();
-            //}
-        //}
 
         return Auth::user()->unreadNotifications;
     }

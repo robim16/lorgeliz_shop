@@ -76,16 +76,12 @@ class VentaController extends Controller
                 ->firstOrFail();
 
     
-           // $pagos = $venta->pagos()->select('*', DB::raw('SUM(monto) as total'))
-            //     ->orderBy('pagos.fecha', 'DESC')
-            //     ->paginate(5);
 
             $pagos = $venta->pagos()
                 ->orderBy('pagos.fecha', 'DESC')
                 ->paginate(5);
 
             
-            // $total_pagos = $pagos()->sum('monto');
     
             $devoluciones = $venta->devoluciones()->paginate(5);
     
@@ -257,29 +253,6 @@ class VentaController extends Controller
     
     public function facturaVentaAdmin(Request $request, $id)
     {
-
-        // $productos = Producto::join('color_producto','productos.id', '=', 'color_producto.producto_id')
-        // ->join('colores', 'color_producto.color_id', '=', 'colores.id') 
-        // ->join('producto_referencia', 'color_producto.id', '=', 'producto_referencia.color_producto_id')
-        // ->join('tallas','producto_referencia.talla_id', '=', 'tallas.id')
-        // ->join('producto_venta','producto_referencia.id', '=', 'producto_venta.producto_referencia_id')
-        // ->join('ventas','ventas.id', '=', 'producto_venta.venta_id')
-        // ->select('productos.*', 'producto_venta.cantidad', 'colores.nombre as color', 'tallas.nombre as talla',
-        // 'producto_referencia.id as referencia','color_producto.id as cop', 'color_producto.slug as slug', 'ventas.valor') 
-        // ->where('ventas.id', '=', $id)
-        // ->get();
-        
-        // $users = Venta::join('clientes','ventas.cliente_id', '=', 'clientes.id')
-        // ->join('users','clientes.user_id', '=', 'users.id')
-        // ->join('facturas', 'ventas.factura_id', '=', 'facturas.id')
-        // ->select('users.nombres', 'users.identificacion','users.direccion','users.departamento',
-        // 'users.municipio','users.telefono','users.email',
-        // 'ventas.id as venta', 'ventas.fecha','ventas.saldo', 'facturas.prefijo', 'facturas.consecutivo')
-        // ->where('ventas.id', '=', $id)
-        // ->get();
-
-        // $pdf = \PDF::loadView('admin.pdf.venta',['productos'=>$productos,'users'=>$users]);
-        // return $pdf->download('factura-'.$users[0]->consecutivo.'.pdf');
 
         try {
 

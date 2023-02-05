@@ -12,7 +12,7 @@ class StockController extends Controller
 {
     public function verify(Request $request)
     {
-        
+        //requiere passport
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}

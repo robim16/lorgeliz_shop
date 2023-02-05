@@ -302,8 +302,7 @@ class CategoryController extends Controller
 
     public function getProductsByKeyword(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/');
-
+    
         try {
             
            

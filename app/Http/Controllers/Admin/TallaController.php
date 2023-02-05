@@ -24,11 +24,14 @@ class TallaController extends Controller
     }
 
 
+    //implementada en admin/api/tallaController. En desuso
     public function getTalla(Request $request, $id)
-    { //implementada en admin/api/tallaController. En desuso
-        if (!$request->ajax()) return redirect('/');
+    { 
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
-        //$id  = $request->producto;
+      
         $tipo = Producto::where('id', $id)->firstOrFail(); 
 
         $tallas = Talla::join('talla_tipo', 'tallas.id', 'talla_tipo.talla_id')
@@ -36,19 +39,17 @@ class TallaController extends Controller
         ->get();
 
         return ['tallas' => $tallas];
-        
-        //$response = ['data' => $tallas];
-        
-        //return response()->json($response); //obtener tallas al actualizar stock en el modal
 
     }
 
 
-    public function tallasTipoId(Request $request)
     //implementada en admin/api/tallaController. En desuso
     //obtener las tallas de un tipo de producto para mostrar en el select las que ya han sido seleccionadas, en la vista index de tipo de producto
+    public function tallasTipoId(Request $request)
     {   
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $id  = $request->id;
 
