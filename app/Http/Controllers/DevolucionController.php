@@ -171,8 +171,8 @@ class DevolucionController extends Controller
         }
 
         return Devolucione::where('venta_id',$request->venta)
-        ->where('producto_referencia_id',$request->producto)
-        ->first();
+            ->where('producto_referencia_id',$request->producto)
+            ->first();
     }
     
 }
