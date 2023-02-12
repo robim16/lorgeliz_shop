@@ -248,7 +248,8 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
         Route::get('/listado', 'Admin\ClienteController@pdfListadoClientes')->name('cliente.listado');
         // api Route::get('/chat', 'Admin\ClienteController@clientesChat')->name('cliente.chat');
         Route::post('/send_message', 'Admin\ClienteController@sendMessage')->name('cliente.message');
-        Route::get('/{id}', 'Admin\ClienteController@show')->name('cliente.show');
+        // Route::get('/{id}', 'Admin\ClienteController@show')->name('cliente.show');
+        Route::get('/{cliente}', 'Admin\ClienteController@show')->name('cliente.show');
     });
 
     //Route::group(['prefix' => '/categorias'], function () {

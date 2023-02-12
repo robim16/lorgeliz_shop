@@ -3,17 +3,17 @@
 
 @section('titulo', 'Ver Producto')
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{route('product.index')}}">Productos</a></li>
-<li class="breadcrumb-item active">@yield('titulo')</li>
+    <li class="breadcrumb-item"><a href="{{route('product.index')}}">Productos</a></li>
+    <li class="breadcrumb-item active">@yield('titulo')</li>
 @endsection
 
 
 @section('estilos')
-<!-- Select2 -->
-<link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/css/select2.min.css') }}">
-<link rel="stylesheet" href="{{ asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
-<!-- Ekko Lightbox -->
-<link rel="stylesheet" href="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.css') }}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <!-- Ekko Lightbox -->
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/ekko-lightbox/ekko-lightbox.css') }}">
 @endsection
 
 @section('content')
@@ -440,17 +440,31 @@
                     <div class="card-body">
                         <div class="row">
                             @foreach ($producto->colors as $product)
-                                @foreach (\App\Imagene::where('imageable_type', 'App\ColorProducto')
-                                ->where('imageable_id', $product->pivot->id)->pluck('url', 'id')->take(1) as $id => $imagen)
-                                <div id="idimagen-{{$id}}" class="col-sm-2">
-                                    <a href="{{ url('storage/' . $imagen)}}" data-toggle="lightbox" data-title="Id:{{ $id }}"
+
+                                {{-- @foreach (\App\Imagene::where('imageable_type', 'App\ColorProducto')
+                                    ->where('imageable_id', $product->pivot->id)->pluck('url', 'id')->take(1) as $id => $imagen)
+                                    <div id="idimagen-{{$id}}" class="col-sm-2">
+                                        <a href="{{ url('storage/' . $imagen)}}" data-toggle="lightbox" data-title="Id:{{ $id }}"
+                                            data-gallery="gallery">
+                                            <img style="width:150px; height:150px;" src="{{ url('storage/' . $imagen) }}"
+                                            class="img-fluid mb-2" />
+                                        </a>
+                                        <br>
+                                    </div>
+                                @endforeach --}}
+
+                                @php
+                                    $imagen = $product->pivot->imagenes[0];
+                                @endphp
+
+                                <div id="idimagen-{{$imagen->id}}" class="col-sm-2">
+                                    <a href="{{ url('storage/' . $imagen->url)}}" data-toggle="lightbox" data-title="Id:{{ $imagen->id }}"
                                         data-gallery="gallery">
-                                        <img style="width:150px; height:150px;" src="{{ url('storage/' . $imagen) }}"
-                                        class="img-fluid mb-2" />
+                                        <img src="{{ url('storage/' . $imagen->url) }}" 
+                                            alt="" style="width:150px; height:150px;" class="img-fluid mb-2">
                                     </a>
                                     <br>
                                 </div>
-                                @endforeach
                             @endforeach
 
                         </div>
@@ -471,15 +485,15 @@
                                     <label>Estado</label>
                                     <select name="estado" id="estado" class="form-control " style="width: 100%;" disabled>
                                         @foreach($estados as $estado)
-                                        <option @if ($producto->estado == $estado)
-                                            selected
-                                            @endif value="{{$estado}}">
-                                            @if ($estado == 1)
-                                            {{ "nuevo" }} 
-                                            @else
-                                            {{"En oferta"}}
-                                            @endif
-                                        </option>
+                                            <option @if ($producto->estado == $estado)
+                                                    selected
+                                                @endif value="{{$estado}}">
+                                                @if ($estado == 1)
+                                                    {{ "nuevo" }} 
+                                                @else
+                                                    {{"En oferta"}}
+                                                @endif
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
