@@ -19,11 +19,8 @@ class NotificationController extends Controller
 
     public function index()
     {
-        $unreadNotifications = Auth::user()->cliente->unreadNotifications;
 
-        //$orderNotifications = $unreadNotifications->filter(function ($value, $key){
-            //return $value->type == 'App\Notifications\NotificationClient';
-        //});
+        $unreadNotifications = Auth::user()->cliente->unreadNotifications;
         
         return $unreadNotifications;
         
@@ -32,7 +29,7 @@ class NotificationController extends Controller
 
     public function setClientRead(Request $request, $id)
     {
-        // if (!$request->ajax()) return redirect('/');
+
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}

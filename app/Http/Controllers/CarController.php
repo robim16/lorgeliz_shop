@@ -8,7 +8,6 @@ use App\Cliente;
 use App\ColorProducto;
 use App\Configuracion;
 use App\Events\UserCart;
-use App\Producto;
 use App\ProductoReferencia;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -432,13 +431,7 @@ class CarController extends Controller
         try {
 
             if (auth()->user()) { // se obtiene el número de productos del carrito del usuario autenticado
-    
-                // $productos = DB::table('carrito_producto')
-                // ->join('carritos','carritos.id', '=', 'carrito_producto.carrito_id')
-                // ->where('carritos.cliente_id', auth()->user()->cliente->id)
-                // ->where('carritos.estado', 1)
-                // ->select( DB::raw('SUM(carrito_producto.cantidad) as cantidad'))
-                // ->get();
+
     
                 $productos = CarritoProducto::whereHas('carrito', function (Builder $query){
                 //     $query->where('estado', 1)

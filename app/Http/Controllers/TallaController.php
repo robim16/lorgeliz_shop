@@ -10,7 +10,6 @@ class TallaController extends Controller
     public function getProductoTallas(Request $request, $id)
     {
         //en desuso, se utiliza tallaController del directorio api
-        // if (!$request->ajax()) return redirect('/');
         if ( ! request()->ajax()) {
             abort(401, 'Acceso denegado');
         };

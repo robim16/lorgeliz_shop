@@ -248,7 +248,6 @@ class InformesController extends Controller
             //throw $th;
         }
 
-
     }
 
 
@@ -299,7 +298,6 @@ class InformesController extends Controller
             //throw $th;
         }
 
-
     }
 
 
@@ -329,7 +327,6 @@ class InformesController extends Controller
         } catch (\Exception $e) {
             //throw $th;
         }
-
 
     }
 

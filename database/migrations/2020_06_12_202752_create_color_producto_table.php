@@ -23,6 +23,9 @@ class CreateColorProductoTable extends Migration
             $table->unsignedInteger('producto_id');
             $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');
             //$table->timestamps();
+
+            $table->index('slug');
+            $table->index('activo');
         });
     }
 

@@ -64,8 +64,8 @@ class UserController extends Controller
     public function show($slug)
     {
         $user = User::where('slug', $slug)
-        ->where('id', auth()->user()->id)
-        ->first();
+            ->where('id', auth()->user()->id)
+            ->first();
         
         return view('user.show', compact('user'));
     }
@@ -121,23 +121,6 @@ class UserController extends Controller
         } catch (\Exception $e) {
             Log::debug('Error editando el usuario'.'Error:'.' '.json_encode($e));
         }
-
-        //if ($request->hasFile('imagen')) {
-
-            //$imagen = $request->file('imagen');
-
-            //$nombre = time().'_'.$imagen->getClientOriginalName();
-
-            //$path = Storage::disk('public')->putFileAs("imagenes/users/" . $user->id, $imagen, $nombre);
-           
-        //}
-
-        //$img = new Imagene();
-        //$img->url = $path;
-        //$img->imageable_type = 'App\User';
-        //$img->imageable_id = $user->id;
-
-        //$img->save();
 
     }
 
