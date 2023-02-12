@@ -23,7 +23,7 @@
                             <div class="card-tools">
                                 <div class="input-group-append">
                                     {{-- <a class="btn btn-success" href="" v-on:click.prevent="imprimir({{ $users[0]->pedido}})" title="imprimir"><i class="fa fa-print"></i></a> --}}
-                                    <a class="btn btn-success" href="" v-on:click.prevent="imprimir({{ $productos[0]->venta->pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
+                                    <a class="btn btn-success" href="" @click.prevent="imprimir({{ $productos[0]->venta->pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -85,8 +85,11 @@
                                             @endif
 
                                         </td>
-                                        <td><a href="{{ route('cliente.show', $productos[0]->venta->cliente->id)}}"
-                                            title="ver cliente">{{$productos[0]->venta->cliente->user->nombres }} {{ $productos[0]->venta->cliente->user->apellidos }}</a></td>
+                                        <td>
+                                            <a href="{{ route('cliente.show', $productos[0]->venta->cliente->id)}}"
+                                            title="ver cliente">{{$productos[0]->venta->cliente->user->nombres }} 
+                                            {{ $productos[0]->venta->cliente->user->apellidos }}</a>
+                                        </td>
                                         <td>{{ date('d/m/Y h:i:s A', strtotime($productos[0]->venta->pedido->fecha)) }}</td>
                                         <td>{{$productos[0]->venta->cliente->user->departamento }}</td>
                                         <td>{{ $productos[0]->venta->cliente->user->municipio }}</td>

@@ -92,13 +92,8 @@ class PaymentController extends Controller
         try {
             
             $pagos = Pago::orderBy('pagos.fecha')
-            ->get();
+                ->get();
     
-            // $count = 0;
-            // foreach ($pagos as $pago) {
-            //     // $count = $count + 1;
-            //     $count += 1;
-            // }
 
             $count = $pagos->count();
     

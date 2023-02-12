@@ -41,8 +41,9 @@ class ProductController extends Controller
         try {
             
             $productos = Producto::orWhere('productos.nombre','like',"%$busqueda%")
-            ->orWhere('productos.id','like',"%$busqueda%")
-            ->paginate(10);
+                ->orWhere('productos.id','like',"%$busqueda%")
+                ->with('colors')
+                ->paginate(10);
     
             return view('admin.productos.index',compact('productos')); //index de productos en admin
 
@@ -73,7 +74,7 @@ class ProductController extends Controller
             return view('admin.productos.coloresproducto',compact('productos'));
 
         } catch (\Exception $e) {
-           
+           return $e;
         }
 
     }   
@@ -229,6 +230,7 @@ class ProductController extends Controller
             $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
                 ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo')
                 ->where('productos.id',$id)
+                ->with('colors')
                 ->firstOrFail();
     
             $estados = $this->estado_productos(); 
@@ -239,6 +241,7 @@ class ProductController extends Controller
             //throw $th;
         }
     }
+
 
     public function showColor($slug)
     {
@@ -286,6 +289,7 @@ class ProductController extends Controller
         }
         
     }
+
 
     public function editColor($slug)
     {
@@ -410,6 +414,7 @@ class ProductController extends Controller
             DB::rollBack();
         }
     }
+
 
     public function updateColor(Request $request, $slug)
     {
@@ -561,6 +566,7 @@ class ProductController extends Controller
         }
     }
 
+
     public function activate($id)
     {
         try {
@@ -585,6 +591,7 @@ class ProductController extends Controller
         }
     }
 
+
     public function createColor($id)
     {
         $producto = Producto::where('id',$id)->firstOrFail();
@@ -592,6 +599,7 @@ class ProductController extends Controller
         $estados = $this->estado_productos();
         return view('admin.productos.createcolor',compact('producto', 'estados'));
     }
+
 
     public function storeColor(Request $request)
     {
@@ -688,6 +696,7 @@ class ProductController extends Controller
 
     }
 
+
     //reemplazado por ruta api imagenController
     public function eliminarImagen(Request $request,$id)
     {
@@ -714,6 +723,7 @@ class ProductController extends Controller
         }
 
     }
+    
 
     public function estado_productos()
     {
