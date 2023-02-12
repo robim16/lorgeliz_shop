@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class ColorProducto extends Pivot
 {
-    //protected $with = ['producto'];
+    // protected $with = ['imagenes'];
 
     protected $table = 'color_producto';
     protected $fillable = [

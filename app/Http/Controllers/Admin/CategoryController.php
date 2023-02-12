@@ -81,6 +81,7 @@ class CategoryController extends Controller
     public function show($slug)
     {
         $categoria = Categoria::where('slug',$slug)->firstOrFail();
+
         return view('admin.categorias.show',compact('categoria'));
     }
 
@@ -93,6 +94,7 @@ class CategoryController extends Controller
     public function edit($slug)
     {
         $categoria = Categoria::where('slug',$slug)->firstOrFail();
+        
         return view('admin.categorias.edit',compact('categoria'));
     }
 

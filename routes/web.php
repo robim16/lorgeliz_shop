@@ -168,7 +168,8 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
         Route::get('/listado', 'Admin\DevolucionController@pdfListarDevoluciones')->name('devolucion.listado');
         // Route::put('/update', 'Admin\DevolucionController@update')->name('devolucion.update');
         Route::put('/', 'Admin\DevolucionController@update')->name('devolucion.update');
-        Route::get('/{id}', 'Admin\DevolucionController@show')->name('admin.devolucion.show');
+        // Route::get('/{id}', 'Admin\DevolucionController@show')->name('admin.devolucion.show');
+        Route::get('/{devolucione}', 'Admin\DevolucionController@show')->name('admin.devolucion.show');
     });
     
     Route::group(['prefix' => '/payments'], function (){

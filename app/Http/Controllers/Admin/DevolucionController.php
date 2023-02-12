@@ -59,16 +59,18 @@ class DevolucionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Devolucione $devolucione)
     {
 
         try {
             
-            $producto_devolucion = Devolucione::with(['venta', 'productoReferencia'])
-                ->where('id', $id)
-                ->paginate(5);
+            // $producto_devolucion = Devolucione::with(['venta', 'productoReferencia'])
+            //     ->where('id', $id)
+            //     ->paginate(5);
             
-    
+            $producto_devolucion = $devolucione->load(['venta', 'productoReferencia'])
+                ->paginate(5);
+
             return view('admin.devoluciones.show',compact('producto_devolucion'));
 
         } catch (\Exception $e) {
