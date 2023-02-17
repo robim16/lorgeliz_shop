@@ -2,9 +2,10 @@
 deployment:
   tasks:
     - export ROOT=/home/u162198909/domains/lorenzogeliztienda.com/public_html/app/laravel
-    - /bin/ls -A -I ".git" -I "public" | /bin/xargs -I % /bin/cp -ru % $ROOT
+    #- /bin/ls -A -I ".git" -I "public" | /bin/xargs -I % /bin/cp -ru % $ROOT
+    - /bin/cp -R .vscode $DEPLOYPATH
     # print without copy : - /bin/ls -A -I ".git" -I "public" | /bin/xargs -t -I % /bin/cp -ru % $ROOT
 
-    - export PUBLIC=/home/u162198909/domains/lorenzogeliztienda.com/public_html/app/
-    - /bin/ls -A -I ".htaccess" public | /bin/xargs -I % /bin/cp -ru public/% $PUBLIC
+    #- export PUBLIC=/home/u162198909/domains/lorenzogeliztienda.com/public_html/app/
+    #- /bin/ls -A -I ".htaccess" public | /bin/xargs -I % /bin/cp -ru public/% $PUBLIC
     # print without copy : - /bin/ls -A -I ".htaccess" public | /bin/xargs -t -I % /bin/cp -ru public/% $PUBLIC
