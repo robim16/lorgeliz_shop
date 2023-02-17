@@ -5,7 +5,8 @@ deployment:
     #- /bin/ls -A -I ".git" -I "public" | /bin/xargs -I % /bin/cp -ru % $ROOT
     - /bin/rm -Rf $DEPLOYPATH
     - /bin/mkdir $DEPLOYPATH
-    - /bin/cp -R $DEPLOYPATH
+    #- /bin/cp -R $DEPLOYPATH
+    - /bin/cp -r * $DEPLOYPATH
     # print without copy : - /bin/ls -A -I ".git" -I "public" | /bin/xargs -t -I % /bin/cp -ru % $ROOT
 
     #- export PUBLIC=/home/u162198909/domains/lorenzogeliztienda.com/public_html/app/
