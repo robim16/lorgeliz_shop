@@ -129,7 +129,7 @@ class ClienteController extends Controller
             $count = $clientes->count();
     
             $pdf = \PDF::loadView('admin.pdf.listadoclientes',['clientes'=>$clientes, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
+                ->setPaper('a4', 'landscape');
             
             return $pdf->download('listadoclientes.pdf');
 

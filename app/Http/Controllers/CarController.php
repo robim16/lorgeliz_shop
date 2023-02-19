@@ -33,20 +33,18 @@ class CarController extends Controller
     //en desuso, esta función fue reemplazada por la siguiente
     public function index()
     {
-        
-        //$cliente = Cliente::where('user_id',auth()->user()->id)->firstOrFail();
 
         try {
             
-            $cliente = auth()->user()->cliente;
+            // $cliente = auth()->user()->cliente;
 
-            $productos = CarritoProducto::whereHas('carrito',
-            function (Builder $query) use ($cliente) {
-               $query->where('estado', 1)
-               ->where('cliente_id', $cliente->id);
-            })
-            ->with(['carrito', 'productoReferencia'])
-            ->get();
+            // $productos = CarritoProducto::whereHas('carrito',
+            // function (Builder $query) use ($cliente) {
+            //    $query->where('estado', 1)
+            //    ->where('cliente_id', $cliente->id);
+            // })
+            // ->with(['carrito', 'productoReferencia'])
+            // ->get();
     
             //return view('tienda.cart', compact('productos'));
             return view('tienda.cart');
@@ -81,8 +79,9 @@ class CarController extends Controller
                     ->cliente($cliente->id);
                 })
                 ->with(['carrito', 'productoReferencia.colorProducto.color', 
-                'productoReferencia.colorProducto.producto',
-                'productoReferencia.talla', 'productoReferencia.colorProducto.imagenes'])
+                    'productoReferencia.colorProducto.producto',
+                    'productoReferencia.talla', 'productoReferencia.colorProducto.imagenes'
+                ])
                 ->get();
     
             return ['productos' => $productos];
@@ -94,6 +93,7 @@ class CarController extends Controller
         }
 
     }
+
 
     
     public function buscarCarrito(Request $request)
@@ -123,7 +123,6 @@ class CarController extends Controller
     public function store(Request $request)
     {
         
-        // if (!$request->ajax()) return redirect('/');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -194,6 +193,8 @@ class CarController extends Controller
         }
 
     }
+
+
 
     //función que se ejecuta al agregar un producto a un carrito existente
     public function update(Request $request)
@@ -286,7 +287,6 @@ class CarController extends Controller
 
     public function destroy(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/cart');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -330,7 +330,6 @@ class CarController extends Controller
     public function updateProduct(Request $request)
     { 
         // se ejecuta al modificar la cantidad de producto en la página del carrito
-        // if (!$request->ajax()) return redirect('/')
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		};
@@ -446,10 +445,11 @@ class CarController extends Controller
     }
     
 
+
     //public function userCart(Request $request)
     public function userCart(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/');
+       
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}
@@ -501,7 +501,7 @@ class CarController extends Controller
 
     public function remove(Request $request)
     {
-        // if (!$request->ajax()) return redirect('/cart');
+    
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}

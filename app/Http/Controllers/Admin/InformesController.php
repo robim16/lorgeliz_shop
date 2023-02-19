@@ -79,10 +79,6 @@ class InformesController extends Controller
                 ->get();
     
     
-            // $count = 0;
-            // foreach ($ventas as $venta) {
-            //     $count += 1;
-            // }
 
             $count = $ventas->count();
     
@@ -165,11 +161,6 @@ class InformesController extends Controller
                 ->get();
     
     
-            // $count = 0;
-            // foreach ($ventas as $venta) {
-            //     // $count = $count + 1;
-            //     $count += 1;
-            // }
 
             $count = $ventas->count();
 
@@ -229,12 +220,7 @@ class InformesController extends Controller
                 ->orderBy('cantidad', 'DESC')
                 ->get();
             
-            // $count = 0;
-
-            // foreach ($productos as $producto) {
-            //     // $count = $count + 1;
-            //     $count += 1;
-            // }
+           
 
             $count = $productos->count();
 
@@ -292,16 +278,11 @@ class InformesController extends Controller
         try {
            
             $clientes = Venta::with('cliente.user')
-            ->select('cliente_id', DB::raw('COUNT(id) as cantidad'))
-            ->groupBy('cliente_id')
-            ->orderBy('cantidad', 'DESC')
-            ->get();
-    
-            // $count = 0;
-            // foreach ($clientes as $cliente) {
-            //     // $count = $count + 1;
-            //     $count += 1;
-            // }
+                ->select('cliente_id', DB::raw('COUNT(id) as cantidad'))
+                ->groupBy('cliente_id')
+                ->orderBy('cantidad', 'DESC')
+                ->get();
+        
 
             $count = $clientes->count();
 
@@ -329,11 +310,11 @@ class InformesController extends Controller
         try {
             
             $pagos = Pago::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio,
-            COUNT(id) as cantidad, SUM(monto) as total')
-            ->whereYear('fecha',$anio)
-            ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
-            ->paginate(5);
-    
+                COUNT(id) as cantidad, SUM(monto) as total')
+                ->whereYear('fecha',$anio)
+                ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
+                ->paginate(5);
+        
             return view('admin.informes.pagos.index',compact('pagos'));
 
         } catch (\Exception $e) {
@@ -357,11 +338,7 @@ class InformesController extends Controller
                 ->whereYear('fecha',$anio)
                 ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
                 ->get();
-            
-            // $count = 0;
-            // foreach ($pagos as $pago) {
-            //     $count += 1;
-            // }
+           
 
             $count = $pagos->count();
     
@@ -428,10 +405,7 @@ class InformesController extends Controller
                 ->orderBy('created_at', 'DESC')
                 ->get();
             
-            // $count = 0;
-            // foreach ($pagos as $pago) {
-            //     $count += 1;
-            // }
+          
 
             $count = $pagos->count();
     
@@ -454,12 +428,12 @@ class InformesController extends Controller
         try {
 
             $saldos_pendientes = Venta::with('cliente')
-            ->where('saldo', '>', '0')
-            ->where('estado', '=', '2')
-            ->select('cliente_id', DB::raw('COUNT(id) as facturas'),
-            DB::raw('SUM(saldo) as saldos'))
-            ->groupBy('cliente_id')
-            ->paginate(5);
+                ->where('saldo', '>', '0')
+                ->where('estado','2')
+                ->select('cliente_id', DB::raw('COUNT(id) as facturas'),
+                DB::raw('SUM(saldo) as saldos'))
+                ->groupBy('cliente_id')
+                ->paginate(5);
     
             return view('admin.informes.saldos.index',compact('saldos_pendientes'));
            
@@ -478,16 +452,12 @@ class InformesController extends Controller
            
             $saldos_pendientes = Venta::with('cliente')
                 ->where('saldo', '>', '0')
-                ->where('estado', '=', '2')
+                ->where('estado','2')
                 ->select('cliente_id', DB::raw('COUNT(id) as facturas'),
                 DB::raw('SUM(saldo) as saldos'))
                 ->groupBy('cliente_id')
                 ->get();
     
-            // $count = 0;
-            // foreach ($saldos_pendientes as $saldos_pendiente) {
-            //     $count += 1;
-            // }
 
             $count = $saldos_pendientes->count();
     
@@ -511,7 +481,7 @@ class InformesController extends Controller
           
             $saldos_pendientes = Venta::with('cliente')
                 ->where('saldo', '>', '0')
-                ->where('estado', '=', '2')
+                ->where('estado','2')
                 ->where('cliente_id', $cliente->id)
                 ->orderBy('fecha', 'DESC')
                 ->paginate(5);

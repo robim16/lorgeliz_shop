@@ -93,18 +93,37 @@ class Venta extends Model implements Auditable
                 ->get();
     
             
+
+                $data = array();
+
                 foreach ($carritos as $carrito) {
-                    
-                    $productoVenta = new ProductoVenta();
-    
-                    $productoVenta->producto_referencia_id = $carrito->producto_referencia_id;
-                    $productoVenta->venta_id = $venta->id;
-                    $productoVenta->cantidad = $carrito->cantidad;
-                    $productoVenta->precio_venta =  $carrito->productoReferencia->colorProducto->producto->precio_actual;
-                    $productoVenta->porcentaje_descuento = $carrito->productoReferencia->colorProducto->producto->porcentaje_descuento;
-    
-                    $productoVenta->save();
+                    $item = array(
+                        'producto_referencia_id' => $carrito->producto_referencia_id,
+                        'venta_id' => $venta->id,
+                        'cantidad' => $carrito->cantidad,
+                        'precio_venta' => $carrito->productoReferencia->colorProducto->producto->precio_actual,
+                        'porcentaje_descuento' => $carrito->productoReferencia->colorProducto->producto->porcentaje_descuento
+                    );
+
+                    array_push($data, $item);
                 }
+
+
+                ProductoVenta::insert($data);
+
+                
+                // foreach ($carritos as $carrito) {
+                    
+                //     $productoVenta = new ProductoVenta();
+    
+                //     $productoVenta->producto_referencia_id = $carrito->producto_referencia_id;
+                //     $productoVenta->venta_id = $venta->id;
+                //     $productoVenta->cantidad = $carrito->cantidad;
+                //     $productoVenta->precio_venta =  $carrito->productoReferencia->colorProducto->producto->precio_actual;
+                //     $productoVenta->porcentaje_descuento = $carrito->productoReferencia->colorProducto->producto->porcentaje_descuento;
+    
+                //     $productoVenta->save();
+                // }
     
     
                 $pedido = new Pedido();
