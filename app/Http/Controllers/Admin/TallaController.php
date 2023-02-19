@@ -24,8 +24,9 @@ class TallaController extends Controller
     }
 
 
+    //implementada en admin/api/tallaController. En desuso
     public function getTalla(Request $request, $id)
-    { //implementada en admin/api/tallaController. En desuso
+    { 
         
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
@@ -45,9 +46,9 @@ class TallaController extends Controller
     }
 
 
-    public function tallasTipoId(Request $request)
     //implementada en admin/api/tallaController. En desuso
     //obtener las tallas de un tipo de producto para mostrar en el select las que ya han sido seleccionadas, en la vista index de tipo de producto
+    public function tallasTipoId(Request $request)
     {   
        
         if ( ! request()->ajax()) {

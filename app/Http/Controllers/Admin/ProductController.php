@@ -68,13 +68,13 @@ class ProductController extends Controller
         try {
            
             $productos = ColorProducto::whereHas('producto', 
-            function (Builder $query) use ($id, $busqueda) {
-               $query->where('id', $id)
-               ->where('nombre','like',"%$busqueda%")
-               ->orderBy('created_at');
-            })
-            ->with(['color', 'producto', 'imagenes'])
-            ->paginate(5); 
+                function (Builder $query) use ($id, $busqueda) {
+                $query->where('id', $id)
+                ->where('nombre','like',"%$busqueda%")
+                ->orderBy('created_at');
+                })
+                ->with(['color', 'producto', 'imagenes'])
+                ->paginate(5); 
             
             return view('admin.productos.coloresproducto',compact('productos'));
 

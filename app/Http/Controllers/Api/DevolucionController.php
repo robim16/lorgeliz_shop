@@ -7,7 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class DevolucionController extends Controller
-{   //cae en desuso al cargar las devoluciones en order show
+{   
+    //cae en desuso al cargar las devoluciones en order show
     public function verify(Request $request){
 
         if ( ! request()->ajax()) {
@@ -15,7 +16,7 @@ class DevolucionController extends Controller
 		}
         
         return Devolucione::where('venta_id',$request->venta)
-        ->where('producto_referencia_id',$request->producto)
-        ->first();
+            ->where('producto_referencia_id',$request->producto)
+            ->first();
     }
 }

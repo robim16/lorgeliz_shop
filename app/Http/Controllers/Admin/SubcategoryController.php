@@ -33,8 +33,8 @@ class SubcategoryController extends Controller
             $nombre = $request->get('nombre');
            
             $subcategorias = Subcategoria::where('nombre','like',"%$nombre%")
-            ->orderBy('created_at')
-            ->paginate(5);
+                ->orderBy('created_at')
+                ->paginate(5);
             
             return view('admin.subcategorias.index',compact('subcategorias'));
 

@@ -160,12 +160,7 @@ class StockController extends Controller
                 ->orderBy('color_producto_id')
                 ->get();
     
-            // $count = 0;
-            
-            // foreach ($productos as $producto) {
-            //     $count = $count + 1;
-            // }
-
+                
             $count = $productos->count();
     
             $pdf = \PDF::loadView('admin.pdf.inventarios',['productos'=>$productos, 'count'=>$count])

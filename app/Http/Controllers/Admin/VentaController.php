@@ -73,17 +73,12 @@ class VentaController extends Controller
                 ->where('id', $id)
                 ->firstOrFail();
 
-    
-           // $pagos = $venta->pagos()->select('*', DB::raw('SUM(monto) as total'))
-            //     ->orderBy('pagos.fecha', 'DESC')
-            //     ->paginate(5);
 
             $pagos = $venta->pagos()
                 ->orderBy('pagos.fecha', 'DESC')
                 ->paginate(5);
 
             
-            // $total_pagos = $pagos()->sum('monto');
     
             $devoluciones = $venta->devoluciones()->paginate(5);
     
