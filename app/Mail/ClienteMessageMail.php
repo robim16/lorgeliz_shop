@@ -30,8 +30,9 @@ class ClienteMessageMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.clienteMessageMail')
-        ->with('details', $this->details);
+        return $this->subject("Has hecho un pedido en lorgeliz shop")
+            ->markdown('emails.clienteMessageMail')
+            ->with('details', $this->details);
     }
 
 }

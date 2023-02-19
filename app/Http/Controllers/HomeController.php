@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Carrito;
-use App\Cliente;
+// use App\Cliente;
 use App\ColorProducto;
-use App\Factura;
-use App\Producto;
+// use App\Factura;
+// use App\Producto;
 use App\ProductoReferencia;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -395,7 +395,6 @@ class HomeController extends Controller
     public function getProductsByOrder(Request $request)
     {
 
-        // if (!$request->ajax()) return redirect('/');
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');
 		}

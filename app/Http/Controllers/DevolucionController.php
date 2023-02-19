@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Cliente;
+// use App\Cliente;
 Use App\Devolucione;
 use App\Jobs\SendEmail;
-Use App\Producto;
+// Use App\Producto;
 Use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\DB;
 use App\Mail\AdminDevolucionMail;
 use App\Notifications\NotificationAdminNewDevolution;
 use Illuminate\Support\Facades\Log;
@@ -172,8 +172,8 @@ class DevolucionController extends Controller
         try {
             
             return Devolucione::where('venta_id',$request->venta)
-            ->where('producto_referencia_id',$request->producto)
-            ->first();
+                ->where('producto_referencia_id',$request->producto)
+                ->first();
 
         } catch (\Exception $e) {
 

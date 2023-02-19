@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Imagene;
+// use App\Imagene;
 use App\User;
 use App\Http\Requests\UserRequest;
 use App\Rules\StrengthPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
+// use Illuminate\Support\Facades\Storage;
 
 
 
@@ -68,8 +68,8 @@ class UserController extends Controller
         try {
       
             $user = User::where('slug', $slug)
-            ->where('id', auth()->user()->id)
-            ->first();
+                ->where('id', auth()->user()->id)
+                ->first();
             
             return view('user.show', compact('user'));
 

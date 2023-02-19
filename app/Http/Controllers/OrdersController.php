@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Cliente;
+// use App\Cliente;
 use App\Pedido;
-use App\Producto;
-use App\ProductoReferencia;
+// use App\Producto;
+// use App\ProductoReferencia;
 use App\ProductoVenta;
-use App\User;
+// use App\User;
 use App\Venta;
 use Illuminate\Database\Eloquent\Builder;
 // use App\Mail\OrderStatusMail;
