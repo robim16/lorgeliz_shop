@@ -9,9 +9,11 @@ class ProductoVenta extends Pivot
 {
     protected $table = 'producto_venta';
     protected $fillable = [
-        'producto_id', 
+        'producto_referencia_id', 
         'venta_id',
         'cantidad',
+        'precio_venta',
+        'porcentaje_descuento'
     ];
 
     public $timestamps = false;
