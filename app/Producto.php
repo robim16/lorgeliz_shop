@@ -18,7 +18,8 @@ class Producto extends Model implements Auditable
 
     protected $fillable = ['nombre', 'tipo_id', 'marca', 'talla', 'precioanterior', 'precioactual', 'porcentajededescuento', 'descripcion_corta', 'descripcion_larga', 'especificaciones','slug'];
 
-    public function tipo (){
+    public function tipo()
+    {
         return $this->belongsTo(Tipo::class);
     }
 
@@ -34,8 +35,11 @@ class Producto extends Model implements Auditable
         //return $this->belongsToMany(Venta::class);
     //}
 
-    public function colors() {
-        return $this->belongsToMany(Color::class)->withPivot('id');
+    public function colors()
+    {
+        return $this->belongsToMany(Color::class)
+            ->withPivot('id')
+            ->using(ColorProducto::class);
     }
 
    // public function imagenes (){

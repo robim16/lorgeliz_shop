@@ -78,11 +78,11 @@ class PaymentController extends Controller
         try {
            
             $pago = Pago::where('pagos.id', $id)
-            ->orderBy('pagos.fecha', 'DESC')
-            ->first();
+                ->orderBy('pagos.fecha', 'DESC')
+                ->first();
     
             $pdf = \PDF::loadView('admin.pdf.pago',['pago'=>$pago])
-            ->setPaper('a4', 'landscape');
+                ->setPaper('a4', 'landscape');
             
             return $pdf->download('pago-'.$pago->id.'.pdf');
 
@@ -102,17 +102,12 @@ class PaymentController extends Controller
             
             $pagos = Pago::orderBy('pagos.fecha')->get();
     
-            // $count = 0;
-
-            // foreach ($pagos as $pago) {
-            //     // $count = $count + 1;
-            //     $count += 1;
-            // }
+            
 
             $count = $pagos->count();
     
             $pdf = \PDF::loadView('admin.pdf.listadopagos',['pagos'=>$pagos, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
+                ->setPaper('a4', 'landscape');
             
             return $pdf->download('listadopagos.pdf');
             

@@ -44,8 +44,9 @@ class ProductController extends Controller
             $busqueda = $request->get('busqueda');
     
             $productos = Producto::orWhere('productos.nombre','like',"%$busqueda%")
-            ->orWhere('productos.id','like',"%$busqueda%")
-            ->paginate(10);
+                ->orWhere('productos.id','like',"%$busqueda%")
+                ->with('colors')
+                ->paginate(10);
     
             return view('admin.productos.index',compact('productos')); //index de productos en admin
 
@@ -241,6 +242,7 @@ class ProductController extends Controller
             $producto = Producto::join('color_producto', 'productos.id', 'color_producto.producto_id')
                 ->select('productos.*', 'color_producto.id as cop', 'color_producto.activo')
                 ->where('productos.id',$id)
+                ->with('colors')
                 ->firstOrFail();
     
             $estados = $this->estado_productos(); 
