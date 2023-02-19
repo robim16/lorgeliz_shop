@@ -9,7 +9,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class ColorProducto extends Pivot implements Auditable
 {
-    //protected $with = ['producto'];
+    // protected $with = ['imagenes'];
 
     use \OwenIt\Auditing\Auditable;
 
@@ -52,11 +52,13 @@ class ColorProducto extends Pivot implements Auditable
 
     public $timestamps = false;
 
-    public function producto () {
+    public function producto() 
+    {
         return $this->belongsTo(Producto::class);
     }
 
-    public function color (){
+    public function color()
+    {
         return $this->belongsTo(Color::class);
     }
 
@@ -64,11 +66,14 @@ class ColorProducto extends Pivot implements Auditable
         //return $this->hasMany(ProductoReferencia::class);
     //}
 
-    public function imagenes (){
+    public function imagenes()
+    {
         return $this->morphMany('App\Imagene','imageable');
     }
 
-    public function tallas (){
+
+    public function tallas()
+    {
         return $this->belongsToMany(Talla::class, 'producto_referencia');
     }
 
@@ -79,4 +84,5 @@ class ColorProducto extends Pivot implements Auditable
     public function scopeVisitas($query){
         return $query->where('visitas', '>', '0');
     }
+    
 }
