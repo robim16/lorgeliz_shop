@@ -42,15 +42,5 @@ class Producto extends Model implements Auditable
             ->using(ColorProducto::class);
     }
 
-   // public function imagenes (){
-   //     return $this->morphMany('App\Imagene','imageable');
-    //}
-
-    //public function productoReferencias() {
-     //   return $this->hasMany(ProductoReferencia::class);
-    //}
-
-    //public function colorproductos() {
-        //return $this->hasMany(ColorProducto::class);
-    //}
+  
 }
