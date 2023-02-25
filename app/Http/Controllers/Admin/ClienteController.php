@@ -75,25 +75,31 @@ class ClienteController extends Controller
 
     public function sendMessage()
     {
-
-        $info = \request('info');
-
-        $data = [];
-
-        parse_str($info, $data);
-
-       
-        $cliente = Cliente::with('user')->where('id', $data['cliente_id'])
-            ->first();
-
         
         try {
+
+
+            $info = \request('info');
+    
+            $data = [];
+    
+            parse_str($info, $data);
+    
+           
+            $cliente = $data['cliente_id'];
+            
+    
+            $mensaje = $data['mensaje'];
+    
+            $cliente = Cliente::with('user')->where('id', $cliente)
+                ->first();
             
            
             // Mail::to($cliente->user->email)->send(new ClientePrivateMail($cliente->user->nombres, 
             //     $data['mensaje']));
 
-            SendClientePrivateMail::dispatch($data['mensaje'], $cliente->user);
+
+            SendClientePrivateMail::dispatch($mensaje, $cliente->user);
 
            
             $success = true;

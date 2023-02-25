@@ -4105,6 +4105,8 @@ __webpack_require__.r(__webpack_exports__);
     //     });
     // },
     store: function store(producto, venta, cantidad) {
+      var _this2 = this;
+
       // let url = '/lorgeliz_tienda_copia/public/devoluciones';
       var url = "".concat(this.ruta, "/devoluciones");
       axios.post(url, {
@@ -4117,9 +4119,13 @@ __webpack_require__.r(__webpack_exports__);
         if (devolucion > 0) {
           swal('Solicitud rechazada!', 'Solicitaste el cambio de este producto antes!', 'error');
         } else {
+          _this2.getProductos();
+
           swal('Producto enviado para cambio!', 'Haz solicitado el cambio de este producto!', 'success');
         }
-      })["catch"](function (error) {
+      } // function (response) {
+      // }
+      )["catch"](function (error) {
         console.log(error);
       });
     },
