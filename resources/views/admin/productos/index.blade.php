@@ -75,11 +75,8 @@
                                 <td> {{$producto->id }} </td>
                                 <td>
                                     @if ($producto->colors->count() > 0)
-                                        @foreach(\App\Imagene::where('imageable_type', 'App\ColorProducto')
-                                            ->where('imageable_id', $producto->colors[0]->pivot->id)->pluck('url', 'id')->take(1) as $id => $imagen)    
-                                            <img src="{{ url('storage/' . $imagen) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
-                                            
-                                        @endforeach
+                                        <img src="{{ url('storage/' . $producto->colors[0]->pivot->imagenes[0]->url) }}" 
+                                            alt="" style="height: 50px; width: 50px;" class="rounded-circle">
                                     @endif
                                 </td>
                                 <td> {{$producto->nombre }} </td>
