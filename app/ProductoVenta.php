@@ -18,11 +18,13 @@ class ProductoVenta extends Pivot
     
     public $timestamps = false;
 
-    public function productoReferencia (){
+    public function productoReferencia()
+    {
         return $this->belongsTo(ProductoReferencia::class, 'producto_referencia_id');
     }
 
-    public function venta (){
+    public function venta()
+    {
         return $this->belongsTo(Venta::class);
     }
 
