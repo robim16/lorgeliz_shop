@@ -231,28 +231,35 @@ export default {
                 'venta': venta,
                 'cantidad': cantidad
             })
-            .then(function (response) {
+            .then( response => {
+                   
                 let devolucion = response.data.data;
-
-                if (devolucion > 0) {
-
-                    swal(
-                        'Solicitud rechazada!',
-                        'Solicitaste el cambio de este producto antes!',
-                        'error'
-                    )
-
-                } else {
-                    swal(
-                        'Producto enviado para cambio!',
-                        'Haz solicitado el cambio de este producto!',
-                        'success'
-                    )
-                }
-
-            }).catch(function (error) {
+       
+                    if (devolucion > 0) {
+       
+                        swal(
+                           'Solicitud rechazada!',
+                           'Solicitaste el cambio de este producto antes!',
+                           'error'
+                        )
+       
+                    } else {
+       
+                       this.getProductos();
+                       
+       
+                        swal(
+                           'Producto enviado para cambio!',
+                           'Haz solicitado el cambio de este producto!',
+                           'success'
+                        )
+                    }
+               }
+             
+            ).catch(function (error) {
                 console.log(error);
             });
+            
         }, 
 
         imprimir(id) {
