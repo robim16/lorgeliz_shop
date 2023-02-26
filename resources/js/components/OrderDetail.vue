@@ -180,47 +180,14 @@ export default {
                 this.subtotal = this.arrayProductos[0].venta.subtotal;
                 this.envio = this.arrayProductos[0].venta.envio;
 
-                // this.arrayProductos.forEach(producto => {
-                //     this.activarDevolucion(producto.producto_referencia.id, producto.venta.id)
-                //     .then(res => {
-                //         this.prodDevolucion.push(res);
-                //     }).catch(error => {
-                //         console.log(error);
-                //     });
-                // })
             }); 
         
         },
 
         
-        // async activarDevolucion(producto, venta){
-        //    return new Promise(async(resolve)=>{
-        //         // let url = '/lorgeliz_tienda_copia/public/devoluciones/verificar?venta=' + venta + '&producto=' + producto;
-                 
-        //         // let url = '/lorgeliz_tienda_copia/public/api/devoluciones/verify?venta='
-        //         //  + venta + '&producto=' + producto;
-
-        //         let url = `${this.ruta}/api/devoluciones/verify?venta=${venta}&producto=${producto}`
-        //         var res = ''
-        //         await axios.get(url).then(response => {
-        //             // console.log(response.data)
-        //             let dev = Object.values(response.data)
-        //             if (dev.length == 0) {
-        //                 res = true;
-        //             }
-        //             else{
-        //                 res = false;
-        //             } 
-        //         }).catch(error => {
-        //             console.log(error);
-        //         });
-        //         resolve(res)
-               
-        //     });
-        // },
+      
 
         store(producto, venta, cantidad){
-            // let url = '/lorgeliz_tienda_copia/public/devoluciones';
 
            let url = `${this.ruta}/devoluciones`
 
@@ -229,18 +196,23 @@ export default {
                 'venta': venta,
                 'cantidad': cantidad
             })
-            .then(function (response) {
+            .then( response => {
+                   
                 let devolucion = response.data.data;
-
+       
                 if (devolucion > 0) {
-
+    
                     swal(
                         'Solicitud rechazada!',
                         'Solicitaste el cambio de este producto antes!',
                         'error'
                     )
-
+    
                 } else {
+    
+                    this.getProductos();
+                    
+    
                     swal(
                         'Producto enviado para cambio!',
                         'Haz solicitado el cambio de este producto!',
@@ -251,10 +223,10 @@ export default {
             }).catch(function (error) {
                 console.log(error);
             });
+           
         }, 
 
         imprimir(id) {
-            // window.open('/lorgeliz_tienda_copia/public/pedidos/show/pdf/' + id + ',' + '_blank');
 
             window.open(`${this.ruta}/pedidos/show/pdf/${id}, _blank`);
         },
