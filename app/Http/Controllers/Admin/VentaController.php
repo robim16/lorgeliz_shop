@@ -47,6 +47,8 @@ class VentaController extends Controller
                     $query->where('nombres', 'like',"%$busqueda%");
                 });
             })
+            ->with(['pedido:id,venta_id', 'cliente:id,user_id', 'cliente.user:id,nombres,apellidos'])
+            ->withCount('devoluciones')
             ->orderBy('id', 'DESC')
             ->paginate(5);
             
