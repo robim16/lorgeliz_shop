@@ -24,6 +24,7 @@
                         <div class="product_image">
                         <a :href="'productos/' + nuevo.slug">
 							<img :src="'storage/' + nuevo.imagenes[0].url" alt="">
+                            <!-- <img :src="'storage/' + nuevo.imagenes.url" alt=""> -->
                         </a>
                         </div>
                         <div class="product_content">

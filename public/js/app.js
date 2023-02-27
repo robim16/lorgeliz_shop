@@ -3795,6 +3795,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   // props:['productos'],
   props: {
@@ -4159,6 +4160,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -4618,6 +4620,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     ruta: {
@@ -4775,6 +4778,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   // props:['productos'],
   props: {
@@ -4867,6 +4871,15 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -51942,21 +51955,23 @@ var render = function() {
                                         _vm._v(" "),
                                         _c(
                                           "del",
-                                          {
-                                            staticClass: "price-oldslider",
-                                            domProps: {
-                                              textContent: _vm._s(
-                                                producto.producto
-                                                  .precio_anterior >
+                                          { staticClass: "price-oldslider" },
+                                          [
+                                            _vm._v(
+                                              "\n                                                            " +
+                                                _vm._s(
                                                   producto.producto
-                                                    .precio_actual
-                                                  ? producto.producto
-                                                      .precio_anterior
-                                                  : ""
-                                              )
-                                            }
-                                          },
-                                          [_c("span")]
+                                                    .precio_anterior >
+                                                    producto.producto
+                                                      .precio_actual
+                                                    ? producto.producto
+                                                        .precio_anterior
+                                                    : ""
+                                                ) +
+                                                "\n                                                            "
+                                            ),
+                                            _c("span")
+                                          ]
                                         )
                                       ])
                                     ]

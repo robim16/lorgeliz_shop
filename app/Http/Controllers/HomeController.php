@@ -41,7 +41,11 @@ class HomeController extends Controller
         $productoSlider = ColorProducto::whereHas('producto', function (Builder $query) {
             $query->where('slider_principal', 'Si');
         })
-        ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        ->with(['producto:id,nombre,precio_actual,tipo_id','producto.tipo:id,nombre','color:id,nombre',
+            'imagenes' => function($query) {
+                $query->select('id', 'url', 'imageable_id');
+            }
+        ])
         // ->where('activo', 'Si')
         ->activo()
         ->whereIn('id', $disponibles)
@@ -65,7 +69,12 @@ class HomeController extends Controller
         // ->get();
 
 
-        $producto_mas_visto = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        $producto_mas_visto = ColorProducto::with(['producto:id,nombre,precio_actual,tipo_id',
+            'producto.tipo:id,nombre','color:id,nombre',
+            'imagenes' => function($query) {
+                $query->select('id', 'url', 'imageable_id');
+            }
+        ])
         // ->where('visitas', '>', '0')
         // ->where('activo', 'Si')
         ->visitas()
@@ -94,7 +103,12 @@ class HomeController extends Controller
         // ->take(5)
         // ->get();
 
-        $productos_vendidos = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        $productos_vendidos = ColorProducto::with(['producto:id,nombre,precio_actual,tipo_id',
+            'producto.tipo:id,nombre','color:id,nombre',
+            'imagenes' => function($query) {
+                $query->select('id', 'url', 'imageable_id');
+            }
+        ])
         ->join('producto_referencia', 'color_producto.id', 'producto_referencia.color_producto_id')
         ->join('producto_venta', 'producto_referencia.id', 'producto_venta.producto_referencia_id')
         // ->where('activo', 'Si')
@@ -125,7 +139,12 @@ class HomeController extends Controller
         $productosoferta = ColorProducto::whereHas('producto', function (Builder $query) {
             $query->where('estado', '2');
         })
-        ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        ->with(['producto:id,nombre,precio_actual,precio_anterior,porcentaje_descuento,tipo_id',
+            'producto.tipo:id,nombre','color:id,nombre',
+            'imagenes' => function($query) {
+                $query->select('id', 'url', 'imageable_id');
+            }
+        ])
         // ->where('activo', 'Si')
         ->activo()
         ->whereIn('id', $disponibles)
@@ -141,7 +160,9 @@ class HomeController extends Controller
     // función para implementar index con ajax
     public function productsIndex(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $disponibles = ProductoReferencia::disponibles();
 
@@ -176,7 +197,11 @@ class HomeController extends Controller
         $nuevos = ColorProducto::whereHas('producto', function (Builder $query) {
             $query->where('estado', '1');
         })
-        ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        ->with(['producto:id,nombre,precio_actual,tipo_id','producto.tipo:id,nombre','color:id,nombre',
+            'imagenes' => function($query) {
+                $query->select('id', 'url', 'imageable_id');
+            }
+        ])
         // ->where('activo', 'Si')
         ->activo()
         ->whereIn('id', $disponibles)
@@ -184,38 +209,7 @@ class HomeController extends Controller
         ->take($cantidad)
         ->get();
 
-        // $populares = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
-        // ->where('visitas', '>', '0')
-        // ->where('activo', 'Si')
-        // ->whereIn('id', $disponibles)
-        // ->orderBy('visitas', 'DESC')
-        // ->take(5)
-        // ->get();
-
-        
-        // $vendidos = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
-        // ->join('producto_referencia', 'color_producto.id', 'producto_referencia.color_producto_id')
-        // ->join('producto_venta', 'producto_referencia.id', 'producto_venta.producto_referencia_id')
-        // ->where('activo', 'Si')
-        // ->where('producto_referencia.stock', '>', '0')
-        // ->select('color_producto.*', DB::raw('SUM(producto_venta.cantidad) as cantidad'))
-        // ->groupBy('color_producto.id')
-        // ->orderBy('cantidad', 'DESC')
-        // ->take(5)
-        // ->get();
-
-        // $ofertas = ColorProducto::whereHas('producto', function (Builder $query) {
-        //     $query->where('estado', '2');
-        // })
-        // ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
-        // ->where('activo', 'Si')
-        // ->whereIn('id', $disponibles)
-        // ->orderBy('id', 'DESC')
-        // ->take(5)
-        // ->get();
-       
-
-        // return ['slider' => $slider, 'nuevos' => $nuevos, 'populares' => $populares, 'vendidos' => $vendidos, 'ofertas' => $ofertas];
+      
         return ['nuevos' => $nuevos];
     }
     
@@ -243,8 +237,9 @@ class HomeController extends Controller
     public function getProductos(Request $request)
     {
         //obtener todos los productos, en vista categorías
-        if (!$request->ajax()) return redirect('/');
-
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $disponibles = ProductoReferencia::disponibles();
 
@@ -271,7 +266,9 @@ class HomeController extends Controller
 
     public function getProductosByState(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $estado = $request->estado;
 
@@ -306,7 +303,9 @@ class HomeController extends Controller
 
     public function getProductosSales(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $productos = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
         ->join('producto_referencia', 'color_producto.id', 'producto_referencia.color_producto_id')
@@ -337,7 +336,9 @@ class HomeController extends Controller
 
     public function getProductosVisitas(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
 
         $disponibles = ProductoReferencia::disponibles();
@@ -371,7 +372,9 @@ class HomeController extends Controller
     public function getProductsByOrder(Request $request)
     {
 
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $criterio = $request->criterio;
 
@@ -405,7 +408,9 @@ class HomeController extends Controller
     public function getProductsByTipo(Request $request)
     {
         
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $tipo = $request->tipo;
         
@@ -439,7 +444,9 @@ class HomeController extends Controller
 
     public function getProductsByGenre(Request $request)
     {
-       if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $genero = $request->genero;
 

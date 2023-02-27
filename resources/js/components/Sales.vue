@@ -8,6 +8,7 @@
                 <div class="product_image">
                 <a :href="'productos/' + producto.slug">
                     <img :src="'storage/' + producto.imagenes[0].url" alt="">
+                    <!-- <img :src="'storage/' + producto.imagenes.url" alt=""> -->
                 </a>
                 </div>
                 <div class="product_content">

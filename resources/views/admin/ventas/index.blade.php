@@ -72,7 +72,9 @@
                         <tr>
                             <td> {{ $venta->id }} </td>
                             <td> {{ date('d/m/Y h:i:s A', strtotime($venta->fecha)) }} </td>
-                            <td> <a href="{{ route('cliente.show', $venta->cliente)}}" title="ver cliente" style="color: black">{{ $venta->cliente->user->nombres }} {{ $venta->cliente->user->apellidos }}</a></td>
+                            <td> 
+                                <a href="{{ route('cliente.show', $venta->cliente)}}" title="ver cliente" style="color: black">{{ $venta->cliente->user->nombres }} {{ $venta->cliente->user->apellidos }}</a>
+                            </td>
                             <td> ${{ floatval($venta->valor) }}</td>
                             <td>
                                 @if ($venta->estado == 1)
@@ -92,7 +94,8 @@
                                 @endif
                             </td>
                             <td>
-                                @if (count($venta->devoluciones) > 0)
+                                {{-- @if (count($venta->devoluciones) > 0) --}}
+                                @if ($venta->devoluciones_count > 0)
                                     {{"Sí"}}
                                 @else
                                     {{"No"}}

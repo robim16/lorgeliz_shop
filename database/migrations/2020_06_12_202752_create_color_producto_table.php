@@ -25,7 +25,7 @@ class CreateColorProductoTable extends Migration
             //$table->timestamps();
 
             $table->index('slug');
-            $table->index('activo');
+            $table->index(['id','producto_id','activo']);
         });
     }
 

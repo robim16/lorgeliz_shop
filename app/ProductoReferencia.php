@@ -58,9 +58,10 @@ class ProductoReferencia extends Pivot
     }
 
     public static function disponibles(){
+
         return ProductoReferencia::where('stock', '>' , '0')
-        ->groupBy('color_producto_id')
-        ->select('color_producto_id')
-        ->get();
+            ->select('color_producto_id')
+            ->groupBy('color_producto_id')
+            ->get();
     }
 }

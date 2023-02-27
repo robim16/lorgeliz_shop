@@ -30,6 +30,8 @@ class CreateProductosTable extends Migration
             $table->unsignedInteger('tipo_id');
             $table->foreign('tipo_id')->references('id')->on('tipos');
             $table->timestamps();
+
+            $table->index(['id','estado']);
         });
     }
 

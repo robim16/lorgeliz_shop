@@ -4,6 +4,7 @@
         
             <div class="owl-item" v-for="producto in productoSlider" :key="producto.id">
                 <div class="background_image" :style="{ 'background-image': 'url(' + 'storage/' + producto.imagenes[0].url + ')'}">
+                    <!-- <div class="background_image" :style="{ 'background-image': 'url(' + 'storage/' + producto.imagenes.url + ')'}"> -->
                 </div>
                 <div class="container fill_height">
                     <div class="row fill_height">
@@ -24,13 +25,21 @@
                                                             <div class="from">desde</div>
                                                             <div style="font-size: 25px">{{ producto.producto.precio_actual | currencyFormat}}<span></span>
                                                             </div>
-                                                            <del class="price-oldslider" v-text="producto.producto.precio_anterior > producto.producto.precio_actual ? producto.producto.precio_anterior : ''">
-                                                            <span></span></del>
+                                                            <!-- <del class="price-oldslider" v-text="producto.producto.precio_anterior > producto.producto.precio_actual ? producto.producto.precio_anterior : ''">
+                                                                <span></span>
+                                                            </del> -->
+
+                                                            <del class="price-oldslider">
+                                                                {{ producto.producto.precio_anterior > producto.producto.precio_actual ? producto.producto.precio_anterior : '' }}
+                                                                <span></span>
+                                                            </del>
                                                         </div>
                                                     </div>
-                                                    <div class="product_image"><a
+                                                    <div class="product_image">
+                                                        <a
                                                             :href="'productos/' + producto.slug">
                                                             <img :src="'storage/' + producto.imagenes[0].url" alt="">
+                                                            <!-- <img :src="'storage/' + producto.imagenes.url" alt=""> -->
                                                         </a>
                                                     </div>
                                                     <div class="product_content">
