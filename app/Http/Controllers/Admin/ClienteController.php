@@ -73,23 +73,30 @@ class ClienteController extends Controller
 
 
 
-    public function sendMessage()
+    public function sendMessage(Request $request)
     {
         
         try {
 
 
-            $info = \request('info');
+            // $info = \request('info');
+
     
-            $data = [];
+            // $data = [];
     
-            parse_str($info, $data);
+            // parse_str($info, $data);
     
            
-            $cliente = $data['cliente_id'];
+            // $cliente = $data['cliente_id'];
             
     
-            $mensaje = $data['mensaje'];
+            // $mensaje = $data['mensaje'];
+
+            $cliente = $request->cliente_id;
+            
+    
+            $mensaje = $request->mensaje;
+    
     
             $cliente = Cliente::with('user')->where('id', $cliente)
                 ->first();
@@ -107,14 +114,14 @@ class ClienteController extends Controller
             
             // return new ClientePrivateMail($cliente->user->nombres, $data['mensaje']);
 
-            return response()->json(['response' => $success]);
+            return response()->json(['enviado' => $success]);
 
         } catch (\Exception $e) {
 
             Log::debug('Error enviando email del admin al cliente.Error: '.$e);
             $success = false;
 
-            return response()->json(['response' => $success]);
+            return response()->json(['enviado' => $success]);
         }
 
     }

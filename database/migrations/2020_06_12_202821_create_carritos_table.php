@@ -23,7 +23,7 @@ class CreateCarritosTable extends Migration
             $table->timestamps();
 
             // $table->index('estado');
-            $table->index(['cliente_id', 'estado']);
+            $table->index(['id','estado','cliente_id']);
         });
     }
 
