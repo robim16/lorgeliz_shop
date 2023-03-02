@@ -34,7 +34,12 @@ class StockController extends Controller
         $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
             $query->where('activo', 'Si');
         })
-        ->with(['talla', 'colorProducto'])//faltan los filtros
+        ->with(['talla:id,nombre', 'colorProducto:id,color_id,producto_id,slug',
+            'colorProducto.producto:id,nombre', 'colorProducto.color:id,nombre',
+            'colorProducto.imagenes' => function($query) {
+                $query->select('id', 'url', 'imageable_id');
+            }
+        ])
         ->where('stock', '>', '0')
         ->when($busqueda, function ($query) use ($busqueda) {
             return $query->whereHas('colorProducto.producto', function (Builder $query) use($busqueda){
