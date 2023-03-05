@@ -31,14 +31,15 @@ class VentaController extends Controller
 
     public function index(Request $request)
     {
-        
         $busqueda = $request->busqueda;
         
         $estado = $request->estado;
 
+      
 
         try {
 
+            
             $ventas = Venta::when($estado, function ($query) use ($estado) {
                 return $query->orWhere('estado', $estado)
                 ->with('cliente');
@@ -56,12 +57,10 @@ class VentaController extends Controller
             
     
             return view('admin.ventas.index', compact('ventas'));
-           
+            
         } catch (\Exception $e) {
-            Log::debug('Error consultando el index de ventas.Error: '.json_encode($e));
+            return $e;
         }
-
-
     }
 
 
