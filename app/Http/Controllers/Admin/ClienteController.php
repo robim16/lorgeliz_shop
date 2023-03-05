@@ -72,27 +72,40 @@ class ClienteController extends Controller
 
 
 
-    public function sendMessage()
+    public function sendMessage(Request $request)
     {
-
-        $info = \request('info');
-
-        $data = [];
-
-        parse_str($info, $data);
-
-       
-        $cliente = Cliente::with('user')->where('id', $data['cliente_id'])
-            ->first();
-
         
         try {
+
+
+            // $info = \request('info');
+
+    
+            // $data = [];
+    
+            // parse_str($info, $data);
+    
+           
+            // $cliente = $data['cliente_id'];
+            
+    
+            // $mensaje = $data['mensaje'];
+
+            $cliente = $request->cliente_id;
+            
+    
+            $mensaje = $request->mensaje;
+    
+    
+            $cliente = Cliente::with('user')->where('id', $cliente)
+                ->first();
             
            
             // Mail::to($cliente->user->email)->send(new ClientePrivateMail($cliente->user->nombres, 
             //     $data['mensaje']));
 
-            SendClientePrivateMail::dispatch($data['mensaje'], $cliente->user);
+
+            SendClientePrivateMail::dispatch($mensaje, $cliente->user);
 
            
             $success = true;
@@ -100,18 +113,17 @@ class ClienteController extends Controller
             
             // return new ClientePrivateMail($cliente->user->nombres, $data['mensaje']);
 
-            return response()->json(['response' => $success]);
+            return response()->json(['enviado' => $success]);
 
         } catch (\Exception $e) {
 
             Log::debug('Error enviando email del admin al cliente.Error: '.$e);
             $success = false;
 
-            return response()->json(['response' => $success]);
+            return response()->json(['enviado' => $success]);
         }
 
     }
-
 
 
     public function pdfListadoClientes()
