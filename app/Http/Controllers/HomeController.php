@@ -41,6 +41,7 @@ class HomeController extends Controller
         $productoSlider = ColorProducto::whereHas('producto', function (Builder $query) {
             $query->where('slider_principal', 'Si');
         })
+        ->select('id','producto_id','slug')
         ->with(['producto:id,nombre,precio_actual,tipo_id','producto.tipo:id,nombre','color:id,nombre',
             'imagenes' => function($query) {
                 $query->select('id', 'url', 'imageable_id');

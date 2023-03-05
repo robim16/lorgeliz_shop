@@ -41,6 +41,7 @@ class ProductController extends Controller
         $productos = Producto::orWhere('productos.nombre','like',"%$busqueda%")
             ->orWhere('productos.id','like',"%$busqueda%")
             ->with('colors')
+            ->withCount('colors')
             ->paginate(10);
 
 
