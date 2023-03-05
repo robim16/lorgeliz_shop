@@ -71,8 +71,8 @@ class ProductoReferencia extends Pivot
         try {
           
             return ProductoReferencia::where('stock', '>' , '0')
-                ->groupBy('color_producto_id')
                 ->select('color_producto_id')
+                ->groupBy('color_producto_id')
                 ->get();
 
         } catch (\Exception $e) {
