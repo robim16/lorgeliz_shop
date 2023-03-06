@@ -21,6 +21,8 @@ use Intervention\Image\Facades\Image;
 // use Symfony\Component\Console\Input\Input;
 use Log;
 
+use function PHPSTORM_META\map;
+
 class ProductController extends Controller
 {
      /**
@@ -40,9 +42,34 @@ class ProductController extends Controller
 
         $productos = Producto::orWhere('productos.nombre','like',"%$busqueda%")
             ->orWhere('productos.id','like',"%$busqueda%")
-            ->with('colors')
+            ->with('colors:id')
             ->withCount('colors')
             ->paginate(10);
+            // ->map(function ($producto) {
+            //     $producto->colors[0]->pivot->load(['imagenes' => function($query) use($producto) {
+            //         $query->select('id', 'url', 'imageable_id')
+            //         ->where('imageable_id', $producto->colors[0]->id)
+            //         ->limit(1);
+            //     }]);
+            // });
+    
+        // $pivots = new \Illuminate\Database\Eloquent\Collection();
+
+        // foreach ($productos as $producto) {
+        //     $pivots = $pivots->concat($producto->colors[0]->pivot->all());
+        // }
+
+        // $pivots->load('imagenes');
+    
+
+        foreach ($productos as $producto) {
+            $producto->colors[0]->pivot->load(['imagenes' => function($query) {
+                $query->select('id', 'url', 'imageable_id')
+                ->limit(1);
+            }]);
+        }
+
+    
 
 
         return view('admin.productos.index',compact('productos')); //index de productos en admin
