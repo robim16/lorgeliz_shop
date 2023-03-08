@@ -61,11 +61,6 @@ if (document.getElementById('app')) {
 }
 
 
-
-if (document.getElementById('product_cart')) {
-    require('./tienda/product');
-}
-
 // if (document.getElementById('chat')) {
 //     require('./tienda/chat');
 // }
@@ -74,13 +69,7 @@ if (document.getElementById('product_cart')) {
 //     require('./tienda/index');
 // }
 
-if (document.getElementById('clientNotification')) {
-    require('./tienda/notifications');
-}
 
-if (document.getElementById('message')) {
-    require('./tienda/messages');
-}
 
 if (document.getElementById('notification')) {
     require('./admin/notifications');
@@ -102,17 +91,10 @@ if (document.getElementById('venta_cliente')) {
     require('./tienda/facturacliente');
 }
 
-if (document.getElementById('carrito')) {
-    require('./tienda/cart');
-}
-
 if (document.getElementById('pedidos')) {
     require('./tienda/orders');
 }
 
-if (document.getElementById('categoria')) {
-    require('./tienda/category');
-}
 
 if (document.getElementById('informeventa')) {
     require('./admin/informe-ventas');
@@ -154,14 +136,7 @@ if (document.getElementById('payments')) {
     require('./admin/listadopagos');
 }
 
-if (document.getElementById('user_cart')) {
-    require('./tienda/userCart');
-}
 
-// if (document.getElementById('factura_venta')) {
-//     require('./admin/factura_venta');
-// }
-    
 if (document.getElementById('venta_show')) {
     require('./admin/ventas_show');
 }
