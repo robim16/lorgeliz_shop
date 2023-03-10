@@ -51564,7 +51564,8 @@ var render = function() {
                     _c("img", {
                       attrs: {
                         src: "storage/" + nuevo.imagenes[0].url,
-                        alt: ""
+                        alt: "",
+                        loading: "lazy"
                       }
                     })
                   ])

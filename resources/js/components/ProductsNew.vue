@@ -23,7 +23,7 @@
                     <div class="product">
                         <div class="product_image">
                         <a :href="'productos/' + nuevo.slug">
-							<img :src="'storage/' + nuevo.imagenes[0].url" alt="">
+							<img :src="'storage/' + nuevo.imagenes[0].url" alt="" loading="lazy">
                             <!-- <img :src="'storage/' + nuevo.imagenes.url" alt=""> -->
                         </a>
                         </div>
