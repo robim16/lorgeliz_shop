@@ -93,7 +93,6 @@
 
 <script>
     export default {
-        // props: ['role_id'],
         props: {
             // role_id:{
             //     required:true,
@@ -170,7 +169,14 @@
                 //     this.arrayMensajes.push(chat);
                 // });
 
+                
+
+                
+                const scroll = document.querySelector(".direct-chat-messages");
+
                 this.arrayMensajes.push(chats);
+
+                scroll.scrollTop = scroll.scrollHeight;
             });
         }
     }
