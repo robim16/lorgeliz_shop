@@ -74,7 +74,8 @@
                             <tr>
                                 <td> {{$producto->id }} </td>
                                 <td>
-                                    @if ($producto->colors->count() > 0)
+                                    {{-- @if ($producto->colors->count() > 0) --}}
+                                    @if ($producto->colors_count > 0)
                                         <img src="{{ url('storage/' . $producto->colors[0]->pivot->imagenes[0]->url) }}" 
                                             alt="" style="height: 50px; width: 50px;" class="rounded-circle">
                                     @endif
@@ -85,7 +86,8 @@
                                 {{--<td> {{$producto->color}}</td>--}}
                                 <td> {{$producto->slider_principal }} </td>
 
-                                @if ($producto->colors->count() > 0)
+                               {{-- @if ($producto->colors->count() > 0) --}}
+                                @if ($producto->colors_count > 0)
 
                                     <td> 
                                         <a class="btn btn-default btn-sm btn-icon" href="{{ route('product.show', $producto->id) }}" title="ver producto">
