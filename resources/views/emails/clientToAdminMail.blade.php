@@ -10,5 +10,6 @@ Ver cliente
 @endcomponent
 
 Gracias por tu atención,<br>
-{{ config('app.name') }}
+{{-- {{ config('app.name') }} --}}
+{{ "Lorgeliz Tienda"}}
 @endcomponent

@@ -144,17 +144,19 @@
                 $.ajax({
                     type: "POST",
                     url: "{{ route('cliente.message') }}",
-                    data: {
-                        info: $('#formCliente').serialize(),
-                    },
+                    data: $('#formCliente').serialize(),
+                    // data: {
+                    //     info: $('#formCliente').serialize(),
+                    // },
                     headers: {
                         'x-csrf-token': $("meta[name=csrf-token]").attr('content')
                     },
                     success: function(response) {
 
-                        console.log(response)
+                        // console.log(response)
+                        console.log(response.enviado)
 
-                        if (response == true) {
+                        if (response.enviado == true) {
                             modal.find('#modalAction').hide();
                             modal.find('.modal-body').html(
                                 '<div class="alert alert-success">Mensaje enviado</div>')

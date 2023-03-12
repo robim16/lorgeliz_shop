@@ -8,5 +8,6 @@ Ver solicitud
 @endcomponent
 
 Gracias,<br>
-{{ config('app.name') }}
+{{-- {{ config('app.name') }} --}}
+{{ "Lorgeliz Tienda" }}
 @endcomponent

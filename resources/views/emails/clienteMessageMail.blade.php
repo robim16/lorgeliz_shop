@@ -9,5 +9,6 @@ En breves instantes empezaremos a atender tu pedido.
 @endcomponent
 
 Gracias por tu compra,<br>
-{{ config('app.name') }}
+{{-- {{ config('app.name') }} --}}
+{{ "Lorgeliz Tienda"}}
 @endcomponent
