@@ -21,16 +21,16 @@ class StockController extends Controller
      * Create a new controller instance.
      *
      * @return void
-    */
+     */
     public function __construct()
     {
         $this->middleware('auth');
     }
-    
+
 
     public function index(Request $request)
     {
-        
+
         $busqueda = $request->get('busqueda');
 
         try {
@@ -38,27 +38,31 @@ class StockController extends Controller
             $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
                 $query->where('activo', 'Si');
             })
-            ->with(['talla', 'colorProducto'])//faltan los filtros
-            ->where('stock', '>', '0')
-            ->when($busqueda, function ($query) use ($busqueda) {
-                return $query->whereHas('colorProducto.producto', function (Builder $query) use($busqueda){
-                    $query->where('nombre','like',"%$busqueda%");
+                ->with([
+                    'talla:id,nombre', 'colorProducto:id,color_id,producto_id,slug',
+                    'colorProducto.producto:id,nombre', 'colorProducto.color:id,nombre',
+                    'colorProducto.imagenes' => function ($query) {
+                        $query->select('id', 'url', 'imageable_id');
+                    }
+                ])
+                ->where('stock', '>', '0')
+                ->when($busqueda, function ($query) use ($busqueda) {
+                    return $query->whereHas('colorProducto.producto', function (Builder $query) use ($busqueda) {
+                        $query->where('nombre', 'like', "%$busqueda%");
+                    })
+                        ->orWhereHas('colorProducto.color', function (Builder $query) use ($busqueda) {
+                            $query->where('nombre', 'like', "%$busqueda%");
+                        });
                 })
-                ->orWhereHas('colorProducto.color', function (Builder $query) use($busqueda){
-                    $query->where('nombre','like',"%$busqueda%");
-                });
-            })
-            ->orderBy('color_producto_id')
-            ->paginate(5);
-    
-    
-            return view('admin.stocks.index',compact('productos'));
-          
+                ->orderBy('color_producto_id')
+                ->paginate(5);
+
+
+            return view('admin.stocks.index', compact('productos'));
         } catch (\Exception $e) {
 
-            Log::debug('Error en index de stocks. Error: '.json_encode($e));
+            Log::debug('Error en index de stocks. Error: ' . json_encode($e));
         }
-
     }
 
 
@@ -84,66 +88,58 @@ class StockController extends Controller
                 ->where('producto_id', $request->producto_id)
                 ->with('producto:id,slider_principal,estado')
                 ->first();
-            
+
             $referencia = ProductoReferencia::where('color_producto_id', $colorproducto->id)
                 ->where('talla_id', $request->talla_id)
                 ->first(); // buscar la referencia
 
-            
+
 
             DB::beginTransaction();
 
 
-            if ($referencia == '') {//si no existe la referencia, se crea
-    
+            if ($referencia == '') { //si no existe la referencia, se crea
+
                 $producto = new ProductoReferencia();
                 $producto->color_producto_id = $colorproducto->id;
                 $producto->talla_id = $request->talla_id;
                 $producto->stock = $request->cantidad;
-        
-                $producto->save();  
 
-            }
+                $producto->save();
+            } else {
 
-            else{
-    
                 if ($request->operacion == 1) {
-                   
+
                     $referencia->stock = $referencia->stock + $request->cantidad; //sino, se actualiza el stock
-                }
-                else{
+                } else {
                     $referencia->stock = $referencia->stock - $request->cantidad;
                 }
-    
+
                 $referencia->save();
             }
-    
+
             session()->flash('message', ['success', ("Se ha actualizado el inventario exitosamente")]);
-    
+
             $product = array();
 
             $product['data'] = array();
-    
+
             $product['data'] = $colorproducto;
 
             broadcast(new AddProductEvent($product));
 
 
             DB::commit();
-    
+
             return back();
-
-
         } catch (\Exception $e) {
 
-            Log::debug('Error actualizando el stock. error: '.json_encode($e));
+            Log::debug('Error actualizando el stock. error: ' . json_encode($e));
 
             DB::rollBack();
 
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
         }
-       
-       
     }
 
 
@@ -151,27 +147,24 @@ class StockController extends Controller
     {
 
         try {
-    
+
             $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
-                    $query->where('activo', 'Si');
-                })
+                $query->where('activo', 'Si');
+            })
                 ->with(['talla', 'colorProducto'])
                 ->where('stock', '>', '0')
                 ->orderBy('color_producto_id')
                 ->get();
-    
-                
+
+
             $count = $productos->count();
-    
-            $pdf = \PDF::loadView('admin.pdf.inventarios',['productos'=>$productos, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
-            
+
+            $pdf = \PDF::loadView('admin.pdf.inventarios', ['productos' => $productos, 'count' => $count])
+                ->setPaper('a4', 'landscape');
+
             return $pdf->download('inventarioproductos.pdf');
-
         } catch (\Exception $e) {
-            Log::debug('Error imprimiendo el pdf de stock. error: '.json_encode($e));
-
+            Log::debug('Error imprimiendo el pdf de stock. error: ' . json_encode($e));
         }
     }
-
 }
