@@ -42,14 +42,23 @@ class ProductController extends Controller
 
             $productos = Producto::orWhere('productos.nombre', 'like', "%$busqueda%")
                 ->orWhere('productos.id', 'like', "%$busqueda%")
-                ->with('colors')
+                ->with('colors:id')
                 ->withCount('colors')
                 ->paginate(10);
+
+
+            foreach ($productos as $producto) {
+                $producto->colors[0]->pivot->load(['imagenes' => function($query) {
+                    $query->select('id', 'url', 'imageable_id')
+                    ->limit(1);
+                }]);
+            }
 
             return view('admin.productos.index', compact('productos')); //index de productos en admin
 
         } catch (\Exception $e) {
-            //throw $th;
+            Log::debug('Error en index de productos.Error: ' . json_encode($e));
+
         }
     }
 
