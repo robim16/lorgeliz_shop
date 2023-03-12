@@ -21,6 +21,8 @@ class CreateProductoReferenciaTable extends Migration
             $table->foreign('talla_id')->references('id')->on('tallas');
             $table->integer('stock');
             $table->timestamps();
+
+            $table->index('stock');
         });
     }
 
