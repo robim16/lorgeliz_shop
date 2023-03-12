@@ -434,10 +434,10 @@ class CarController extends Controller
 
     
                 $productos = CarritoProducto::whereHas('carrito', function (Builder $query){
-                //     $query->where('estado', 1)
-                //    ->where('cliente_id', auth()->user()->cliente->id);
-                    $query->cliente(auth()->user()->cliente->id)
-                    ->estado();
+                    // $query->cliente(auth()->user()->cliente->id)
+                    //     ->estado();
+                    $query->estado()
+                        ->cliente(auth()->user()->cliente->id);
                 })
                 ->selectRaw('SUM(cantidad) as cantidad')
                 ->get();

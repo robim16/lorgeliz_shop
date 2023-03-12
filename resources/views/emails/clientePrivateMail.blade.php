@@ -8,5 +8,6 @@ Ir a mi cuenta
 @endcomponent
 
 Atentamente,<br>
-{{ config('app.name') }}
+{{-- {{ config('app.name') }} --}}
+{{ "Lorgeliz Tienda"}}
 @endcomponent

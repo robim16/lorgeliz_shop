@@ -18,5 +18,6 @@ Ver mi solicitud de cambio de productos
 @endcomponent
 
 Gracias,<br>
-{{ config('app.name') }}
+{{-- {{ config('app.name') }} --}}
+{{ "Lorgeliz Tienda"}}
 @endcomponent
