@@ -143,7 +143,7 @@ export default {
 
     },
     mounted() {
-        window.Echo.channel('chat-added').listen('ChatEvent', (e) => {
+        window.Echo.channel('chat-added').listen('.new-message', (e) => {
             
             let chats = e.data.chats;
 
