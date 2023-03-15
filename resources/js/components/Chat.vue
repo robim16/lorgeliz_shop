@@ -155,12 +155,14 @@
         },
 
        created() {
+
+        
             this.loadMessages();
             var url = window.location.pathname;
             this.urlLength = url.split('/').length;
            
 
-            window.Echo.channel('chat-added').listen('ChatEvent', (e) => {
+            window.Echo.channel('chat-added').listen('.new-message', (e) => {
                 let chats = e.data.chats;
                 // let chats = e.data;
                 
@@ -177,6 +179,7 @@
                 this.arrayMensajes.push(chats);
 
                 scroll.scrollTop = scroll.scrollHeight;
+                console.log(chats)
             });
         }
     }

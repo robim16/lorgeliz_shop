@@ -128,6 +128,7 @@ export default {
                     if (response.data.data == 'success') {
                         // me.loadMessages();
                         this.mensajes.push(response.data.msg)
+                        this.mensaje = ''
                     }
                 }).catch(function (error) {
                     console.log(error);
@@ -143,7 +144,7 @@ export default {
 
     },
     mounted() {
-        window.Echo.channel('chat-added').listen('ChatEvent', (e) => {
+        window.Echo.channel('chat-added').listen('.new-message', (e) => {
             
             let chats = e.data.chats;
 

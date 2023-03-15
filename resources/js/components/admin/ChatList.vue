@@ -176,7 +176,7 @@
         mounted() {
             this.chatList(1);
 
-            window.Echo.channel('chat-added').listen('ChatEvent', (e) => {
+            window.Echo.channel('chat-added').listen('.new-message', (e) => {
                 this.chatList(1);
             });
         }

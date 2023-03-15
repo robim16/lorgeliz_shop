@@ -8,5 +8,6 @@ require('./tienda/bootstrap');
 
 require('./comun');
 
+Pusher.log = function (message) { window.console.log(message); }
 
 
