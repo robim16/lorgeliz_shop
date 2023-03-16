@@ -11,61 +11,73 @@ class ColorProducto extends Pivot
 
     protected $table = 'color_producto';
     protected $fillable = [
-        'producto_id', 
+        'producto_id',
         'color_id',
         'visitas',
         'slug',
         'slider_principal'
     ];
 
-    public static function boot () {
+    public static function boot()
+    {
         parent::boot();
-        
-        static::creating(function(ColorProducto $colorproducto) {
+
+        static::creating(function (ColorProducto $colorproducto) {
 
             $nombre = request()->nombre;
             $id = request()->color;
 
             $color = Color::where('id', $id)->first();
-            
-            $slug = \Str::slug($nombre);
-            
-            //$count = static::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
-            
-            $colorproducto->slug = "{$slug}-{$color['nombre']}";
-          
-        });
 
+            $slug = \Str::slug($nombre);
+
+            //$count = static::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+
+            $colorproducto->slug = "{$slug}-{$color['nombre']}";
+        });
     }
 
     public $timestamps = false;
-    
 
-    public function producto () {
+
+    public function producto()
+    {
         return $this->belongsTo(Producto::class);
     }
 
-    public function color (){
+    public function color()
+    {
         return $this->belongsTo(Color::class);
     }
 
     //public function productoReferencias (){
-        //return $this->hasMany(ProductoReferencia::class);
+    //return $this->hasMany(ProductoReferencia::class);
     //}
 
-    public function imagenes (){
-        return $this->morphMany('App\Imagene','imageable');
+    public function imagenes()
+    {
+        return $this->morphMany('App\Imagene', 'imageable');
     }
 
-    public function tallas (){
+    public function tallas()
+    {
         return $this->belongsToMany(Talla::class, 'producto_referencia');
     }
 
-    public function scopeActivo($query){
+    public function scopeActivo($query)
+    {
         return $query->where('activo', 'Si');
     }
 
-    public function scopeVisitas($query){
+    public function scopeVisitas($query)
+    {
         return $query->where('visitas', '>', '0');
     }
+
+    public function imagenesColor()
+    {
+        // return $this->books()->where('favourite', true)->with('authors')->get();
+        return $this->imagenes->select('url');
+    }
+
 }
