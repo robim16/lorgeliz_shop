@@ -2551,14 +2551,19 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.loadCart();
-  },
-  mounted: function mounted() {
     var _this5 = this;
 
-    window.Echo["private"]("cart-updated.".concat(this.user_id)).listen('UserCart', function (e) {
+    this.loadCart();
+    window.Echo["private"]("cart-updated.".concat(this.user_id)).listen('.new-product-to-cart', function (e) {
       _this5.loadCart();
-    }); // window.Echo.channel('producto-agotado').listen('ProductoAgotado', (e) => {
+
+      console.log(e);
+    });
+  },
+  mounted: function mounted() {// window.Echo.private(`cart-updated.${this.user_id}`).listen('UserCart', (e) => {
+    //     this.loadCart();
+    // });
+    // window.Echo.channel('producto-agotado').listen('ProductoAgotado', (e) => {
     //     products = e.data;
     //     Object.values(products).map(product => {
     //         const index = this.arrayProductos.findIndex(p => p.id == product.id);
@@ -3301,7 +3306,7 @@ __webpack_require__.r(__webpack_exports__);
     this.loadMessages();
     var url = window.location.pathname;
     this.urlLength = url.split('/').length;
-    window.Echo.channel('chat-added').listen('ChatEvent', function (e) {
+    window.Echo.channel('chat-added').listen('.new-message', function (e) {
       var chats = e.data.chats; // let chats = e.data;
       // this.arrayMensajes = [];
       // chats.map(chat => {
@@ -5371,7 +5376,7 @@ __webpack_require__.r(__webpack_exports__);
     })["catch"](function (error) {
       console.log(error);
     });
-    window.Echo["private"]("cart-updated.".concat(this.user_id)).listen('UserCart', function (e) {
+    window.Echo["private"]("cart-updated.".concat(this.user_id)).listen('.new-product-to-cart', function (e) {
       var cart = e.cart;
       _this2.productos = cart.cantidad;
     });
@@ -5761,7 +5766,7 @@ __webpack_require__.r(__webpack_exports__);
       this.enable(this.getCliente);
     }
 
-    window.Echo.channel('chat-added').listen('ChatEvent', function (e) {
+    window.Echo.channel('chat-added').listen('.new-message', function (e) {
       var chats = e.data.chats; // this.arrayMensajes = [];
       // console.log(chats);
 
@@ -5967,7 +5972,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this2 = this;
 
     this.chatList(1);
-    window.Echo.channel('chat-added').listen('ChatEvent', function (e) {
+    window.Echo.channel('chat-added').listen('.new-message', function (e) {
       _this2.chatList(1);
     });
   }
@@ -6127,7 +6132,7 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this2 = this;
 
-    window.Echo.channel('chat-added').listen('ChatEvent', function (e) {
+    window.Echo.channel('chat-added').listen('.new-message', function (e) {
       var chats = e.data.chats;
 
       if (_this2.cliente == e.data.cliente) {
