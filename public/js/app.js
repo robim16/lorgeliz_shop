@@ -5398,7 +5398,7 @@ __webpack_require__.r(__webpack_exports__);
     })["catch"](function (error) {
       console.log(error);
     });
-    window.Echo["private"]("cart-updated.".concat(this.user_id)).listen('UserCart', function (e) {
+    window.Echo["private"]("cart-updated.".concat(this.user_id)).listen('.new-product-to-cart', function (e) {
       var cart = e.cart;
       _this2.productos = cart.cantidad;
     });
@@ -6139,6 +6139,8 @@ __webpack_require__.r(__webpack_exports__);
           if (response.data.data == 'success') {
             // me.loadMessages();
             _this.mensajes.push(response.data.msg);
+
+            _this.mensaje = '';
           }
         })["catch"](function (error) {
           console.log(error);
