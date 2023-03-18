@@ -371,14 +371,18 @@
         created() {
             
             this.loadCart();
+
+            window.Echo.private(`cart-updated.${this.user_id}`).listen('.new-product-to-cart', (e) => {
+                this.loadCart();
+            });
            
         },
 
         mounted() {
 
-            window.Echo.private(`cart-updated.${this.user_id}`).listen('UserCart', (e) => {
-                this.loadCart();
-            });
+            // window.Echo.private(`cart-updated.${this.user_id}`).listen('UserCart', (e) => {
+            //     this.loadCart();
+            // });
 
             // window.Echo.channel('producto-agotado').listen('ProductoAgotado', (e) => {
 

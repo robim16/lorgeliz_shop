@@ -45,10 +45,11 @@
                 console.log(error);
             });
 
-            window.Echo.private(`cart-updated.${this.user_id}`).listen('UserCart', (e) => {
+            window.Echo.private(`cart-updated.${this.user_id}`).listen('.new-product-to-cart', (e) => {
                 let cart = e.cart;
                 this.productos = cart.cantidad;
             });
+            
         }
     }
 </script>

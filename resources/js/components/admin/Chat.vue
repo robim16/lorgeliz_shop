@@ -378,7 +378,7 @@ import Messenger from './Messenger.vue';
                 this.enable(this.getCliente);
             }
 
-            window.Echo.channel('chat-added').listen('ChatEvent', (e) => {
+            window.Echo.channel('chat-added').listen('.new-message', (e) => {
                 let chats = e.data.chats;
                 // this.arrayMensajes = [];
                 // console.log(chats);
