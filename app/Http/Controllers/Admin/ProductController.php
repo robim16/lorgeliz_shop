@@ -11,6 +11,7 @@ use App\ProductoVenta;
 use App\Events\ProductStatusEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Services\ProductService;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -107,106 +108,21 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request)
+    public function store(ProductRequest $request, ProductService $productService)
     {
         try {
 
+
             DB::beginTransaction();
 
-            $producto = new Producto();
 
-            //$producto->nombre = $request->nombre." ".$color['nombre'];
-            $producto->nombre = $request->nombre;
-            $producto->tipo_id = $request->tipo_id;
-            $producto->marca = $request->marca;
-            $producto->precio_anterior = $request->precioanterior;
-            $producto->precio_actual = $request->precioactual;
-            $producto->porcentaje_descuento = $request->porcentajededescuento;
-            $producto->descripcion_corta = $request->descripcion_corta;
-            $producto->descripcion_larga = $request->descripcion_larga;
-            $producto->especificaciones = $request->especificaciones;
-            $producto->estado = $request->estado;
+            $producto = $productService->createProduct($request);
 
-            if ($request->sliderprincipal) {
-                $producto->slider_principal = 'Si';
-            } else {
-                $producto->slider_principal = 'No';
-            }
+            
+            $url_imagenes = $productService->uploadImage($request, $producto);
 
+            $color_producto = $productService->createColorProducto($request, $producto, $url_imagenes);
 
-            $producto->save();
-
-
-            $url_imagenes = [];
-
-            if ($request->hasFile('imagenes')) {
-
-                $imagenes = $request->file('imagenes');
-
-
-                foreach ($imagenes as $imagen) {
-
-                    $nombre = time() . '_' . $imagen->getClientOriginalName();
-
-                    // $path = Storage::disk('public')->putFileAs("imagenes/productos/producto" . $producto->id, $imagen, $nombre);
-
-                    // $url_imagenes[]['url'] = $path;
-
-
-                    $image = Image::make($imagen)->encode('jpg', 75);
-                    $image->resize(530, 591, function ($constraint) {
-                        $constraint->upsize();
-                    });
-
-                    // Storage::disk('dropbox')->put("imagenes/productos/producto".$nombre, $image->stream()->__toString());
-                    // $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
-                    // $response = $dropbox->createSharedLinkWithSettings("imagenes/productos/producto" . $nombre, ["requested_visibility" => "public"]);
-
-                    // $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
-
-                    // $path = "imagenes/productos/producto/".$producto->id."/".$nombre;
-
-                    $path = "imagenes/productos/producto_" . $producto->id . "/" . $nombre;
-
-                    Storage::disk('public')->put($path, $image->stream());
-
-                    $url_imagenes[]['url'] = $path;
-                }
-            }
-
-            // $colorproducto = new ColorProducto(); //creamos el color
-            // $colorproducto->producto_id = $producto->id;
-            // $colorproducto->color_id = $request->color;
-
-            // if ($request->activo) {
-            //     $colorproducto->activo = 'Si';    
-            // }
-            // else {
-            //     $colorproducto->activo = 'No';    
-            // }
-
-            // $colorproducto->save();
-
-
-            if ($request->activo) {
-                $activo = 'Si';
-            } else {
-                $activo = 'No';
-            }
-
-            $colorproducto = ColorProducto::create([
-                'producto_id' => $producto->id,
-                'color_id' => $request->color,
-                'activo' => $activo
-            ]);
-
-            $color_producto = ColorProducto::where('slug', $colorproducto->slug)
-                ->where('color_id', $colorproducto->color_id)
-                ->where('producto_id', $colorproducto->producto_id)
-                ->first();
-
-
-            $color_producto->imagenes()->createMany($url_imagenes);
 
             DB::commit();
 
@@ -214,13 +130,15 @@ class ProductController extends Controller
             session()->flash('message', ['success', ("Se ha creado el producto exitosamente")]);
 
             return redirect()->route('product.index');
+
         } catch (Exception $e) {
 
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
 
             Log::debug('Error creando el producto.Error: ' . json_encode($e));
 
-            return redirect()->back();
+            return redirect()->back()
+                ->withInput($request->input());
 
             DB::rollBack();
         }
@@ -422,6 +340,7 @@ class ProductController extends Controller
             session()->flash('message', ['success', ("Se ha actualizado el producto exitosamente")]);
 
             return redirect()->route('product.index');
+
         } catch (Exception $e) {
 
             session()->flash('message', ['warning', ("ha ocurrido un error" . $e)]);
@@ -498,13 +417,15 @@ class ProductController extends Controller
             session()->flash('message', ['success', ("Se ha actualizado el producto exitosamente")]);
 
             return redirect()->route('product.colors', $producto_id);
+            
         } catch (Exception $e) {
 
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
 
             Log::debug('Error editando el color producto.Error: ' . json_encode($e));
 
-            return redirect()->back();
+            return redirect()->back()
+                ->withInput($request->input());
 
             DB::rollBack();
         }
@@ -566,6 +487,7 @@ class ProductController extends Controller
             } else {
                 return redirect()->route('product.index');
             }
+
         } catch (\Exception $e) {
 
             session()->flash('message', ['warning', ("Ha ocurrido un error al eliminar el producto")]);
@@ -594,6 +516,7 @@ class ProductController extends Controller
             session()->flash('message', ['success', ("Se ha activado el producto")]);
 
             return back();
+
         } catch (\Exception $e) {
 
             Log::debug('Error activando el color_producto.Error :' . json_encode($e));
@@ -706,7 +629,8 @@ class ProductController extends Controller
 
             Log::debug('Error creando el color_producto.Error: ' . json_encode($e));
 
-            return back();
+            return redirect()->back()
+                ->withInput($request->input());
 
             DB::rollBack();
         }
