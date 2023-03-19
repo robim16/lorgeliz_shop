@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Color;
 use App\ColorProducto;
 use App\Imagene;
 use App\Producto;
@@ -11,6 +10,7 @@ use App\ProductoVenta;
 use App\Events\ProductStatusEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Services\ProductService;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -76,6 +76,7 @@ class ProductController extends Controller
 
     }
 
+
     public function product(Request $request, $id)
     {
        
@@ -101,6 +102,7 @@ class ProductController extends Controller
 
     }   
 
+
     public function create()
     {
         $estados = $this->estado_productos();
@@ -108,78 +110,86 @@ class ProductController extends Controller
         return view('admin.productos.create', compact('estados'));//vista para crear un producto
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request)
+    public function store(ProductRequest $request, ProductService $productService)
     {
         try {
             
             DB::beginTransaction();
 
-            $producto = new Producto();
+            // $producto = new Producto();
     
-            //$producto->nombre = $request->nombre." ".$color['nombre'];
-            $producto->nombre = $request->nombre;
-            $producto->tipo_id = $request->tipo_id;
-            $producto->marca = $request->marca;
-            $producto->precio_anterior = $request->precioanterior;
-            $producto->precio_actual = $request->precioactual;
-            $producto->porcentaje_descuento = $request->porcentajededescuento;
-            $producto->descripcion_corta = $request->descripcion_corta;
-            $producto->descripcion_larga = $request->descripcion_larga;
-            $producto->especificaciones = $request->especificaciones;
-            $producto->estado = $request->estado;
+            // $producto->nombre = $request->nombre;
+            // $producto->tipo_id = $request->tipo_id;
+            // $producto->marca = $request->marca;
+            // $producto->precio_anterior = $request->precioanterior;
+            // $producto->precio_actual = $request->precioactual;
+            // $producto->porcentaje_descuento = $request->porcentajededescuento;
+            // $producto->descripcion_corta = $request->descripcion_corta;
+            // $producto->descripcion_larga = $request->descripcion_larga;
+            // $producto->especificaciones = $request->especificaciones;
+            // $producto->estado = $request->estado;
     
-            if ($request->sliderprincipal) {
-                $producto->slider_principal = 'Si';    
-            }
-            else {
-                $producto->slider_principal = 'No';    
-            }
+            // if ($request->sliderprincipal) {
+            //     $producto->slider_principal = 'Si';    
+            // }
+            // else {
+            //     $producto->slider_principal = 'No';    
+            // }
             
     
-            $producto->save();
+            // $producto->save();
+
+            $producto = $productService->createProduct($request);
 
     
-            $url_imagenes = [];
+            $url_imagenes = $productService->uploadImage($request, $producto);
+
+
+            $color_producto = $productService->createColorProducto($request, $producto, $url_imagenes);
+
+
+            // $url_imagenes = [];
     
-            if ($request->hasFile('imagenes')) {
+            // if ($request->hasFile('imagenes')) {
     
-                $imagenes = $request->file('imagenes');
+            //     $imagenes = $request->file('imagenes');
     
-                foreach ($imagenes as $imagen) {
+            //     foreach ($imagenes as $imagen) {
     
-                    $nombre = time().'_'.$imagen->getClientOriginalName();
+            //         $nombre = time().'_'.$imagen->getClientOriginalName();
     
-                    // $path = Storage::disk('public')->putFileAs("imagenes/productos/producto" . $producto->id, $imagen, $nombre);
+            //         // $path = Storage::disk('public')->putFileAs("imagenes/productos/producto" . $producto->id, $imagen, $nombre);
     
-                    // $url_imagenes[]['url'] = $path;
+            //         // $url_imagenes[]['url'] = $path;
     
     
-                    $image = Image::make($imagen)->encode('jpg', 75);
-                    $image->resize(530, 591, function ($constraint){
-                        $constraint->upsize();
-                    });
+            //         $image = Image::make($imagen)->encode('jpg', 75);
+            //         $image->resize(530, 591, function ($constraint){
+            //             $constraint->upsize();
+            //         });
                     
-                    // Storage::disk('dropbox')->put("imagenes/productos/producto".$nombre, $image->stream()->__toString());
-                    // $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
-                    // $response = $dropbox->createSharedLinkWithSettings("imagenes/productos/producto" . $nombre, ["requested_visibility" => "public"]);
+            //         // Storage::disk('dropbox')->put("imagenes/productos/producto".$nombre, $image->stream()->__toString());
+            //         // $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
+            //         // $response = $dropbox->createSharedLinkWithSettings("imagenes/productos/producto" . $nombre, ["requested_visibility" => "public"]);
     
-                    // $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
+            //         // $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
 
-                    $path = "imagenes/productos/producto_".$producto->id."/".$nombre;
+            //         $path = "imagenes/productos/producto_".$producto->id."/".$nombre;
 
-                    Storage::disk('public')->put($path, $image->stream());
+            //         Storage::disk('public')->put($path, $image->stream());
 
-                    $url_imagenes[]['url'] = $path;
+            //         $url_imagenes[]['url'] = $path;
     
-                }
+            //     }
     
-            }
+            // }
     
             // $colorproducto = new ColorProducto(); //creamos el color
             // $colorproducto->producto_id = $producto->id;
@@ -195,27 +205,27 @@ class ProductController extends Controller
             // $colorproducto->save();
 
             
-            if ($request->activo) {
-                $activo = 'Si';    
-            }
-            else {
-                $activo = 'No';    
-            }
+            // if ($request->activo) {
+            //     $activo = 'Si';    
+            // }
+            // else {
+            //     $activo = 'No';    
+            // }
 
-            $colorproducto = ColorProducto::create([
-                'producto_id'=>$producto->id,
-                'color_id' => $request->color,
-                'activo' => $activo 
-            ]);
+            // $colorproducto = ColorProducto::create([
+            //     'producto_id'=>$producto->id,
+            //     'color_id' => $request->color,
+            //     'activo' => $activo 
+            // ]);
             
 
-            $color_producto = ColorProducto::where('slug', $colorproducto->slug)
-                ->where('color_id', $colorproducto->color_id)
-                ->where('producto_id', $colorproducto->producto_id)
-                ->first();
+            // $color_producto = ColorProducto::where('slug', $colorproducto->slug)
+            //     ->where('color_id', $colorproducto->color_id)
+            //     ->where('producto_id', $colorproducto->producto_id)
+            //     ->first();
             
 
-            $color_producto->imagenes()->createMany($url_imagenes);
+            // $color_producto->imagenes()->createMany($url_imagenes);
 
             DB::commit();
 
@@ -228,8 +238,7 @@ class ProductController extends Controller
 
             session()->flash('message', ['warning', ("ha ocurrido un error")]);
 
-            Log::debug('Error creando el producto. producto: '.json_encode($producto).' '.'color_producto: '
-                .json_encode($color_producto));
+            Log::debug('Error creando el producto.Request: '.json_encode($request).' '.'Error: '.$e);
 
             return redirect()->back();
 
