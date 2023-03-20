@@ -13,7 +13,10 @@ class ChatController extends Controller
 {
     public function index(Request $request){
 
-        if (!$request->ajax()) return redirect('/chats/admin');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
+        
         $buscar = $request->buscar;
         
         $user = auth()->user()->id;

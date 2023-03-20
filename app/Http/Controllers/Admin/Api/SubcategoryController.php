@@ -10,7 +10,9 @@ class SubcategoryController extends Controller
 {
     public function index(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $id  = $request->categoria;
         $subcategorias = Subcategoria::where('categoria_id', $id)->get(); 

@@ -12,15 +12,24 @@ class ImagenController extends Controller
 {
     public function destroy(Request $request,$id)
     {
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
       
-        $image = Imagene::find($id);
+        try {
+            
+            $image = Imagene::find($id);
+    
+            $eliminar = Storage::disk('public')->delete($image->url); // se elimina del directorio
+    
+            $image->delete(); // se elimina de la bd
+    
+            return "eliminado id:".$id.' '.$eliminar;
 
-        $eliminar = Storage::disk('public')->delete($image->url); // se elimina del directorio
-
-        $image->delete(); // se elimina de la bd
-
-        return "eliminado id:".$id.' '.$eliminar;
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+        
     }
 }

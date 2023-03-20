@@ -272,7 +272,7 @@
 
     // var JSONFinal = '';
 
-   function init() {
+    function init() {
         return new Promise(async (resolve, reject) => {
             await loadJSON(function (response) {
 
@@ -307,12 +307,7 @@
 <script>
 	$(document).ready(function () {
        
-        var JSONFinal = '';
-        init().
-        then((data)=>{
-            JSONFinal = data;
-            setMunicipios(JSONFinal);
-        });
+        e
 
         $(document).on('change', '#departamento', function(e) { 
 			e.preventDefault();

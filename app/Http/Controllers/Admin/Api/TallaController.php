@@ -22,12 +22,15 @@ class TallaController extends Controller
 
         return $tallas;
     }
+    
 
-    public function fetchTallasByTipo(Request $request)
     //obtener las tallas de un tipo de producto para mostrar en el select las que ya han sido seleccionadas
     //, en la vista index de tipo de producto
+    public function fetchTallasByTipo(Request $request)
     {   
-        if (!$request->ajax()) return redirect('/');
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
 
         $id  = $request->id;
 

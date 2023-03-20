@@ -155,10 +155,9 @@
                             <label for="nombre">Transportadora</label>
                             <select name="transportadora" id="transportadora" class="form-control @error('transportadora') is-invalid @enderror" required autocomplete="transportadora">
                                 <option value="">Seleccione uno</option>
-                                <option value="Interrapidisimo">Interrapidísimo</option>
-                                <option value="Servientrega">Servientrega</option>
-                                <option value="Coordinadora">Coordinadora</option>
-                                <option value="Envia">Envía</option>
+                                @foreach ($transportadoras as $transportadora)
+                                    <option value="{{ $transportadora }}">{{ $transportadora }}</option>
+                                @endforeach
                             </select>
                             
                             @if($errors->has('transportadora'))
@@ -298,7 +297,7 @@
 
                 var cliente = parseInt($('#cliente_id').val());
 
-                if (cliente != 0) {
+                if (cliente != '') {
 
                     $.ajax({
                         type: "GET",
