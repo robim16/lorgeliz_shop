@@ -41,7 +41,17 @@ class EnviosController extends Controller
             ->whereHas('ventas')
             ->get();
 
-        return view('admin.envios.create', compact('clientes'));
+        $transportadoras = array();
+
+        $transportadoras = [
+            'Interrapidísimo',
+            'Servientrega',
+            'Coordinadora',
+            'Envía'
+        ];
+
+        return view('admin.envios.create', compact('clientes', 'transportadoras'));
+
     }
 
     /**
@@ -84,9 +94,30 @@ class EnviosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Envio $envio)
     {
-        //
+        try {
+            
+            $clientes = Cliente::with('user')
+                ->whereHas('ventas')
+                ->get();
+                
+            $envio->load('venta:id,cliente_id');
+    
+            $transportadoras = array();
+    
+            $transportadoras = [
+                'Interrapidísimo',
+                'Servientrega',
+                'Coordinadora',
+                'Envía'
+            ];
+    
+            return view('admin.envios.edit', compact('envio','clientes', 'transportadoras'));
+
+        } catch (\Exception $e) {
+            Log::debug('Error en edit envío'.' '.json_encode($e));
+        }
     }
 
     /**
@@ -96,9 +127,19 @@ class EnviosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Envio $envio)
     {
-        //
+        try {
+
+            $update = $envio->update($request->except('cliente_id'));
+
+            session()->flash('message', ['success', ("Se editado la guía de envío exitosamente")]);
+
+            return back();
+           
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 
     /**

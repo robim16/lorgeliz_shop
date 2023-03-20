@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('titulo', 'Registrar guía de envío')
+@section('titulo', 'Editar guía de envío')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('envios.index') }}">Envíos</a></li>
@@ -11,8 +11,9 @@
 @section('content')
 
     <div>
-        <form action="{{ route('envios.store') }}" method="POST">
+        <form action="{{ route('envios.update', $envio->id) }}" method="POST">
             @csrf
+            @method('PUT')
 
             <!-- Default box -->
             <div class="card">
@@ -38,7 +39,9 @@
                                 <select name="cliente_id" id="cliente_id" class="form-control" style="width: 100%;">
                                     <option value="">Seleccione</option>
                                     @foreach ($clientes as $cliente)
-                                        <option value="{{ $cliente->id }}">
+                                        <option
+                                            {{ (int) old('cliente_id') === $cliente || $envio->venta->cliente_id === $cliente->id ? 'selected' : '' }}
+                                            value="{{ $cliente->id }}">
                                             {{ $cliente->user->nombres }} {{ $cliente->user->apellidos }}
                                         </option>
                                     @endforeach
@@ -98,7 +101,7 @@
                                 <select name="municipio" id="municipio"
                                     class="form-control @error('municipio') is-invalid @enderror" required
                                     autocomplete="municipio">
-                                    <option value="0">Seleccione uno</option>
+                                   
                                 </select>
 
                                 @error('municipio')
@@ -112,6 +115,7 @@
                         </div>
                     </div>
 
+
                     <div class="row">
 
                         <div class="col-md-6">
@@ -119,7 +123,8 @@
                             <div class="form-group">
                                 <label for="nombre">Dirección</label>
                                 <input type="text" name="direccion" id="direccion" class="form-control"
-                                    value="{{ old('direccion') }}" autofocus />
+                                    value="{{ old('direccion') ?: $envio->direccion }}"
+                                    autofocus />
 
                                 @if ($errors->has('direccion'))
                                     <small class="form-text text-danger">
@@ -133,7 +138,8 @@
                             <div class="form-group">
                                 <label for="guia">Número de guía</label>
                                 <input type="text" name="guia" id="guia" class="form-control"
-                                    value="{{ old('guia') }}" autofocus />
+                                    value="{{ old('direccion') ?: $envio->guia }}"
+                                    autofocus />
 
                                 @if ($errors->has('guia'))
                                     <small class="form-text text-danger">
@@ -155,9 +161,13 @@
                                 <select name="transportadora" id="transportadora"
                                     class="form-control @error('transportadora') is-invalid @enderror" required
                                     autocomplete="transportadora">
+                                    <option value="">Seleccione uno</option>
                                     @foreach ($transportadoras as $transportadora)
-                                        <option value="{{ $transportadora }}">{{ $transportadora }}</option>
+                                        <option
+                                            {{ (int) old('transportadora') === $transportadora || $envio->transportadora === $transportadora ? 'selected' : '' }}
+                                            value="{{ $transportadora }}">{{ $transportadora }}</option>
                                     @endforeach
+
                                 </select>
 
                                 @if ($errors->has('transportadora'))
@@ -172,7 +182,7 @@
                             <div class="form-group">
                                 <label for="costo">Costo del envío</label>
                                 <input type="number" name="costo" id="costo" class="form-control"
-                                    value="{{ old('costo') }}" autofocus step="0" />
+                                    value="{{ old('costo') ?: $envio->costo }}" autofocus step="0" />
 
                                 @if ($errors->has('costo'))
                                     <small class="form-text text-danger">
@@ -192,7 +202,7 @@
                             <div class="form-group">
                                 <label for="fecha">Fecha</label>
                                 <input type="datetime-local" name="fecha" id="fecha" class="form-control"
-                                    value="{{ old('fecha') }}" autofocus />
+                                    value="{{ old('fecha') ?: $envio->fecha }}" autofocus />
 
                                 @if ($errors->has('fecha'))
                                     <small class="form-text text-danger">
@@ -207,9 +217,8 @@
                             <div class="form-group">
 
                                 <label for="comentarios">Comentarios</label>
-                                <textarea class="form-control" name="comentarios" id="comentarios" cols="30" rows="5">
-                                {{ old('comentarios') }}
-                            </textarea>
+                                <textarea class="form-control" name="comentarios" id="comentarios" cols="30" rows="5">{{ old('comentarios') ?: $envio->comentarios }}
+                                </textarea>
 
                                 @if ($errors->has('comentarios'))
                                     <small class="form-text text-danger">
@@ -256,74 +265,118 @@
 
         var JSONFinal = '';
 
-        function init() {
-            loadJSON(function(response) {
+        function init(depto) {
+            return new Promise(async (resolve, reject) => {
+                await loadJSON(function (response) {
 
-                // Parse JSON string into object
-                JSONFinal = JSON.parse(response);
-                const departamentos = JSONFinal.map(d => d.departamento);
+                    // Parse JSON string into object
+                    const JSONFinal =  JSON.parse(response);
+                    const departamentos = JSONFinal.map(d => d.departamento);
 
-                $.each(departamentos, function(key, value) {
-                    $('#departamento').append("<option value='" +
-                        value + "'>" + value + "</option>");
+                    $.each(departamentos, function (key, value) {
+
+                        $('#departamento').append(`<option value="${ value }"
+                            ${value == depto ? 'selected' : ''}>${ value }</option>`);
+                    });
+
+                    resolve(JSONFinal);
                 });
+            
             });
         }
+
+
+        function setMunicipios(JSONFinal, municipio="") {
+            const departamento = $('#departamento').val();
+            const filtrados = JSONFinal.filter(d => d.departamento === departamento);
+            const municipios = filtrados[0].ciudades;
+
+            $('#municipio').append('<option value="">Seleccione uno</option>')
+            $.each(municipios, function (key, value) {
+
+                $('#municipio').append(`<option value="${ value }"
+                    ${value == municipio ? 'selected' : ''}>${ value }</option>`);
+            });
+        }
+
+
+
+        function traer_ventas(cliente, venta="") {
+
+            $.ajax({
+                type: "GET",
+                url: 'http://lorenzogeliztienda.com/api/admin/ventas/cliente/' + cliente,
+                dataType: 'json',
+                data:{venta},
+                success: function(response) {
+                    $('#venta_id').html('');
+                    $('#venta_id').append('<option value="0">Seleccione una</option>')
+                    $.each(response, function(key, value) {
+                    
+                        $('#venta_id').append(`<option value="${value.id}" ${value.id == venta ? 'selected' : ''}>
+                            código: ${value.id} - fecha: ${value.fecha } - 
+                            valor: $ ${value.valor} </option>`);
+                    });
+
+                    
+                }
+
+            });
+        }
+
     </script>
+
+
     <script>
+
         $(document).ready(function() {
 
-            init();
+            var JSONFinal = '';
 
-            $(document).on('change', '#departamento', function(e) {
-                e.preventDefault();
+            let depto = "{{ $envio->departamento }}";
 
-                $('#municipio').html('');
+            let municipio = "{{ $envio->municipio }}";
 
-                const departamento = $('#departamento').val();
-                const filtrados = JSONFinal.filter(d => d.departamento === departamento);
-                const municipios = filtrados[0].ciudades;
-
-                $('#municipio').append('<option value="0">Seleccione uno</option>')
-                $.each(municipios, function(key, value) {
-                    $('#municipio').append("<option value='" +
-                        value + "'>" + value + "</option>");
-                });
+            init(depto).
+            then((data)=>{
+                JSONFinal = data;
+                setMunicipios(JSONFinal, municipio);
             });
+
+
+            let cliente = parseInt($('#cliente_id').val());
+
+            let venta = parseInt("{{ $envio->venta_id }}");
+
+            if (cliente != '') {
+                traer_ventas(cliente, venta)
+            }
+
+
+            $(document).on('change', '#departamento', function(e) { 
+                e.preventDefault();
+            
+                $('#municipio').html('');
+                setMunicipios(JSONFinal);
+            });
+
 
 
             $(document).on('change', '#cliente_id', function(e) {
                 e.preventDefault();
 
-                var cliente = parseInt($('#cliente_id').val());
+                let cliente = parseInt($('#cliente_id').val());
 
                 if (cliente != '') {
 
-                    $.ajax({
-                        type: "GET",
-                        url: {{ url('/api/admin/ventas/cliente/') }} + cliente,
-                        dataType: 'json',
-                        success: function(response) {
-
-                            $('#venta_id').html('');
-                            $('#venta_id').append('<option value="0">Seleccione una</option>')
-                            // response.data
-                            $.each(response, function(key, value) {
-                                $('#venta_id').append("<option value='" +
-                                    value.id + "'>" + "código: " + value.id + '-' +
-                                    "fecha: " +
-                                    value.fecha + '-' + "valor: $" + value.valor +
-                                    "</option>");
-                            });
-
-                        }
-
-                    });
+                    traer_ventas(cliente);
 
                 }
 
             });
+
         });
+
     </script>
 
 @endsection
