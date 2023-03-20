@@ -31,11 +31,27 @@ class EnviosController extends Controller
      */
     public function create()
     {
-        $clientes = Cliente::with('user')
-            ->whereHas('ventas')
-            ->get();
+        try {
+            
+            $clientes = Cliente::with('user')
+                ->whereHas('ventas')
+                ->get();
+    
+    
+            $transportadoras = array();
+    
+            $transportadoras = [
+                'Interrapidísimo',
+                'Servientrega',
+                'Coordinadora',
+                'Envía'
+            ];
+    
+            return view('admin.envios.create', compact('clientes', 'transportadoras'));
 
-        return view('admin.envios.create', compact('clientes'));
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     /**
@@ -77,9 +93,24 @@ class EnviosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Envio $envio)
     {
-        //
+        $clientes = Cliente::with('user')
+            ->whereHas('ventas')
+            ->get();
+            
+        $envio->load('venta:id,cliente_id');
+
+        $transportadoras = array();
+
+        $transportadoras = [
+            'Interrapidísimo',
+            'Servientrega',
+            'Coordinadora',
+            'Envía'
+        ];
+
+        return view('admin.envios.edit', compact('envio','clientes', 'transportadoras'));
     }
 
     /**
