@@ -307,7 +307,12 @@
 <script>
 	$(document).ready(function () {
        
-        e
+        var JSONFinal = '';
+        init().
+        then((data)=>{
+            JSONFinal = data;
+            setMunicipios(JSONFinal);
+        });
 
         $(document).on('change', '#departamento', function(e) { 
 			e.preventDefault();
