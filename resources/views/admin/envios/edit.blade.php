@@ -309,6 +309,9 @@
                 url: 'http://dev.lorenzogeliztienda.com/api/admin/ventas/cliente/' + cliente,
                 dataType: 'json',
                 data:{venta},
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 success: function(response) {
                     $('#venta_id').html('');
                     $('#venta_id').append('<option value="0">Seleccione una</option>')

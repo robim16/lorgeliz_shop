@@ -120,9 +120,19 @@ class EnviosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Envio $envio)
     {
-        //
+        try {
+
+            $update = $envio->update($request->except('cliente_id'));
+
+            session()->flash('message', ['success', ("Se editado la guía de envío exitosamente")]);
+
+            return back();
+           
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 
     /**
