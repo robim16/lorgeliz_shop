@@ -63,7 +63,7 @@ Route::group(['prefix' => "/admin"], function ($router) {
 
     Route::group(['prefix' => '/tallas'], function () {
         Route::get('/{id}', 'Admin\Api\TallaController@index');
-        Route::get('/tipos/get', 'Admin\Api\TallaController@fetchTallasByTipo');
+        Route::get('/tipos/get', 'Admin\Api\TallaController@fetchTallasByTipo')->name('api.tallas.tipos');
     });
 
     Route::group(['prefix' => '/chats'], function () {
