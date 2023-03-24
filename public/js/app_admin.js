@@ -2719,7 +2719,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   // props : ['keyword'],
   props: {
@@ -3037,6 +3036,15 @@ __webpack_require__.r(__webpack_exports__);
     if (this.keyword != '') {
       this.getProductByKeyword(1, this.keyword);
       localStorage.removeItem('keyword');
+    }
+  },
+  filters: {
+    currencyFormat: function currencyFormat(number) {
+      return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      }).format(number);
     }
   },
   mounted: function mounted() {
@@ -49742,37 +49750,46 @@ var render = function() {
                                 _vm._v(" "),
                                 _c(
                                   "div",
-                                  {
-                                    staticClass: "product_price text-right",
-                                    domProps: {
-                                      textContent: _vm._s(
-                                        "$" + producto.producto.precio_actual
+                                  { staticClass: "product_price text-right" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm._f("currencyFormat")(
+                                          producto.producto.precio_actual
+                                        )
                                       )
-                                    }
-                                  },
-                                  [_c("span")]
+                                    ),
+                                    _c("span")
+                                  ]
                                 ),
                                 _vm._v(" "),
-                                _c("del", {
-                                  directives: [
-                                    {
-                                      name: "show",
-                                      rawName: "v-show",
-                                      value:
-                                        producto.producto.precio_actual <
-                                        producto.producto.precio_anterior,
-                                      expression:
-                                        "producto.producto.precio_actual<producto.producto.precio_anterior"
-                                    }
-                                  ],
-                                  staticClass: "price-old text-right",
-                                  staticStyle: { "font-size": "17px" },
-                                  domProps: {
-                                    textContent: _vm._s(
-                                      "$" + producto.producto.precio_anterior
+                                _c(
+                                  "del",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value:
+                                          producto.producto.precio_actual <
+                                          producto.producto.precio_anterior,
+                                        expression:
+                                          "producto.producto.precio_actual<producto.producto.precio_anterior"
+                                      }
+                                    ],
+                                    staticClass: "price-old text-right",
+                                    staticStyle: { "font-size": "17px" }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm._f("currencyFormat")(
+                                          producto.producto.precio_anterior
+                                        )
+                                      )
                                     )
-                                  }
-                                })
+                                  ]
+                                )
                               ])
                             ]
                           ),
