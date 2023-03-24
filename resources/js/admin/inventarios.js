@@ -71,7 +71,10 @@ const inventarios = new Vue({
                 'cantidad': this.cantidad,
                 'operacion': this.operacion
                 }).then(response => {
-                //    console.log(response)
+
+                    if (response.data.data == 'success') {
+                        this.alertShow = true
+                    }
 
                 }).catch(error => {
                     console.log(error.response.data)

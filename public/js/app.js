@@ -3039,6 +3039,15 @@ __webpack_require__.r(__webpack_exports__);
       localStorage.removeItem('keyword');
     }
   },
+  filters: {
+    currencyFormat: function currencyFormat(number) {
+      return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      }).format(number);
+    }
+  },
   mounted: function mounted() {
     var _this3 = this;
 
@@ -49718,37 +49727,46 @@ var render = function() {
                                 _vm._v(" "),
                                 _c(
                                   "div",
-                                  {
-                                    staticClass: "product_price text-right",
-                                    domProps: {
-                                      textContent: _vm._s(
-                                        "$" + producto.producto.precio_actual
+                                  { staticClass: "product_price text-right" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm._f("currencyFormat")(
+                                          producto.producto.precio_actual
+                                        )
                                       )
-                                    }
-                                  },
-                                  [_c("span")]
+                                    ),
+                                    _c("span")
+                                  ]
                                 ),
                                 _vm._v(" "),
-                                _c("del", {
-                                  directives: [
-                                    {
-                                      name: "show",
-                                      rawName: "v-show",
-                                      value:
-                                        producto.producto.precio_actual <
-                                        producto.producto.precio_anterior,
-                                      expression:
-                                        "producto.producto.precio_actual<producto.producto.precio_anterior"
-                                    }
-                                  ],
-                                  staticClass: "price-old text-right",
-                                  staticStyle: { "font-size": "17px" },
-                                  domProps: {
-                                    textContent: _vm._s(
-                                      "$" + producto.producto.precio_anterior
+                                _c(
+                                  "del",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value:
+                                          producto.producto.precio_actual <
+                                          producto.producto.precio_anterior,
+                                        expression:
+                                          "producto.producto.precio_actual<producto.producto.precio_anterior"
+                                      }
+                                    ],
+                                    staticClass: "price-old text-right",
+                                    staticStyle: { "font-size": "17px" }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm._f("currencyFormat")(
+                                          producto.producto.precio_anterior
+                                        )
+                                      )
                                     )
-                                  }
-                                })
+                                  ]
+                                )
                               ])
                             ]
                           ),
@@ -74013,6 +74031,8 @@ var inventarios = new Vue({
       });
     },
     ingresarStock: function ingresarStock() {
+      var _this3 = this;
+
       var url = 'http://dev.lorenzogeliztienda.com/admin/stock';
       axios.post(url, {
         'producto_id': this.producto,
@@ -74020,7 +74040,10 @@ var inventarios = new Vue({
         'color_id': this.color,
         'cantidad': this.cantidad,
         'operacion': this.operacion
-      }).then(function (response) {//    console.log(response)
+      }).then(function (response) {
+        if (response.data.data == 'success') {
+          _this3.alertShow = true;
+        }
       })["catch"](function (error) {
         console.log(error.response.data);
 

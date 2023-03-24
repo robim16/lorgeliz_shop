@@ -129,7 +129,8 @@ class StockController extends Controller
             
         } catch (\Exception $e) {
             Log::debug('Error ingresando el inventario.Error: ' . json_encode($e));
-            session()->flash('message', ['warning', ("Ha ocurrido un error" . $e)]);
+            // session()->flash('message', ['warning', ("Ha ocurrido un error" . $e)]);
+            return $e;
         }
     }
 

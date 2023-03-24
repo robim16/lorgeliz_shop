@@ -8,11 +8,11 @@
 					<div class="products_bar d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-start justify-content-center">
 						<div class="products_bar_links">
 							<ul class="d-flex flex-row align-items-start justify-content-start">
-								<li :class="listar == 7 ? 'active' : ''"><a href="" v-on:click.prevent="getproductos(1)">Todos</a></li>
-								<li :class="listar == 4 ? 'active' : ''"><a href="" v-on:click.prevent="hotProducts(1)">Populares</a></li>
-								<li :class="listar == 6 && estado == 1 ? 'active' : ''"><a href="" v-on:click.prevent="getProductByState(1,1)">Nuevos</a></li>
-								<li :class="listar == 5 ? 'active' : ''"><a href="" v-on:click.prevent="saleProductos(1)">Más Vendidos</a></li>
-								<li :class="listar == 6 && estado == 2 ? 'active' : ''"><a href="" v-on:click.prevent="getProductByState(1,2)">Ofertas</a></li>
+								<li :class="listar == 7 ? 'active' : ''"><a href="" @click.prevent="getproductos(1)">Todos</a></li>
+								<li :class="listar == 4 ? 'active' : ''"><a href="" @click.prevent="hotProducts(1)">Populares</a></li>
+								<li :class="listar == 6 && estado == 1 ? 'active' : ''"><a href="" @click.prevent="getProductByState(1,1)">Nuevos</a></li>
+								<li :class="listar == 5 ? 'active' : ''"><a href="" @click.prevent="saleProductos(1)">Más Vendidos</a></li>
+								<li :class="listar == 6 && estado == 2 ? 'active' : ''"><a href="" @click.prevent="getProductByState(1,2)">Ofertas</a></li>
 							</ul>
 							
 						</div>
@@ -20,9 +20,9 @@
 							<div class="products_dropdown product_dropdown_sorting">
 								<div class="isotope_sorting_text"><span>Ordenar Por</span><i class="fa fa-caret-down" aria-hidden="true"></i></div>
 								<ul>
-									<li class="item_sorting_btn" v-on:click.prevent="getproductos(1)">Default</li>
-									<li class="item_sorting_btn" v-on:click.prevent="getProductsByOrder(1,1)">Precio</li>
-									<li class="item_sorting_btn" v-on:click.prevent="getProductsByOrder(1,2)">Nombre</li>
+									<li class="item_sorting_btn" @click.prevent="getproductos(1)">Default</li>
+									<li class="item_sorting_btn" @click.prevent="getProductsByOrder(1,1)">Precio</li>
+									<li class="item_sorting_btn" @click.prevent="getProductsByOrder(1,2)">Nombre</li>
 								</ul>
 							</div>
 
@@ -30,19 +30,19 @@
 							<div class="products_dropdown text-right product_dropdown_filter">
 								<div class="isotope_filter_text"><span>Género</span><i class="fa fa-caret-down" aria-hidden="true"></i></div>
 								<ul>
-									<li class="item_filter_btn" v-on:click.prevent="getProductByGenre(1,1)">Masculino</li>
-									<li class="item_filter_btn" v-on:click.prevent="getProductByGenre(1,2)">Femenino</li>
-									<li class="item_filter_btn" v-on:click.prevent="getProductByGenre(1,3)">Niños</li>
+									<li class="item_filter_btn" @click.prevent="getProductByGenre(1,1)">Masculino</li>
+									<li class="item_filter_btn" @click.prevent="getProductByGenre(1,2)">Femenino</li>
+									<li class="item_filter_btn" @click.prevent="getProductByGenre(1,3)">Niños</li>
 									
 								</ul>
 							</div>
 							<div class="products_dropdown text-right product_dropdown_filter">
 								<div class="isotope_filter_text"><span>Filtrar</span><i class="fa fa-caret-down" aria-hidden="true"></i></div>
 								<ul>
-									<li class="item_filter_btn" v-on:click.prevent="getproductos(1)">Todos</li>
-									<li class="item_filter_btn" v-on:click.prevent="hotProducts(1)">Populares</li>
-									<li class="item_filter_btn" v-on:click.prevent="getProductByState(1,1)">Nuevos</li>
-									<li class="item_filter_btn" v-on:click.prevent="saleProductos(1)" v-text="smallScreen != true ? 'Más Vendidos' : '+ Vendidos' "></li>
+									<li class="item_filter_btn" @click.prevent="getproductos(1)">Todos</li>
+									<li class="item_filter_btn" @click.prevent="hotProducts(1)">Populares</li>
+									<li class="item_filter_btn" @click.prevent="getProductByState(1,1)">Nuevos</li>
+									<li class="item_filter_btn" @click.prevent="saleProductos(1)" v-text="smallScreen != true ? 'Más Vendidos' : '+ Vendidos' "></li>
 								</ul>
 							</div>
 						</div>
@@ -87,9 +87,9 @@
 										</div>
 									</div>
 									<div class="ml-auto text-right">
-										<div class="product_category">En <a href="" v-text="producto.producto.tipo.nombre"  v-on:click.prevent="getProductByTipo(1,producto.producto.tipo_id)"></a></div>
-										<div class="product_price text-right" v-text="'$'+producto.producto.precio_actual"><span></span></div>
-										<del class="price-old text-right" v-show="producto.producto.precio_actual<producto.producto.precio_anterior" v-text="'$'+producto.producto.precio_anterior" style="font-size: 17px"></del>
+										<div class="product_category">En <a href="" v-text="producto.producto.tipo.nombre"  @click.prevent="getProductByTipo(1,producto.producto.tipo_id)"></a></div>
+										<div class="product_price text-right">{{ producto.producto.precio_actual | currencyFormat }}<span></span></div>
+										<del class="price-old text-right" v-show="producto.producto.precio_actual<producto.producto.precio_anterior" style="font-size: 17px">{{ producto.producto.precio_anterior | currencyFormat }}</del>
 									</div>
 								</div>
 								<div class="product_buttons">
@@ -501,6 +501,12 @@
 				this.getProductByKeyword(1,this.keyword);
 				localStorage.removeItem('keyword');
 			}
+        },
+
+		filters: {
+            currencyFormat: function (number) {
+                return new Intl.NumberFormat('es-CO', {style: 'currency',currency: 'COP', minimumFractionDigits: 0}).format(number);
+            }
         },
 
 		mounted() {
