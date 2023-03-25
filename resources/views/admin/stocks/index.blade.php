@@ -128,6 +128,12 @@
 
                         <form id='formStock' class="form-horizontal" action="{{ route('stock.store') }}" method="POST">
                             @csrf
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" v-show="alertShow">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <p>{{ "Se ha actualizado el inventario del producto"}}</p>
+                            </div>
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Producto</label>
                                 <div class="col-md-9">

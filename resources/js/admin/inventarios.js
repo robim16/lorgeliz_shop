@@ -9,7 +9,8 @@ const inventarios = new Vue({
        cantidad: 1,
        arrayTallas: [],
        arrayColores: [],
-       operacion: ''
+       operacion: '',
+       alertShow: false
     }, 
     
     methods: {
@@ -21,6 +22,8 @@ const inventarios = new Vue({
         selectProducto(data =[], param){
             //recibe una instancia de producto
             // this.producto =  data['id'];//se accede a las propiedades como un array
+
+            this.alertShow = false;
 
             this.producto =  data['color_producto']['producto_id'];
             
@@ -35,8 +38,8 @@ const inventarios = new Vue({
         },
 
         getTallas(){
+
             this.talla = 0;
-            // let url = '/lorgeliz_tienda_copia/public/admin/tallas/'+this.producto;
 
             let url = 'http://dev.lorenzogeliztienda.com/api/admin/tallas/' +this.producto;
     
@@ -49,8 +52,7 @@ const inventarios = new Vue({
 
         getColores(){
             this.color = 0;
-            // let url = '/lorgeliz_tienda_copia/public/admin/colores/get/'+this.producto;
-
+            
             let url = 'http://dev.lorenzogeliztienda.com/api/admin/colores/'+this.producto;
 
     
