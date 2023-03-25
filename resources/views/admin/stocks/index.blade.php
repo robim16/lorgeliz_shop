@@ -151,12 +151,7 @@
                                         @endforeach
                                     </select>
 
-                                    {{-- @if ($errors->has('producto_id'))
-                                        <small class="form-text text-danger">
-                                            {{ $errors->first('producto_id') }}
-                                        </small>
-                                    @endif --}}
-
+                                    
                                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                                     <span class="text-danger">
                                         <strong id="producto_id-error"></strong>
@@ -168,21 +163,13 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Talla</label>
                                 <div class="col-md-9">
-                                    {{-- <select name="talla_id" id="talla_id" class="form-control">
-                                    
-                                </select> --}}
+                                   
                                     <select name="talla_id" id="talla_id" class="form-control" v-model="talla"
                                         @change="getColores">
                                         <option value="0">Seleccione una talla</option>
                                         <option v-for="talla in arrayTallas" :key="talla.talla_id" :value="talla.talla_id"
                                             v-text="talla.nombre"></option>
                                     </select>
-
-                                    {{-- @if ($errors->has('talla_id'))
-                                        <small class="form-text text-danger">
-                                            {{ $errors->first('talla_id') }}
-                                        </small>
-                                    @endif --}}
 
                                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                                     <span class="text-danger">
@@ -202,11 +189,6 @@
                                             v-text="color.nombre"></option>
                                     </select>
 
-                                    {{-- @if ($errors->has('color_id'))
-                                        <small class="form-text text-danger">
-                                            {{ $errors->first('color_id') }}
-                                        </small>
-                                    @endif --}}
 
                                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                                     <span class="text-danger">
@@ -223,12 +205,6 @@
                                     <input type="number" id="cantidad" name="cantidad" class="form-control"
                                         placeholder="Cantidad" v-model="cantidad">
                                 </div>
-
-                                {{-- @if ($errors->has('cantidad'))
-                                    <small class="form-text text-danger">
-                                        {{ $errors->first('cantidad') }}
-                                    </small>
-                                @endif --}}
 
                                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                                 <span class="text-danger">
