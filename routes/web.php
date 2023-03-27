@@ -20,15 +20,6 @@ Route::get('/categorias', 'HomeController@categorias')->name('categorias');
 Route::get('/checkout', 'HomeController@checkout')->name('checkout')->middleware('auth');
 
 
-// api Route::get('/categorias/productos', 'HomeController@getProductos')->name('categorias.productos');
-// Route::get('/categorias/productos/estado', 'HomeController@getProductosByState')->name('productos.estados');
-// Route::get('/categorias/productos/vendidos', 'HomeController@getProductosSales')->name('productos.sale');
-// Route::get('/categorias/productos/vistos', 'HomeController@getProductosVisitas')->name('productos.view');
-// Route::get('/categorias/productos/orden', 'HomeController@getProductsByOrder')->name('productos.orden');
-// Route::get('/categorias/productos/tipo', 'HomeController@getProductsByTipo')->name('productos.tipo');
-// Route::get('/categorias/productos/genero', 'HomeController@getProductsByGenre')->name('productos.genero');
-// Route::get('/categorias/productos/keyword', 'HomeController@getProductsByKeyword')->name('productos.keyword');
-
 // Route::group(['prefix' => '/'], function (){
 //     Route::get('/cuenta', 'UserController@index')->name('users.cuenta');
 //     Route::put('/update', 'UserController@update')->name('users.update');
@@ -212,6 +203,7 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
     
     Route::group(['prefix' => '/stock'], function (){
         Route::get('/', 'Admin\StockController@index')->name('stock.index');
+        Route::get('/productos', 'Admin\StockController@loadStocks');
         Route::get('/listado', 'Admin\StockController@pdfInventarios')->name('stock.listadopdf');
         Route::post('/', 'Admin\StockController@store')->name('stock.store');
     });
@@ -318,7 +310,6 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
 
 });
 
-//Route::resource('/car', 'CarController');
 
 Route::get('cancelar/{ruta}', function($ruta) {
     session()->flash('message', ['danger', ("Acción cancelada")]);

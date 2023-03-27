@@ -35,30 +35,33 @@ class StockController extends Controller
 
         try {
 
-            $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
-                $query->where('activo', 'Si');
-            })
-                ->with([
-                    'talla:id,nombre', 'colorProducto:id,color_id,producto_id,slug',
-                    'colorProducto.producto:id,nombre', 'colorProducto.color:id,nombre',
-                    'colorProducto.imagenes' => function ($query) {
-                        $query->select('id', 'url', 'imageable_id');
-                    }
-                ])
-                ->where('stock', '>', '0')
-                ->when($busqueda, function ($query) use ($busqueda) {
-                    return $query->whereHas('colorProducto.producto', function (Builder $query) use ($busqueda) {
-                        $query->where('nombre', 'like', "%$busqueda%");
-                    })
-                        ->orWhereHas('colorProducto.color', function (Builder $query) use ($busqueda) {
-                            $query->where('nombre', 'like', "%$busqueda%");
-                        });
-                })
-                ->orderBy('color_producto_id')
-                ->paginate(5);
+            // $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
+            //     $query->where('activo', 'Si');
+            // })
+            //     ->with([
+            //         'talla:id,nombre', 'colorProducto:id,color_id,producto_id,slug',
+            //         'colorProducto.producto:id,nombre', 'colorProducto.color:id,nombre',
+            //         'colorProducto.imagenes' => function ($query) {
+            //             $query->select('id', 'url', 'imageable_id');
+            //         }
+            //     ])
+            //     ->where('stock', '>', '0')
+            //     ->when($busqueda, function ($query) use ($busqueda) {
+            //         return $query->whereHas('colorProducto.producto', function (Builder $query) use ($busqueda) {
+            //             $query->where('nombre', 'like', "%$busqueda%");
+            //         })
+            //             ->orWhereHas('colorProducto.color', function (Builder $query) use ($busqueda) {
+            //                 $query->where('nombre', 'like', "%$busqueda%");
+            //             });
+            //     })
+            //     ->orderBy('color_producto_id')
+            //     ->paginate(5);
 
 
-            return view('admin.stocks.index', compact('productos'));
+            // return view('admin.stocks.index', compact('productos'));
+
+            return view('admin.stocks.index');
+
         } catch (\Exception $e) {
             Log::debug('Error consultando el inventario.Error: ' . json_encode($e));
         }
@@ -113,7 +116,7 @@ class StockController extends Controller
                 $referencia->save();
             }
     
-            session()->flash('message', ['success', ("Se ha actualizado el inventario exitosamente")]);
+            // session()->flash('message', ['success', ("Se ha actualizado el inventario exitosamente")]);
     
             $product = array();
             $product['data'] = array();
@@ -155,8 +158,61 @@ class StockController extends Controller
                 ->setPaper('a4', 'landscape');
 
             return $pdf->download('inventarioproductos.pdf');
+
         } catch (\Exception $e) {
             Log::debug('Error imprimiendo los inventarios.Error: ' . json_encode($e));
         }
+    }
+
+
+    public function loadStocks(Request $request)
+    {
+
+        try {
+        
+            $busqueda = $request->get('busqueda');
+    
+    
+            $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
+                $query->where('activo', 'Si');
+            })
+            ->with(['talla:id,nombre', 'colorProducto:id,color_id,producto_id,slug',
+                'colorProducto.producto:id,nombre', 'colorProducto.color:id,nombre',
+                'colorProducto.imagenes' => function($query) {
+                    $query->select('id', 'url', 'imageable_id');
+                }
+            ])
+            ->where('stock', '>', '0')
+            ->when($busqueda, function ($query) use ($busqueda) {
+                return $query->whereHas('colorProducto.producto', function (Builder $query) use($busqueda){
+                    $query->where('nombre','like',"%$busqueda%");
+                })
+                ->orWhereHas('colorProducto.color', function (Builder $query) use($busqueda){
+                    $query->where('nombre','like',"%$busqueda%");
+                });
+            })
+            ->orderBy('color_producto_id')
+            ->paginate(5);
+    
+    
+            return [
+                'pagination' => [
+                    'total'        => $productos->total(),
+                    'current_page' => $productos->currentPage(),
+                    'per_page'     => $productos->perPage(),
+                    'last_page'    => $productos->lastPage(),
+                    'from'         => $productos->firstItem(),
+                    'to'           => $productos->lastItem(),
+                ],
+                'productos' => $productos
+            ];
+
+
+        } catch (\Exception $e) {
+            Log::debug('Error trayendo inventarios.Error: ' . json_encode($e));
+            return $e;
+        }
+
+
     }
 }
