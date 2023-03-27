@@ -74011,6 +74011,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var inventarios = new Vue({
   el: '#inventarios',
   data: {
+    active: '',
     producto: '',
     talla: 0,
     color: 0,
@@ -74018,12 +74019,64 @@ var inventarios = new Vue({
     arrayTallas: [],
     arrayColores: [],
     operacion: '',
-    alertShow: false
+    alertShow: false,
+    arrayProductos: [],
+    pagination: {
+      'total': 0,
+      'current_page': 0,
+      'per_page': 0,
+      'last_page': 0,
+      'from': 0,
+      'to': 0
+    },
+    offset: 3
+  },
+  computed: {
+    isActived: function isActived() {
+      return this.pagination.current_page;
+    },
+    //Calcula los elementos de la paginación
+    pagesNumber: function pagesNumber() {
+      if (!this.pagination.to) {
+        return [];
+      }
+
+      var from = this.pagination.current_page - this.offset;
+
+      if (from < 1) {
+        from = 1;
+      }
+
+      var to = from + this.offset * 2;
+
+      if (to >= this.pagination.last_page) {
+        to = this.pagination.last_page;
+      }
+
+      var pagesArray = [];
+
+      while (from <= to) {
+        pagesArray.push(from);
+        from++;
+      }
+
+      return pagesArray;
+    }
   },
   methods: {
-    pdfInventarios: function pdfInventarios() {
-      var url = '/lorgeliz_tienda_copia/public/admin/stock/listado'; // let url = 'http://dev.lorenzogeliztienda.com/admin/stock/listado'
+    traerInventario: function traerInventario(page) {
+      var _this = this;
 
+      var url = '/lorgeliz_tienda_copia/public/admin/stock/productos?page=' + page;
+      axios.get(url).then(function (response) {
+        var respuesta = response.data;
+        _this.arrayProductos = respuesta.productos.data;
+        _this.pagination = respuesta.pagination;
+        _this.active = 0;
+      });
+    },
+    pdfInventarios: function pdfInventarios() {
+      var url = '/lorgeliz_tienda_copia/public/admin/stock/listado';
       window.open(url);
     },
     selectProducto: function selectProducto() {
@@ -74036,38 +74089,30 @@ var inventarios = new Vue({
       this.operacion = param;
       this.getTallas();
       this.getColores();
-      this.talla = data['talla_id']; // this.color = data['color_id'];
-
+      this.talla = data['talla_id'];
       this.color = data['color_producto']['color_id'];
     },
     getTallas: function getTallas() {
-      var _this = this;
+      var _this2 = this;
 
-      this.talla = 0; // let url = '/lorgeliz_tienda_copia/public/admin/tallas/'+this.producto;
-
-      var url = '/lorgeliz_tienda_copia/public/api/admin/tallas/' + this.producto; // let url = 'http://dev.lorenzogeliztienda.com/api/admin/tallas/' +this.producto;
-
+      this.talla = 0;
+      var url = '/lorgeliz_tienda_copia/public/api/admin/tallas/' + this.producto;
       axios.get(url).then(function (response) {
-        //   this.arrayTallas = response.data.tallas;
-        _this.arrayTallas = response.data;
+        _this2.arrayTallas = response.data;
       });
     },
     getColores: function getColores() {
-      var _this2 = this;
+      var _this3 = this;
 
-      this.color = 0; // let url = '/lorgeliz_tienda_copia/public/admin/colores/get/'+this.producto;
-
-      var url = '/lorgeliz_tienda_copia/public/api/admin/colores/' + this.producto; // let url = 'http://dev.lorenzogeliztienda.com/api/admin/colores/'+this.producto;
-
+      this.color = 0;
+      var url = '/lorgeliz_tienda_copia/public/api/admin/colores/' + this.producto;
       axios.get(url).then(function (response) {
-        //   this.arrayColores = response.data.colores;
-        _this2.arrayColores = response.data;
+        _this3.arrayColores = response.data;
       });
     },
     ingresarStock: function ingresarStock() {
-      var _this3 = this;
+      var _this4 = this;
 
-      // let url = 'http://dev.lorenzogeliztienda.com/admin/stock';
       var url = '/lorgeliz_tienda_copia/public/admin/stock';
       axios.post(url, {
         'producto_id': this.producto,
@@ -74077,10 +74122,13 @@ var inventarios = new Vue({
         'operacion': this.operacion
       }).then(function (response) {
         if (response.data.data == 'success') {
-          _this3.alertShow = true;
+          _this4.traerInventario(1);
+
+          _this4.alertShow = true;
         }
       })["catch"](function (error) {
-        console.log(error.response.data);
+        // console.log(error.response.data)
+        console.log(error);
 
         for (var _i = 0, _Object$entries = Object.entries(error.response.data); _i < _Object$entries.length; _i++) {
           var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
@@ -74097,7 +74145,16 @@ var inventarios = new Vue({
       this.talla = '';
       this.color = '';
       this.operacion = 3;
+    },
+    cambiarPagina: function cambiarPagina(page) {
+      //Actualiza la página actual
+      this.pagination.current_page = page; //Envia la petición para visualizar la data de esa página
+
+      this.traerInventario(page);
     }
+  },
+  mounted: function mounted() {
+    this.traerInventario(1);
   }
 });
 
@@ -76348,38 +76405,6 @@ var category = new Vue({
     estado: 0,
     categoria: '',
     subcategoria: ''
-  },
-  computed: {
-    isActived: function isActived() {
-      return this.pagination.current_page;
-    },
-    //Calcula los elementos de la paginación
-    pagesNumber: function pagesNumber() {
-      if (!this.pagination.to) {
-        return [];
-      }
-
-      var from = this.pagination.current_page - this.offset;
-
-      if (from < 1) {
-        from = 1;
-      }
-
-      var to = from + this.offset * 2;
-
-      if (to >= this.pagination.last_page) {
-        to = this.pagination.last_page;
-      }
-
-      var pagesArray = [];
-
-      while (from <= to) {
-        pagesArray.push(from);
-        from++;
-      }
-
-      return pagesArray;
-    }
   },
   methods: {
     getproductos: function getproductos(page) {
