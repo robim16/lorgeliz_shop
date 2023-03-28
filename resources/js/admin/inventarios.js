@@ -21,7 +21,7 @@ const inventarios = new Vue({
             'from': 0,
             'to': 0,
         },
-        offset: 3,
+        offset: 3
     }, 
     
     computed:{
