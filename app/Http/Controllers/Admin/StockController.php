@@ -9,8 +9,10 @@ use App\Producto;
 use App\ProductoReferencia;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StockRequest;
+use App\Services\Admin\StockService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class StockController extends Controller
@@ -60,56 +62,67 @@ class StockController extends Controller
 
 
 
-    public function store(Request $request)
+    public function store(StockRequest $request, StockService $stockService)
     {
         
 
-        $validator = Validator::make($request->all(), [
-            'producto_id'   => 'required',
-            'talla_id'      => 'required',
-            'color_id'      => 'required',
-            'cantidad'      => 'required',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'producto_id'   => 'required',
+        //     'talla_id'      => 'required',
+        //     'color_id'      => 'required',
+        //     'cantidad'      => 'required',
+        // ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+        // if ($validator->fails()) {
+        //     return response()->json($validator->errors(), 422);
+        // }
+
+        if (isset($request->validator) && $request->validator->fails()){
+            return response()->json($request->validator->errors(), 422);
         }
 
         try {
+
+            DB::beginTransaction();
            
-            $colorproducto = ColorProducto::where('color_id', $request->color_id)
-                ->where('producto_id', $request->producto_id)
-                ->with('producto:id,slider_principal,estado')
-                ->first();
+            // $colorproducto = ColorProducto::where('color_id', $request->color_id)
+            //     ->where('producto_id', $request->producto_id)
+            //     ->with('producto:id,slider_principal,estado')
+            //     ->first();
             
-            $referencia = ProductoReferencia::where('color_producto_id', $colorproducto->id)
-                ->where('talla_id', $request->talla_id)
-                ->first(); // buscar la referencia
+            // $referencia = ProductoReferencia::where('color_producto_id', $colorproducto->id)
+            //     ->where('talla_id', $request->talla_id)
+            //     ->first(); // buscar la referencia
     
            
-            if ($referencia == '') {//si no existe la referencia, se crea
+            // if ($referencia == '') {//si no existe la referencia, se crea
     
-                $producto = new ProductoReferencia();
-                $producto->color_producto_id = $colorproducto->id;
-                $producto->talla_id = $request->talla_id;
-                $producto->stock = $request->cantidad;
+            //     $producto = new ProductoReferencia();
+            //     $producto->color_producto_id = $colorproducto->id;
+            //     $producto->talla_id = $request->talla_id;
+            //     $producto->stock = $request->cantidad;
         
-                $producto->save();  
-            }
-            else{
+            //     $producto->save();  
+            // }
+            // else{
     
-                if ($request->operacion == 1) {
+            //     if ($request->operacion == 1) {
                    
-                    $referencia->stock = $referencia->stock + $request->cantidad; //sino, se actualiza el stock
-                }
-                else{
-                    $referencia->stock = $referencia->stock - $request->cantidad;
-                }
+            //         $referencia->stock = $referencia->stock + $request->cantidad; //sino, se actualiza el stock
+            //     }
+            //     else{
+            //         $referencia->stock = $referencia->stock - $request->cantidad;
+            //     }
     
-                $referencia->save();
-            }
+            //     $referencia->save();
+            // }
     
             // session()->flash('message', ['success', ("Se ha actualizado el inventario exitosamente")]);
+
+            $colorproducto = $stockService->saveStock($request);
+
+
+            DB::commit();
     
             $product = array();
             $product['data'] = array();
@@ -126,6 +139,8 @@ class StockController extends Controller
 
         } catch (\Exception $e) {
             // session()->flash('message', ['warning', ("Ha ocurrido un error".$e)]);
+
+            DB::rollBack();
             return $e;
         }
 

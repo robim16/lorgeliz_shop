@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StockRequest extends FormRequest
 {
+    public $validator = null;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -30,8 +33,8 @@ class StockRequest extends FormRequest
     		case 'POST': {
     			return [
     				'producto_id'   => 'required',
-                    'talla_id'      => 'required',
-                    'color_id'      => 'required',
+                    'talla_id'      => 'required|gt:0',
+                    'color_id'      => 'required|gt:0',
     				'cantidad'      => 'required',
     			];
     		}
@@ -44,5 +47,11 @@ class StockRequest extends FormRequest
     			];
     		}
     	}
+    }
+
+
+    protected function failedValidation(Validator $validator)
+    {
+        $this->validator = $validator;
     }
 }

@@ -18,18 +18,18 @@ class Pedido extends Model
     public static function boot () {
         parent::boot();
         
-        static::updating(function(Pedido $pedido) {
+        // static::updating(function(Pedido $pedido) {
 
-            $details = [
-                'cliente' => $pedido->venta->cliente->user->nombres,
-                'fecha' => date('d/m/Y', strtotime($pedido->fecha)),
-                'estado' => $pedido->estado,
-                'url' => url('/pedidos/'. $pedido->id),
-            ];
+        //     $details = [
+        //         'cliente' => $pedido->venta->cliente->user->nombres,
+        //         'fecha' => date('d/m/Y', strtotime($pedido->fecha)),
+        //         'estado' => $pedido->estado,
+        //         'url' => url('/pedidos/'. $pedido->id),
+        //     ];
             
-            Mail::to($pedido->venta->cliente->user->email)->send(new OrderStatusMail($details));
+        //     Mail::to($pedido->venta->cliente->user->email)->send(new OrderStatusMail($details));
 
-        });
+        // });
     }
 
     public function venta (){

@@ -8,7 +8,7 @@ Use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Mail\AdminDevolucionMail;
-
+use App\Services\DevolucionService;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -88,7 +88,7 @@ class DevolucionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, DevolucionService $devolucionService)
     {   
         //podría implementare en api
         
@@ -100,54 +100,56 @@ class DevolucionController extends Controller
         try {
 
 
-            $producto = $request->producto;
+            // $producto = $request->producto;
 
-            $venta = $request->venta;
+            // $venta = $request->venta;
 
-            $cantidad = $request->cantidad;
+            // $cantidad = $request->cantidad;
     
-            $devoluciones = Devolucione::where('producto_referencia_id', $producto)//$ref
-                ->where('venta_id', $venta)
-                ->count(); // verificamos que no se haya solicitado la devolución anteriormente
+            // $devoluciones = Devolucione::where('producto_referencia_id', $producto)//$ref
+            //     ->where('venta_id', $venta)
+            //     ->count(); // verificamos que no se haya solicitado la devolución anteriormente
 
     
-            if ($devoluciones == 0) {
+            // if ($devoluciones == 0) {
                 
-                $devolucion = new Devolucione();
-                $devolucion->fecha = \Carbon\Carbon::now();
-                $devolucion->cantidad = $cantidad;
-                $devolucion->producto_referencia_id = $producto; //$ref
-                $devolucion->venta_id = $venta;
+            //     $devolucion = new Devolucione();
+            //     $devolucion->fecha = \Carbon\Carbon::now();
+            //     $devolucion->cantidad = $cantidad;
+            //     $devolucion->producto_referencia_id = $producto; //$ref
+            //     $devolucion->venta_id = $venta;
     
-                $devolucion->save();
+            //     $devolucion->save();
     
-                $admin = User::where('role_id', 2)->first();
-                $user = auth()->user();
+            //     $admin = User::where('role_id', 2)->first();
+            //     $user = auth()->user();
     
-                // return $admin->nombres;
+            //     // return $admin->nombres;
             
-                $details = [
-                    'title' => 'Se ha solicitado una nueva devolucion',
-                    'user' => $admin->nombres,
-                    'cliente' => $user->nombres.' '.$user->apellidos,
-                    'url' => url('/admin/devoluciones/'. $devolucion->id),
-                ];
+            //     $details = [
+            //         'title' => 'Se ha solicitado una nueva devolucion',
+            //         'user' => $admin->nombres,
+            //         'cliente' => $user->nombres.' '.$user->apellidos,
+            //         'url' => url('/admin/devoluciones/'. $devolucion->id),
+            //     ];
     
                 
-                SendEmail::dispatch($details, $admin);
+            //     SendEmail::dispatch($details, $admin);
 
-                // Mail::to($admin->email)->send(new AdminDevolucionMail($details));
+            //     // Mail::to($admin->email)->send(new AdminDevolucionMail($details));
     
-                // User::findOrFail($admin->id)->notify(new AdminDevolucionMail($details));
+            //     // User::findOrFail($admin->id)->notify(new AdminDevolucionMail($details));
     
-            } 
+            // } 
     
-            $response = ['data' => $devoluciones];
+            // $response = ['data' => $devoluciones];
+
+            $response = $devolucionService->saveDevolucion($request);
             
             return response()->json($response);
          
         } catch (\Exception $e) {
-            //throw $th;
+            return $e;
         }
         
     }
@@ -158,7 +160,9 @@ class DevolucionController extends Controller
 
         try {
            
-            if (!$request->ajax()) return redirect('/');
+            if ( ! request()->ajax()) {
+                abort(401, 'Acceso denegado');
+            }
     
             return Devolucione::where('venta_id',$request->venta)
                 ->where('producto_referencia_id',$request->producto)

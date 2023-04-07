@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendOrderStatusMail;
+use App\Services\Admin\OrderService;
 
 class OrdersController extends Controller
 {
@@ -81,47 +82,49 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, OrderService $orderService)
     {
 
         try {
             
-            
-            $pedido = Pedido::where('id', $request->pedido_id)->firstOrFail();
-            $pedido->estado = $request->estado;
-    
-            $pedido->save(); // se actualiza el estado
-    
-            $details = [
-                'cliente' => $pedido->venta->cliente->user->nombres,
-                'fecha' => date('d/m/Y', strtotime($pedido->fecha)),
-                'estado' => $pedido->estado,
-                'url' => url('/pedidos/'. $pedido->id),
-            ];
-    
-            if ($pedido->estado == 2) {
-               $mensaje = 'Tu pedido está siendo preparado';
-            }
-            if ($pedido->estado == 3) {
-                $mensaje = 'Tu pedido está siendo enviado';
-            }
-            if ($pedido->estado == 4) {
-                $mensaje = 'Tu pedido ha sido entregado';
-            }
-    
-            
-            $arrayData = [
-                'notificacion' => [
-                    'msj' => $mensaje,
-                    'url' => url('/pedidos/'. $pedido->id)
-                ]
-            ];
-    
-            Cliente::findOrFail($pedido->venta->cliente->id)->notify(new NotificationClient($arrayData));
-    
-            //Mail::to($pedido->venta->cliente->user->email)->send(new OrderStatusMail($details));
 
-            SendOrderStatusMail::dispatch($details, $pedido->venta->cliente->user);
+            $orderService->updateOrderStatus($request);
+            
+            // $pedido = Pedido::where('id', $request->pedido_id)->firstOrFail();
+            // $pedido->estado = $request->estado;
+    
+            // $pedido->save(); // se actualiza el estado
+    
+            // $details = [
+            //     'cliente' => $pedido->venta->cliente->user->nombres,
+            //     'fecha' => date('d/m/Y', strtotime($pedido->fecha)),
+            //     'estado' => $pedido->estado,
+            //     'url' => url('/pedidos/'. $pedido->id),
+            // ];
+    
+            // if ($pedido->estado == 2) {
+            //    $mensaje = 'Tu pedido está siendo preparado';
+            // }
+            // if ($pedido->estado == 3) {
+            //     $mensaje = 'Tu pedido está siendo enviado';
+            // }
+            // if ($pedido->estado == 4) {
+            //     $mensaje = 'Tu pedido ha sido entregado';
+            // }
+    
+            
+            // $arrayData = [
+            //     'notificacion' => [
+            //         'msj' => $mensaje,
+            //         'url' => url('/pedidos/'. $pedido->id)
+            //     ]
+            // ];
+    
+            // Cliente::findOrFail($pedido->venta->cliente->id)->notify(new NotificationClient($arrayData));
+    
+            // //Mail::to($pedido->venta->cliente->user->email)->send(new OrderStatusMail($details));
+
+            // SendOrderStatusMail::dispatch($details, $pedido->venta->cliente->user);
             
     
             session()->flash('message', ['success', ("Se ha actualizado el estado del pedido")]);
@@ -129,7 +132,7 @@ class OrdersController extends Controller
             return back();
 
         } catch (\Exception $e) {
-            //throw $th;
+            return $e;
         }
 
     }
