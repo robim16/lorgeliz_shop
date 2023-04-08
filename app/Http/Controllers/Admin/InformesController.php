@@ -64,20 +64,7 @@ class InformesController extends Controller
 
         $anio = date('Y');
 
-        // if ( $fecha_de =='' && $fecha_a =='') {
-
-            // $ventas=DB::table('ventas as v')
-            // ->select(DB::raw('MONTH(v.fecha) as mes'),
-            // DB::raw('YEAR(v.fecha) as anio'),
-            // DB::raw('COUNT(v.id) as cantidad'),
-            // DB::raw('SUM(v.valor) as total'))
-            // ->whereYear('v.fecha',$anio)
-            // ->groupBy(DB::raw('MONTH(v.fecha)'),DB::raw('YEAR(v.fecha)'))
-            // ->get();
-
-
-            
-            // }
+       
 
         try {
             
@@ -245,21 +232,23 @@ class InformesController extends Controller
 
         try {
             
-            $clientes = Venta::when($busqueda, function ($query) use ($busqueda) {
-                return $query->whereHas('cliente.user',  function (Builder $query) use ($busqueda) {
-                    $query->orWhere('id','like',"%$busqueda%")
-                    ->orWhere('nombres','like',"%$busqueda%")
-                    ->orWhere('apellidos','like',"%$busqueda%")
-                    ->orWhere('users.telefono','like',"%$busqueda%");//no funcionan los filtros
-                });
-            })
-            ->with('cliente.user')
-            ->select('cliente_id', DB::raw('COUNT(id) as cantidad'))
-            ->groupBy('cliente_id')
-            ->orderBy('cantidad', 'DESC')
-            ->paginate(5);
+            // $clientes = Venta::when($busqueda, function ($query) use ($busqueda) {
+            //     return $query->whereHas('cliente.user',  function (Builder $query) use ($busqueda) {
+            //         $query->orWhere('id','like',"%$busqueda%")
+            //         ->orWhere('nombres','like',"%$busqueda%")
+            //         ->orWhere('apellidos','like',"%$busqueda%")
+            //         ->orWhere('users.telefono','like',"%$busqueda%");//no funcionan los filtros
+            //     });
+            // })
+            // ->with('cliente.user')
+            // ->select('cliente_id', DB::raw('COUNT(id) as cantidad'))
+            // ->groupBy('cliente_id')
+            // ->orderBy('cantidad', 'DESC')
+            // ->paginate(5);
     
-            return view('admin.informes.clientes.index',compact('clientes'));
+            // return view('admin.informes.clientes.index',compact('clientes'));
+
+            return view('admin.informes.clientes.index');
 
         } catch (\Exception $e) {
             //throw $th;

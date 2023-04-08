@@ -15,7 +15,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-header">
                             <h3 class="card-title mb-2">Informe de clientes que más compran</h3>
 
@@ -36,7 +36,6 @@
                                 </form>
                             </div>
                         </div>
-                        <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
                             <table class="table table-head-fixed">
                                 <thead>
@@ -52,57 +51,34 @@
                                 </thead>
                                 <tbody>
 
-
-                                    {{-- @foreach ($clientes as $cliente)
-                                    <tr>
-
-                                        <td>{{ $cliente->user }}</td>
-                                        <td><a href="{{ route('cliente.show', $cliente->id_cliente)}}" class="text-primary">
-                                            {{ $cliente->nombres }} {{ $cliente->apellidos }}</a>
-                                        </td>
-                                        <td> 
-                                            @foreach(\App\Imagene::where('imageable_type', 'App\User')
-                                            ->where('imageable_id', $cliente->user)->pluck('url', 'id')->take(1) as $id => $imagen)    
-                                            <img src="{{ url('storage/' . $imagen) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
-                                            @endforeach
-                                        </td>
-                                        <td>{{ $cliente->telefono }}</td>
-                                        <td>{{ $cliente->email }}</td>
-                                        <td>{{ $cliente->cantidad }}</td>
-                                        <td><a href="{{ route('cliente.show', $cliente->id_cliente)}}" class="btn btn-primary" title="compras del cliente">
-                                            <i class="fas fa-eye"></i></a>
-                                        </td>
-                                    </tr>
-                                    @endforeach --}}
-
                                     @foreach ($clientes as $data)
-                                    <tr>
+                                        <tr>
 
-                                        <td>{{ $data->cliente->user->id }}</td>
-                                        <td><a href="{{ route('cliente.show', $data->cliente->id)}}" class="text-primary">
-                                            {{ $data->cliente->user->nombres }} {{ $data->cliente->user->apellidos }}</a>
-                                        </td>
-                                        <td> 
-                                            <img src="{{ url('storage/' . $data->cliente->user->imagene->url) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
-                                        </td>
-                                        <td>{{ $data->cliente->user->telefono }}</td>
-                                        <td>{{ $data->cliente->user->email }}</td>
-                                        <td>{{ $data->cantidad }}</td>
-                                        <td>
-                                            <a href="{{ route('cliente.show', $data->cliente->id)}}" class="btn btn-primary btn-sm btn-icon" title="compras del cliente">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                            <td>{{ $data->cliente->user->id }}</td>
+                                            <td><a href="{{ route('cliente.show', $data->cliente->id)}}" class="text-primary">
+                                                {{ $data->cliente->user->nombres }} {{ $data->cliente->user->apellidos }}</a>
+                                            </td>
+                                            <td> 
+                                                <img src="{{ url('storage/' . $data->cliente->user->imagene->url) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
+                                            </td>
+                                            <td>{{ $data->cliente->user->telefono }}</td>
+                                            <td>{{ $data->cliente->user->email }}</td>
+                                            <td>{{ $data->cantidad }}</td>
+                                            <td>
+                                                <a href="{{ route('cliente.show', $data->cliente->id)}}" class="btn btn-primary btn-sm btn-icon" title="compras del cliente">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                         
                                 </tbody>
                             </table>
                         {{ $clientes->appends($_GET)->links() }}
                         </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
+                    </div> --}}
+
+                    @livewire('admin.index-informe-clientes')
                 </div>
             </div>
             <!-- /.row -->
