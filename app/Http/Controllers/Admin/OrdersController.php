@@ -19,7 +19,7 @@ use App\Services\Admin\OrderService;
 
 class OrdersController extends Controller
 {
-     /**
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -36,31 +36,29 @@ class OrdersController extends Controller
 
         $tipo = $request->get('tipo');
 
-       
+
 
         try {
-            
-            
-            $pedidos = Pedido::whereHas('venta',function (Builder $query) use ($keyword) {
+
+
+            $pedidos = Pedido::whereHas('venta', function (Builder $query) use ($keyword) {
                 $query->where('estado', '!=', '3');
                 // ->where('ventas.valor','like',"%$keyword%");
             })
-            // ->orWhere('fecha','like',"%$keyword%")
-            // ->orWhere('id','like',"%$keyword%")
-            ->buscar($tipo, $keyword)
-            ->with('venta.cliente.user')
-            ->orderBy('created_at', 'DESC')
-            ->paginate(5);
-    
-    
-            $estados = $this->estados_pedido();
-    
-            return view('admin.pedidos.index', compact('pedidos', 'estados'));
+                // ->orWhere('fecha','like',"%$keyword%")
+                // ->orWhere('id','like',"%$keyword%")
+                ->buscar($tipo, $keyword)
+                ->with('venta.cliente.user')
+                ->orderBy('created_at', 'DESC')
+                ->paginate(5);
 
+
+            $estados = $this->estados_pedido();
+
+            return view('admin.pedidos.index', compact('pedidos', 'estados'));
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
 
     public function show($id)
@@ -71,8 +69,7 @@ class OrdersController extends Controller
 
         // return view('admin.pedidos.show',compact('productos','users'));
 
-        return view('admin.pedidos.show',compact('productos'));
-
+        return view('admin.pedidos.show', compact('productos'));
     }
 
     /**
@@ -86,22 +83,22 @@ class OrdersController extends Controller
     {
 
         try {
-            
+
 
             $orderService->updateOrderStatus($request);
-            
+
             // $pedido = Pedido::where('id', $request->pedido_id)->firstOrFail();
             // $pedido->estado = $request->estado;
-    
+
             // $pedido->save(); // se actualiza el estado
-    
+
             // $details = [
             //     'cliente' => $pedido->venta->cliente->user->nombres,
             //     'fecha' => date('d/m/Y', strtotime($pedido->fecha)),
             //     'estado' => $pedido->estado,
             //     'url' => url('/pedidos/'. $pedido->id),
             // ];
-    
+
             // if ($pedido->estado == 2) {
             //    $mensaje = 'Tu pedido está siendo preparado';
             // }
@@ -111,35 +108,33 @@ class OrdersController extends Controller
             // if ($pedido->estado == 4) {
             //     $mensaje = 'Tu pedido ha sido entregado';
             // }
-    
-            
+
+
             // $arrayData = [
             //     'notificacion' => [
             //         'msj' => $mensaje,
             //         'url' => url('/pedidos/'. $pedido->id)
             //     ]
             // ];
-    
+
             // Cliente::findOrFail($pedido->venta->cliente->id)->notify(new NotificationClient($arrayData));
-    
+
             // //Mail::to($pedido->venta->cliente->user->email)->send(new OrderStatusMail($details));
 
             // SendOrderStatusMail::dispatch($details, $pedido->venta->cliente->user);
-            
-    
-            session()->flash('message', ['success', ("Se ha actualizado el estado del pedido")]);
-    
-            return back();
 
+
+            session()->flash('message', ['success', ("Se ha actualizado el estado del pedido")]);
+
+            return back();
         } catch (\Exception $e) {
             return $e;
         }
-
     }
 
 
     public function imprimirPedido(Request $request, $id)
-    {   
+    {
 
         $productos = $this->productosOrder($id);
 
@@ -147,13 +142,13 @@ class OrdersController extends Controller
 
         // $pdf = \PDF::loadView('admin.pdf.pedido',['productos'=>$productos, 'users'=>$users])
         // ->setPaper('a4', 'landscape');
-        
+
         // return $pdf->download('pedido-'.$users[0]->pedido.'.pdf'); //imprimir pedido en pdf
 
-        $pdf = \PDF::loadView('admin.pdf.pedido',['productos'=>$productos])
-        ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('pedido-'.$productos[0]->venta->pedido->id.'.pdf'); //imprimir pedido en pdf
+        $pdf = \PDF::loadView('admin.pdf.pedido', ['productos' => $productos])
+            ->setPaper('a4', 'landscape');
+
+        return $pdf->download('pedido-' . $productos[0]->venta->pedido->id . '.pdf'); //imprimir pedido en pdf
     }
 
 
@@ -161,39 +156,44 @@ class OrdersController extends Controller
     {
 
         try {
-            
-            $pedidos = Pedido::whereHas('venta',function (Builder $query) {
+
+            $pedidos = Pedido::whereHas('venta', function (Builder $query) {
                 $query->where('estado', '!=', '3');
             })
-            ->with('venta.cliente.user')
-            ->orderBy('created_at', 'DESC')
-            ->get();
-    
+                ->with('venta.cliente.user')
+                ->orderBy('created_at', 'DESC')
+                ->get();
+
 
             $count = $pedidos->count();
-    
-            $pdf = \PDF::loadView('admin.pdf.listadopedidos',['pedidos'=>$pedidos, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
-            
+
+            $pdf = \PDF::loadView('admin.pdf.listadopedidos', ['pedidos' => $pedidos, 'count' => $count])
+                ->setPaper('a4', 'landscape');
+
             return $pdf->download('listadopedidos.pdf'); //listado de pedidos en pdf
 
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
 
-    
+
     public function productosOrder($id) //esta función se reutiliza
     {
 
-        return ProductoVenta::whereHas('venta.pedido',
-        function (Builder $query) use ($id) {
-           $query->where('id', $id);
-        })
-        ->with(['venta.pedido', 'venta.cliente.user'])
-        ->get();
-
+        return ProductoVenta::whereHas(
+            'venta.pedido',
+            function (Builder $query) use ($id) {
+                $query->where('id', $id);
+            }
+        )
+            ->with([
+                'venta.pedido', 'venta.cliente.user',
+                'productoReferencia.colorProducto.color:id,nombre', 'productoReferencia.colorProducto.producto:id,nombre', 'productoReferencia.talla:id,nombre', 'productoReferencia.colorProducto.imagenes' => function ($query) {
+                    $query->select('id', 'url', 'imageable_id');
+                }
+            ])
+            ->get();
     }
 
     // public function userPedido($id)
@@ -217,5 +217,4 @@ class OrdersController extends Controller
             4
         ];
     }
-
 }
