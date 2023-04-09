@@ -191,6 +191,13 @@ class OrdersController extends Controller
                 'venta.pedido', 'venta.cliente.user',
                 'productoReferencia.colorProducto.color:id,nombre', 'productoReferencia.colorProducto.producto:id,nombre', 'productoReferencia.talla:id,nombre', 'productoReferencia.colorProducto.imagenes' => function ($query) {
                     $query->select('id', 'url', 'imageable_id');
+                },
+                'productoReferencia.devoluciones' => function ($query) use ($id) {
+                    $query->whereIn('venta_id', function ($query) use ($id) {
+                        $query->select('venta_id')
+                            ->from('pedidos')
+                            ->where('id', $id);
+                    });
                 }
             ])
             ->get();

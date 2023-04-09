@@ -135,6 +135,7 @@
                                         <th scope="col">Cantidad</th>
                                         <th scope="col">Precio unitario</th>
                                         <th scope="col">Subtotal</th>
+                                        <th scope="col">Estado</th>
                                         <th scope="col">Acciones</th>
                                     </tr>
                                 </thead>
@@ -190,7 +191,9 @@
                                         <td>${{ floatval($producto->precio_venta) }}</td>
                                         {{-- <td>${{ floatval($producto->productoReferencia->colorProducto->producto->precio_actual * $producto->cantidad) }}</td> --}}
                                         <td>${{ floatval($producto->precio_venta * $producto->cantidad) }}</td>
-                                        <td><a href="{{ route('productos.show', $producto->productoReferencia->colorProducto->slug)}}"
+                                        <td>{{ count($producto->productoReferencia->devoluciones) > 0 ? 'con devolución' : 'sin devolución' }}</td>
+                                        <td>
+                                            <a href="{{ route('productos.show', $producto->productoReferencia->colorProducto->slug)}}"
                                                 class="btn btn-primary btn-sm btn-icon" title="ver producto">
                                                 <i class="fas fa-eye"></i>
                                             </a>
@@ -204,15 +207,15 @@
 
                                 <tfoot>
                                     <tr>
-                                        <td colspan="7" class="text-right">Subtotal:</td>
+                                        <td colspan="8" class="text-right">Subtotal:</td>
                                         <td colspan="2" class="text-left">${{ floatval($producto->venta->subtotal) }}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="7" class="text-right">Envío:</td>
+                                        <td colspan="8" class="text-right">Envío:</td>
                                         <td colspan="2" class="text-left">${{ floatval($producto->venta->envio) }}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="7" class="text-right">Total pedido:</td>
+                                        <td colspan="8" class="text-right">Total pedido:</td>
                                         <td colspan="2" class="text-left">${{ floatval($producto->venta->valor) }}</td>
                                     </tr>
 
