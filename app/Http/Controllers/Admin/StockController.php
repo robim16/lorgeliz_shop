@@ -129,7 +129,7 @@ class StockController extends Controller
     
             $product['data'] = $colorproducto;
             
-            // broadcast(new AddProductEvent($product));
+            broadcast(new AddProductEvent($product));
 
     
             $response = ['data' => 'success'];

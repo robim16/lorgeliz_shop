@@ -270,7 +270,6 @@
 
         methods : {
             loadCart(){
-                // let url = '/lorgeliz_tienda_copia/public/cart/user';
                 let url = `${this.ruta}/cart/user`
                 axios.get(url).then(response => {
                     this.arrayProductos = response.data.productos;
@@ -295,8 +294,6 @@
                 this.producto = producto;
                 this.operacion = operacion;
 
-                // let url = '/lorgeliz_tienda_copia/public/cart/setCantidad';
-                // let me = this;
 
                 let url = `${this.ruta}/cart/setCantidad`
 
@@ -323,9 +320,6 @@
             
             remove(producto){
                 this.producto = producto;
-                // let url = '/lorgeliz_tienda_copia/public/cart/remove/'+this.producto;
-                // let url = `/lorgeliz_tienda_copia/public/cart/${this.producto}/remove`;
-                // let me = this;
 
                 let url = `${this.ruta}/cart/${this.producto}/remove`
         
@@ -339,9 +333,7 @@
             },
         
             limpiarCarrito(){
-                // let url = '/lorgeliz_tienda_copia/public/cart/delete/'+this.carrito;
-                // let me = this;
-                // let url = `/lorgeliz_tienda_copia/public/cart/${this.carrito}/delete`;
+               
 
                 let url = `${this.ruta}/cart/${this.carrito}/delete`
         

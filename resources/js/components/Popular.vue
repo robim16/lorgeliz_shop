@@ -64,7 +64,6 @@
         
         methods : {
             getProductos(){
-                // let url = '/lorgeliz_tienda_copia/public/index';
                 let url = `${this.ruta}/index`
 
                 axios.get(url).then(response => {
@@ -76,7 +75,6 @@
 
             setSubcategoria(subcategoria){
                 localStorage.setItem('subcategory', JSON.stringify(subcategoria));
-                // window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
 
                 window.location.href = `${this.ruta}/categorias`;
             }
@@ -99,7 +97,9 @@
                 console.log(product.data.id)
                 
 
-                const index = this.productoPopular.findIndex(p => p.id == product.id);
+                // const index = this.productoPopular.findIndex(p => p.id == product.id);
+
+                const index = this.productoPopular.findIndex(p => p.id == product.data.id);
 
                 if (index == -1) {
                     // this.productoOffers.push(product);

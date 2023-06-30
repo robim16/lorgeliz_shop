@@ -4,7 +4,7 @@
 @section('titulo', 'Administración de Ventas')
 
 @section('breadcrumb')
-<li class="breadcrumb-item active">@yield('titulo')</li>
+    <li class="breadcrumb-item active">@yield('titulo')</li>
 @endsection
 
 
@@ -13,7 +13,7 @@
 <div id="listventas" class="row">
 
     <div class="col-12">
-        <div class="card">
+        {{-- <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Sección de ventas</h3>
 
@@ -94,7 +94,6 @@
                                 @endif
                             </td>
                             <td>
-                                {{-- @if (count($venta->devoluciones) > 0) --}}
                                 @if ($venta->devoluciones_count > 0)
                                     {{"Sí"}}
                                 @else
@@ -114,7 +113,8 @@
                             
                             @if ($venta->estado != 3)
                                 
-                                <td><form action="{{ route('venta.anular', $venta->id)}}" method="post">
+                                <td>
+                                    <form action="{{ route('venta.anular', $venta->id)}}" method="post">
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="btn btn-danger btn-sm btn-icon" title="anular venta"><i class="fas fa-trash"></i></button>
@@ -134,8 +134,9 @@
                 {{ $ventas->appends($_GET)->links() }}
             </div>
             <!-- /.card-body -->
-        </div>
-        <!-- /.card -->
+        </div> --}}
+
+        @livewire('admin.ventas-component')
     </div>
 </div>
 <!-- /.row -->

@@ -62,6 +62,13 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/productos/{pedido}', 'Api\OrderController@productos');
     });
 
+    Route::group(['prefix' => "/admin"], function ($router) {
+        Route::group(['prefix' => '/chats'], function () {
+            Route::get('/get', 'Admin\Api\ChatController@index');
+        });
+    });
+    
+
 });
 
 
@@ -74,9 +81,9 @@ Route::middleware('auth:api')->group(function () {
             Route::get('/tipos/get', 'Admin\Api\TallaController@fetchTallasByTipo');
         });
 
-        Route::group(['prefix' => '/chats'], function () {
-            Route::get('/', 'Admin\Api\ChatController@index');
-        });
+        // Route::group(['prefix' => '/chats'], function () {
+        //     Route::get('/', 'Admin\Api\ChatController@index');
+        // });
 
         Route::group(['prefix' => '/colores'], function () {
             Route::get('/{id}', 'Admin\Api\ColorController@index');

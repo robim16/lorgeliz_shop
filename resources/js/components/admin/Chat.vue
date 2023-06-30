@@ -261,6 +261,7 @@ import Messenger from './Messenger.vue';
                 // else{
                 //     return null;
                 // }
+                
                 let me = this;
               
                 (() => {
@@ -281,10 +282,8 @@ import Messenger from './Messenger.vue';
     	}, 
 
         methods:{
+
             loadMessages(cliente){
-        
-                // let url ='/lorgeliz_tienda_copia/public/admin/chats/'+this.cliente;
-                // let url ='/lorgeliz_tienda_copia/public/admin/chats/'+ cliente;
 
                 let url = `${this.ruta}/admin/chats/${cliente}`;
                 axios.get(url).then(response => {
@@ -348,9 +347,6 @@ import Messenger from './Messenger.vue';
             },
 
             listarClientes(page, buscar, criterio){
-                // let url ='/lorgeliz_tienda_copia/public/admin/clientes/chat?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
-                // let url ='/lorgeliz_tienda_copia/public/api/admin/clientes?page=' + page + '&buscar='+
-                //     buscar + '&criterio='+ criterio;
 
                 let url = `${this.ruta}/admin/clientes?page=${page}&buscar=${buscar}&criterio=${criterio}`;
 
@@ -361,6 +357,7 @@ import Messenger from './Messenger.vue';
 					this.active = 0;
                 })
             },
+
 
             cambiarPagina(page){
 				//Actualiza la página actual
@@ -373,6 +370,7 @@ import Messenger from './Messenger.vue';
         },
 
         mounted() {
+
             // this.loadMessages();
             if (this.getCliente != '' && this.getCliente != null){
                 this.enable(this.getCliente);

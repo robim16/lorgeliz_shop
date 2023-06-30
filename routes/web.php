@@ -117,7 +117,7 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
 
     Route::group(['prefix' => '/chats'], function () {
         Route::get('/', 'Admin\ChatController@index')->name('chats.admin');
-        Route::get('/get', 'Admin\ChatController@chatsAjax')->name('chats.admin.index');
+        // Route::get('/get', 'Admin\ChatController@chatsAjax')->name('chats.admin.index');
         Route::post('/', 'Admin\ChatController@store')->name('chat.admin.store');
         Route::get('/messages', 'Admin\ChatController@lastMessage')->name('chat.to-admin');
         Route::put('/read/{chat}', 'Admin\ChatController@readMessage')->name('chat.read');

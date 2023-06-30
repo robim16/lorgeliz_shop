@@ -137,17 +137,17 @@
         methods:{
 
             chatList(page){
+
                 // if (localStorage.getItem('cliente')) {
 				//     this.cliente = JSON.parse(localStorage.getItem('cliente'));//obtenemos el cliente si existe
                 //     localStorage.removeItem('cliente');
                 //     this.buscar = this.cliente;
 			    // }
 			
-                // let url ='/lorgeliz_tienda_copia/public/admin/chats/get?page='
-                //     + page + '&buscar='+ this.buscar;
                 
-                let url = `${this.ruta}/admin/chats/get?page=${page}&buscar=${this.buscar}`
+                let url = `${this.ruta}/api/admin/chats/get?page=${page}&buscar=${this.buscar}`
                 // let url ='/lorgeliz_tienda_copia/public/api/admin/chats?page=' + page + '&buscar='+ this.buscar;
+                
                 axios.get(url).then(response =>{
                     var respuesta = response.data;
 					this.arrayChats = respuesta.chats.data;

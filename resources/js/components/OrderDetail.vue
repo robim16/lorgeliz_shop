@@ -165,8 +165,6 @@ export default {
     }, 
     methods: {
         getProductos(){
-            // let url = '/lorgeliz_tienda_copia/public/pedidos/productos/' + this.id;
-            // let url = `/lorgeliz_tienda_copia/public/api/orders/${this.id}/productos`;
 
             // let url = `${this.ruta}/pedidos/productos/${this.id}`
 
@@ -219,8 +217,7 @@ export default {
         // },
 
         store(producto, venta, cantidad){
-            // let url = '/lorgeliz_tienda_copia/public/devoluciones';
-
+    
            let url = `${this.ruta}/devoluciones`
 
             axios.post(url, {
@@ -252,16 +249,12 @@ export default {
                     )
                 }
             }
-            // function (response) {
-
-            // }
             ).catch(function (error) {
                 console.log(error);
             });
         }, 
 
         imprimir(id) {
-            // window.open('/lorgeliz_tienda_copia/public/pedidos/show/pdf/' + id + ',' + '_blank');
 
             window.open(`${this.ruta}/pedidos/show/pdf/${id}, _blank`);
         },

@@ -438,7 +438,7 @@
     
         <div class="modal fade" tabindex="-1" role="dialog"  id="modalPago" :class="{'mostrar' : modal}">
             <div class="modal-dialog" role="document">
-                <div class="modal-content">
+                <div class="modal-content mt-5">
                     <div class="modal-header modal-primary">
                         <h5 class="modal-title" id="appModalLabel">Registrar pago</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="cerrarModal">

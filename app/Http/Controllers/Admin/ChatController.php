@@ -32,59 +32,59 @@ class ChatController extends Controller
         return view('admin.chats.index');
     }
 
-    //obtener chats en el index de chats
-    public function chatsAjax(Request $request)
-    {
+    //obtener chats en el index de chats. Implementado an api/chat
+    // public function chatsAjax(Request $request)
+    // {
 
-        if ( ! request()->ajax()) {
-			abort(401, 'Acceso denegado');
-		}
+    //     if ( ! request()->ajax()) {
+	// 		abort(401, 'Acceso denegado');
+	// 	}
 
-        $buscar = $request->buscar;
+    //     $buscar = $request->buscar;
         
-        $user = auth()->user()->id;
+    //     $user = auth()->user()->id;
 
       
 
-        try {
+    //     try {
 
 
-            $chats = User::has('chats')
-            ->addSelect([
-                'mensaje' => Chat::select('mensaje')
-                ->whereColumn('from_id', 'users.id')
-                ->orderBy('created_at', 'DESC')
-                ->limit(1)
-            ])
-            ->addSelect([
-                'fecha' => Chat::select('created_at')
-                ->whereColumn('from_id', 'users.id')
-                ->orderBy('created_at', 'DESC')
-                ->limit(1)
-            ])
-            ->where('users.nombres', 'like',"%$buscar%")
-            ->whereNotIn('users.id', [$user])
-            ->with('imagene')
-            ->orderBy('fecha', 'DESC')
-            ->paginate(5);
+    //         $chats = User::has('chats')
+    //         ->addSelect([
+    //             'mensaje' => Chat::select('mensaje')
+    //             ->whereColumn('from_id', 'users.id')
+    //             ->orderBy('created_at', 'DESC')
+    //             ->limit(1)
+    //         ])
+    //         ->addSelect([
+    //             'fecha' => Chat::select('created_at')
+    //             ->whereColumn('from_id', 'users.id')
+    //             ->orderBy('created_at', 'DESC')
+    //             ->limit(1)
+    //         ])
+    //         ->where('users.nombres', 'like',"%$buscar%")
+    //         ->whereNotIn('users.id', [$user])
+    //         ->with('imagene')
+    //         ->orderBy('fecha', 'DESC')
+    //         ->paginate(5);
     
-            return [
-                'pagination' => [
-                    'total'        => $chats->total(),
-                    'current_page' => $chats->currentPage(),
-                    'per_page'     => $chats->perPage(),
-                    'last_page'    => $chats->lastPage(),
-                    'from'         => $chats->firstItem(),
-                    'to'           => $chats->lastItem(),
-                ],
-                'chats' => $chats
-            ];
+    //         return [
+    //             'pagination' => [
+    //                 'total'        => $chats->total(),
+    //                 'current_page' => $chats->currentPage(),
+    //                 'per_page'     => $chats->perPage(),
+    //                 'last_page'    => $chats->lastPage(),
+    //                 'from'         => $chats->firstItem(),
+    //                 'to'           => $chats->lastItem(),
+    //             ],
+    //             'chats' => $chats
+    //         ];
             
-        } catch (\Exception $e) {
-            //throw $th;
-        }
+    //     } catch (\Exception $e) {
+    //         //throw $th;
+    //     }
 
-    }
+    // }
 
 
     /**

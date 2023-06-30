@@ -122,11 +122,16 @@
 			this.getProductos();
 
             window.Echo.channel('add-product').listen('AddProductEvent', (e) => {
-               let product = e.data;
+               
+                let product = e.data;
+
+                // console.log(product.data.id)//es el id de color_producto
                 
                 if (product.data.producto.estado == 1) {
 
                     const index = this.productoNuevo.findIndex(p => p.id == product.id);
+
+                    // const index = this.productoNuevo.findIndex(p => p.id == product.data.id);
 
                     if (index == -1) {
                         // this.productoOffers.push(product);

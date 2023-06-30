@@ -22,7 +22,7 @@
         </div>
 
         <div class="pl-5 pr-5">
-        <form method="POST" action="{{ route('users.update', $user->id)}}" novalidate enctype="multipart/form-data">
+            <form method="POST" action="{{ route('users.update', $user->id)}}" novalidate enctype="multipart/form-data">
                 @method('PUT')
 
                 @csrf
@@ -44,9 +44,9 @@
                                             name="email" value="{{ $user->email}}" required autofocus />
 
                                         @if($errors->has('email'))
-                                        <span class="invalid-feedback">
-                                            <strong>{{ $errors->first('email') }}</strong>
-                                        </span>
+                                            <span class="invalid-feedback">
+                                                <strong>{{ $errors->first('email') }}</strong>
+                                            </span>
                                         @endif
                                     </div>
                                 </div>
@@ -62,9 +62,9 @@
                                             name="password" required />
 
                                         @if ($errors->has('password'))
-                                        <span class="invalid-feedback">
-                                            <strong>{{ $errors->first('password') }}</strong>
-                                        </span>
+                                            <span class="invalid-feedback">
+                                                <strong>{{ $errors->first('password') }}</strong>
+                                            </span>
                                         @endif
                                     </div>
                                 </div>
@@ -98,9 +98,9 @@
                                             name="usuario" value="{{ old('usuario') ?: $user->username }}" required />
 
                                         @if($errors->has('usuario'))
-                                        <span class="invalid-feedback">
-                                            <strong>{{ $errors->first('usuario') }}</strong>
-                                        </span>
+                                            <span class="invalid-feedback">
+                                                <strong>{{ $errors->first('usuario') }}</strong>
+                                            </span>
                                         @endif
                                     </div>
                                 </div>
@@ -115,9 +115,9 @@
                                             name="nombres" value="{{ old('nombres') ?: $user->nombres }}" required />
 
                                         @if($errors->has('nombres'))
-                                        <span class="invalid-feedback">
-                                            <strong>{{ $errors->first('nombres') }}</strong>
-                                        </span>
+                                            <span class="invalid-feedback">
+                                                <strong>{{ $errors->first('nombres') }}</strong>
+                                            </span>
                                         @endif
                                     </div>
                                 </div>
@@ -132,9 +132,9 @@
                                             name="apellidos" value="{{ old('apellidos') ?: $user->apellidos }}" required />
 
                                         @if($errors->has('apellidos'))
-                                        <span class="invalid-feedback">
-                                            <strong>{{ $errors->first('apellidos') }}</strong>
-                                        </span>
+                                            <span class="invalid-feedback">
+                                                <strong>{{ $errors->first('apellidos') }}</strong>
+                                            </span>
                                         @endif
                                     </div>
                                 </div>
@@ -152,9 +152,9 @@
                                         </select>
 
                                         @if($errors->has('departamento'))
-                                        <span class="invalid-feedback">
-                                            <strong>{{ $errors->first('departamento') }}</strong>
-                                        </span>
+                                            <span class="invalid-feedback">
+                                                <strong>{{ $errors->first('departamento') }}</strong>
+                                            </span>
                                         @endif
                                     </div>
                                 </div>
@@ -172,9 +172,9 @@
                                         </select>
 
                                         @if($errors->has('municipio'))
-                                        <span class="invalid-feedback">
-                                            <strong>{{ $errors->first('municipio') }}</strong>
-                                        </span>
+                                            <span class="invalid-feedback">
+                                                <strong>{{ $errors->first('municipio') }}</strong>
+                                            </span>
                                         @endif
                                     </div>
                                 </div>
@@ -189,9 +189,9 @@
                                             name="direccion" value="{{ old('direccion') ?: $user->direccion}}" required />
 
                                         @if($errors->has('direccion'))
-                                        <span class="invalid-feedback">
-                                            <strong>{{ $errors->first('direccion') }}</strong>
-                                        </span>
+                                            <span class="invalid-feedback">
+                                                <strong>{{ $errors->first('direccion') }}</strong>
+                                            </span>
                                         @endif
                                     </div>
                                 </div>
@@ -206,9 +206,9 @@
                                             name="telefono" value="{{  old('telefono') ?: $user->telefono }}" required />
 
                                         @if($errors->has('telefono'))
-                                        <span class="invalid-feedback">
-                                            <strong>{{ $errors->first('telefono') }}</strong>
-                                        </span>
+                                            <span class="invalid-feedback">
+                                                <strong>{{ $errors->first('telefono') }}</strong>
+                                            </span>
                                         @endif
                                     </div>
                                 </div>
@@ -218,21 +218,29 @@
 
                             <div class="form-group ml-3 mr-2 row">
                                 <div class="col-md-6 offset-4">
-                                    <input type="file" class="custom-file-input" id="imagen" name="imagen" />
-                                    <label class="custom-file-label" for="picture">
+                                    {{-- <input type="file" class="custom-file-input" id="imagen" name="imagen" /> --}}
+                                    <input
+                                        type="file"
+                                        class="custom-file-input"
+                                        id="imagen"
+                                        name="imagen"
+                                        accept="image/*"
+								    />
+                                    
+                                    <label class="custom-file-label" for="imagen">
                                         {{ "Imagen" }}
                                     </label>
 
                                     @if ($errors->has('imagen'))
-                                    <small class="form-text text-danger">
-                                        {{ $errors->first('imagen') }}
-                                    </small>
+                                        <small class="form-text text-danger">
+                                            {{ $errors->first('imagen') }}
+                                        </small>
                                     @endif
                                 </div>
                             </div>
                             <div class="form-group text-center">
                                 <div class="text-center">
-                                    <button type="submit" name="revision" class="btn btn-success">
+                                    <button type="submit" class="btn btn-success">
                                         <b>{{ __("Actualizar perfil") }}</b>
                                     </button>
                                 </div>

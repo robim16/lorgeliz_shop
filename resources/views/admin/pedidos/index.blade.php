@@ -56,98 +56,58 @@
                                 <tbody>
     
                                     @foreach ($pedidos as $pedido)
-    
-                                    {{-- <tr>
-                                        <td>{{ $pedido->id }}</td>
-                                        <td>{{ date('d/m/Y h:i:s A', strtotime($pedido->fecha)) }}</td>
-                                        <td><a href="{{ route('cliente.show', $pedido->cliente)}}"
-                                            title="ver cliente">{{ $pedido->nombres }} {{ $pedido->apellidos }}</a>
-                                        </td>
-                                        <td><span class="badge badge-success">
-                                            @if ($pedido->estado == 1 )
-                                            {{ "pendiente" }}
-                                            @endif
-                                            @if ($pedido->estado == 2)
-                                            {{ "en proceso"}}
-                                            @endif
-                                            @if ($pedido->estado == 3)
-                                            {{ "enviado"}}
-                                            @endif
-                                            @if ($pedido->estado == 4)
-                                            {{ "entregado"}}
-                                            @endif
-                                            </span>
-                                        </td>
-                                        <td>${{ floatval($pedido->valor) }}</td>
-                                        <td><a href="{{ route('venta.show', $pedido->venta)}}"
-                                           title="ver venta">{{ $pedido->venta}}</a></td>
-                                        <td><a href="{{ route('admin.pedidos.show', $pedido->id)}}"
-                                        class="btn btn-primary" title="ver pedido">
-                                         <i class="fas fa-eye"></i></a>
-                                        </td>
-                                        <td><a href=""
-                                            class="btn btn-warning" title="cambiar estado"
-                                            data-toggle="modal"
-                                            data-target="#modalEstado"
-                                            data-id="{{$pedido['id']}}"
-                                            data-status="{{$pedido['estado']}}">
-                                            <i class="fas fa-pen"></i></a>
-                                        </td>
-                                        <td><a class="btn btn-success" href="" v-on:click.prevent="imprimir({{ $pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
-                                        </td>
-                                    </tr> --}}
-
-                                    <tr>
-                                        <td>{{ $pedido->id }}</td>
-                                        <td>{{ date('d/m/Y h:i:s A', strtotime($pedido->fecha)) }}</td>
-                                        <td><a href="{{ route('cliente.show', $pedido->venta->cliente->id)}}"
-                                            title="ver cliente">{{ $pedido->venta->cliente->user->nombres }} {{ $pedido->venta->cliente->user->apellidos }}</a>
-                                        </td>
-                                        <td><span class="badge badge-success">
-                                            @if ($pedido->estado == 1 )
-                                            {{ "pendiente" }}
-                                            @endif
-                                            @if ($pedido->estado == 2)
-                                            {{ "en proceso"}}
-                                            @endif
-                                            @if ($pedido->estado == 3)
-                                            {{ "enviado"}}
-                                            @endif
-                                            @if ($pedido->estado == 4)
-                                            {{ "entregado"}}
-                                            @endif
-                                            @if ($pedido->estado == 5)
-                                            {{ "anulado"}}
-                                            @endif
-                                            </span>
-                                        </td>
-                                        <td>${{ floatval($pedido->venta->valor) }}</td>
-                                        <td>
-                                            <a href="{{ route('venta.show', $pedido->venta->id)}}"
-                                           title="ver venta">{{ $pedido->venta->id}}</a>
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('admin.pedidos.show', $pedido->id)}}"
-                                                class="btn btn-primary btn-sm btn-icon" title="ver pedido">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                        </td>
-
-                                        @if ($pedido->estado != 5)
-                                            
-                                            <td><a href=""
-                                                class="btn btn-warning btn-sm btn-icon" title="cambiar estado"
-                                                data-toggle="modal"
-                                                data-target="#modalEstado"
-                                                data-id="{{$pedido['id']}}"
-                                                data-status="{{$pedido['estado']}}">
-                                                <i class="fas fa-pen"></i></a>
+                                   
+                                        <tr>
+                                            <td>{{ $pedido->id }}</td>
+                                            <td>{{ date('d/m/Y h:i:s A', strtotime($pedido->fecha)) }}</td>
+                                            <td><a href="{{ route('cliente.show', $pedido->venta->cliente->id)}}"
+                                                title="ver cliente">{{ $pedido->venta->cliente->user->nombres }} {{ $pedido->venta->cliente->user->apellidos }}</a>
                                             </td>
-                                        @endif
+                                            <td><span class="badge badge-success">
+                                                @if ($pedido->estado == 1 )
+                                                {{ "pendiente" }}
+                                                @endif
+                                                @if ($pedido->estado == 2)
+                                                {{ "en proceso"}}
+                                                @endif
+                                                @if ($pedido->estado == 3)
+                                                {{ "enviado"}}
+                                                @endif
+                                                @if ($pedido->estado == 4)
+                                                {{ "entregado"}}
+                                                @endif
+                                                @if ($pedido->estado == 5)
+                                                {{ "anulado"}}
+                                                @endif
+                                                </span>
+                                            </td>
+                                            <td>${{ floatval($pedido->venta->valor) }}</td>
+                                            <td>
+                                                <a href="{{ route('venta.show', $pedido->venta->id)}}"
+                                            title="ver venta">{{ $pedido->venta->id}}</a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('admin.pedidos.show', $pedido->id)}}"
+                                                    class="btn btn-primary btn-sm btn-icon" title="ver pedido">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
 
-                                        <td><a class="btn btn-success btn-sm btn-icon" href="" @click.prevent="imprimir({{ $pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
-                                        </td>
-                                    </tr>
+                                            @if ($pedido->estado != 5)
+                                                
+                                                <td><a href=""
+                                                    class="btn btn-warning btn-sm btn-icon" title="cambiar estado"
+                                                    data-toggle="modal"
+                                                    data-target="#modalEstado"
+                                                    data-id="{{$pedido['id']}}"
+                                                    data-status="{{$pedido['estado']}}">
+                                                    <i class="fas fa-pen"></i></a>
+                                                </td>
+                                            @endif
+
+                                            <td><a class="btn btn-success btn-sm btn-icon" href="" @click.prevent="imprimir({{ $pedido->id}})" title="imprimir"><i class="fa fa-print"></i></a>
+                                            </td>
+                                        </tr>
                                     
                                     @endforeach
                                     

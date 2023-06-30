@@ -125,7 +125,6 @@
 		
         methods : {
             getProductos(){
-				// let url = '/lorgeliz_tienda_copia/public/index';
                 let url = `${this.ruta}/index`
 				axios.get(url).then(response => {
 					this.productoSlider = response.data.slider
@@ -134,9 +133,6 @@
                 });
             
         	},
-
-        
-
         },
 
         filters: {
@@ -149,15 +145,16 @@
             this.productoSlider = this.productos;
 			// this.getProductos();
 
+
             window.Echo.channel('add-product').listen('AddProductEvent', (e) => {
                let product = e.data;
-            //    console.log(product.data.producto.slider_principal)
-                console.log(product.data.id)
+    
+                // console.log(product.data.id)//es el id de color_producto
                 
                 if (product.data.producto.slider_principal == 'Si') {
 
-                    let element = this.productoSlider.findIndex(p => p.id == product);
-
+    
+                    let element = this.productoSlider.findIndex(p => p.id == product.data.id);//probar
                     if (element == -1) {
                         // this.productoOffers.push(product);
                         this.getProductos();
@@ -165,6 +162,7 @@
                 }
                 
             });
+
 
             window.Echo.channel('producto-agotado').listen('ProductoAgotado', (e) => {
 
@@ -180,6 +178,8 @@
                 });
                 
             });
+
+            
 
             window.Echo.channel('change-status').listen('ProductStatusEvent', (e) => {
                 let productos = e.data;

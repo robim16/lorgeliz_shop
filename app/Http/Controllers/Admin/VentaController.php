@@ -40,23 +40,25 @@ class VentaController extends Controller
         try {
 
             
-            $ventas = Venta::when($estado, function ($query) use ($estado) {
-                return $query->orWhere('estado', $estado)
-                ->with('cliente');
-            },
-            function ($query) use ($busqueda) {
-                return $query->orWhere('valor', 'like',"%$busqueda%")
-                ->orWhereHas('cliente.user', function (Builder $query)  use ($busqueda)  {
-                    $query->where('nombres', 'like',"%$busqueda%");
-                });
-            })
-            ->with(['pedido:id,venta_id', 'cliente:id,user_id', 'cliente.user:id,nombres,apellidos'])
-            ->withCount('devoluciones')
-            ->orderBy('id', 'DESC')
-            ->paginate(5);
+            // $ventas = Venta::when($estado, function ($query) use ($estado) {
+            //     return $query->orWhere('estado', $estado)
+            //     ->with('cliente');
+            // },
+            // function ($query) use ($busqueda) {
+            //     return $query->orWhere('valor', 'like',"%$busqueda%")
+            //     ->orWhereHas('cliente.user', function (Builder $query)  use ($busqueda)  {
+            //         $query->where('nombres', 'like',"%$busqueda%");
+            //     });
+            // })
+            // ->with(['pedido:id,venta_id', 'cliente:id,user_id', 'cliente.user:id,nombres,apellidos'])
+            // ->withCount('devoluciones')
+            // ->orderBy('id', 'DESC')
+            // ->paginate(5);
             
     
-            return view('admin.ventas.index', compact('ventas'));
+            // return view('admin.ventas.index', compact('ventas'));
+
+            return view('admin.ventas.index');
             
         } catch (\Exception $e) {
             return $e;

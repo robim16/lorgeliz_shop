@@ -21,7 +21,6 @@ use Intervention\Image\Facades\Image;
 // use Symfony\Component\Console\Input\Input;
 use Log;
 
-use function PHPSTORM_META\map;
 
 class ProductController extends Controller
 {
@@ -36,22 +35,17 @@ class ProductController extends Controller
         $this->middleware('auth');
     }
 
+
     public function index(Request $request)
     {
-        $busqueda = $request->get('busqueda');
+        // $busqueda = $request->get('busqueda');
 
-        $productos = Producto::orWhere('productos.nombre', 'like', "%$busqueda%")
-            ->orWhere('productos.id', 'like', "%$busqueda%")
-            ->with('colors:id')
-            ->withCount('colors')
-            ->paginate(10);
-        // ->map(function ($producto) {
-        //     $producto->colors[0]->pivot->load(['imagenes' => function($query) use($producto) {
-        //         $query->select('id', 'url', 'imageable_id')
-        //         ->where('imageable_id', $producto->colors[0]->id)
-        //         ->limit(1);
-        //     }]);
-        // });
+        // $productos = Producto::orWhere('productos.nombre', 'like', "%$busqueda%")
+        //     ->orWhere('productos.id', 'like', "%$busqueda%")
+        //     ->with('colors:id')
+        //     ->withCount('colors')
+        //     ->paginate(10);
+       
 
         // $pivots = new \Illuminate\Database\Eloquent\Collection();
 
@@ -62,17 +56,17 @@ class ProductController extends Controller
         // $pivots->load('imagenes');
 
 
-        foreach ($productos as $producto) {
-            $producto->colors[0]->pivot->load(['imagenes' => function ($query) {
-                $query->select('id', 'url', 'imageable_id')
-                    ->limit(1);
-            }]);
-        }
+        // foreach ($productos as $producto) {
+        //     $producto->colors[0]->pivot->load(['imagenes' => function ($query) {
+        //         $query->select('id', 'url', 'imageable_id')
+        //             ->limit(1);
+        //     }]);
+        // }
 
 
+        // return view('admin.productos.index', compact('productos')); //index de productos en admin
 
-
-        return view('admin.productos.index', compact('productos')); //index de productos en admin
+        return view('admin.productos.index');
 
     }
 

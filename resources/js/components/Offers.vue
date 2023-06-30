@@ -96,11 +96,18 @@
             this.productoOffers = this.productos;
             
             window.Echo.channel('add-product').listen('AddProductEvent', (e) => {
-               let product = e.data.product;
+                //    let product = e.data.product;
+                let product = e.data;
+
+                console.log(product.data.id)
                 
                 if (product.producto.estado == 2) {
 
+                // if (product.data.producto.estado == 2) {
+
+
                     const index = this.productoOffers.findIndex(p => p.id == product.id);
+                    // const index = this.productoOffers.findIndex(p => p.id == product.data.id);
 
                     if (index == -1) {
                         // this.productoOffers.push(product);

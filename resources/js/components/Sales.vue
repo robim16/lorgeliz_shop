@@ -97,10 +97,14 @@
             window.Echo.channel('add-product').listen('AddProductEvent', (e) => {
 
                 // let product = e.data.product;
+
                 let product = e.data;
                 console.log(product);
-
+                
+                // console.log(product.data.id)//es el id de color_producto
                 const index = this.productoSales.findIndex(p => p.id == product.id);
+
+                // const index = this.productoSales.findIndex(p => p.id == product.data.id);
 
                 if (index == -1) {
                     // this.productoSales.push(product);

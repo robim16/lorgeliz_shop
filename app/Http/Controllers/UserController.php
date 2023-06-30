@@ -93,8 +93,9 @@ class UserController extends Controller
         try {
 
 
+            return $request;
             $user = User::where('id', $id)->first();
-    
+
             // $user = auth()->user();
             $user->username = request('usuario');
             $user->nombres = request('nombres');
@@ -103,22 +104,23 @@ class UserController extends Controller
             $user->municipio = request('municipio');
             $user->direccion = request('direccion');
             $user->telefono = request('telefono');
-    
+
             if (request('password')) { //si se envía el password se somete a la rule
-    
-                $this->validate(request(), 
-                 ['password' => ['confirmed', new StrengthPassword]]);
-                 $user->password = bcrypt(request('password'));
+
+                $this->validate(
+                    request(),
+                    ['password' => ['confirmed', new StrengthPassword]]
+                );
+                $user->password = bcrypt(request('password'));
             }
-           
+
             $user->save();
-            
+
             session()->flash('message', ['success', ("Se han actualizado los datos")]);
 
             return back();
-
         } catch (\Exception $e) {
-           Log::debug('Error actualizando el usuario'.'error:'.' '.json_encode($e));
+            Log::debug('Error actualizando el usuario' . 'error:' . ' ' . json_encode($e));
         }
 
     }
