@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\ColorProducto;
-use App\Imagene;
+// use App\Imagene;
 use App\Producto;
 use App\ProductoReferencia;
 use App\ProductoVenta;
-use App\Events\ProductStatusEvent;
+// use App\Events\ProductStatusEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Services\Admin\ProductService;
@@ -15,8 +15,8 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
+// use Illuminate\Support\Facades\Storage;
+// use Intervention\Image\Facades\Image;
 // use Spatie\Dropbox\Client;
 // use Symfony\Component\Console\Input\Input;
 use Log;
