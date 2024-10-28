@@ -241,7 +241,7 @@ class ProductController extends Controller
             
         } catch (Exception $e) {
 
-            session()->flash('message', ['warning', ("ha ocurrido un error")]);
+            session()->flash('message', ['warning', ("ha ocurrido un error".$e)]);
 
             Log::debug('Error creando el producto.Request: ' . json_encode($request) . ' ' . 'Error: ' . $e);
 

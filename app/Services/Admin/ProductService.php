@@ -170,35 +170,35 @@ class ProductService
     public function uploadImage(Request $request, Producto $producto)
     {
 
-        // $url_imagenes = [];
+        $url_imagenes = [];
 
-        // if ($request->hasFile('imagenes')) {
+        if ($request->hasFile('imagenes')) {
 
-        //     $imagenes = $request->file('imagenes');
+            $imagenes = $request->file('imagenes');
 
-        //     foreach ($imagenes as $imagen) {
+            foreach ($imagenes as $imagen) {
 
-        //         $nombre = time() . '_' . $imagen->getClientOriginalName();
+                $nombre = time() . '_' . $imagen->getClientOriginalName();
 
 
-        //         $image = Image::make($imagen)->encode('jpg', 75);
-        //         $image->resize(530, 591, function ($constraint) {
-        //             $constraint->upsize();
-        //         });
+                $image = Image::make($imagen)->encode('jpg', 75);
+                $image->resize(530, 591, function ($constraint) {
+                    $constraint->upsize();
+                });
 
                 
 
-        //         $path = "imagenes/productos/producto_" . $producto->id . "/" . $nombre;
+                $path = "imagenes/productos/producto_" . $producto->id . "/" . $nombre;
 
-        //         Storage::disk('public')->put($path, $image->stream());
+                Storage::disk('public')->put($path, $image->stream());
 
-        //         $url_imagenes[]['url'] = $path;
-        //     }
+                $url_imagenes[]['url'] = $path;
+            }
 
-        //     return $url_imagenes;
-        // }
+            return $url_imagenes;
+        }
 
-        UploadProductsImages::dispatch($producto,$request);
+        // UploadProductsImages::dispatch($producto,$request->all());
         
     }
 

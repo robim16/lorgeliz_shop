@@ -4,7 +4,7 @@
 @section('titulo', 'Administración de productos')
 
 @section('breadcrumb')
-<li class="breadcrumb-item active">@yield('titulo')</li>
+    <li class="breadcrumb-item active">@yield('titulo')</li>
 @endsection
 
 
@@ -31,7 +31,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Sección de productos</h3>
+                <h3 class="card-title">Colores del producto</h3>
 
                 <div class="card-tools">
 
@@ -67,24 +67,6 @@
 
                         @foreach ($productos as $producto)
                         <tr>
-                            {{-- <td> {{$producto->id }} </td>
-                            <td>
-                                @foreach(\App\Imagene::where('imageable_type', 'App\ColorProducto')
-                                    ->where('imageable_id', $producto->cop)->pluck('url', 'id')->take(1) as $id => $imagen)    
-                                    <img src="{{ url('storage/' . $imagen) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
-                                @endforeach
-                               
-                            </td>
-                            <td> {{$producto->nombre }} </td>
-                            <td> {{$producto->marca }} </td>
-                            <td> {{$producto->color}}</td>
-                            <td> {{$producto->slider_principal }} </td>
-
-                            <td> <a class="btn btn-default" href="{{ route('product.showColor', $producto->slug) }}" title="ver producto"><i class="fas fa-eye"></i></a>
-                            </td>
-
-                            <td> <a class="btn btn-info" href="{{ route('product.editColor', $producto->slug) }}" title="editar"><i class="fas fa-pen"></i></a>
-                            </td> --}}
 
                             <td> {{$producto->producto->id }} </td>
                             <td>
