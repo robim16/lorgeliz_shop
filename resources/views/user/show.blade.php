@@ -16,7 +16,7 @@
         <div class="row mb-4">
             <div class="pt-1 mx-auto d-flex">
                 <img src="{{ auth()->user()->imagene ? url('storage/' . auth()->user()->imagene->url) : '' }}" alt="{{ auth()->user()->nombres }}"
-                    class="rounded-circle image-responsive">
+                    class="rounded-circle image-responsive" style="max-width: 150px;">
                 <h2 style="text-align: center" class="pt-4 pb-4"> {{ auth()->user()->nombres}}</h2>
             </div>
         </div>

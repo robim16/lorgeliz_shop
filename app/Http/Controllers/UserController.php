@@ -93,7 +93,7 @@ class UserController extends Controller
         try {
 
 
-            return $request;
+            // return $request;
             $user = User::where('id', $id)->first();
 
             // $user = auth()->user();

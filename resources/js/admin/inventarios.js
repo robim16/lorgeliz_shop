@@ -59,7 +59,7 @@ const inventarios = new Vue({
 
         traerInventario(page){
 
-            let url = '/lorgeliz_tienda_copia/public/admin/stock/productos?page=' + page;
+            let url = '/admin/stock/productos?page=' + page;
 
             axios.get(url).then(response => {
                 var respuesta = response.data;
@@ -71,7 +71,7 @@ const inventarios = new Vue({
         },
 
         pdfInventarios(){
-            let url = '/lorgeliz_tienda_copia/public/admin/stock/listado';
+            let url = '/admin/stock/listado';
             window.open(url);
         },
         
@@ -96,7 +96,7 @@ const inventarios = new Vue({
         getTallas(){
             this.talla = 0;
 
-            let url = '/lorgeliz_tienda_copia/public/api/admin/tallas/'+this.producto;
+            let url = '/api/admin/tallas/'+this.producto;
             
     
             axios.get(url).then(response => {
@@ -108,7 +108,7 @@ const inventarios = new Vue({
         getColores(){
             this.color = 0;
 
-            let url = '/lorgeliz_tienda_copia/public/api/admin/colores/'+this.producto;
+            let url = '/api/admin/colores/'+this.producto;
 
     
             axios.get(url).then(response => {
@@ -118,7 +118,7 @@ const inventarios = new Vue({
 
         ingresarStock(){
 
-            let url = '/lorgeliz_tienda_copia/public/admin/stock';
+            let url = '/admin/stock';
             
 
             axios.post(url,{

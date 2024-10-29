@@ -34,12 +34,11 @@ if (document.getElementById('app')) {
             keyword: '',
             location: '',
             // ruta: 'http://dev.lorenzogeliztienda.com'
-            ruta: '/lorgeliz_tienda_copia/public'
+            ruta: '/'
         }, 
         methods:{
             setCategoria(categoria){
                 localStorage.setItem('category', JSON.stringify(categoria));
-                // window.location.href = `/lorgeliz_tienda_copia/public/categorias`;
                 window.location.href = `${this.ruta}/categorias`;
             },
 

@@ -23,7 +23,6 @@
 
         methods : {
             carritoUser(){
-                // let url = '/lorgeliz_tienda_copia/public/cart/products';
 
                 let url = `${this.ruta}/cart/products`;
 
@@ -36,7 +35,6 @@
 
         mounted() {
             
-            // let url = '/lorgeliz_tienda_copia/public/cart/products';
             let url = `${this.ruta}/cart/products`;
 
             axios.get(url).then(response => {

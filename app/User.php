@@ -147,7 +147,12 @@ class User extends Authenticatable
     
                         // $img->save();
 
-                        UploadUsersImages::dispatch($user, request()->file('imagen'));
+                        $imagen = request()->file('imagen');
+                        $nombre = time().'_'.$imagen->getClientOriginalName();
+                        
+                        $path = Storage::disk('public')->putFileAs("imagenes/users/" . $user->id, $imagen, $nombre);
+
+                        UploadUsersImages::dispatch($user, $path);
     
                         if ($user->cliente) {
                             $imagen = Imagene::where('imageable_type','App\User')
