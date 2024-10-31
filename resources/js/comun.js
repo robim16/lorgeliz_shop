@@ -34,7 +34,7 @@ if (document.getElementById('app')) {
             keyword: '',
             location: '',
             // ruta: 'http://dev.lorenzogeliztienda.com'
-            ruta: '/'
+            ruta: ''
         }, 
         methods:{
             setCategoria(categoria){

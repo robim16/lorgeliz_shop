@@ -6,26 +6,11 @@ const app = new Vue({
     },
 
     computed:{
-        // listar : function(){
-        //     //this.arrayNotificationsVentas = Object.values(this.notifications[0]);
-        //     //if (this.notifications == '') {
-        //         //return this.arrayNotificationsVentas = [];
-        //     //}
-        //     //else{
-        //        // this.arrayNotificationsVentas = Object.values(this.notifications[0]);
-        //         //if (this.arrayNotificationsVentas.length > 3) {
-        //             //return Object.values(this.arrayNotificationsVentas[4]);
-                   
-        //         //} else {
-        //            // return Object.values(this.arrayNotificationsVentas[0]);
-        //         //}
-        //    // }
-            
-        // }
+       
     },
     methods:{
         readNotification(id,ruta){
-            let url = '/lorgeliz_tienda_copia/public/admin/notification/'+id;
+            let url = '/admin/notification/'+id;
            
             axios.put(url).then(response => {
                 window.location.href = ruta;
@@ -34,9 +19,7 @@ const app = new Vue({
     },
     created() {
 
-        // let url = '/lorgeliz_tienda_copia/public/api/admin/notifications';
-
-        let url = '/lorgeliz_tienda_copia/public/admin/notification'
+        let url = '/admin/notification'
        
         axios.get(url).then(response => {
           this.notifications = response.data;

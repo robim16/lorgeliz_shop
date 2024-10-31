@@ -87,7 +87,9 @@ class ProductController extends Controller
                         ->orderBy('created_at');
                 }
             )
-                ->with(['color', 'producto', 'imagenes'])
+                ->with(['color', 'producto', 'imagenes' => function ($query) {
+                    $query->select('id', 'url', 'imageable_id');
+                }])
                 ->paginate(5);
 
             return view('admin.productos.coloresproducto', compact('productos'));

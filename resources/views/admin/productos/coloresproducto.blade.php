@@ -50,7 +50,11 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
-            <a class=" m-2 float-right btn btn-primary" href="{{ route('product.color', $productos[0]->producto_id)}}"><i class="fas fa-plus"></i> Crear</a>
+                {{-- <a class=" m-2 float-right btn btn-primary" href="{{ route('product.color', $productos[0]->producto_id)}}"><i class="fas fa-plus"></i> Crear</a> --}}
+                <button type="button" id="new" class="m-2 float-right btn btn-primary"
+                    data-toggle="modal" data-target="#modalColor">
+                    <i class="far fa-plus-square mx-1"></i>Crear
+                </button>
                 <table class="table1 table-head-fixed">
                     <thead>
                         <tr>
@@ -104,5 +108,83 @@
     </div>
 </div>
 <!-- /.row -->
+
+<div class="modal fade" id="modalColor" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header modal-primary">
+                <h5 class="modal-title" id="appModalLabel">
+                   Nuevo color del producto
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <form id='formColor' class="form-horizontal" action="{{ route('product.store-color') }}" method="POST">
+                    @csrf
+
+                    <div class="alert alert-success alert-dismissible fade show" role="alert" v-show="alertShow">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <p>{{ 'Se ha creado el producto' }}</p>
+                    </div>
+
+                    <div class="form-group row">
+
+                        <label class="col-md-3 form-control-label" for="text-input">Color</label>
+                        <div class="col-md-9">
+                            <select name="color_id" id="color_id" class="form-control" v-model="color">
+                                <option value="">Seleccione uno</option>
+                                @foreach (\App\Color::pluck('nombre', 'id') as $id => $color)
+                                    <option value="{{ $id }}">
+                                        {{ $color }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <input type="hidden" name="product_id" value="">
+
+                            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                            <span class="text-danger">
+                                <strong id="color_id-error"></strong>
+                            </span>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-md-3 form-control-label" for="imagenes">Añadir imágenes</label>
+                        <div class="col-md-9">
+
+                            <input type="file" class="form-control-file" name="imagenes[]" id="imagenes" multiple
+                                accept="image/*">
+
+                            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                            <span class="text-danger">
+                                <strong id="imagenes-error"></strong>
+                            </span>
+
+                        </div>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary float-left" id="aceptar"
+                        @click.prevent="createColor">Guardar <i class="bi bi-hdd"></i></button>
+                    <button type="reset" class="btn btn-danger float-right" id="rechazar">Cancelar</button>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
