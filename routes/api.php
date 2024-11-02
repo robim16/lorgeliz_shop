@@ -69,7 +69,7 @@ Route::middleware('auth:api')->group(function () {
 
         Route::group(['prefix' => '/products'], function () {
             
-            Route::post('/color', 'Admin\Api\ProductController@store_color')->name('product.store-color');
+            Route::post('/color', 'Admin\Api\ProductoController@store_color')->name('product.store-color');
         });
     });
     

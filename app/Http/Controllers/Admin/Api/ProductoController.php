@@ -17,6 +17,7 @@ class ProductoController extends Controller
 
         try {
 
+            // return $request;
             DB::beginTransaction();
 
             $producto_id = $request->producto;

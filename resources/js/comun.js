@@ -156,6 +156,10 @@ if (document.getElementById('payments')) {
     require('./admin/listadopagos');
 }
 
+if (document.getElementById('product_color')) {
+    require('./admin/create_color_producto');
+}
+
 if (document.getElementById('user_cart')) {
     require('./tienda/userCart');
 }

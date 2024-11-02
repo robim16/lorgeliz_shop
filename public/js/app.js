@@ -73809,6 +73809,78 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./resources/js/admin/create_color_producto.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/admin/create_color_producto.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var inventarios = new Vue({
+  el: '#product_color',
+  data: {
+    producto: '',
+    color: 0,
+    alertShow: false,
+    imagenes: ''
+  },
+  methods: {
+    selectFiles: function selectFiles(event) {
+      this.imagenes = event.target.files;
+    },
+    create_color: function create_color(producto) {
+      var _this = this;
+
+      var url = '/api/admin/products/color';
+      this.producto = producto;
+      var form = new FormData();
+      form.append('producto', this.producto);
+      form.append('color', this.color);
+
+      for (var i = 0; i < this.imagenes.length; i++) {
+        var file = this.imagenes[i];
+        form.append('imagenes[' + i + ']', file);
+      }
+
+      axios.post(url, form, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        if (response.data.data == 'success') {
+          _this.alertShow = true;
+        }
+      })["catch"](function (error) {
+        console.log(error);
+
+        for (var _i = 0, _Object$entries = Object.entries(error.response.data); _i < _Object$entries.length; _i++) {
+          var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+              el = _Object$entries$_i[0],
+              message = _Object$entries$_i[1];
+
+          // $(`#${el}-error`).html(message)
+          document.getElementById("".concat(el, "-error")).innerHTML = message;
+        }
+      });
+    },
+    reset: function reset() {
+      this.color = '';
+      this.imagenes = '';
+    }
+  },
+  mounted: function mounted() {}
+});
+
+/***/ }),
+
 /***/ "./resources/js/admin/imprimir_pedidos.js":
 /*!************************************************!*\
   !*** ./resources/js/admin/imprimir_pedidos.js ***!
@@ -74104,7 +74176,6 @@ var inventarios = new Vue({
           _this4.alertShow = true;
         }
       })["catch"](function (error) {
-        // console.log(error.response.data)
         console.log(error);
 
         for (var _i = 0, _Object$entries = Object.entries(error.response.data); _i < _Object$entries.length; _i++) {
@@ -76229,6 +76300,10 @@ if (document.getElementById('inventarios')) {
 
 if (document.getElementById('payments')) {
   __webpack_require__(/*! ./admin/listadopagos */ "./resources/js/admin/listadopagos.js");
+}
+
+if (document.getElementById('product_color')) {
+  __webpack_require__(/*! ./admin/create_color_producto */ "./resources/js/admin/create_color_producto.js");
 }
 
 if (document.getElementById('user_cart')) {
