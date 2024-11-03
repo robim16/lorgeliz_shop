@@ -30,6 +30,7 @@
                     <th>Imagen</th>
                     <th>Nombre</th>
                     <th>Descripción</th>
+                    <th>Precio</th>
                     <th>Marca</th>
                     <th>Slider</th>
                     <th colspan="3">Acciones</th>
@@ -50,6 +51,7 @@
                         </td>
                         <td> {{ $producto->nombre }} </td>
                         <td> {!! Str::limit($producto->descripcion_corta, 30) !!} </td>
+                        <td>${{ $producto->precio_actual }}</td>
                         <td> {{ $producto->marca }} </td>
                         
                         <td> {{ $producto->slider_principal }} </td>

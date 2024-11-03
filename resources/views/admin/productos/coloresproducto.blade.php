@@ -62,6 +62,7 @@
                                 <th>Imagen</th>
                                 <th>Nombre</th>
                                 <th>Marca</th>
+                                <th>Precio</th>
                                 <th>Color</th>
                                 <th>Slider</th>
                                 <th colspan="4"></th>
@@ -78,6 +79,7 @@
                                 </td>
                                 <td> {{$producto->producto->nombre }} </td>
                                 <td> {{$producto->producto->marca }} </td>
+                                <td> ${{$producto->producto->precio_actual }} </td>
                                 <td> {{$producto->color->nombre}}</td>
                                 <td> {{$producto->producto->slider_principal }} </td>
     

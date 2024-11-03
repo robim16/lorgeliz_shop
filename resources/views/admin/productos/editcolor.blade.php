@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 
-@section('titulo', 'Editar Producto')
+@section('titulo', 'Editar Producto en color '.$producto->color)
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{route('product.index')}}">Productos</a></li>
     <li class="breadcrumb-item active">@yield('titulo')</li>
@@ -110,7 +110,7 @@
                             </div>
                             <!-- /.col -->
 
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Marca</label>
                                     <input class="form-control" type="text" id="marca" name="marca" value="{{ old('marca')
@@ -123,12 +123,31 @@
                                 </small>
                                 @endif
 
+                            </div> --}}
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Color</label>
+                                    <select name="color" id="color" class="form-control">
+                                        @foreach (\App\Color::pluck( 'nombre','id') as $id => $nombre)
+                                            <option  {{ $producto->color_id === $id ? 'selected' : '' }} value="{{ $id}}">
+                                                {{ $nombre}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                @if($errors->has('color'))
+                                <small class="form-text text-danger">
+                                    {{ $errors->first('color') }}
+                                </small>
+                                @endif
                             </div>
 
                         </div>
                         <!-- /.row -->
 
-                        <div class="row">
+                        {{-- <div class="row">
 
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -169,9 +188,9 @@
                                 </div>
                             </div>
 
-                        </div>
+                        </div> --}}
 
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     
@@ -212,7 +231,7 @@
                                 @endif
                             </div>
 
-                        </div>
+                        </div>  --}}
 
 
                     </div>
@@ -224,7 +243,7 @@
 
                 <!-- /.card -->
 
-                <div class="card card-success">
+                {{-- <div class="card card-success">
                     <div class="card-header">
                         <h3 class="card-title">Sección de Precios</h3>
 
@@ -329,10 +348,10 @@
                     <div class="card-footer">
 
                     </div>
-                </div>
+                </div> --}}
                 <!-- /.card -->
 
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-md-6">
 
                         <div class="card card-primary">
@@ -432,7 +451,7 @@
                     <!-- /.col-md-6 -->
 
 
-                </div>
+                </div> --}}
                 <!-- /.row -->
 
 
@@ -490,18 +509,18 @@
                         <div class="row">
 
                             @foreach (\App\Imagene::where('imageable_type', 'App\ColorProducto')
-                            ->where('imageable_id', $producto->cop)->pluck('url', 'id') as $id => $imagen)
-                            <div id="idimagen-{{$id}}" class="col-sm-2">
-                                <a href="{{ url('storage/' . $imagen)}}" data-toggle="lightbox" data-title="Id:{{ $id }}"
-                                    data-gallery="gallery">
-                                    <img style="width:150px; height:150px;" src="{{ url('storage/' . $imagen) }}"
-                                    class="img-fluid mb-2" />
-                                </a>
-                                <br>
-                                <a href="{{ $imagen }}" @click.prevent="eliminarimagen({{$id}})">
-                                    <i class="fas fa-trash-alt" style="color:red"></i> Id:{{ $id }}
-                                </a>
-                            </div>
+                                ->where('imageable_id', $producto->cop)->pluck('url', 'id') as $id => $imagen)
+                                <div id="idimagen-{{$id}}" class="col-sm-2">
+                                    <a href="{{ url('storage/' . $imagen)}}" data-toggle="lightbox" data-title="Id:{{ $id }}"
+                                        data-gallery="gallery">
+                                        <img style="width:150px; height:150px;" src="{{ url('storage/' . $imagen) }}"
+                                        class="img-fluid mb-2" />
+                                    </a>
+                                    <br>
+                                    <a href="{{ $imagen }}" @click.prevent="eliminarimagen({{$id}})">
+                                        <i class="fas fa-trash-alt" style="color:red"></i> Id:{{ $id }}
+                                    </a>
+                                </div>
                             @endforeach
 
                         </div>
@@ -515,7 +534,7 @@
                     <!-- /.card-header -->
                     <div class="card-body">
 
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
 
@@ -578,7 +597,7 @@
 
                             </div>
 
-                        </div>
+                        </div> --}}
                         <!-- /.row -->
 
                         <div class="row">

@@ -391,7 +391,7 @@
                 <!-- /.row -->
 
 
-                <div class="card card-warning">
+                {{-- <div class="card card-warning">
                     <div class="card-header">
                         <h3 class="card-title">Imágenes</h3>
 
@@ -426,7 +426,7 @@
                     <div class="card-footer">
 
                     </div>
-                </div>
+                </div> --}}
                 <!-- /.card -->
 
 
@@ -519,7 +519,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
 
-                                    <a class="btn btn-danger" href="{{route('product.index')}}">Cancelar</a>
+                                    <a class="btn btn-danger" href="{{ route('product.colors', $producto->id) }}">Cancelar</a>
                                     <a class="btn btn-primary float-right" href="{{ route('product.editColor', $producto->slug)}}">Editar</a>
 
                                 </div>
