@@ -64,18 +64,6 @@ class StockController extends Controller
 
     public function store(StockRequest $request, StockService $stockService)
     {
-        
-
-        // $validator = Validator::make($request->all(), [
-        //     'producto_id'   => 'required',
-        //     'talla_id'      => 'required',
-        //     'color_id'      => 'required',
-        //     'cantidad'      => 'required',
-        // ]);
-
-        // if ($validator->fails()) {
-        //     return response()->json($validator->errors(), 422);
-        // }
 
         if (isset($request->validator) && $request->validator->fails()){
             return response()->json($request->validator->errors(), 422);
@@ -84,40 +72,6 @@ class StockController extends Controller
         try {
 
             DB::beginTransaction();
-           
-            // $colorproducto = ColorProducto::where('color_id', $request->color_id)
-            //     ->where('producto_id', $request->producto_id)
-            //     ->with('producto:id,slider_principal,estado')
-            //     ->first();
-            
-            // $referencia = ProductoReferencia::where('color_producto_id', $colorproducto->id)
-            //     ->where('talla_id', $request->talla_id)
-            //     ->first(); // buscar la referencia
-    
-           
-            // if ($referencia == '') {//si no existe la referencia, se crea
-    
-            //     $producto = new ProductoReferencia();
-            //     $producto->color_producto_id = $colorproducto->id;
-            //     $producto->talla_id = $request->talla_id;
-            //     $producto->stock = $request->cantidad;
-        
-            //     $producto->save();  
-            // }
-            // else{
-    
-            //     if ($request->operacion == 1) {
-                   
-            //         $referencia->stock = $referencia->stock + $request->cantidad; //sino, se actualiza el stock
-            //     }
-            //     else{
-            //         $referencia->stock = $referencia->stock - $request->cantidad;
-            //     }
-    
-            //     $referencia->save();
-            // }
-    
-            // session()->flash('message', ['success', ("Se ha actualizado el inventario exitosamente")]);
 
             $colorproducto = $stockService->saveStock($request);
 
@@ -131,14 +85,12 @@ class StockController extends Controller
             
             broadcast(new AddProductEvent($product));
 
-    
             $response = ['data' => 'success'];
             
             return response()->json($response);
 
 
         } catch (\Exception $e) {
-            // session()->flash('message', ['warning', ("Ha ocurrido un error".$e)]);
 
             DB::rollBack();
             return $e;
@@ -150,30 +102,32 @@ class StockController extends Controller
 
     public function pdfInventarios()
     {
-       
+        try {
 
-        $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
-            $query->where('activo', 'Si');
-        })
-        ->with(['talla', 'colorProducto'])
-        ->where('stock', '>', '0')
-        ->orderBy('color_producto_id')
-        ->get();
+            $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
+                $query->where('activo', 'Si');
+            })
+                ->with(['talla', 'colorProducto'])
+                ->where('stock', '>', '0')
+                ->orderBy('color_producto_id')
+                ->get();
 
-        
-        $count = $productos->count();
 
-        $pdf = \PDF::loadView('admin.pdf.inventarios',['productos'=>$productos, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
-        
-        return $pdf->download('inventarioproductos.pdf');
-        
+            $count = $productos->count();
+
+            $pdf = \PDF::loadView('admin.pdf.inventarios', ['productos' => $productos, 'count' => $count])
+                ->setPaper('a4', 'landscape');
+
+            return $pdf->download('inventarioproductos.pdf');
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+
     }
 
     public function loadStocks(Request $request)
     {
         $busqueda = $request->get('busqueda');
-
 
         $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
             $query->where('activo', 'Si');

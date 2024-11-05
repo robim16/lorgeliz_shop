@@ -26,12 +26,11 @@
         </button>
     </form>
 @else
-
-<form action="{{ route('product.activate', $producto->id) }}" method="POST">
-    @csrf
-    <button type="submit" class="btn btn-success text-white"  title="activar producto">
-        <i class="fas fa-check"></i>
-    </button>
-</form>
+    <form action="{{ route('product.activate', $producto->id) }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-success text-white"  title="activar producto">
+            <i class="fas fa-check"></i>
+        </button>
+    </form>
 
 @endif

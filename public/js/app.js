@@ -74078,7 +74078,8 @@ var inventarios = new Vue({
       'from': 0,
       'to': 0
     },
-    offset: 3
+    offset: 3,
+    busqueda: ''
   },
   computed: {
     isActived: function isActived() {
@@ -74116,7 +74117,7 @@ var inventarios = new Vue({
     traerInventario: function traerInventario(page) {
       var _this = this;
 
-      var url = '/admin/stock/productos?page=' + page;
+      var url = "/admin/stock/productos?page=".concat(page, "&busqueda=").concat(this.busqueda);
       axios.get(url).then(function (response) {
         var respuesta = response.data;
         _this.arrayProductos = respuesta.productos.data;
@@ -74187,6 +74188,9 @@ var inventarios = new Vue({
           document.getElementById("".concat(el, "-error")).innerHTML = message;
         }
       });
+    },
+    search: function search() {
+      this.traerInventario(this.pagination.current_page);
     },
     reset: function reset() {
       this.producto = '';

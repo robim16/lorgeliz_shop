@@ -22,6 +22,7 @@ const inventarios = new Vue({
             'to': 0,
         },
         offset: 3,
+        busqueda: ''
     },
 
     computed:{
@@ -59,15 +60,13 @@ const inventarios = new Vue({
 
         traerInventario(page){
 
-            let url = '/admin/stock/productos?page=' + page;
-
+            let url = `/admin/stock/productos?page=${page}&busqueda=${this.busqueda}`;
             axios.get(url).then(response => {
                 var respuesta = response.data;
                 this.arrayProductos = respuesta.productos.data;
                 this.pagination = respuesta.pagination;
                 this.active = 0;
             }); 
-
         },
 
         pdfInventarios(){
@@ -120,7 +119,6 @@ const inventarios = new Vue({
 
             let url = '/admin/stock';
             
-
             axios.post(url,{
                 'producto_id': this.producto,
                 'talla_id': this.talla,
@@ -144,6 +142,10 @@ const inventarios = new Vue({
                     }
                 });
 
+        },
+
+        search(){
+            this.traerInventario(this.pagination.current_page)
         },
 
         reset(){

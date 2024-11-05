@@ -21,7 +21,10 @@ class CategoryController extends Controller
 
         $disponibles = ProductoReferencia::disponibles();
 
-        $productos = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        $productos = ColorProducto::with(['producto.tipo:id,nombre',
+            'color:id,nombre',
+            'imagenes'
+        ])
         // ->where('activo', 'Si')
         ->activo()
         ->whereIn('id', $disponibles)

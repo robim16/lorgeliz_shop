@@ -65,7 +65,7 @@
                                 <th>Precio</th>
                                 <th>Color</th>
                                 <th>Slider</th>
-                                <th colspan="4"></th>
+                                <th colspan="5"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -94,6 +94,12 @@
                                         <i class="fas fa-pen"></i>
                                     </a>
                                 </td>
+
+                                <td>
+                                    <a class="btn btn-primary btn-sm btn-icon" href="{{ route('product.editColor', $producto->slug) }}" title="inventario">
+                                        <i class="fas fa-dolly"></i>
+                                    </a>
+                                <td>
     
                                 <td>@include('admin.productos.delete')</td>
     

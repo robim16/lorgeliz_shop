@@ -17,25 +17,29 @@
                         <div class="card-header">
                             <h3 class="card-title mb-2">Información de inventario de productos</h3>
 
-                            <div class="card-tools">
-                                <form>
-                                    <div class="input-group input-group-sm" style="width: 190px">
+                            <div class="card-tools d-flex">
+                                <form @submit.prevent="search">
+                                    <div class="input-group input-group-sm" style="width: 220px; margin: 0.5px 0 0;">
 
                                         <input type="text" name="busqueda" class="form-control float-right"
-                                            placeholder="buscar" value="{{ request()->get('busqueda') }}">
+                                            placeholder="buscar" v-model="busqueda">
 
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-success"><i
                                                     class="fas fa-search"></i></button>
                                         </div>
-                                        <div class="input-group-append">
-                                            <a href="" class="btn btn-success mx-1" @click.prevent="pdfInventarios">
-                                                <i class="fas fa-print"></i>
-                                            </a>
-                                        </div>
+                                        
                                     </div>
                                 </form>
+                                
+                                <div class="input-group-append">
+                                    <a href="" class="btn btn-success btn-sm btn-icon mx-1" @click.prevent="pdfInventarios">
+                                        <i class="fas fa-print"></i>
+                                    </a>
+                                </div>
+                            
                             </div>
+                            
                         </div>
 
                         <div class="card-body table-responsive p-0">
