@@ -96,7 +96,7 @@
                                 </td>
 
                                 <td>
-                                    <a class="btn btn-primary btn-sm btn-icon" href="{{ route('product.editColor', $producto->slug) }}" title="inventario">
+                                    <a class="btn btn-primary btn-sm btn-icon" href="{{ route('stock.index', $producto->id) }}" title="inventario">
                                         <i class="fas fa-dolly"></i>
                                     </a>
                                 <td>

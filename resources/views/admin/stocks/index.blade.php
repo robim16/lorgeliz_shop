@@ -26,7 +26,7 @@
 
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-success"><i
-                                                    class="fas fa-search"></i></button>
+                                                class="fas fa-search"></i></button>
                                         </div>
                                         
                                     </div>
@@ -258,5 +258,10 @@
 @endsection
 
 @section('scripts')
+<script>
+    window.data = {
+        busqueda: "{{ $busqueda }}",
+    }
+</script>
 
 @endsection

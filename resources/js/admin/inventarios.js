@@ -60,9 +60,10 @@ const inventarios = new Vue({
 
         traerInventario(page){
 
-            let url = `/admin/stock/productos?page=${page}&busqueda=${this.busqueda}`;
+            let url = `/admin/stock/productos/existentes?page=${page}&busqueda=${this.busqueda}`;
             axios.get(url).then(response => {
                 var respuesta = response.data;
+                // console.log(respuesta);
                 this.arrayProductos = respuesta.productos.data;
                 this.pagination = respuesta.pagination;
                 this.active = 0;
@@ -167,6 +168,7 @@ const inventarios = new Vue({
     },
 
     mounted(){
+        this.busqueda = data.busqueda;
         this.traerInventario(1)
     }
 

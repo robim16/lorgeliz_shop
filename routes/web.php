@@ -202,8 +202,8 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
 
     Route::group(['prefix' => '/stock'], function (){
 
-        Route::get('/', 'Admin\StockController@index')->name('stock.index');
-        Route::get('/productos', 'Admin\StockController@loadStocks');
+        Route::get('/{busqueda?}', 'Admin\StockController@index')->name('stock.index');
+        Route::get('/productos/existentes', 'Admin\StockController@loadStocks');
         Route::get('/listado', 'Admin\StockController@pdfInventarios')->name('stock.listadopdf');
         Route::post('/', 'Admin\StockController@store')->name('stock.store');
 

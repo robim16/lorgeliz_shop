@@ -74117,9 +74117,10 @@ var inventarios = new Vue({
     traerInventario: function traerInventario(page) {
       var _this = this;
 
-      var url = "/admin/stock/productos?page=".concat(page, "&busqueda=").concat(this.busqueda);
+      var url = "/admin/stock/productos/existentes?page=".concat(page, "&busqueda=").concat(this.busqueda);
       axios.get(url).then(function (response) {
-        var respuesta = response.data;
+        var respuesta = response.data; // console.log(respuesta);
+
         _this.arrayProductos = respuesta.productos.data;
         _this.pagination = respuesta.pagination;
         _this.active = 0;
@@ -74206,6 +74207,7 @@ var inventarios = new Vue({
     }
   },
   mounted: function mounted() {
+    this.busqueda = data.busqueda;
     this.traerInventario(1);
   }
 });

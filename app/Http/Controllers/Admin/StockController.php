@@ -27,10 +27,8 @@ class StockController extends Controller
         $this->middleware('auth');
     }
     
-    public function index(Request $request)
+    public function index(Request $request, $busqueda = null)
     {
-
-        // $busqueda = $request->get('busqueda');
 
 
         // $productos = ProductoReferencia::whereHas('colorProducto', function (Builder $query) {
@@ -56,7 +54,7 @@ class StockController extends Controller
 
 
         
-        return view('admin.stocks.index');
+        return view('admin.stocks.index', compact('busqueda'));
 
     }
 
@@ -145,6 +143,9 @@ class StockController extends Controller
             })
             ->orWhereHas('colorProducto.color', function (Builder $query) use($busqueda){
                 $query->where('nombre','like',"%$busqueda%");
+            })
+            ->orWhereHas('colorProducto', function (Builder $query) use($busqueda){
+                $query->where('id', $busqueda);
             });
         })
         ->orderBy('color_producto_id')

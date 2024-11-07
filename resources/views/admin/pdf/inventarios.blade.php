@@ -97,33 +97,17 @@
                 </tr>
             </thead>
             <tbody>
-                {{-- @foreach ($productos as $producto)
-                <tr>
-                    <td>{{ $producto->id }}</td>
-                    <td>{{ $producto->nombre }}</td>
-                    <td> 
-                        @foreach(\App\Imagene::where('imageable_type', 'App\ColorProducto')
-                        ->where('imageable_id', $producto->cop)->pluck('url', 'id')->take(1) as $id => $imagen)    
-                        <img src="{{ url('storage/' . $imagen) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
-                        @endforeach
-                    </td>
-                    <td>{{ $producto->talla }}</td>
-                    <td>{{ $producto->color }}</td>
-                    <td>{{ $producto->stock }}</td>
-                </tr>
-                @endforeach                                 --}}
-
                 @foreach ($productos as $producto)
-                <tr>
-                    <td>{{ $producto->colorProducto->producto->id }}</td>
-                    <td>{{ $producto->colorProducto->producto->nombre }}</td>
-                    <td> 
-                        <img src="{{ url('storage/' . $producto->colorProducto->imagenes[0]->url) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
-                    </td>
-                    <td>{{ $producto->talla->nombre }}</td>
-                    <td>{{ $producto->colorProducto->color->nombre }}</td>
-                    <td>{{ $producto->stock }}</td>
-                </tr>
+                    <tr>
+                        <td>{{ $producto->colorProducto->producto->id }}</td>
+                        <td>{{ $producto->colorProducto->producto->nombre }}</td>
+                        <td> 
+                            <img src="{{ url('storage/' . $producto->colorProducto->imagenes[0]->url) }}" alt="" style="height: 50px; width: 50px;" class="rounded-circle">
+                        </td>
+                        <td>{{ $producto->talla->nombre }}</td>
+                        <td>{{ $producto->colorProducto->color->nombre }}</td>
+                        <td>{{ $producto->stock }}</td>
+                    </tr>
                 @endforeach        
             </tbody>
         </table>
