@@ -50,6 +50,9 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
+                    <a class="m-2 float-right btn btn-primary" href="{{ route('stock.index', $productos[0]->producto->nombre) }}" title="inventarios">
+                        <i class="fas fa-dolly"></i>
+                    </a>
                     {{-- <a class=" m-2 float-right btn btn-primary" href="{{ route('product.color', $productos[0]->producto_id)}}"><i class="fas fa-plus"></i> Crear</a> --}}
                     <button type="button" id="new" class="m-2 float-right btn btn-primary"
                         data-toggle="modal" data-target="#modalColor">

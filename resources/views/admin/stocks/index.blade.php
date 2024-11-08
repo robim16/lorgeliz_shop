@@ -67,7 +67,7 @@
                                         <td>@{{ producto.color_producto.producto.id }}</td>
                                         <td>@{{ producto.color_producto.producto.nombre }}</td>
                                         <td> <a :href="'../product/' + producto.color_producto.slug">
-                                                <img :src="'../storage/' + producto.color_producto.imagenes[0].url"
+                                                <img :src="base_url + 'storage/' + producto.color_producto.imagenes[0].url"
                                                     alt="" style="height: 50px; width: 50px;" class="rounded-circle">
                                             </a>
                                         </td>

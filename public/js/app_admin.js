@@ -74070,6 +74070,7 @@ var inventarios = new Vue({
     operacion: '',
     alertShow: false,
     arrayProductos: [],
+    base_url: 'http://127.0.0.1:8000/',
     pagination: {
       'total': 0,
       'current_page': 0,
