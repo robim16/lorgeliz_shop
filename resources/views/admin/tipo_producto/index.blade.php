@@ -118,10 +118,10 @@
                         <div class="col-md-8">
                             <select name="tallas_id[]" id="tallas_id" class="form-control select2" multiple="multiple" data-placeholder="Selecciona las tallas">
                                 @foreach(\App\Talla::pluck('nombre', 'id') as $id => $nombre)
-                                <option value="{{ $id }}" class="option">
-                                    {{$nombre}}
+                                    <option value="{{ $id }}" class="option">
+                                        {{$nombre}}
 
-                                </option>
+                                    </option>
                                 @endforeach
                             
                             </select>
@@ -196,7 +196,7 @@ $(document).ready(function () {
             type: "GET",
             // url: "route('talla.tipos'",
             // url:'/lorgeliz_tienda_copia/public/api/admin/tallas/tipos/get',
-            url:'http://dev.lorenzogeliztienda.com/api/admin/tallas/tipos/get',
+            url:'http://127.0.0.1:8000/api/admin/tallas/tipos/get',
             data:{id:id},
             dataType: 'json',
             success: function (response) {

@@ -38,9 +38,9 @@ Route::group(['prefix' => '/'], function ($router) {
     });
 
 
-    Route::group(['prefix' => '/tallas'], function () {
-        Route::get('/{id}', 'Api\TallaController@index');
-    });
+    // Route::group(['prefix' => '/tallas'], function () {
+    //     Route::get('/{id}', 'Api\TallaController@index');
+    // });
 
 
     // Route::group(['prefix' => '/devoluciones'], function () {
@@ -70,6 +70,10 @@ Route::middleware('auth:api')->group(function () {
         Route::group(['prefix' => '/products'], function () {
             
             Route::post('/color', 'Admin\Api\ProductoController@store_color')->name('product.store-color');
+        });
+
+        Route::group(['prefix' => '/tallas'], function () {
+            Route::get('/{id}', 'Api\TallaController@index');
         });
     });
     

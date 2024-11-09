@@ -12,13 +12,13 @@ class TallaController extends Controller
     
     public function index(Request $request, $id)
     {
-       //obtener tallas al actualizar stock en el modal
+        //obtener tallas al actualizar stock en el modal
 
-        $tipo = Producto::where('id', $id)->firstOrFail(); 
+        $tipo_producto = Producto::where('id', $id)->firstOrFail();
 
         $tallas = Talla::join('talla_tipo', 'tallas.id', 'talla_tipo.talla_id')
-        ->where('talla_tipo.tipo_id', $tipo->tipo_id)
-        ->get();
+            ->where('talla_tipo.tipo_id', $tipo_producto->tipo_id)
+            ->get();
 
         return $tallas;
     }
