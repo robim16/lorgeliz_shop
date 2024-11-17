@@ -37,4 +37,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'epayco' => [
+		'key' => env('EPAYCO_SECRET_KEY'),
+	],
+
 ];

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TipoRequest;
+use App\Talla;
 use App\Tipo;
 use Illuminate\Http\Request;
 
@@ -26,8 +27,8 @@ class TipoProductoController extends Controller
         $nombre = $request->get('nombre');
        
         $tipos = Tipo::where('nombre','like',"%$nombre%")
-        ->orderBy('id')
-        ->paginate(5);
+            ->orderBy('id')
+            ->paginate(5);
         
         return view('admin.tipo_producto.index',compact('tipos'));
     }

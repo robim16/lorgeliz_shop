@@ -69,6 +69,7 @@
                                 <td class="" id="total">
                                 </td>
                             </tr>
+                            {{ $response }}
                         </tbody>
                     </table>
                 </div>
@@ -91,7 +92,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script>
+    {{-- <script>
         function getQueryParam(param) {
             location.search.substr(1)
                 .split("&")
@@ -179,7 +180,7 @@
             });
         });
 
-    </script>
+    </script> --}}
 </body>
 
 </html>

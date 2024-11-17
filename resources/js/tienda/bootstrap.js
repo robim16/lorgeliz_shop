@@ -49,7 +49,7 @@ window.Pusher = require('pusher-js');
 
 //descomentar
 window.Echo = new Echo({
-    authEndpoint: 'http://localhost/lorgeliz_tienda_copia/public/broadcasting/auth',
+    authEndpoint: 'http://127.0.0.1:8000/broadcasting/auth',
     broadcaster: 'pusher',
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,

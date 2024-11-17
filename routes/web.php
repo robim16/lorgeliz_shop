@@ -20,11 +20,7 @@ Route::get('/categorias', 'HomeController@categorias')->name('categorias');
 Route::get('/checkout', 'HomeController@checkout')->name('checkout')->middleware('auth');
 
 
-
-// Route::group(['prefix' => '/'], function (){
-//     Route::get('/cuenta', 'UserController@index')->name('users.cuenta');
-//     Route::put('/update', 'UserController@update')->name('users.update');
-// });
+Route::post('/checkout', 'CheckoutController@checkout')->name('cart.checkout');
 
 
 
@@ -55,11 +51,11 @@ Route::group(['prefix' => '/productos'], function() {
 
 // ruta api. Route::get('/tallas/productos/{id}', 'TallaController@getProductoTallas')->name('talla.productos');
 
-Route::group(['prefix' => '/payments'], function (){
-    Route::get('/epayco/response', 'PaymentController@response')->name('response');
+Route::group(['prefix' => '/checkout'], function (){
+    Route::get('/epayco/{invoice}', 'CheckoutController@checkout')->name('epayco.checkout');
+    Route::post('/epayco/confirm', 'CheckoutController@confirm')->name('epayco.confirmation');
 });
 
-// Route::get('/payments/epayco/response', 'PaymentController@response')->name('response');
 
 Route::group(['prefix' => '/stock'], function (){
     Route::get('/verificar', 'StockController@verificarStock')->name('stock.verificar');
@@ -99,7 +95,6 @@ Route::group(['prefix' => '/devoluciones'], function () {
 
 Route::group(['prefix' => '/ventas'], function () {
     Route::post('/epayco', 'VentaController@epayco_register')->name('venta.epayco');
-    //Route::post('/epayco/confirm', 'VentaController@epaycoConfirm')->name('venta.confirmation'); //ruta para confirmación, de prueba
     // Route::post('/store', 'VentaController@store')->name('venta.store');
     Route::post('/', 'VentaController@store')->name('venta.store');
 });
@@ -221,7 +216,6 @@ Route::group(['prefix' => "/admin", "middleware" => [sprintf("role:%s", \App\Rol
         Route::get('/', 'Admin\VentaController@index')->name('venta.index');
         Route::put('/anular/{venta}', 'Admin\VentaController@anular')->name('venta.anular');
         Route::put('/pagar/{venta}', 'Admin\VentaController@registrarPago')->name('venta.pagar');
-        //Route::post('/epayco', 'VentaController@epayco_register')->name('venta.epayco');
         //Route::post('/store', 'VentaController@store')->name('venta.store');
         Route::get('/factura/{id}', 'Admin\VentaController@facturaVentaAdmin')->name('venta.factura');
         Route::get('/listado','Admin\VentaController@listadoVentasPdf')->name('venta.listado');

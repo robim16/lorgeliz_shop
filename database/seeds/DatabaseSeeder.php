@@ -14,6 +14,14 @@ class DatabaseSeeder extends Seeder
         // factory(\App\Role::class, 1)->create(['nombre' => 'cliente', 'descripcion' => 'usuario con rol cliente']);
         // factory(\App\Role::class, 1)->create(['nombre' => 'administrador', 'descripcion' => 'usuario con rol administrador']);
 
+        // factory(\App\Tipo::class, 1)->create(['nombre' => 'camisetas', 'descripcion' => 'camisetas', 'slug' => 'camisetas]);
+        // factory(\App\Tipo::class, 1)->create(['nombre' => 'vestidos', 'descripcion' => 'vestidos', 'slug' => 'vestidos]);
+        // factory(\App\Tipo::class, 1)->create(['nombre' => 'zapatos', 'descripcion' => 'zapatos', 'slug' => 'zapatos]);
+        // factory(\App\Tipo::class, 1)->create(['nombre' => 'blusas', 'descripcion' => 'blusas', 'slug' => 'blusas]);
+        // factory(\App\Tipo::class, 1)->create(['nombre' => 'baletas', 'descripcion' => 'baletas', 'slug' => 'baletas]);
+        // factory(\App\Tipo::class, 1)->create(['nombre' => 'tacones', 'descripcion' => 'tacones', 'slug' => 'tacones]);
+
+
         // factory(\App\Talla::class, 1)->create(['nombre' => '24', 'descripcion' => 'talla 24']);
         // factory(\App\Talla::class, 1)->create(['nombre' => '25', 'descripcion' => 'talla 25']);
         // factory(\App\Talla::class, 1)->create(['nombre' => '26', 'descripcion' => 'talla 26']);
@@ -33,6 +41,13 @@ class DatabaseSeeder extends Seeder
         // factory(\App\Talla::class, 1)->create(['nombre' => '40', 'descripcion' => 'talla 40']);
         // factory(\App\Talla::class, 1)->create(['nombre' => '41', 'descripcion' => 'talla 41']);
         // factory(\App\Talla::class, 1)->create(['nombre' => '42', 'descripcion' => 'talla 42']);
+
+
+        // factory(\App\Talla::class, 1)->create(['nombre' => 'S', 'descripcion' => 'talla S']);
+        // factory(\App\Talla::class, 1)->create(['nombre' => 'L', 'descripcion' => 'talla L']);
+        // factory(\App\Talla::class, 1)->create(['nombre' => 'M', 'descripcion' => 'talla M']);
+        // factory(\App\Talla::class, 1)->create(['nombre' => 'X', 'descripcion' => 'talla X']);
+        // factory(\App\Talla::class, 1)->create(['nombre' => 'XL', 'descripcion' => 'talla XL']);
         
 
         // factory(\App\User::class, 1)->create()
@@ -60,64 +75,6 @@ class DatabaseSeeder extends Seeder
         factory(\App\TallaTipo::class, 1)->create(['talla_id' => '16', 'tipo_id' => '1']);
         factory(\App\TallaTipo::class, 1)->create(['talla_id' => '17', 'tipo_id' => '1']);
 
-
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '1', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '2', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '3', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '4', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '5', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '6', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '7', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '8', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '9', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '10', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '11', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '12', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '13', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '14', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '15', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '16', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '17', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '18', 'tipo_id' => '2']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '19', 'tipo_id' => '2']);
-
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '5', 'tipo_id' => '3']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '6', 'tipo_id' => '3']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '7', 'tipo_id' => '3']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '8', 'tipo_id' => '3']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '9', 'tipo_id' => '3']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '10', 'tipo_id' => '3']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '11', 'tipo_id' => '3']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '12', 'tipo_id' => '3']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '13', 'tipo_id' => '3']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '14', 'tipo_id' => '3']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '15', 'tipo_id' => '3']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '16', 'tipo_id' => '3']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '17', 'tipo_id' => '3']);
-
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '5', 'tipo_id' => '4']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '6', 'tipo_id' => '4']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '7', 'tipo_id' => '4']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '8', 'tipo_id' => '4']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '9', 'tipo_id' => '4']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '10', 'tipo_id' => '4']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '11', 'tipo_id' => '4']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '12', 'tipo_id' => '4']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '13', 'tipo_id' => '4']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '14', 'tipo_id' => '4']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '15', 'tipo_id' => '4']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '16', 'tipo_id' => '4']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '17', 'tipo_id' => '4']);
-
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '11', 'tipo_id' => '5']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '12', 'tipo_id' => '5']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '13', 'tipo_id' => '5']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '14', 'tipo_id' => '5']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '15', 'tipo_id' => '5']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '16', 'tipo_id' => '5']);
-        factory(\App\TallaTipo::class, 1)->create(['talla_id' => '17', 'tipo_id' => '5']);
-       
-       
-
+    
     }
 }

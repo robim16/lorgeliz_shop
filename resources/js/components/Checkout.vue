@@ -5,18 +5,18 @@
             <ul>
                 <li class="shipping_option d-flex flex-row align-items-center justify-content-start">
                     <label class="radio_container">
-                        <input type="radio" id="radio_2" name="payment_radio" class="payment_radio" @click.prevent="setOption(1)" :checked="option==1">
+                        <input type="radio" id="radio_2" name="payment_radio" class="payment_radio" @click="setOption(1)" :checked="option==1">
                         <span class="radio_mark"></span>
                         <span class="radio_text">Pagar contra entrega</span>
                     </label>
                 </li>
-                <!-- <li class="shipping_option d-flex flex-row align-items-center justify-content-start">
+                <li class="shipping_option d-flex flex-row align-items-center justify-content-start">
                     <label class="radio_container">
-                        <input type="radio" id="radio_3" name="payment_radio" class="payment_radio" @click.prevent="setOption(2)" :checked="option==2">
+                        <input type="radio" id="radio_3" name="payment_radio" class="payment_radio" @click="setOption(2)" :checked="option==2">
                         <span class="radio_mark"></span>
                         <span class="radio_text">Pagar con epayco</span>
                     </label>
-                </li> -->
+                </li>
             </ul>
         </div>
         <div class="cart_text">
@@ -41,7 +41,7 @@ export default {
             option: 0, 
             name: "Artículos de moda",
             description: "Pedidos realizados en Lorgeliz Shopp",
-            invoice: "1234",
+            invoice: "",
             currency: "cop",
             amount: "",
             tax_base: "0",
@@ -49,36 +49,31 @@ export default {
             country: "co",
             lang: "es",	
             external: "false",
-            // confirmation: "http://localhost/lorgeliz_tienda_copia/public/ventas/epayco/confirm",
-            // response: "http://localhost/lorgeliz_tienda_copia/public/payments/epayco/response",
-            confirmation: this.ruta + "/ventas/epayco/confirm",
-            response: this.ruta + "/payments/epayco/response",
+            confirmation: this.ruta + "/checkout/epayco/confirm",
+            response: this.ruta + "/checkout/epayco",
             p_confirm_method: "POST",
             name_billing: "",
             address_billing: "",
             type_doc_billing: "cc",
             mobilephone_billing: "",
             number_doc_billing: "",
-            key: '12d3b45147fae13431996471aa5966af',
+            key: '15f20d656c02a318876c678239344a0e',
             test: true
         }
     },
     methods:{
         setOption(option){
             this.option = option;
+            console.log(this.option);
         },
 
         verifyAndSale(){
-
-            // let url = '/lorgeliz_tienda_copia/public/stock/verificar'
             let url = `${this.ruta}/stock/verificar`
 
             axios.get(url)
             .then(response => {
                 if (response.data.data == 'success') {
                     if (this.option == 1) {
-
-                        // let url = '/lorgeliz_tienda_copia/public/ventas';
 
                         let url = `${this.ruta}/ventas`;
 
@@ -110,16 +105,17 @@ export default {
 						description: this.description,
 						invoice: this.invoice,
 						currency: this.currency,
-						amount: this.amount,
-						tax_base: this.tax_base,
-						tax: this.tax,
+						amount: parseInt(this.amount),
+						tax_base: parseInt(this.tax_base),
+						tax: parseInt(this.tax),
+                        tax_ico: parseInt(this.tax),
 						country: this.country,
 						lang: this.lang,
 
 						external: this.external,
 
 						confirmation: this.confirmation,
-						response: this.response,
+						response:`${this.response}/${this.invoice}`,
 						p_confirm_method: this.p_confirm_method,
 
 						name_billing: this.name_billing,
@@ -139,7 +135,6 @@ export default {
 						'error'
 					)
 					setTimeout(() => {
-						// window.location.href = `/lorgeliz_tienda_copia/public/cart`;
 
                         window.location.href = `${this.ruta}/cart`;
 					}, 4000);
@@ -157,6 +152,7 @@ export default {
         this.address_billing = data.datos.address_billing;
         this.mobilephone_billing = data.datos.mobilephone_billing;
         this.number_doc_billing = data.datos.number_doc_billing;
+        this.invoice = data.datos.factura;
     }
 }
 </script>

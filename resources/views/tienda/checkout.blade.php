@@ -1,8 +1,8 @@
 @extends('layouts.store')
 
 @section('estilos')
-<link rel="stylesheet" type="text/css" href="{{ asset('asset/styles/checkout.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('asset/styles/checkout_responsive.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('asset/styles/checkout.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('asset/styles/checkout_responsive.css') }}">
 @endsection
 
 @section('content')
@@ -147,7 +147,7 @@
 										<div class="cart_extra_total_value ml-auto">${{ floatval($carrito->total)}}</div>
 									</li>
 								</ul>
-								<div class="payment_options">
+								{{-- <div class="payment_options">
 									<div class="checkout_title">Método de Pago</div>
 									<ul>
 										
@@ -158,21 +158,23 @@
 												<span class="radio_text">Pagar contra entrega</span>
 											</label>
 										</li>
-										{{-- <li class="shipping_option d-flex flex-row align-items-center justify-content-start">
+										<li class="shipping_option d-flex flex-row align-items-center justify-content-start">
 											<label class="radio_container">
 												<input type="radio" id="radio_3" name="payment_radio" class="payment_radio">
 												<span class="radio_mark"></span>
 												<span class="radio_text">Pagar con epayco</span>
 											</label>
-										</li> --}}
+										</li>
 									</ul>
-								</div> 
-								<div class="cart_text">
+								</div>  --}}
+								<checkout :ruta="ruta"/>	
+								{{-- <div class="cart_text">
 									<p>Puedes pagar contra entrega o a tráves de epayco. Aceptamos todas las tarjetas, efecty, pse, daviplata y otros medios</p>
-								</div>
-								<div class="checkout_button trans_200">
+								</div> --}}
+								{{-- <div id="" class="checkout_button trans_200">
 									<a href="" id="btnCheckout">realizar pedido</a>
-								</div>
+									 
+								</div> --}}
 								{{-- <checkout :ruta="ruta"></checkout> --}}
 							</div>
 						</div>
@@ -180,213 +182,102 @@
 				</div>
 			</div>
         </div>
-    
+
 	</div>
 	
 @endsection
 
 @section('scripts')
-<script src="{{ asset('asset/js/checkout.js') }}"></script>
+	<script src="{{ asset('asset/js/checkout.js') }}"></script>
 
-<script>
+	<script>
 
-	let ruta = 'lorgeliz_tienda_copia/public';
-	// let url = "/lorgeliz_tienda_copia/public/colombia-json-master/colombia-json-master/colombia.json"
-	let url = `${ruta}/colombia-json-master/colombia-json-master/colombia.json`
+		let ruta = 'http://127.0.0.1:8000';
+		let url = `${ruta}/colombia-json-master/colombia-json-master/colombia.json`
 
-    function loadJSON(callback) {
-        var xobj = new XMLHttpRequest();
-        xobj.overrideMimeType("application/json");
-        xobj.open("GET", url, true); // Reemplaza colombia-json.json con el nombre que le hayas puesto
-        xobj.onreadystatechange = function () {
-            if (xobj.readyState == 4 && xobj.status == "200") {
-                callback(xobj.responseText); //el callback recibe por parámetro el response de la petición
-            }
-        };
-        xobj.send(null);
-    }
+		function loadJSON(callback) {
+			var xobj = new XMLHttpRequest();
+			xobj.overrideMimeType("application/json");
+			xobj.open("GET", url, true); // Reemplaza colombia-json.json con el nombre que le hayas puesto
+			xobj.onreadystatechange = function () {
+				if (xobj.readyState == 4 && xobj.status == "200") {
+					callback(xobj.responseText); //el callback recibe por parámetro el response de la petición
+				}
+			};
+			xobj.send(null);
+		}
 
 
-   function init() {
-        return new Promise(async (resolve, reject) => {
-            await loadJSON(function (response) {
+	function init() {
+			return new Promise(async (resolve, reject) => {
+				await loadJSON(function (response) {
 
-                // Parse JSON string into object
-                const JSONFinal =  JSON.parse(response);
-                const departamentos = JSONFinal.map(d => d.departamento);
+					// Parse JSON string into object
+					const JSONFinal =  JSON.parse(response);
+					const departamentos = JSONFinal.map(d => d.departamento);
 
-                $.each(departamentos, function (key, value) {
-                $('#checkout_province').append("<option value='" 
-                    + value + "'>" + value + "</option>");
-            	});
+					$.each(departamentos, function (key, value) {
+					$('#checkout_province').append("<option value='" 
+						+ value + "'>" + value + "</option>");
+					});
 
-                resolve(JSONFinal);
-            });
-           
-        });
-    }
+					resolve(JSONFinal);
+				});
+			
+			});
+		}
 
-    function setMunicipios(JSONFinal) {
-		
-        const departamento = $('#checkout_province').val();
-        const filtrados = JSONFinal.filter(d => d.departamento === departamento);
-        const municipios = filtrados[0].ciudades;
-        $('#checkout_city').append('<option value="0">Seleccione uno</option>')
-		$.each(municipios, function (key, value) {
-			$('#checkout_city').append("<option value='" 
-				+ value + "'>" + value + "</option>");
-		});
-    }
+		function setMunicipios(JSONFinal) {
+			
+			const departamento = $('#checkout_province').val();
+			const filtrados = JSONFinal.filter(d => d.departamento === departamento);
+			const municipios = filtrados[0].ciudades;
+			$('#checkout_city').append('<option value="0">Seleccione uno</option>')
+			$.each(municipios, function (key, value) {
+				$('#checkout_city').append("<option value='" 
+					+ value + "'>" + value + "</option>");
+			});
+		}
 
-</script>
+	</script>
 
-<script>
-	window.data = {
-        datos: {
-			"amount": "{{$carrito->total}}",
-			"name_billing": "{{$carrito->cliente->user->nombres}} {{$carrito->cliente->user->apellidos}}",
-			"address_billing": "{{$carrito->cliente->user->direccion}}",
-			"mobilephone_billing": "{{$carrito->cliente->user->telefono}}",
-			"number_doc_billing": "{{$carrito->cliente->user->identificacion}}",
-        }
-    }
-</script>
-
-<script> 
-$(document).ready(function () {
-
-	var JSONFinal = '';
-
-	init().
-	then((data) => {
-		JSONFinal = data;
-		setMunicipios(JSONFinal);
-	});
-
-	$(document).on('change', '#checkout_province', function(e) { 
-		e.preventDefault();
-		
-		$('#checkout_city').html('');
-		setMunicipios(JSONFinal);
-	});
-
-	$("#btnCheckout").click(function (e) { 
-		e.preventDefault();
-		
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $("input[name= _token]").val()
+	<script>
+		window.data = {
+			datos: {
+				"amount": "{{$carrito->total}}",
+				"name_billing": "{{$carrito->cliente->user->nombres}} {{$carrito->cliente->user->apellidos}}",
+				"address_billing": "{{$carrito->cliente->user->direccion}}",
+				"mobilephone_billing": "{{$carrito->cliente->user->telefono}}",
+				"number_doc_billing": "{{$carrito->cliente->user->identificacion}}",
+				"factura": "{{ $factura->id }}"
 			}
+		}
+	</script>
+
+	<script> 
+
+	document.addEventListener("DOMContentLoaded", function(event) {
+		var JSONFinal = '';
+
+		init().
+		then((data) => {
+			JSONFinal = data;
+			setMunicipios(JSONFinal);
 		});
 
-		$.ajax({
-			type: "GET",
-			url: "{{route('stock.verificar')}}",
-			// url:'/lorgeliz_tienda_copia/public/api/stock/verify',
-			data:{},
-			dataType: 'json',
-			success: function (response) {
+		$(document).on('change', '#checkout_province', function(e) { 
+			e.preventDefault();
+			
+			$('#checkout_city').html('');
+			setMunicipios(JSONFinal);
+		});
 				
-				if (response.data == 'success') {
-					
-					if($("#radio_2").is(':checked',true))
-					{
-
-						$.ajax({
-							type: "POST",
-							url: "{{ route('venta.store') }}",
-							data:{},
-							dataType: 'json',
-							success: function (response) {
-								if (response.data == 'success') {
-
-									var pedido = response.pedido;
-									swal(
-										'Pedido recibido!',
-										'Hemos recibido tu pedido. En breve empezaremos a alistarlo y nos pondremos en contacto contigo!',
-										'success'
-									)
-									// window.location.href = `/lorgeliz_tienda_copia/public/pedidos/` + pedido;
-
-									let ruta = '/lorgeliz_tienda_copia/public'
-									window.location.href = `${ruta}/pedidos/${pedido}`;
-								}
-							}
-
-						});
-					}
-
-					if($("#radio_3").is(':checked',true))
-					{
-						var handler = ePayco.checkout.configure({
-							key: '12d3b45147fae13431996471aa5966af',
-							test: true
-						})  
-
-						let ruta = 'http://localhost/lorgeliz_tienda_copia/public'
-
-						var data={
-						//Parametros compra (obligatorio)
-						name: "Artículos de moda",
-						description: "Pedidos realizados en Lorgeliz Shopp",
-						invoice: "1234",
-						currency: "cop",
-						amount: "{{floatval($carrito->total)}}",
-						tax_base: "0",
-						tax: "0",
-						country: "co",
-						lang: "es",
-
-						//Onpage="false" - Standard="true"
-						external: "false",
-
-
-						//Atributos opcionales
-						//extra1: "extra1",
-						//extra2: "extra2",
-						//extra3: "extra3",
-						// confirmation: "http://localhost/lorgeliz_tienda_copia/public/ventas/epayco/confirm",
-						// response: "http://localhost/lorgeliz_tienda_copia/public/payments/epayco/response",
-						confirmation: `${ruta}/ventas/epayco/confirm/`,
-						response: `${ruta}/payments/epayco/response`,
-						p_confirm_method: "POST",
-
-						//Atributos cliente
-						name_billing: "{{$carrito->nombres}} {{$carrito->apellidos}}",
-						address_billing: "{{$carrito->direccion}}",
-						type_doc_billing: "cc",
-						mobilephone_billing: "{{$carrito->telefono}}",
-						number_doc_billing: "{{$carrito->identificacion}}"
-
-						}
-						handler.open(data)
-					}
-				}
-				else{
-					swal(
-						'Uno de tus productos está agotado!',
-						'Te informamos que uno de los productos que pusiste en el carrito se agotó!',
-						'error'
-					)
-					setTimeout(() => {
-						// window.location.href = `/lorgeliz_tienda_copia/public/cart`;
-
-						let ruta = '/lorgeliz_tienda_copia/public'
-						window.location.href = `${ruta}/cart`
-					}, 4000);
-				}
-
-				console.log(response)
-			}
-
-		});
 
 	});
-});
-</script>
 
-<script type="text/javascript" src="https://checkout.epayco.co/checkout.js">
-</script>
+	</script>
+
+	<script type="text/javascript" src="https://checkout.epayco.co/checkout.js"></script>
 
 @endsection
 

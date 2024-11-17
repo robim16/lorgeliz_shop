@@ -3429,7 +3429,7 @@ __webpack_require__.r(__webpack_exports__);
       option: 0,
       name: "Artículos de moda",
       description: "Pedidos realizados en Lorgeliz Shopp",
-      invoice: "1234",
+      invoice: "",
       currency: "cop",
       amount: "",
       tax_base: "0",
@@ -3437,33 +3437,30 @@ __webpack_require__.r(__webpack_exports__);
       country: "co",
       lang: "es",
       external: "false",
-      // confirmation: "http://localhost/lorgeliz_tienda_copia/public/ventas/epayco/confirm",
-      // response: "http://localhost/lorgeliz_tienda_copia/public/payments/epayco/response",
-      confirmation: this.ruta + "/ventas/epayco/confirm",
-      response: this.ruta + "/payments/epayco/response",
+      confirmation: this.ruta + "/checkout/epayco/confirm",
+      response: this.ruta + "/checkout/epayco",
       p_confirm_method: "POST",
       name_billing: "",
       address_billing: "",
       type_doc_billing: "cc",
       mobilephone_billing: "",
       number_doc_billing: "",
-      key: '12d3b45147fae13431996471aa5966af',
+      key: '15f20d656c02a318876c678239344a0e',
       test: true
     };
   },
   methods: {
     setOption: function setOption(option) {
       this.option = option;
+      console.log(this.option);
     },
     verifyAndSale: function verifyAndSale() {
       var _this = this;
 
-      // let url = '/lorgeliz_tienda_copia/public/stock/verificar'
       var url = "".concat(this.ruta, "/stock/verificar");
       axios.get(url).then(function (response) {
         if (response.data.data == 'success') {
           if (_this.option == 1) {
-            // let url = '/lorgeliz_tienda_copia/public/ventas';
             var _url = "".concat(_this.ruta, "/ventas");
 
             axios.post(_url).then(function (response) {
@@ -3484,14 +3481,15 @@ __webpack_require__.r(__webpack_exports__);
               description: _this.description,
               invoice: _this.invoice,
               currency: _this.currency,
-              amount: _this.amount,
-              tax_base: _this.tax_base,
-              tax: _this.tax,
+              amount: parseInt(_this.amount),
+              tax_base: parseInt(_this.tax_base),
+              tax: parseInt(_this.tax),
+              tax_ico: parseInt(_this.tax),
               country: _this.country,
               lang: _this.lang,
               external: _this.external,
               confirmation: _this.confirmation,
-              response: _this.response,
+              response: "".concat(_this.response, "/").concat(_this.invoice),
               p_confirm_method: _this.p_confirm_method,
               name_billing: _this.name_billing,
               address_billing: _this.address_billing,
@@ -3504,7 +3502,6 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           swal('Uno de tus productos está agotado!', 'Te informamos que uno de los productos que pusiste en el carrito se agotó!', 'error');
           setTimeout(function () {
-            // window.location.href = `/lorgeliz_tienda_copia/public/cart`;
             window.location.href = "".concat(_this.ruta, "/cart");
           }, 4000);
         }
@@ -3519,6 +3516,7 @@ __webpack_require__.r(__webpack_exports__);
     this.address_billing = data.datos.address_billing;
     this.mobilephone_billing = data.datos.mobilephone_billing;
     this.number_doc_billing = data.datos.number_doc_billing;
+    this.invoice = data.datos.factura;
   }
 });
 
@@ -50314,7 +50312,6 @@ var render = function() {
                 domProps: { checked: _vm.option == 1 },
                 on: {
                   click: function($event) {
-                    $event.preventDefault()
                     return _vm.setOption(1)
                   }
                 }
@@ -50324,6 +50321,34 @@ var render = function() {
               _vm._v(" "),
               _c("span", { staticClass: "radio_text" }, [
                 _vm._v("Pagar contra entrega")
+              ])
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          {
+            staticClass:
+              "shipping_option d-flex flex-row align-items-center justify-content-start"
+          },
+          [
+            _c("label", { staticClass: "radio_container" }, [
+              _c("input", {
+                staticClass: "payment_radio",
+                attrs: { type: "radio", id: "radio_3", name: "payment_radio" },
+                domProps: { checked: _vm.option == 2 },
+                on: {
+                  click: function($event) {
+                    return _vm.setOption(2)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("span", { staticClass: "radio_mark" }),
+              _vm._v(" "),
+              _c("span", { staticClass: "radio_text" }, [
+                _vm._v("Pagar con epayco")
               ])
             ])
           ]
@@ -76186,7 +76211,7 @@ if (document.getElementById('app')) {
       keyword: '',
       location: '',
       // ruta: 'http://dev.lorenzogeliztienda.com'
-      ruta: ''
+      ruta: 'http://127.0.0.1:8000'
     },
     methods: {
       setCategoria: function setCategoria(categoria) {
@@ -76371,7 +76396,7 @@ if (token) {
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js"); //descomentar
 
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
-  authEndpoint: 'http://localhost/lorgeliz_tienda_copia/public/broadcasting/auth',
+  authEndpoint: 'http://127.0.0.1:8000/broadcasting/auth',
   broadcaster: 'pusher',
   key: "",
   cluster: "mt1",

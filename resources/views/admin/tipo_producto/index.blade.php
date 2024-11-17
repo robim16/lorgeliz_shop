@@ -153,17 +153,17 @@
 
 @section('scripts')
 <!-- Select2 -->
-{{-- <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script> --}}
+<script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
 {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
 
 <script>
 
-// $('#tallas_id').select2()
+    $('#tallas_id').select2()
 
-//Initialize Select2 Elements
-// $('.select2bs4').select2({
-//     theme: 'bootstrap4'
-// });
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+        theme: 'bootstrap4'
+    });
 
 </script>
 
@@ -195,16 +195,15 @@ $(document).ready(function () {
         $.ajax({
             type: "GET",
             // url: "route('talla.tipos'",
-            // url:'/lorgeliz_tienda_copia/public/api/admin/tallas/tipos/get',
             url:'http://127.0.0.1:8000/api/admin/tallas/tipos/get',
             data:{id:id},
             dataType: 'json',
             success: function (response) {
                 
-                // if (response.data[0] != null) {
                 if (response.length > 0) {
                    
                     $.each(response, function (key, value) {
+
                         //muestra seleccionadas las tallas que ya existen del tipo de producto
                         $(".option").each(function() {
                             const tipo = parseInt($(this).val());

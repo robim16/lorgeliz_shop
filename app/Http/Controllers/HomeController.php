@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Carrito;
 use App\ColorProducto;
+use App\Factura;
 use App\ProductoReferencia;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -157,9 +158,17 @@ class HomeController extends Controller
             ->cliente(auth()->user()->cliente->id)
             ->firstOrFail();
 
-        // ->where('estado', 1)
-        // ->where('cliente_id', auth()->user()->cliente->id)
-        return view('tienda.checkout', compact('carrito'));
+        $facturas = Factura::all('id');
+        $consecutivo = $facturas->last();// se obtiene le ultimo id de facturas
+        
+        $id = $consecutivo->id + 1;// $consecutivo++
+
+        $factura = new Factura();
+        $factura->consecutivo = $id;
+
+        $factura->save();
+        
+        return view('tienda.checkout', compact('carrito', 'factura'));
     }
 
     //todas las funciones asociadas a la página de categorías fueron 
