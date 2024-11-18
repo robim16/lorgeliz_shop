@@ -36,40 +36,57 @@
                 <h4 style="text-align:left"> Respuesta de la Transacción </h4>
                 <hr>
             </div>
+            <div class="col-lg-8 col-lg-offset-2 mb-2">
+                <a href="{{ route('pedidos.show', $venta->pedido->id)}}" class="btn btn-primary" style="text-align:left">
+                    Ver mi pedido
+                </a>
+            </div>
             <div class="col-lg-8 col-lg-offset-2 ">
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <tbody>
                             <tr>
                                 <td>Referencia</td>
-                                <td id="referencia"></td>
+                                <td id="referencia">
+                                    {{ $transaction["x_id_invoice"] }}
+                                </td>
                             </tr>
                             <tr>
                                 <td class="bold">Fecha</td>
-                                <td id="fecha" class=""></td>
+                                <td id="fecha" class="">
+                                    {{ $transaction["x_transaction_date"] }}
+                                </td>
                             </tr>
                             <tr>
                                 <td>Respuesta</td>
-                                <td id="respuesta"></td>
+                                <td id="respuesta">
+                                    {{ $transaction["x_response"] }}
+                                </td>
                             </tr>
                             <tr>
                                 <td>Motivo</td>
-                                <td id="motivo"></td>
+                                <td id="motivo">
+                                    {{ $transaction["x_response_reason_text"] }}
+                                </td>
                             </tr>
                             <tr>
                                 <td class="bold">Banco</td>
                                 <td class="" id="banco">
+                                    {{ $transaction["x_bank_name"] }}
+                                </td>
                             </tr>
                             <tr>
                                 <td class="bold">Recibo</td>
-                                <td id="recibo"></td>
+                                <td id="recibo">
+                                    {{ $transaction["x_transaction_id"] }}
+                                </td>
                             </tr>
                             <tr>
                                 <td class="bold">Total</td>
                                 <td class="" id="total">
+                                    {{ $transaction["x_amount"] }}
                                 </td>
                             </tr>
-                            {{ $response }}
                         </tbody>
                     </table>
                 </div>
@@ -92,95 +109,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    {{-- <script>
-        function getQueryParam(param) {
-            location.search.substr(1)
-                .split("&")
-                .some(function (item) { // returns first occurence and stops
-                    return item.split("=")[0] == param && (param = item.split("=")[1])
-                })
-            return param
-        }
-        $(document).ready(function () {
-            //llave publica del comercio
-            //Referencia de payco que viene por url
-            var ref_payco = getQueryParam('ref_payco');
-            //Url Rest Metodo get, se pasa la llave y la ref_payco como paremetro
-            var urlapp = "https://secure.epayco.co/validation/v1/reference/" + ref_payco;
-            $.get(urlapp, function (response) {
-                if (response.success) {
-                    if (response.data.x_cod_response == 1) {
-                        //Codigo personalizado
-                        var x_amount = response.data.x_amount;
-                        var x_cod_response = response.data.x_cod_response;
-                        var x_signature = response.data.x_signature;
-                        var x_transaction_id = response.data.x_transaction_id;
-                        var x_currency_code = response.data.x_currency_code;
-    
-                        $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: "POST",
-                        url: "{{ route('venta.epayco') }}",
-                        data: {x_ref_payco: ref_payco,x_amount: x_amount,x_cod_response: x_cod_response,x_signature: x_signature,x_transaction_id: x_transaction_id,x_currency_code: x_currency_code},
-                        dataType: 'json',
-                        success: function (response) {
-                            //if (response.data == 'success') {
-                                //window.location.href = `/lorgeliz_tienda/public/`;
-                            //}
-                        }
-
-			            });
-                       
-                    }
-                    //Transaccion Rechazada
-                    if (response.data.x_cod_response == 2) {
-                        console.log('transacción rechazada');
-                    }
-                    //Transaccion Pendiente
-                    if (response.data.x_cod_response == 3) {
-                        var x_amount = response.data.x_amount;
-                        var x_cod_response = response.data.x_cod_response;
-                        var x_signature = response.data.x_signature;
-                        var x_transaction_id = response.data.x_transaction_id;
-                        var x_currency_code = response.data.x_currency_code;
-    
-                        $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: "POST",
-                        url: "{{ route('venta.epayco') }}",
-                        data: {x_ref_payco: ref_payco,x_amount: x_amount,x_cod_response: x_cod_response,x_signature: x_signature,x_transaction_id: x_transaction_id,x_currency_code: x_currency_code},
-                        dataType: 'json',
-                        success: function (response) {
-                            //if (response.data == 'success') {
-                                //window.location.href = `/lorgeliz_tienda/public/`;
-                            //}
-                        }
-
-			            });
-                    }
-                    //Transaccion Fallida
-                    if (response.data.x_cod_response == 4) {
-                        console.log('transacción fallida');
-                    }
-                    $('#fecha').html(response.data.x_transaction_date);
-                    $('#respuesta').html(response.data.x_response);
-                    $('#referencia').text(response.data.x_id_invoice);
-                    $('#motivo').text(response.data.x_response_reason_text);
-                    $('#recibo').text(response.data.x_transaction_id);
-                    $('#banco').text(response.data.x_bank_name);
-                    $('#autorizacion').text(response.data.x_approval_code);
-                    $('#total').text(response.data.x_amount + ' ' + response.data.x_currency_code);
-                } else {
-                    alert("Error consultando la información");
-                }
-            });
-        });
-
-    </script> --}}
 </body>
 
 </html>

@@ -35,13 +35,6 @@ class VentaController extends Controller
 
     public function store(Request $request)
     {
-
-        // if ( ! request()->ajax()) {
-		// 	abort(401, 'Acceso denegado');
-		// }
-
-        return $request;
-
         try {
 
             $x_ref_payco = ($request->x_ref_payco) ? $request->x_ref_payco : 0; // si no viene la ref. se pone 0

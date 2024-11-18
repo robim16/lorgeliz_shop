@@ -38,9 +38,9 @@ Route::group(['prefix' => '/'], function ($router) {
     });
 
 
-    // Route::group(['prefix' => '/tallas'], function () {
-    //     Route::get('/{id}', 'Api\TallaController@index');
-    // });
+    Route::group(['prefix' => '/tallas'], function () {
+        Route::get('/{id}', 'Api\TallaController@index');
+    });
 
 
     // Route::group(['prefix' => '/devoluciones'], function () {

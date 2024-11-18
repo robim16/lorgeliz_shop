@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\VentaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -31,10 +32,10 @@ class CheckoutController extends Controller
                 'invoice'   => $invoice,
             ]);
     
-            $venta =  new VentaController();
-            $venta->store($request);
+            $venta_service =  new VentaService();
+            $venta = $venta_service->completar_venta($request, $invoice);
         
-            return view('epayco.response', compact('transaction'));
+            return view('epayco.response', compact('transaction', 'venta'));
         } catch (\Throwable $th) {
             // throw $th;
             return $th;

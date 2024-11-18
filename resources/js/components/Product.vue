@@ -101,9 +101,6 @@
 
             getTallas(){
 
-                // let url = '/lorgeliz_tienda_copia/public/tallas/productos/'+this.producto;
-                // let url = '/lorgeliz_tienda_copia/public/api/tallas/'+this.producto;
-
                 let url = `${this.ruta}/api/tallas/${this.producto}`
 
                 axios.get(url).then(response => {
@@ -116,7 +113,6 @@
             }, 
 
             getCarrito(){
-                // let url = '/lorgeliz_tienda_copia/public/cart/buscarCarrito';
 
                 if (this.user_id != 0) {
                     
@@ -131,8 +127,7 @@
                             console.log(response)
                             if (this.arrayCarrito != null){
                                 this.carrito = this.arrayCarrito.id;
-    
-                                // let url = '/lorgeliz_tienda_copia/public/cart/update';
+
     
                                 let url = `${this.ruta}/cart/update`
                                 
@@ -202,8 +197,6 @@
                         
                             } else{
                 
-                                // let url = '/lorgeliz_tienda_copia/public/cart/store';
-                                // let url = '/lorgeliz_tienda_copia/public/cart';
     
                                 let url = `${this.ruta}/cart`
                     

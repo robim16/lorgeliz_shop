@@ -67,16 +67,15 @@ class Venta extends Model
 
                 
                 $cart = Carrito::estado()
-                ->cliente(auth()->user()->cliente->id)
-                ->firstOrFail();
-                // where('cliente_id', auth()->user()->cliente->id)
-                // ->where('estado', 1)
+                    ->cliente(auth()->user()->cliente->id)
+                    ->firstOrFail();
+               
     
                 $cart->estado = '0';
                 $cart->save();
     
                 $carritos = CarritoProducto::where('carrito_id', $cart->id)
-                ->get();
+                    ->get();
 
 
                 $data = array();
@@ -130,7 +129,7 @@ class Venta extends Model
                 
                 // Mail::to(Auth()->user()->email)->send(new ClienteMessageMail($details));
                 
-                SendClienteSalesMail::dispatch($details, Auth()->user());
+                // SendClienteSalesMail::dispatch($details, Auth()->user());
     
                 $productos = array();
                 // $products['data'] = array();
@@ -148,7 +147,8 @@ class Venta extends Model
                 // broadcast(new SalesEvent($vendidos));
 
             } catch (\Exception $e) {
-                //throw $th;
+                throw $e;
+                return $e;
             }
             
         });
