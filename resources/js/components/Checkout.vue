@@ -23,7 +23,7 @@
             <p>Puedes pagar contra entrega o a tráves de epayco. Aceptamos todas las tarjetas, efecty, pse, daviplata y otros medios</p>
         </div>
         <div class="checkout_button trans_200">
-            <a href="" @click.prevent="verifyAndSale">realizar pedido</a>
+            <button @click.prevent="verifyAndSale" :disabled="isDisabled">realizar pedido</button>
 		</div>
     </main>
 </template>
@@ -58,7 +58,8 @@ export default {
             mobilephone_billing: "",
             number_doc_billing: "",
             key: '15f20d656c02a318876c678239344a0e',
-            test: true
+            test: true,
+            isDisabled: false
         }
     },
     methods:{
@@ -95,6 +96,9 @@ export default {
                         });
                         
                     } else {
+
+                        this.isDisabled = true;
+
                         var handler = ePayco.checkout.configure({
 							key: this.key,
 							test: this.test
@@ -153,6 +157,7 @@ export default {
         this.mobilephone_billing = data.datos.mobilephone_billing;
         this.number_doc_billing = data.datos.number_doc_billing;
         this.invoice = data.datos.factura;
+        this.isDisabled = false;
     }
 }
 </script>

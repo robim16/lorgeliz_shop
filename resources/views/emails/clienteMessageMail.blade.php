@@ -9,6 +9,5 @@ Ver pedido
 @endcomponent
 
 Gracias por tu compra,<br>
-{{-- {{ config('app.name') }} --}}
 {{ "Lorgeliz Tienda"}}
 @endcomponent

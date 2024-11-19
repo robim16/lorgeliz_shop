@@ -95,39 +95,25 @@ class Venta extends Model
 
                 ProductoVenta::insert($data);
 
-                
-            
-                // foreach ($carritos as $carrito) {
-                    
-                //     $productoVenta = new ProductoVenta();
     
-                //     $productoVenta->producto_referencia_id = $carrito->producto_referencia_id;
-                //     $productoVenta->venta_id = $venta->id;
-                //     $productoVenta->cantidad = $carrito->cantidad;
-                //     $productoVenta->precio_venta =  $carrito->productoReferencia->colorProducto->producto->precio_actual;
-                //     $productoVenta->porcentaje_descuento = $carrito->productoReferencia->colorProducto->producto->porcentaje_descuento;
-    
-                //     $productoVenta->save();
-                // }
-    
+                $cliente = auth()->user();
     
                 $pedido = new Pedido();
                 $pedido->fecha = \Carbon\Carbon::now();
-                $pedido->direccion_entrega = Auth()->user()->direccion;
+                $pedido->direccion_entrega = $cliente->direccion;
                 $pedido->venta_id = $venta->id;
                 $pedido->save();
     
-                $cliente = auth()->user()->cliente->id;
     
                 $details = [
                     'title' => 'Hemos recibido tu pedido',
-                    'cliente' => $cliente,
+                    'cliente' => $cliente->nombres.' '.$cliente->apellidos,
                     'url' => url('/pedidos/'. $venta->id),
                 ];
 
 
                 
-                // Mail::to(Auth()->user()->email)->send(new ClienteMessageMail($details));
+                Mail::to($cliente->email)->send(new ClienteMessageMail($details));
                 
                 // SendClienteSalesMail::dispatch($details, Auth()->user());
     

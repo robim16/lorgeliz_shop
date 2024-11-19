@@ -74,7 +74,7 @@ class VentaService
                 ];
                 
                 
-                // Mail::to($admin->email)->send(new AdminVentaMail($details));
+                Mail::to($admin->email)->send(new AdminVentaMail($details));
 
                 $numVentas = DB::table('ventas')->where('id', $venta->id)->count();
 

@@ -43,19 +43,23 @@
 									<div class="row">
 										<div class="col-lg-6">
 											<!-- Name -->
-										<input type="text" id="checkout_name" class="checkout_input" placeholder="Nombres" required="required" value="{{ $carrito->cliente->user->nombres}}">
+											<label for="checkout_name">Nombres</label>
+											<input type="text" id="checkout_name" class="checkout_input" placeholder="Nombres" required="required" value="{{ $carrito->cliente->user->nombres}}">
 										</div>
 										<div class="col-lg-6">
 											<!-- Last Name -->
+											<label for="checkout_last_name">Apellidos</label>
 											<input type="text" id="checkout_last_name" class="checkout_input" placeholder="Apellidos" required="required" value="{{ $carrito->cliente->user->apellidos}}">
 										</div>
 									</div>
 									<div>
 										<!-- Company -->
+										<label for="checkout_company">Empresa</label>
 										<input type="text" id="checkout_company" placeholder="Empresa" class="checkout_input">
 									</div>
 									<div>
 										<!-- Country -->
+										<label for="checkout_country">País</label>
 										<select name="checkout_country" id="checkout_country" class="dropdown_item_select checkout_input" require="required">
 											{{-- <option>País</option> --}}
 											<option>Colombia</option>
@@ -63,6 +67,7 @@
 									</div>
 									<div>
 										<!-- Province -->
+										<label for="checkout_province">Departamento</label>
 										<select name="checkout_province" id="checkout_province" class="dropdown_item_select checkout_input" require="required">
 											<option value="{{ $carrito->cliente->user->departamento}}" selected>{{ $carrito->cliente->user->departamento }}</option>
 											{{-- <option>Córdoba</option>
@@ -73,6 +78,7 @@
 									</div>
 									<div>
 										<!-- City / Town -->
+										<label for="checkout_city">Ciudad</label>
 										<select name="checkout_city" id="checkout_city" class="dropdown_item_select checkout_input" require="required">
 											<option value="{{ $carrito->cliente->user->municipio }}" selected> {{ $carrito->cliente->user->municipio}}</option>
 											{{-- <option>Montería</option>
@@ -83,19 +89,22 @@
 									</div>
 									<div>
 										<!-- Address -->
+										<label for="checkout_address">Dirección</label>
 										<input type="text" id="checkout_address" class="checkout_input" placeholder="Dirección" required="required" value="{{ $carrito->cliente->user->direccion}}">
-										<input type="text" id="checkout_address_2" class="checkout_input checkout_address_2" placeholder="Dirección 2" required="required">
+										{{-- <input type="text" id="checkout_address_2" class="checkout_input checkout_address_2" placeholder="Dirección 2" required="required"> --}}
 									</div>
-									<div>
-										<!-- Zipcode -->
+									<!-- Zipcode -->
+									{{-- <div>
 										<input type="text" id="checkout_zipcode" class="checkout_input" placeholder="Código postal" required="required">
-									</div>
+									</div> --}}
 									<div>
 										<!-- Phone no -->
+										<label for="checkout_phone">Teléfono</label>
 										<input type="phone" id="checkout_phone" class="checkout_input" placeholder="Teléfono" required="required" value="{{ $carrito->cliente->user->telefono}}">
 									</div>
 									<div>
 										<!-- Email -->
+										<label for="checkout_email">Email</label>
 										<input type="phone" id="checkout_email" class="checkout_input" placeholder="Email" required="required" value="{{ $carrito->cliente->user->email}}">
 									</div>
 									<div class="checkout_extra">
