@@ -89,9 +89,10 @@
 									</div>
 									<div>
 										<!-- Address -->
-										<label for="checkout_address">Dirección</label>
+										<label for="checkout_address">Dirección del envío</label>
 										<input type="text" id="checkout_address" class="checkout_input" placeholder="Dirección" required="required" value="{{ $carrito->cliente->user->direccion}}">
 										{{-- <input type="text" id="checkout_address_2" class="checkout_input checkout_address_2" placeholder="Dirección 2" required="required"> --}}
+										<a href="" class="text-primary" data-toggle="modal" data-target="#modalDir">cambiar</a>
 									</div>
 									<!-- Zipcode -->
 									{{-- <div>
@@ -156,35 +157,7 @@
 										<div class="cart_extra_total_value ml-auto">${{ floatval($carrito->total)}}</div>
 									</li>
 								</ul>
-								{{-- <div class="payment_options">
-									<div class="checkout_title">Método de Pago</div>
-									<ul>
-										
-										<li class="shipping_option d-flex flex-row align-items-center justify-content-start">
-											<label class="radio_container">
-												<input type="radio" id="radio_2" name="payment_radio" class="payment_radio">
-												<span class="radio_mark"></span>
-												<span class="radio_text">Pagar contra entrega</span>
-											</label>
-										</li>
-										<li class="shipping_option d-flex flex-row align-items-center justify-content-start">
-											<label class="radio_container">
-												<input type="radio" id="radio_3" name="payment_radio" class="payment_radio">
-												<span class="radio_mark"></span>
-												<span class="radio_text">Pagar con epayco</span>
-											</label>
-										</li>
-									</ul>
-								</div>  --}}
 								<checkout :ruta="ruta"/>	
-								{{-- <div class="cart_text">
-									<p>Puedes pagar contra entrega o a tráves de epayco. Aceptamos todas las tarjetas, efecty, pse, daviplata y otros medios</p>
-								</div> --}}
-								{{-- <div id="" class="checkout_button trans_200">
-									<a href="" id="btnCheckout">realizar pedido</a>
-									 
-								</div> --}}
-								{{-- <checkout :ruta="ruta"></checkout> --}}
 							</div>
 						</div>
 					</div>
@@ -192,6 +165,57 @@
 			</div>
         </div>
 
+	</div>
+
+	<div class="modal fade" id="modalDir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+		<div class="modal-dialog modal-primary modal-lg pt-5" role="document">
+			<div class="modal-content pt-3">
+				<div class="modal-header">
+					<h4 class="modal-title">Seleccionar dirección de envío del pedido</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group row">
+							<div class="col-md-6">
+								<div class="input-group">
+									
+								</div>
+							</div>
+					</div>
+					<div class="table-responsive">
+						<table class="table table-bordered table-striped table-sm">
+							<thead>
+								<tr>
+									<th>Dirección</th>
+									<th>Descripción</th>
+									<th>Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Calle 34</td>
+									<td>Dirección de mi oficina</td>
+									<td>
+										<a href="" class="btn btn-primary btn-sm btn-icon" title="recibir pedido aquí">
+											<i class="fa fa-check"></i>
+										</a>
+									</td>
+								</tr>                                
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="modal-footer">
+					{{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button> --}}
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
 	</div>
 	
 @endsection
