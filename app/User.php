@@ -241,6 +241,12 @@ class User extends Authenticatable
         return $this->hasMany(Chat::class, 'from_id');
     }
 
+
+    public function direccionEntregas()
+    {
+        return $this->hasMany(DireccionEntrega::class);
+    }
+
     
     /**
      * Send the password reset notification.

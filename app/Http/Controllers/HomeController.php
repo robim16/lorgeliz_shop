@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Carrito;
 use App\ColorProducto;
+use App\DireccionEntrega;
 use App\Factura;
 use App\ProductoReferencia;
 use Illuminate\Database\Eloquent\Builder;
@@ -167,8 +168,10 @@ class HomeController extends Controller
         $factura->consecutivo = $id;
 
         $factura->save();
+
+        $direcciones = DireccionEntrega::where('user_id', auth()->user()->id)->get();
         
-        return view('tienda.checkout', compact('carrito', 'factura'));
+        return view('tienda.checkout', compact('carrito', 'factura', 'direcciones'));
     }
 
     //todas las funciones asociadas a la página de categorías fueron 

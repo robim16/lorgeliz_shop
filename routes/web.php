@@ -95,8 +95,12 @@ Route::group(['prefix' => '/devoluciones'], function () {
 
 Route::group(['prefix' => '/ventas'], function () {
     Route::post('/epayco', 'VentaController@epayco_register')->name('venta.epayco');
-    // Route::post('/store', 'VentaController@store')->name('venta.store');
     Route::post('/', 'VentaController@store')->name('venta.store');
+});
+
+
+Route::group(['prefix' => '/direcciones'], function () {
+    Route::post('/seleccionar', 'DireccionController@select_direction')->name('direction.update');
 });
 
 Route::group(['prefix' => '/notification'], function () {

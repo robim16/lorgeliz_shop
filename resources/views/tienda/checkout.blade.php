@@ -194,23 +194,22 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>Calle 34</td>
-									<td>Dirección de mi oficina</td>
-									<td>
-										<a href="" class="btn btn-primary btn-sm btn-icon" title="recibir pedido aquí">
-											<i class="fa fa-check"></i>
-										</a>
-									</td>
-								</tr>                                
+								@foreach ($direcciones as $direccion)
+									<tr>
+										<td>{{ $direccion->direccion}}</td>
+										<td>{{ $direccion->descripcion}}</td>
+										<td>
+											<a href="javascript:void(0)" onclick="selectDirection({{$direccion->id}})" class="btn btn-primary btn-sm btn-icon" title="recibir pedido aquí">
+												<i class="fa fa-check"></i>
+											</a>
+										</td>
+									</tr>                                
+								@endforeach
 							</tbody>
 						</table>
 					</div>
 				</div>
 				<div class="modal-footer">
-					{{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button> --}}
 				</div>
 			</div>
 			<!-- /.modal-content -->
@@ -241,7 +240,7 @@
 		}
 
 
-	function init() {
+		function init() {
 			return new Promise(async (resolve, reject) => {
 				await loadJSON(function (response) {
 
@@ -270,6 +269,16 @@
 				$('#checkout_city').append("<option value='" 
 					+ value + "'>" + value + "</option>");
 			});
+		}
+
+
+		function selectDirection(direccion) {
+			axios.post("http://127.0.0.1:8000/direcciones/seleccionar", {direccion})
+				.then(response => {
+					console.log(response);
+				}).catch(err => {
+					console.log(err);
+				})
 		}
 
 	</script>
