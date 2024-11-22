@@ -177,12 +177,11 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="form-group row">
-							<div class="col-md-6">
-								<div class="input-group">
-									
-								</div>
-							</div>
+					<div id="alerta" class="alert alert-success alert-dismissible fade show d-none" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<p>{{ 'Se ha actualizado la dirección de envío del pedido' }}</p>
 					</div>
 					<div class="table-responsive">
 						<table class="table table-bordered table-striped table-sm">
@@ -275,7 +274,12 @@
 		function selectDirection(direccion) {
 			axios.post("http://127.0.0.1:8000/direcciones/seleccionar", {direccion})
 				.then(response => {
-					console.log(response);
+					var element = document.getElementById("alerta");
+					element.classList.remove("d-none");
+
+					setTimeout(() => {
+						element.classList.add("d-none");
+					}, 6000);
 				}).catch(err => {
 					console.log(err);
 				})

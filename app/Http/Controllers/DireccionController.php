@@ -21,16 +21,22 @@ class DireccionController extends Controller
     public function select_direction(Request $request)
     {
        
+        if ( ! request()->ajax()) {
+			abort(401, 'Acceso denegado');
+		}
+        
         $direcciones = DireccionEntrega::where('user_id', auth()->user()->id)
             ->update(['activa' => false]);
            
         $direccion_pedido = DireccionEntrega::where('id', $request->direccion)
             ->where('user_id', auth()->user()->id)
-            ->update(['activa' => true]);
+            ->first();
        
 
-        $response = "se ha actualizado la dirección de entrega del pedido";
-        
+        $response = ['data' => $direccion_pedido];
+
+        $direccion_pedido->update(['activa' => true]);
+
         return response()->json($response);
     }
 }
