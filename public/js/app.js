@@ -3417,6 +3417,120 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     ruta: {
@@ -3446,7 +3560,8 @@ __webpack_require__.r(__webpack_exports__);
       mobilephone_billing: "",
       number_doc_billing: "",
       key: '15f20d656c02a318876c678239344a0e',
-      test: true
+      test: true,
+      isDisabled: false
     };
   },
   methods: {
@@ -3472,6 +3587,7 @@ __webpack_require__.r(__webpack_exports__);
               console.log(error);
             });
           } else {
+            _this.isDisabled = true;
             var handler = ePayco.checkout.configure({
               key: _this.key,
               test: _this.test
@@ -3517,6 +3633,7 @@ __webpack_require__.r(__webpack_exports__);
     this.mobilephone_billing = data.datos.mobilephone_billing;
     this.number_doc_billing = data.datos.number_doc_billing;
     this.invoice = data.datos.factura;
+    this.isDisabled = false;
   }
 });
 
@@ -4387,8 +4504,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getTallas: function getTallas() {
       var _this = this;
 
-      // let url = '/lorgeliz_tienda_copia/public/tallas/productos/'+this.producto;
-      // let url = '/lorgeliz_tienda_copia/public/api/tallas/'+this.producto;
       var url = "".concat(this.ruta, "/api/tallas/").concat(this.producto);
       axios.get(url).then(function (response) {
         // this.arrayTallas = response.data.tallas;
@@ -4400,7 +4515,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getCarrito: function getCarrito() {
       var _this2 = this;
 
-      // let url = '/lorgeliz_tienda_copia/public/cart/buscarCarrito';
       if (this.user_id != 0) {
         var url = "".concat(this.ruta, "/cart/buscarCarrito");
 
@@ -4411,7 +4525,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(response);
 
             if (_this2.arrayCarrito != null) {
-              _this2.carrito = _this2.arrayCarrito.id; // let url = '/lorgeliz_tienda_copia/public/cart/update';
+              _this2.carrito = _this2.arrayCarrito.id;
 
               var _url = "".concat(_this2.ruta, "/cart/update");
 
@@ -4461,8 +4575,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 }
               }
             } else {
-              // let url = '/lorgeliz_tienda_copia/public/cart/store';
-              // let url = '/lorgeliz_tienda_copia/public/cart';
               var _url2 = "".concat(_this2.ruta, "/cart");
 
               for (var _i = 0; _i < _this2.arrayTallas.length; _i++) {
@@ -50294,88 +50406,430 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("main", [
-    _c("div", { staticClass: "payment_options" }, [
-      _c("div", { staticClass: "checkout_title" }, [_vm._v("Método de Pago")]),
-      _vm._v(" "),
-      _c("ul", [
-        _c(
-          "li",
-          {
-            staticClass:
-              "shipping_option d-flex flex-row align-items-center justify-content-start"
-          },
-          [
-            _c("label", { staticClass: "radio_container" }, [
-              _c("input", {
-                staticClass: "payment_radio",
-                attrs: { type: "radio", id: "radio_2", name: "payment_radio" },
-                domProps: { checked: _vm.option == 1 },
-                on: {
-                  click: function($event) {
-                    return _vm.setOption(1)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("span", { staticClass: "radio_mark" }),
-              _vm._v(" "),
-              _c("span", { staticClass: "radio_text" }, [
-                _vm._v("Pagar contra entrega")
-              ])
+    _c("div", { staticClass: "checkout" }, [
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-lg-6 cart_col" }, [
+            _c("div", { staticClass: "cart_total" }, [
+              _c(
+                "div",
+                { staticClass: "cart_extra_content cart_extra_total" },
+                [
+                  _c("div", { staticClass: "checkout_title" }, [
+                    _vm._v("Total carrito")
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "payment_options" }, [
+                    _c("div", { staticClass: "checkout_title" }, [
+                      _vm._v("Método de Pago")
+                    ]),
+                    _vm._v(" "),
+                    _c("ul", [
+                      _c(
+                        "li",
+                        {
+                          staticClass:
+                            "shipping_option d-flex flex-row align-items-center justify-content-start"
+                        },
+                        [
+                          _c("label", { staticClass: "radio_container" }, [
+                            _c("input", {
+                              staticClass: "payment_radio",
+                              attrs: {
+                                type: "radio",
+                                id: "radio_2",
+                                name: "payment_radio"
+                              },
+                              domProps: { checked: _vm.option == 1 },
+                              on: {
+                                click: function($event) {
+                                  return _vm.setOption(1)
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "radio_mark" }),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "radio_text" }, [
+                              _vm._v("Pagar contra entrega")
+                            ])
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "li",
+                        {
+                          staticClass:
+                            "shipping_option d-flex flex-row align-items-center justify-content-start"
+                        },
+                        [
+                          _c("label", { staticClass: "radio_container" }, [
+                            _c("input", {
+                              staticClass: "payment_radio",
+                              attrs: {
+                                type: "radio",
+                                id: "radio_3",
+                                name: "payment_radio"
+                              },
+                              domProps: { checked: _vm.option == 2 },
+                              on: {
+                                click: function($event) {
+                                  return _vm.setOption(2)
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "radio_mark" }),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "radio_text" }, [
+                              _vm._v("Pagar con epayco")
+                            ])
+                          ])
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "checkout_button trans_200" }, [
+                    _c(
+                      "button",
+                      {
+                        attrs: { disabled: _vm.isDisabled },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.verifyAndSale($event)
+                          }
+                        }
+                      },
+                      [_vm._v("realizar pedido")]
+                    )
+                  ])
+                ]
+              )
             ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "li",
-          {
-            staticClass:
-              "shipping_option d-flex flex-row align-items-center justify-content-start"
-          },
-          [
-            _c("label", { staticClass: "radio_container" }, [
-              _c("input", {
-                staticClass: "payment_radio",
-                attrs: { type: "radio", id: "radio_3", name: "payment_radio" },
-                domProps: { checked: _vm.option == 2 },
-                on: {
-                  click: function($event) {
-                    return _vm.setOption(2)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("span", { staticClass: "radio_mark" }),
-              _vm._v(" "),
-              _c("span", { staticClass: "radio_text" }, [
-                _vm._v("Pagar con epayco")
-              ])
-            ])
-          ]
-        )
+          ])
+        ])
       ])
-    ]),
-    _vm._v(" "),
-    _vm._m(0),
-    _vm._v(" "),
-    _c("div", { staticClass: "checkout_button trans_200" }, [
-      _c(
-        "a",
-        {
-          attrs: { href: "" },
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.verifyAndSale($event)
-            }
-          }
-        },
-        [_vm._v("realizar pedido")]
-      )
     ])
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-lg-6" }, [
+      _c("div", { staticClass: "billing" }, [
+        _c("div", { staticClass: "checkout_title" }, [
+          _vm._v("Información de Pago")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "checkout_form_container" }, [
+          _c(
+            "form",
+            {
+              staticClass: "checkout_form",
+              attrs: { action: "#", id: "checkout_form" }
+            },
+            [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-lg-6" }, [
+                  _c("label", { attrs: { for: "checkout_name" } }, [
+                    _vm._v("Nombres")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "checkout_input",
+                    attrs: {
+                      type: "text",
+                      id: "checkout_name",
+                      placeholder: "Nombres",
+                      required: "required",
+                      value: ""
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-lg-6" }, [
+                  _c("label", { attrs: { for: "checkout_last_name" } }, [
+                    _vm._v("Apellidos")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "checkout_input",
+                    attrs: {
+                      type: "text",
+                      id: "checkout_last_name",
+                      placeholder: "Apellidos",
+                      required: "required",
+                      value: ""
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", [
+                _c("label", { attrs: { for: "checkout_company" } }, [
+                  _vm._v("Empresa")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "checkout_input",
+                  attrs: {
+                    type: "text",
+                    id: "checkout_company",
+                    placeholder: "Empresa"
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", [
+                _c("label", { attrs: { for: "checkout_country" } }, [
+                  _vm._v("País")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    staticClass: "dropdown_item_select checkout_input",
+                    attrs: {
+                      name: "checkout_country",
+                      id: "checkout_country",
+                      require: "required"
+                    }
+                  },
+                  [_c("option", [_vm._v("Colombia")])]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", [
+                _c("label", { attrs: { for: "checkout_province" } }, [
+                  _vm._v("Departamento")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    staticClass: "dropdown_item_select checkout_input",
+                    attrs: {
+                      name: "checkout_province",
+                      id: "checkout_province",
+                      require: "required"
+                    }
+                  },
+                  [_c("option", { attrs: { value: "", selected: "" } })]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", [
+                _c("label", { attrs: { for: "checkout_city" } }, [
+                  _vm._v("Ciudad")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    staticClass: "dropdown_item_select checkout_input",
+                    attrs: {
+                      name: "checkout_city",
+                      id: "checkout_city",
+                      require: "required"
+                    }
+                  },
+                  [_c("option", { attrs: { value: "", selected: "" } })]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", [
+                _c("label", { attrs: { for: "checkout_address" } }, [
+                  _vm._v("Dirección del envío")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "checkout_input",
+                  attrs: {
+                    type: "text",
+                    id: "checkout_address",
+                    placeholder: "Dirección",
+                    required: "required",
+                    value: ""
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "text-primary",
+                    attrs: {
+                      href: "",
+                      "data-toggle": "modal",
+                      "data-target": "#modalDir"
+                    }
+                  },
+                  [_vm._v("cambiar")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", [
+                _c("label", { attrs: { for: "checkout_phone" } }, [
+                  _vm._v("Teléfono")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "checkout_input",
+                  attrs: {
+                    type: "phone",
+                    id: "checkout_phone",
+                    placeholder: "Teléfono",
+                    required: "required",
+                    value: ""
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", [
+                _c("label", { attrs: { for: "checkout_email" } }, [
+                  _vm._v("Email")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "checkout_input",
+                  attrs: {
+                    type: "phone",
+                    id: "checkout_email",
+                    placeholder: "Email",
+                    required: "required",
+                    value: ""
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "checkout_extra" }, [
+                _c("ul", [
+                  _c(
+                    "li",
+                    {
+                      staticClass:
+                        "billing_info d-flex flex-row align-items-center justify-content-start"
+                    },
+                    [
+                      _c("label", { staticClass: "checkbox_container" }, [
+                        _c("input", {
+                          staticClass: "billing_checkbox",
+                          attrs: {
+                            type: "checkbox",
+                            id: "cb_1",
+                            name: "billing_checkbox"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "checkbox_mark" }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "checkbox_text" }, [
+                          _vm._v("Términos y condiciones")
+                        ])
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "li",
+                    {
+                      staticClass:
+                        "billing_info d-flex flex-row align-items-center justify-content-start"
+                    },
+                    [
+                      _c("label", { staticClass: "checkbox_container" }, [
+                        _c("input", {
+                          staticClass: "billing_checkbox",
+                          attrs: {
+                            type: "checkbox",
+                            id: "cb_3",
+                            name: "billing_checkbox"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "checkbox_mark" }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "checkbox_text" }, [
+                          _vm._v("Suscríbete a nuestro boletín")
+                        ])
+                      ])
+                    ]
+                  )
+                ])
+              ])
+            ]
+          )
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "cart_extra_total_list" }, [
+      _c(
+        "li",
+        {
+          staticClass:
+            "d-flex flex-row align-items-center justify-content-start"
+        },
+        [
+          _c("div", { staticClass: "cart_extra_total_title" }, [
+            _vm._v("Subtotal")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "cart_extra_total_value ml-auto" }, [
+            _vm._v("$")
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          staticClass:
+            "d-flex flex-row align-items-center justify-content-start"
+        },
+        [
+          _c("div", { staticClass: "cart_extra_total_title" }, [
+            _vm._v("Envío")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "cart_extra_total_value ml-auto" }, [
+            _vm._v("$")
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          staticClass:
+            "d-flex flex-row align-items-center justify-content-start"
+        },
+        [
+          _c("div", { staticClass: "cart_extra_total_title" }, [
+            _vm._v("Total")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "cart_extra_total_value ml-auto" }, [
+            _vm._v("$")
+          ])
+        ]
+      )
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

@@ -9,7 +9,6 @@
 
 <div class="super_container_inner">
 	<div>
-	{{--<div class="super_container_inner">--}}
 		<div class="super_overlay"></div>
 
 		<!-- Home -->
@@ -29,12 +28,10 @@
 		</div>
 
 		<!-- Checkout -->
-
-		<div class="checkout">
+		{{-- <div class="checkout">
 			<div class="container">
 				<div class="row">
-					
-					<!-- Billing -->
+				
 					<div class="col-lg-6">
 						<div class="billing">
 							<div class="checkout_title">Información de Pago</div>
@@ -42,69 +39,60 @@
 								<form action="#" id="checkout_form" class="checkout_form">
 									<div class="row">
 										<div class="col-lg-6">
-											<!-- Name -->
+											
 											<label for="checkout_name">Nombres</label>
 											<input type="text" id="checkout_name" class="checkout_input" placeholder="Nombres" required="required" value="{{ $carrito->cliente->user->nombres}}">
 										</div>
 										<div class="col-lg-6">
-											<!-- Last Name -->
+											
 											<label for="checkout_last_name">Apellidos</label>
 											<input type="text" id="checkout_last_name" class="checkout_input" placeholder="Apellidos" required="required" value="{{ $carrito->cliente->user->apellidos}}">
 										</div>
 									</div>
 									<div>
-										<!-- Company -->
+										
 										<label for="checkout_company">Empresa</label>
 										<input type="text" id="checkout_company" placeholder="Empresa" class="checkout_input">
 									</div>
 									<div>
-										<!-- Country -->
+										
 										<label for="checkout_country">País</label>
 										<select name="checkout_country" id="checkout_country" class="dropdown_item_select checkout_input" require="required">
-											{{-- <option>País</option> --}}
+											
 											<option>Colombia</option>
 										</select>
 									</div>
 									<div>
-										<!-- Province -->
+								
 										<label for="checkout_province">Departamento</label>
 										<select name="checkout_province" id="checkout_province" class="dropdown_item_select checkout_input" require="required">
 											<option value="{{ $carrito->cliente->user->departamento}}" selected>{{ $carrito->cliente->user->departamento }}</option>
-											{{-- <option>Córdoba</option>
-											<option>Province</option>
-											<option>Province</option>
-											<option>Province</option> --}}
+										
 										</select>
 									</div>
 									<div>
-										<!-- City / Town -->
+										
 										<label for="checkout_city">Ciudad</label>
 										<select name="checkout_city" id="checkout_city" class="dropdown_item_select checkout_input" require="required">
 											<option value="{{ $carrito->cliente->user->municipio }}" selected> {{ $carrito->cliente->user->municipio}}</option>
-											{{-- <option>Montería</option>
-											<option>City</option>
-											<option>City</option>
-											<option>City</option> --}}
+											
 										</select>
 									</div>
 									<div>
-										<!-- Address -->
+										
 										<label for="checkout_address">Dirección del envío</label>
 										<input type="text" id="checkout_address" class="checkout_input" placeholder="Dirección" required="required" value="{{ $carrito->cliente->user->direccion}}">
-										{{-- <input type="text" id="checkout_address_2" class="checkout_input checkout_address_2" placeholder="Dirección 2" required="required"> --}}
+										
 										<a href="" class="text-primary" data-toggle="modal" data-target="#modalDir">cambiar</a>
 									</div>
-									<!-- Zipcode -->
-									{{-- <div>
-										<input type="text" id="checkout_zipcode" class="checkout_input" placeholder="Código postal" required="required">
-									</div> --}}
+									
 									<div>
-										<!-- Phone no -->
+									
 										<label for="checkout_phone">Teléfono</label>
 										<input type="phone" id="checkout_phone" class="checkout_input" placeholder="Teléfono" required="required" value="{{ $carrito->cliente->user->telefono}}">
 									</div>
 									<div>
-										<!-- Email -->
+										
 										<label for="checkout_email">Email</label>
 										<input type="phone" id="checkout_email" class="checkout_input" placeholder="Email" required="required" value="{{ $carrito->cliente->user->email}}">
 									</div>
@@ -117,13 +105,7 @@
 													<span class="checkbox_text">Términos y condiciones</span>
 												</label>
 											</li>
-											{{--<li class="billing_info d-flex flex-row align-items-center justify-content-start">
-												<label class="checkbox_container">
-													<input type="checkbox" id="cb_2" name="billing_checkbox" class="billing_checkbox">
-													<span class="checkbox_mark"></span>
-													<span class="checkbox_text">Crear una cuenta</span>
-												</label>
-											</li>--}}
+											
 											<li class="billing_info d-flex flex-row align-items-center justify-content-start">
 												<label class="checkbox_container">
 													<input type="checkbox" id="cb_3" name="billing_checkbox" class="billing_checkbox">
@@ -138,7 +120,6 @@
 						</div>
 					</div>
 
-					<!-- Cart Total -->
 					<div class="col-lg-6 cart_col">
 						<div class="cart_total">
 							<div class="cart_extra_content cart_extra_total">
@@ -163,7 +144,9 @@
 					</div>
 				</div>
 			</div>
-        </div>
+        </div> --}}
+
+		<checkout :ruta="ruta"/>	
 
 	</div>
 
