@@ -146,7 +146,8 @@
 			</div>
         </div> --}}
 
-		<checkout :ruta="ruta"/>	
+		<checkout :ruta="ruta" :carrito="{{ $carrito }}" :factura="{{ $factura }}"
+			:direcciones="{{ $direcciones }}"/>	
 
 	</div>
 
@@ -204,7 +205,7 @@
 @section('scripts')
 	<script src="{{ asset('asset/js/checkout.js') }}"></script>
 
-	<script>
+	{{-- <script>
 
 		let ruta = 'http://127.0.0.1:8000';
 		let url = `${ruta}/colombia-json-master/colombia-json-master/colombia.json`
@@ -268,9 +269,9 @@
 				})
 		}
 
-	</script>
+	</script> --}}
 
-	<script>
+	{{-- <script>
 		window.data = {
 			datos: {
 				"amount": "{{$carrito->total}}",
@@ -281,30 +282,30 @@
 				"factura": "{{ $factura->id }}"
 			}
 		}
-	</script>
+	</script> --}}
 
-	<script> 
+	{{-- <script> 
 
-	document.addEventListener("DOMContentLoaded", function(event) {
-		var JSONFinal = '';
+		document.addEventListener("DOMContentLoaded", function(event) {
+			var JSONFinal = '';
 
-		init().
-		then((data) => {
-			JSONFinal = data;
-			setMunicipios(JSONFinal);
-		});
+			init().
+			then((data) => {
+				JSONFinal = data;
+				setMunicipios(JSONFinal);
+			});
 
-		$(document).on('change', '#checkout_province', function(e) { 
-			e.preventDefault();
-			
-			$('#checkout_city').html('');
-			setMunicipios(JSONFinal);
-		});
+			$(document).on('change', '#checkout_province', function(e) { 
+				e.preventDefault();
 				
+				$('#checkout_city').html('');
+				setMunicipios(JSONFinal);
+			});
+					
 
-	});
+		});
 
-	</script>
+	</script> --}}
 
 	<script type="text/javascript" src="https://checkout.epayco.co/checkout.js"></script>
 

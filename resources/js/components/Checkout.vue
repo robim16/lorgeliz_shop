@@ -13,12 +13,12 @@
 										<div class="col-lg-6">
 											<!-- Name -->
 											<label for="checkout_name">Nombres</label>
-											<input type="text" id="checkout_name" class="checkout_input" placeholder="Nombres" required="required" value="">
+											<input type="text" id="checkout_name" class="checkout_input" placeholder="Nombres" required="required" value="" v-model="nombres">
 										</div>
 										<div class="col-lg-6">
 											<!-- Last Name -->
 											<label for="checkout_last_name">Apellidos</label>
-											<input type="text" id="checkout_last_name" class="checkout_input" placeholder="Apellidos" required="required" value="">
+											<input type="text" id="checkout_last_name" class="checkout_input" placeholder="Apellidos" required="required" value="" v-model="apellidos">
 										</div>
 									</div>
 									<div>
@@ -54,19 +54,19 @@
 									<div>
 										<!-- Address -->
 										<label for="checkout_address">Dirección del envío</label>
-										<input type="text" id="checkout_address" class="checkout_input" placeholder="Dirección" required="required" value="">
+										<input type="text" id="checkout_address" class="checkout_input" placeholder="Dirección" required="required" value="" v-model="address_billing">
 										<a href="" class="text-primary" data-toggle="modal" data-target="#modalDir">cambiar</a>
 									</div>
 									
 									<div>
 										<!-- Phone no -->
 										<label for="checkout_phone">Teléfono</label>
-										<input type="phone" id="checkout_phone" class="checkout_input" placeholder="Teléfono" required="required" value="">
+										<input type="phone" id="checkout_phone" class="checkout_input" placeholder="Teléfono" required="required" value="" v-model="mobilephone_billing">
 									</div>
 									<div>
 										<!-- Email -->
 										<label for="checkout_email">Email</label>
-										<input type="phone" id="checkout_email" class="checkout_input" placeholder="Email" required="required" value="">
+										<input type="phone" id="checkout_email" class="checkout_input" placeholder="Email" required="required" value="" v-model="email">
 									</div>
 									<div class="checkout_extra">
 										<ul>
@@ -100,15 +100,15 @@
 								<ul class="cart_extra_total_list">
 									<li class="d-flex flex-row align-items-center justify-content-start">
 										<div class="cart_extra_total_title">Subtotal</div>
-										<div class="cart_extra_total_value ml-auto">$</div>
+										<div class="cart_extra_total_value ml-auto">${{ subtotal }}</div>
 									</li>
 									<li class="d-flex flex-row align-items-center justify-content-start">
 										<div class="cart_extra_total_title">Envío</div>
-										<div class="cart_extra_total_value ml-auto">$</div>
+										<div class="cart_extra_total_value ml-auto">${{ envio }}</div>
 									</li>
 									<li class="d-flex flex-row align-items-center justify-content-start">
 										<div class="cart_extra_total_title">Total</div>
-										<div class="cart_extra_total_value ml-auto">$</div>
+										<div class="cart_extra_total_value ml-auto">${{ amount }}</div>
 									</li>
 								</ul>
                                 <div class="payment_options">
@@ -152,7 +152,19 @@ export default {
         ruta:{
             required: true,
             type: String
-        }
+        },
+		carrito:{
+			required: true,
+			type: Object
+		},
+		factura:{
+			required: true,
+			type: Object
+		},
+		direcciones:{
+			required: true,
+			type: Array
+		}
     },
     data() {
         return {
@@ -162,6 +174,8 @@ export default {
             invoice: "",
             currency: "cop",
             amount: "",
+			subtotal: "",
+			envio: "",
             tax_base: "0",
             tax: "0",
             country: "co",
@@ -181,17 +195,22 @@ export default {
             departamento: "", 
             departamentos: [],
             municipio: "",
-            municipios: []
+            municipios: [],
+			jsonFinal: '',
+			nombres: '',
+			apellidos: '',
+			pais: '', 
+			email: ''
         }
     },
     methods:{
 
-        init() {
+        init(){
 			return new Promise(async (resolve, reject) => {
-				await loadJSON(function (response) {
+				await this.loadJSON(response => {
 
 					// Parse JSON string into object
-					const JSONFinal =  JSON.parse(response);
+					var JSONFinal =  JSON.parse(response);
 					this.departamentos = JSONFinal.map(d => d.departamento);
 
 					resolve(JSONFinal);
@@ -227,7 +246,7 @@ export default {
 
 
 		selectDirection(direccion) {
-			axios.post("http://127.0.0.1:8000/direcciones/seleccionar", {direccion})
+			axios.post(`${this.ruta}/direcciones/seleccionar`, {direccion})
 				.then(response => {
 					var element = document.getElementById("alerta");
 					element.classList.remove("d-none");
@@ -330,31 +349,36 @@ export default {
     },
     mounted() {
 
-        this.amount = data.datos.amount;
-        this.name_billing = data.datos.name_billing;
-        this.address_billing = data.datos.address_billing;
-        this.mobilephone_billing = data.datos.mobilephone_billing;
-        this.number_doc_billing = data.datos.number_doc_billing;
-        this.invoice = data.datos.factura;
+
+		this.nombres = this.carrito.cliente.user.nombres;
+		this.apellidos = this.carrito.cliente.user.apellidos;
+		this.departamento = this.carrito.cliente.user.departamento;
+		this.municipio = this.carrito.cliente.user.municipio;
+		this.amount = this.carrito.total;
+        this.name_billing = `${this.carrito.cliente.user.nombres}${this.carrito.cliente.user.apellidos}`;
+        this.address_billing = this.carrito.cliente.user.direccion;
+        this.mobilephone_billing = this.carrito.cliente.user.telefono;
+        this.number_doc_billing = this.carrito.cliente.user.identificacion;
+        this.invoice = this.factura.id;
+		this.email = this.carrito.cliente.user.email;
+		this.subtotal = this.carrito.subtotal;
+		this.envio = this.carrito.envio;
         this.isDisabled = false;
 
 
+		this.init().
+		then((data) => {
+			this.jsonFinal = data;
+			this.setMunicipios(this.jsonFinal);
+		});
+
         document.addEventListener("DOMContentLoaded", function(event) {
-            var JSONFinal = '';
+            // this.jsonFinal = '';
 
-            init().
-            then((data) => {
-                JSONFinal = data;
-                setMunicipios(JSONFinal);
-            });
-
-            $(document).on('change', '#checkout_province', function(e) { 
-                e.preventDefault();
-                
-                $('#checkout_city').html('');
-                setMunicipios(JSONFinal);
-            });
-                    
+			document.getElementById('checkout_province').addEventListener('change', function() {
+				this.municipio = '';
+                this.setMunicipios(this.jsonFinal);
+  			});
 
         });
     }
