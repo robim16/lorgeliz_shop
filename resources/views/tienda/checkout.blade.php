@@ -151,7 +151,7 @@
 
 	</div>
 
-	<div class="modal fade" id="modalDir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+	{{-- <div class="modal fade" id="modalDir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
 		<div class="modal-dialog modal-primary modal-lg pt-5" role="document">
 			<div class="modal-content pt-3">
 				<div class="modal-header">
@@ -198,7 +198,7 @@
 			<!-- /.modal-content -->
 		</div>
 		<!-- /.modal-dialog -->
-	</div>
+	</div> --}}
 	
 @endsection
 

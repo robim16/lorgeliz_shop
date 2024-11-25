@@ -54,7 +54,7 @@
 									<div>
 										<!-- Address -->
 										<label for="checkout_address">Dirección del envío</label>
-										<input type="text" id="checkout_address" class="checkout_input" placeholder="Dirección" required="required" value="" v-model="address_billing">
+										<input type="text" id="checkout_address" class="checkout_input" placeholder="Dirección" required="required" value="" v-model="direccion_entrega">
 										<a href="" class="text-primary" data-toggle="modal" data-target="#modalDir">cambiar</a>
 									</div>
 									
@@ -134,7 +134,7 @@
                                     <p>Puedes pagar contra entrega o a tráves de epayco. Aceptamos todas las tarjetas, efecty, pse, daviplata y otros medios</p>
                                 </div>
                                 <div class="checkout_button trans_200">
-                                    <button @click.prevent="verifyAndSale" :disabled="isDisabled">realizar pedido</button>
+                                    <a class="pay_button" @click.prevent="verifyAndSale" :disabled="isDisabled">realizar pedido</a>
                                 </div>
 								
 							</div>
@@ -143,6 +143,53 @@
 				</div>
 			</div>
         </div>
+
+		<div class="modal fade" id="modalDir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+			<div class="modal-dialog modal-primary modal-lg pt-5" role="document">
+				<div class="modal-content pt-3">
+					<div class="modal-header">
+						<h4 class="modal-title">Seleccionar dirección de envío del pedido</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div id="alerta" class="alert alert-success alert-dismissible fade show d-none" role="alert">
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<p>{{ 'Se ha actualizado la dirección de envío del pedido' }}</p>
+						</div>
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped table-sm">
+								<thead>
+									<tr>
+										<th>Dirección</th>
+										<th>Descripción</th>
+										<th>Acciones</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="direccion in direcciones" :key="direccion.id" :class="direccion.direccion == direccion_entrega ? 'text-success' : ''">
+										<td>{{ direccion.direccion}}</td>
+										<td>{{ direccion.descripcion}}</td>
+										<td>
+											<a href="" @click.prevent="selectDirection(direccion.id)" class="btn btn-primary btn-sm btn-icon" title="recibir pedido aquí">
+												<i class="fa fa-check"></i>
+											</a>
+										</td>
+									</tr>                                
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="modal-footer">
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
     </main>
 </template>
 
@@ -200,7 +247,8 @@ export default {
 			nombres: '',
 			apellidos: '',
 			pais: '', 
-			email: ''
+			email: '',
+			direccion_entrega: ''
         }
     },
     methods:{
@@ -248,6 +296,8 @@ export default {
 		selectDirection(direccion) {
 			axios.post(`${this.ruta}/direcciones/seleccionar`, {direccion})
 				.then(response => {
+					this.direccion_entrega = response.data.data.direccion
+					console.log(response.data);
 					var element = document.getElementById("alerta");
 					element.classList.remove("d-none");
 
@@ -364,6 +414,7 @@ export default {
 		this.subtotal = this.carrito.subtotal;
 		this.envio = this.carrito.envio;
         this.isDisabled = false;
+		this.direccion_entrega = this.carrito.cliente.user.direccion;
 
 
 		this.init().
@@ -372,10 +423,10 @@ export default {
 			this.setMunicipios(this.jsonFinal);
 		});
 
-        document.addEventListener("DOMContentLoaded", function(event) {
+        document.addEventListener("DOMContentLoaded", (event) => {
             // this.jsonFinal = '';
 
-			document.getElementById('checkout_province').addEventListener('change', function() {
+			document.getElementById('checkout_province').addEventListener('change', () => {
 				this.municipio = '';
                 this.setMunicipios(this.jsonFinal);
   			});
@@ -385,3 +436,12 @@ export default {
 }
 </script>
 
+<style scoped>
+	.pay_button {
+		border: none;
+		width: 100%;
+		height: 100%;
+		cursor: pointer;
+		color: white;
+	}
+</style>
