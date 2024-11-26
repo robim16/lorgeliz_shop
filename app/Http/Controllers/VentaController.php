@@ -44,25 +44,11 @@ class VentaController extends Controller
             DB::beginTransaction();
         
             if ($x_cod_response == 1 || $x_cod_response == 3) { 
-                // si la transacción es aceptada o está pendiente
-
-                // $facturas = Factura::all('id');
-                // $consecutivo = $facturas->last();// se obtiene le ultimo id de facturas
-
-                // $id = $consecutivo->id + 1;// $consecutivo++
-
-                // $factura = new Factura();
-                // $factura->consecutivo = $id;
-
-                // $factura->save();
-
-                //$car = Carrito::where('id', $request->carrito)->firstOrFail();
+                
                 $car = Carrito::where('cliente_id', auth()->user()->cliente->id)
                     ->where('estado', 1)
                     ->firstOrFail(); // se busca el carrito del cliente
     
-                //$car->estado = '0';
-                //$car->save();
     
                 $venta = new Venta();
                 $venta->fecha = \Carbon\Carbon::now();

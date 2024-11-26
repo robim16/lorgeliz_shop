@@ -170,7 +170,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="direccion in direcciones" :key="direccion.id" :class="direccion.direccion == direccion_entrega ? 'text-success' : ''">
+									<tr v-for="direccion in direcciones" :key="direccion.id" :class="direccion.direccion == direccion_entrega ? 'table-success' : ''">
 										<td>{{ direccion.direccion}}</td>
 										<td>{{ direccion.descripcion}}</td>
 										<td>
@@ -211,6 +211,10 @@ export default {
 		direcciones:{
 			required: true,
 			type: Array
+		},
+		direccion_pedido:{
+			required: true,
+			type: Object
 		}
     },
     data() {
@@ -297,7 +301,6 @@ export default {
 			axios.post(`${this.ruta}/direcciones/seleccionar`, {direccion})
 				.then(response => {
 					this.direccion_entrega = response.data.data.direccion
-					console.log(response.data);
 					var element = document.getElementById("alerta");
 					element.classList.remove("d-none");
 
@@ -414,7 +417,7 @@ export default {
 		this.subtotal = this.carrito.subtotal;
 		this.envio = this.carrito.envio;
         this.isDisabled = false;
-		this.direccion_entrega = this.carrito.cliente.user.direccion;
+		this.direccion_entrega = this.direccion_pedido.direccion;
 
 
 		this.init().

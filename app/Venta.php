@@ -97,10 +97,17 @@ class Venta extends Model
 
     
                 $cliente = auth()->user();
+
+
+                $direccion_pedido = DireccionEntrega::where('activa', true)
+                    ->where('user_id', $cliente->id)
+                    ->first();
+                
     
                 $pedido = new Pedido();
                 $pedido->fecha = \Carbon\Carbon::now();
-                $pedido->direccion_entrega = $cliente->direccion;
+                // $pedido->direccion_entrega = $cliente->direccionEntregas->where('activa', true)->first(['direccion']);
+                $pedido->direccion_entrega = $direccion_pedido->direccion;
                 $pedido->venta_id = $venta->id;
                 $pedido->save();
     
@@ -113,9 +120,10 @@ class Venta extends Model
 
 
                 
-                Mail::to($cliente->email)->send(new ClienteMessageMail($details));
+                // Mail::to($cliente->email)->send(new ClienteMessageMail($details));
+
                 
-                // SendClienteSalesMail::dispatch($details, Auth()->user());
+                SendClienteSalesMail::dispatch($details, $cliente);
     
                 $productos = array();
                 // $products['data'] = array();

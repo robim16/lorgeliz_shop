@@ -23,8 +23,8 @@ class SendClienteSalesMail implements ShouldQueue
      */
     public function __construct($details, $user)
     {
-        $this->details;
-        $this->user;
+        $this->details = $details;
+        $this->user = $user;
     }
 
     /**

@@ -3614,6 +3614,10 @@ __webpack_require__.r(__webpack_exports__);
     direcciones: {
       required: true,
       type: Array
+    },
+    direccion_pedido: {
+      required: true,
+      type: Object
     }
   },
   data: function data() {
@@ -3709,7 +3713,6 @@ __webpack_require__.r(__webpack_exports__);
         direccion: direccion
       }).then(function (response) {
         _this2.direccion_entrega = response.data.data.direccion;
-        console.log(response.data);
         var element = document.getElementById("alerta");
         element.classList.remove("d-none");
         setTimeout(function () {
@@ -3796,7 +3799,7 @@ __webpack_require__.r(__webpack_exports__);
     this.subtotal = this.carrito.subtotal;
     this.envio = this.carrito.envio;
     this.isDisabled = false;
-    this.direccion_entrega = this.carrito.cliente.user.direccion;
+    this.direccion_entrega = this.direccion_pedido.direccion;
     this.init().then(function (data) {
       _this4.jsonFinal = data;
 
@@ -51928,7 +51931,7 @@ var render = function() {
                               key: direccion.id,
                               class:
                                 direccion.direccion == _vm.direccion_entrega
-                                  ? "text-success"
+                                  ? "table-success"
                                   : ""
                             },
                             [

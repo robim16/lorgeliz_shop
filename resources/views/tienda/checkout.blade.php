@@ -147,7 +147,7 @@
         </div> --}}
 
 		<checkout :ruta="ruta" :carrito="{{ $carrito }}" :factura="{{ $factura }}"
-			:direcciones="{{ $direcciones }}"/>	
+			:direcciones="{{ $direcciones }}" :direccion_pedido="{{ $direccion_pedido }}"/>	
 
 	</div>
 

@@ -31,7 +31,7 @@ class AdminVentaMail extends Mailable
     public function build()
     {
         return $this->subject("nueva venta")
-        ->markdown('emails.adminVentaMail')
-        ->with('details', $this->details);
+            ->markdown('emails.adminVentaMail')
+            ->with('details', $this->details);
     }
 }

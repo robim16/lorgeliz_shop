@@ -170,8 +170,13 @@ class HomeController extends Controller
         $factura->save();
 
         $direcciones = DireccionEntrega::where('user_id', auth()->user()->id)->get();
+
+        $direccion_pedido = DireccionEntrega::where('activa', true)
+            ->where('user_id', auth()->user()->id)
+            ->first();
         
-        return view('tienda.checkout', compact('carrito', 'factura', 'direcciones'));
+        return view('tienda.checkout', compact('carrito', 'factura', 'direcciones',
+            'direccion_pedido'));
     }
 
     //todas las funciones asociadas a la página de categorías fueron 

@@ -34,6 +34,7 @@ class CheckoutController extends Controller
     
             $venta_service =  new VentaService();
             $venta = $venta_service->completar_venta($request, $invoice);
+
         
             return view('epayco.response', compact('transaction', 'venta'));
         } catch (\Throwable $th) {
