@@ -328,7 +328,9 @@ export default {
 
                         let url = `${this.ruta}/ventas`;
 
-                        axios.post(url)
+                        axios.post(url, {
+							'invoice': this.invoice,
+						})
                         .then(response => {
                             if (response.data.data == 'success') {
                                 // var pedido = response.pedido;

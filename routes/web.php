@@ -71,18 +71,18 @@ Route::group(['prefix' => '/pedidos'], function () {
 Route::resource('/pedidos', 'OrdersController');
 
 Route::group(['prefix' => '/cart'], function () {
-    Route::get('/', 'CarController@index')->name('cart.index'); 
-    Route::get('/user', 'CarController@cartUser')->name('cart.products'); 
-    Route::get('/products', 'CarController@userCart')->name('cart.user');
+    Route::get('/', 'CartController@index')->name('cart.index'); 
+    Route::get('/user', 'CartController@cartUser')->name('cart.products'); 
+    Route::get('/products', 'CartController@userCart')->name('cart.user');
     // Route::post('/store', 'CarController@store')->name('cart.store');
-    Route::post('/', 'CarController@store')->name('cart.store');
-    Route::post('/update', 'CarController@update')->name('cart.update');
-    Route::post('/setCantidad', 'CarController@updateProduct')->name('cart.updateProduct');
+    Route::post('/', 'CartController@store')->name('cart.store');
+    Route::post('/update', 'CartController@update')->name('cart.update');
+    Route::post('/setCantidad', 'CartController@updateProduct')->name('cart.updateProduct');
     // Route::delete('/remove/{producto}', 'CarController@remove')->name('cart.remove');
-    Route::delete('{producto}/remove', 'CarController@remove')->name('cart.remove');
+    Route::delete('{producto}/remove', 'CartController@remove')->name('cart.remove');
     // Route::delete('/delete/{carrito}', 'CarController@destroy')->name('cart.destroy');
-    Route::delete('{carrito}/delete', 'CarController@destroy')->name('cart.destroy');
-    Route::get('/buscarCarrito', 'CarController@buscarCarrito')->name('cart.buscarCarrito');
+    Route::delete('{carrito}/delete', 'CartController@destroy')->name('cart.destroy');
+    Route::get('/buscarCarrito', 'CartController@buscarCarrito')->name('cart.buscarCarrito');
 });
 
 Route::group(['prefix' => '/devoluciones'], function () {

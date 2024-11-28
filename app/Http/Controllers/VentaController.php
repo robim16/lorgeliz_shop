@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\ClienteMessageMail;
 use App\Mail\AdminVentaMail;
 use App\Notifications\NotificationAdmin;
-
+use App\Services\VentaService;
 
 class VentaController extends Controller
 {
@@ -37,119 +37,14 @@ class VentaController extends Controller
     {
         try {
 
-            $x_ref_payco = ($request->x_ref_payco) ? $request->x_ref_payco : 0; // si no viene la ref. se pone 0
-            $x_cod_response = ($request->x_cod_response) ? $request->x_cod_response : 3;
-            $x_amount = ($request->x_amount) ? $request->x_amount : 0;
-        
-            DB::beginTransaction();
-        
-            if ($x_cod_response == 1 || $x_cod_response == 3) { 
-                
-                $car = Carrito::where('cliente_id', auth()->user()->cliente->id)
-                    ->where('estado', 1)
-                    ->firstOrFail(); // se busca el carrito del cliente
-    
-    
-                $venta = new Venta();
-                $venta->fecha = \Carbon\Carbon::now();
-                $venta->factura_id = $request->factura;
-                $venta->subtotal =  $car->subtotal;
-                $venta->envio =  $car->envio;
-                $venta->valor =  $car->total;
-                $venta->cliente_id = auth()->user()->cliente->id;
-                $venta->saldo = $car->total - $x_amount; // si el pago no fue por epayco o está pendiente, la venta queda con saldo
+            $invoice = $request->invoice;
+            $venta_service =  new VentaService();
+            $response = $venta_service->completar_venta($request, $invoice);
 
-                if ($x_cod_response == 1) {
-
-                    $venta->estado = 1; // si el pago fue exitoso, la venta queda pagada
-                    $venta->save();
-
-                    $total = $car->total;
-                    $venta_id = $venta->id;
-                    $payment =  new PaymentController();
-                    $payment->store($x_ref_payco, $total, $venta_id, $x_cod_response);
-                }
-                else{
-                    $venta->estado = 2;
-                    $venta->save();
-                }
-
-    
-                $admin = User::where('role_id', 2)->first();
-    
-                $details = [
-                    'title' => 'Se ha efectuado una nueva venta',
-                    'user' => $admin->nombres,
-                    'valor' => $venta->valor,
-                    'url' => url('/admin/ventas/'. $venta->id),
-                ];
-                
-                // Mail::to($admin->email)->send(new AdminVentaMail($details));
-
-
-
-                $numVentas = DB::table('ventas')->where('id', $venta->id)->count();
-
-                $arrayData = [
-                    'ventas' => [
-                        'numero' => $numVentas,
-                        'msj' => 'nueva venta',
-                        'url' => url('/admin/ventas/'. $venta->id)
-                    ]
-                ];
-
-                
-
-                SendVentaMail::dispatch($details, $admin);
-
-                User::findOrFail($admin->id)->notify(new NotificationAdmin($arrayData));
-
-                DB::commit();
-
-                $products = array();
-
-                $products['data'] = array();
-
-                // $carritos = CarritoProducto::join('producto_referencia', 
-                // 'carrito_producto.producto_referencia_id', 'producto_referencia.id')
-                // ->where('carrito_id', $car->id)
-                // ->get(); // con map(1)
-
-
-                // $prods = ProductoVenta::join('producto_referencia', 'producto_venta.producto_referencia_id',
-                // 'producto_referencia.id')
-                // ->where('venta_id', $venta->id)
-                // ->select('color_producto_id')
-                // ->groupBy('color_producto_id')
-                // ->get();(2)
-
-            
-                // $stocks = ProductoReferencia::whereIn('color_producto_id',$prods)
-                // ->select('color_producto_id as productos', DB::raw('SUM(stock) as stock'))
-                // ->groupBy('color_producto_id')
-                // ->get();(2)
-
-                $stocks = ProductoReferencia::select('color_producto_id as id',
-                    DB::raw('SUM(stock) as stock'))
-                    ->groupBy('color_producto_id')
-                    ->get();
-                
-                
-                $agotados = $stocks->filter(function ($value) {
-                    return $value->stock == 0;
-                });
-                
-                // broadcast(new ProductoAgotado($agotados));
-
-                // broadcast(new SalesEvent());
-
-                $response = ['data' => 'success', 'pedido' => $venta->pedido->id];
-
-                return response()->json($response);//$response
-            }
+            return $response;
 
         } catch (\Exception $e) {
-            DB::rollBack();
+            return $e;
         }
     }
 

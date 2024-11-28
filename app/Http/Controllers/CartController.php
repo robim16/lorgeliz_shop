@@ -11,10 +11,11 @@ use App\ProductoReferencia;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Log;
 
-class CarController extends Controller
+class CartController extends Controller
 {
 
     /**
@@ -30,22 +31,7 @@ class CarController extends Controller
     //en desuso, esta función fue reemplazada por la siguiente
     public function index()
     {
-        
-        //$cliente = Cliente::where('user_id',auth()->user()->id)->firstOrFail();
-
         $cliente = auth()->user()->cliente;
-       
-       
-
-        // $productos = CarritoProducto::whereHas('carrito',
-        // function (Builder $query) use ($cliente) {
-        //    $query->where('estado', 1)
-        //    ->where('cliente_id', $cliente->id);
-        // })
-        // ->with(['carrito', 'productoReferencia'])
-        // ->get();
-
-        //return view('tienda.cart', compact('productos'));
         return view('tienda.cart');
     }
 
@@ -92,10 +78,8 @@ class CarController extends Controller
         try {
 
             $carrito = Carrito::estado()
-            //where('estado', '1')
-            // ->where('cliente_id', auth()->user()->cliente->id)
-            ->cliente(auth()->user()->cliente->id)
-            ->first();
+                ->cliente(auth()->user()->cliente->id)
+                ->first();
     
             return ['carrito' => $carrito];
            
@@ -115,57 +99,79 @@ class CarController extends Controller
 
         try {
 
-            $carrito =  Carrito::estado()->cliente(auth()->user()->cliente->id)
-                ->first();
-
-
-            if (!$carrito) {
-              
-    
-                DB::beginTransaction();
-    
+            if (auth()) {
                 
-                $producto = ProductoReferencia::obtenerProducto($request->producto,$request->talla);
+                $carrito =  Carrito::estado()->cliente(auth()->user()->cliente->id)
+                    ->first();
     
-                // $precio = $producto[0]->precio_actual;
-                $configuracion = Configuracion::where('nit', '78900765')->first();
+                if (!$carrito) {
+                    
+        
+                    DB::beginTransaction();
+        
+                    
+                    $producto = ProductoReferencia::obtenerProducto($request->producto,$request->talla);
+        
+                    $configuracion = Configuracion::where('nit', '78900765')->first();
+        
+                    $precio = $producto[0]->colorProducto->producto->precio_actual;
     
-                $precio = $producto[0]->colorProducto->producto->precio_actual;
-
-                $cantidad = $request->cantidad;
-
-
-                $subtotal = $cantidad * $precio;
-                $envio = $configuracion->costo_envio;
+                    $cantidad = $request->cantidad;
     
-                $carrito = new Carrito();
-                $carrito->fecha = \Carbon\Carbon::now();
-                $carrito->subtotal = $subtotal;
-                $carrito->envio = $envio;
-                $carrito->total = $subtotal + $envio;
-                $carrito->cliente_id = auth()->user()->cliente->id;
-                $carrito->estado = '1';
     
-                $carrito->save();
+                    $subtotal = $cantidad * $precio;
+                    $envio = $configuracion->costo_envio;
+        
+                    $carrito = new Carrito();
+                    $carrito->fecha = \Carbon\Carbon::now();
+                    $carrito->subtotal = $subtotal;
+                    $carrito->envio = $envio;
+                    $carrito->total = $subtotal + $envio;
+                    $carrito->cliente_id = auth()->user()->cliente->id;
+                    $carrito->estado = '1';
+        
+                    $carrito->save();
+        
     
-
-                $carritoProducto = new CarritoProducto();
-                // $carritoProducto->producto_referencia_id = $producto[0]->referencia;
-                $carritoProducto->producto_referencia_id = $producto[0]->id;
-                $carritoProducto->carrito_id = $carrito->id;
-                $carritoProducto->cantidad = $cantidad;
+                    $carritoProducto = new CarritoProducto();
+                    $carritoProducto->producto_referencia_id = $producto[0]->id;
+                    $carritoProducto->carrito_id = $carrito->id;
+                    $carritoProducto->cantidad = $cantidad;
+        
+                    $carritoProducto->save();
+        
+                    $cart =  $this->userCart($request); //calcular número de productos en el carrito
+        
+                    broadcast(new UserCart($cart)); // notificar el evento
+                    
+                    DB::commit();
     
-                $carritoProducto->save();
+                } else {
     
-                $cart =  $this->userCart($request); //calcular número de productos en el carrito
-    
-                broadcast(new UserCart($cart)); // notificar el evento
-                
-                DB::commit();
+                    $this->update($request);
+                }
 
             } else {
 
-               $this->update($request);
+                $producto = ProductoReferencia::obtenerProducto($request->producto,$request->talla);
+               
+                $cartItems = json_decode($request->cookie('cart_items', '[]'), true);
+                $productFound = false;
+                foreach ($cartItems as &$item) {
+                    if ($item['product_id'] === $producto[0]->id) {
+                        $item['quantity'] += $request->cantidad;
+                        $productFound = true;
+                        break;
+                    }
+                }
+                if (!$productFound) {
+                    $cartItems[] = [
+                        'user_id' => null,
+                        'product_id' => $producto[0]->id,
+                        'quantity' => $request->cantidad,
+                    ];
+                }
+                Cookie::queue('cart_items', json_encode($cartItems), 60 * 24 * 30);
             }
             
 
