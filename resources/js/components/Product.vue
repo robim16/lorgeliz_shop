@@ -71,8 +71,6 @@
         methods: {
             setVisitas(){
 
-                // let url = `/lorgeliz_tienda_copia/public/productos/${this.producto}/update/visitas`;
-                // let url = `/lorgeliz_tienda_copia/public/api/productos/${this.producto}/update/visitas`;
                 let url = `${this.ruta}/api/productos/${this.producto}/update/visitas`
                 axios.put(url).then(response => {
                    
@@ -124,7 +122,6 @@
                         axios.get(url).then(response => {
                             this.arrayCarrito = response.data.carrito;
 
-                            console.log(response)
                             if (this.arrayCarrito != null){
                                 this.carrito = this.arrayCarrito.id;
 

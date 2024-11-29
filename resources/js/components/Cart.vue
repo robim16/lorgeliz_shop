@@ -334,7 +334,6 @@
         
             limpiarCarrito(){
                
-
                 let url = `${this.ruta}/cart/${this.carrito}/delete`
         
                 axios.delete(url).then(response => {
