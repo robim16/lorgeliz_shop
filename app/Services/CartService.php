@@ -280,4 +280,90 @@ class CartService
                 'error:'.json_encode($e));
         }
     }
+
+
+
+    public function remove_product(Request $request)
+    {
+
+        try {
+               
+                
+            $carrito = Carrito::where('cliente_id', auth()->user()->cliente->id)
+                ->estado()
+                ->first();
+    
+          
+    
+            $car_producto = CarritoProducto::where('producto_referencia_id', $request->producto)
+                ->where('carrito_id', $carrito->id) // se busca el producto que viene
+                ->first();
+    
+        
+    
+            $producto = ProductoReferencia::where('id', $request->producto) // se obtiene su precio
+                ->first();
+    
+    
+    
+            $carrito->subtotal = $carrito->subtotal - 
+                ($producto->colorProducto->producto->precio_actual * $car_producto->cantidad);
+    
+            $carrito->total =  $carrito->subtotal + $carrito->envio;
+    
+            $carrito->save();
+    
+            $car_producto->delete();
+    
+            $cart =  $this->user_cart($request); //calcular número de productos en el carrito
+    
+            broadcast(new UserCart($cart)); // notificar el evento
+    
+            $response = ['data' => 'success'];
+            
+            return response()->json($response);
+    
+        } catch (\Exception $e) {
+            Log::debug('Error eliminando el producto del carrito'.'carrito:'.' '.json_encode($carrito).
+                'producto:'.' '.json_encode($car_producto).' '.
+                'error:'.json_encode($e));
+        }
+    }
+
+
+    public function destroy(Request $request)
+    {
+        try{
+
+            DB::beginTransaction();
+
+            $productos = CarritoProducto::where('carrito_id', $request->carrito)->get(); // se seleccionan todos los productos del carrito del usuario
+
+            foreach ($productos as $producto) {
+                $producto->delete(); // borramos todos los productos
+            }
+
+            $carrito = Carrito::where('id', $request->carrito)->first();
+
+            $carrito->delete(); // se borra el carrito
+
+            DB::commit();
+
+            $cart =  $this->user_cart($request); //calcular número de productos en el carrito
+
+            broadcast(new UserCart($cart)); // notificar el evento
+
+            $response = ['data' => 'success'];
+            
+            return response()->json($response);
+
+        }
+
+        catch (\Exception $e){
+            DB::rollBack();
+
+            Log::debug('Error eliminando el carrito'.'carrito:'.' '.json_encode($carrito).' '.
+                'error:'.json_encode($e));
+        }
+    }
 }
