@@ -26,7 +26,7 @@ class CartController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except('userCart');
+        $this->middleware('auth')->except('userCart', 'store');
     }
 
   

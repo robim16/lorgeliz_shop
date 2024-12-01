@@ -245,8 +245,41 @@
                     }
 
                 } else {
+                    //si no está auntenticado se crea la cookie
                     
-                    window.location.href = `${this.ruta}/login`;
+                    let url = `${this.ruta}/cart`
+                    
+                    for (let i = 0; i < this.arrayTallas.length; i++) {
+                        if (this.arrayTallas[i].id == this.talla) {
+                            if (this.cantidad <= this.arrayTallas[i].stock) {
+                                axios.post(url,{
+                                'producto': this.producto,
+                                'talla': this.talla,
+                                'cantidad': this.cantidad
+                    
+                                }).then(response => {
+                                
+                                    swal(
+                                        'Producto agregado al carrito!',
+                                        'Haz agregado este producto a tu carrito',
+                                        'success'
+                                    )
+                                }).catch(error => {
+                                    console.log(error);
+                                });
+                            }
+                            else{
+
+                                let datos = 'No se puede agregar el producto al carrito!. La cantidad debe ser máximo ' + this.arrayTallas[i].stock;
+                                
+                                bootbox.alert(datos);
+                        
+                            }
+                        }
+                        
+                    }
+
+                    // window.location.href = `${this.ruta}/login`;
                 }
 
             },

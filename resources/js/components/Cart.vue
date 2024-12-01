@@ -278,8 +278,7 @@
                         this.empty = true;
                     }
                     else{
-                        // this.total = this.arrayProductos[0].total;
-                        // this.totalneto = this.arrayProductos[0].total;
+                        
                         this.carrito = this.arrayProductos[0].carrito.id;
                         this.subtotal = parseInt(this.arrayProductos[0].carrito.subtotal);
                         this.total = parseInt(this.arrayProductos[0].carrito.total);
@@ -345,7 +344,7 @@
                         )
 
                         this.loadCart();
-                        // window.location.href = `/lorgeliz_tienda_copia/public/`;
+                       
 				    }
                 }).catch(error => {
                     console.log(error);

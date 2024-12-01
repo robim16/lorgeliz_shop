@@ -2478,8 +2478,6 @@ __webpack_require__.r(__webpack_exports__);
         if (_this.arrayProductos.length == 0) {
           _this.empty = true;
         } else {
-          // this.total = this.arrayProductos[0].total;
-          // this.totalneto = this.arrayProductos[0].total;
           _this.carrito = _this.arrayProductos[0].carrito.id;
           _this.subtotal = parseInt(_this.arrayProductos[0].carrito.subtotal);
           _this.total = parseInt(_this.arrayProductos[0].carrito.total);
@@ -2536,8 +2534,7 @@ __webpack_require__.r(__webpack_exports__);
         if (response.data.data == 'success') {
           swal('Haz limpiado tu carrito!', 'Tu carrito de compras está vacío!', 'success');
 
-          _this4.loadCart(); // window.location.href = `/lorgeliz_tienda_copia/public/`;
-
+          _this4.loadCart();
         }
       })["catch"](function (error) {
         console.log(error);
@@ -3734,7 +3731,9 @@ __webpack_require__.r(__webpack_exports__);
           if (_this3.option == 1) {
             var _url = "".concat(_this3.ruta, "/ventas");
 
-            axios.post(_url).then(function (response) {
+            axios.post(_url, {
+              'invoice': _this3.invoice
+            }).then(function (response) {
               if (response.data.data == 'success') {
                 // var pedido = response.pedido;
                 swal('Pedido recibido!', 'Hemos recibido tu pedido. En breve empezaremos a alistarlo y nos pondremos en contacto contigo!', 'success'); // window.location.href = `/lorgeliz_tienda_copia/public/pedidos/` + pedido;
@@ -4659,8 +4658,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     setVisitas: function setVisitas() {
-      // let url = `/lorgeliz_tienda_copia/public/productos/${this.producto}/update/visitas`;
-      // let url = `/lorgeliz_tienda_copia/public/api/productos/${this.producto}/update/visitas`;
       var url = "".concat(this.ruta, "/api/productos/").concat(this.producto, "/update/visitas");
       axios.put(url).then(function (response) {})["catch"](function (error) {
         console.log(error);
@@ -4701,7 +4698,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           if (this.error) this.error = false;
           axios.get(url).then(function (response) {
             _this2.arrayCarrito = response.data.carrito;
-            console.log(response);
 
             if (_this2.arrayCarrito != null) {
               _this2.carrito = _this2.arrayCarrito.id;
@@ -4790,7 +4786,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           this.error = true;
         }
       } else {
-        window.location.href = "".concat(this.ruta, "/login");
+        //si no está auntenticado se crea la cookie
+        var _url3 = "".concat(this.ruta, "/cart");
+
+        for (var i = 0; i < this.arrayTallas.length; i++) {
+          if (this.arrayTallas[i].id == this.talla) {
+            if (this.cantidad <= this.arrayTallas[i].stock) {
+              axios.post(_url3, {
+                'producto': this.producto,
+                'talla': this.talla,
+                'cantidad': this.cantidad
+              }).then(function (response) {
+                swal('Producto agregado al carrito!', 'Haz agregado este producto a tu carrito', 'success');
+              })["catch"](function (error) {
+                console.log(error);
+              });
+            } else {
+              var datos = 'No se puede agregar el producto al carrito!. La cantidad debe ser máximo ' + this.arrayTallas[i].stock;
+              bootbox.alert(datos);
+            }
+          }
+        } // window.location.href = `${this.ruta}/login`;
+
       }
     }
   },
@@ -78172,8 +78189,8 @@ window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/d
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   authEndpoint: 'http://127.0.0.1:8000/broadcasting/auth',
   broadcaster: 'pusher',
-  key: "",
-  cluster: "mt1",
+  key: "395d78638e3ae29a21e8",
+  cluster: "us2",
   encrypted: true,
   auth: {
     headers: {
