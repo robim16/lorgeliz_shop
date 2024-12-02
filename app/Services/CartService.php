@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Helpers\Cart;
 
 class CartService
 {
@@ -60,7 +61,7 @@ class CartService
         
                     $carritoProducto->save();
         
-                    $cart =  $this->user_cart($request); //calcular número de productos en el carrito
+                    $cart =  $this->user_cart(); //calcular número de productos en el carrito
         
                     broadcast(new UserCart($cart)); // notificar el evento
                     
@@ -92,6 +93,11 @@ class CartService
                     ];
                 }
                 Cookie::queue('cart_items', json_encode($cartItems), 60 * 24 * 30);
+
+
+                $cart =  $this->user_cart(); //calcular número de productos en el carrito
+        
+                broadcast(new UserCart($cart)); // notificar el evento
             }
             
 
@@ -160,7 +166,7 @@ class CartService
 
             DB::commit();
 
-            $cart =  $this->user_cart($request); //calcular número de productos en el carrito
+            $cart =  $this->user_cart(); //calcular número de productos en el carrito
 
             broadcast(new UserCart($cart)); // notificar el evento
 
@@ -181,7 +187,8 @@ class CartService
     {
         try {
 
-            if (auth()->user()) { // se obtiene el número de productos del carrito del usuario autenticado
+            // se obtiene el número de productos del carrito del usuario
+            if (auth()->user()) { 
     
                 $productos = CarritoProducto::whereHas('carrito', function (Builder $query){
                     $query->estado()
@@ -197,7 +204,8 @@ class CartService
                 }
             }
             else{
-                $cantidad = 0;
+
+                $cantidad = Cart::getCartItemsCount();
             }
     
             return ['cantidad' => $cantidad];
@@ -264,7 +272,7 @@ class CartService
 
             DB::commit();
 
-            $cart =  $this->user_cart($request); //calcular número de productos en el carrito
+            $cart =  $this->user_cart(); //calcular número de productos en el carrito
             
             broadcast(new UserCart($cart)); // notificar el evento
 
@@ -315,7 +323,7 @@ class CartService
     
             $car_producto->delete();
     
-            $cart =  $this->user_cart($request); //calcular número de productos en el carrito
+            $cart =  $this->user_cart(); //calcular número de productos en el carrito
     
             broadcast(new UserCart($cart)); // notificar el evento
     
@@ -349,7 +357,7 @@ class CartService
 
             DB::commit();
 
-            $cart =  $this->user_cart($request); //calcular número de productos en el carrito
+            $cart =  $this->user_cart(); //calcular número de productos en el carrito
 
             broadcast(new UserCart($cart)); // notificar el evento
 

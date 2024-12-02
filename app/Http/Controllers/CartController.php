@@ -43,10 +43,10 @@ class CartController extends Controller
 			abort(401, 'Acceso denegado');
 		}
 
-        $cliente = Cliente::where('user_id',auth()->user()->id)->firstOrFail();
-       
-
+        
         try {
+            
+            $cliente = Cliente::where('user_id',auth()->user()->id)->firstOrFail();
            
             $productos = CarritoProducto::whereHas('carrito',
                 function (Builder $query) use ($cliente) {

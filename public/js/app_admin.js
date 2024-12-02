@@ -2560,10 +2560,12 @@ __webpack_require__.r(__webpack_exports__);
       console.log(e);
     });
   },
-  mounted: function mounted() {// window.Echo.private(`cart-updated.${this.user_id}`).listen('UserCart', (e) => 
-    //     this.loadCart();
-    // });
-    // window.Echo.channel('producto-agotado').listen('ProductoAgotado', (e) => {
+  mounted: function mounted() {
+    var _this6 = this;
+
+    window.Echo["private"]("cart-updated.".concat(this.user_id)).listen('UserCart', function (e) {
+      _this6.loadCart();
+    }); // window.Echo.channel('producto-agotado').listen('ProductoAgotado', (e) => {
     //     products = e.data;
     //     Object.values(products).map(product => {
     //         const index = this.arrayProductos.findIndex(p => p.id == product.id);
