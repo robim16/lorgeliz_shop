@@ -5702,6 +5702,7 @@ __webpack_require__.r(__webpack_exports__);
     window.Echo["private"]("cart-updated.".concat(this.user_id)).listen('.new-product-to-cart', function (e) {
       var cart = e.cart;
       _this2.productos = cart.cantidad;
+      console.log(e);
     });
   }
 });

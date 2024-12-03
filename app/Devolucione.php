@@ -13,11 +13,13 @@ class Devolucione extends Model
 
     protected $fillable = ['fecha', 'cantidad', 'producto_referencia_id', 'venta_id', 'estado'];
 
-    public function productoReferencia (){
+    public function productoReferencia()
+    {
         return $this->belongsTo(ProductoReferencia::class);
     }
 
-    public function venta (){
+    public function venta()
+    {
         return $this->belongsTo(Venta::class);
     }
 

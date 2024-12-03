@@ -11,6 +11,8 @@ use App\Producto;
 // use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
 use App\Events\VisitEvent;
+use App\Helpers\Cart;
+
 // use Illuminate\Support\Facades\Storage;
 // use Intervention\Image\Facades\Image;
 // use Spatie\Dropbox\Client;
@@ -32,6 +34,8 @@ class ProductController extends Controller
     {
 
         try {
+
+            // return Cart::moveCartItemsIntoDb();
             
             $producto = ColorProducto::with(['imagenes:imageable_id,url', 'color:id,nombre',
                 'producto.tipo.subcategoria.categoria'])

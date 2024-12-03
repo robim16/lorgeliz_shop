@@ -28,11 +28,11 @@ class PaymentController extends Controller
         try {
             
             $pagos = Pago::orWhere('pagos.venta_id','like',"%$busqueda%")
-            ->orWhere('pagos.estado','like',"%$busqueda%")
-            ->orWhere('pagos.id', $busqueda)
-            ->orWhere('pagos.monto', $busqueda)
-            ->orderBy('pagos.fecha', 'DESC')
-            ->paginate(5);
+                ->orWhere('pagos.estado','like',"%$busqueda%")
+                ->orWhere('pagos.id', $busqueda)
+                ->orWhere('pagos.monto', $busqueda)
+                ->orderBy('pagos.fecha', 'DESC')
+                ->paginate(5);
     
             return view('admin.pagos.index', compact('pagos'));
 
@@ -67,11 +67,11 @@ class PaymentController extends Controller
         try {
             
             $pago = Pago::where('pagos.id', $id)
-            ->orderBy('pagos.fecha', 'DESC')
-            ->first();
+                ->orderBy('pagos.fecha', 'DESC')
+                ->first();
     
             $pdf = \PDF::loadView('admin.pdf.pago',['pago'=>$pago])
-            ->setPaper('a4', 'landscape');
+                ->setPaper('a4', 'landscape');
             
             return $pdf->download('pago-'.$pago->id.'.pdf');
 
@@ -94,7 +94,7 @@ class PaymentController extends Controller
             $count = $pagos->count();
     
             $pdf = \PDF::loadView('admin.pdf.listadopagos',['pagos'=>$pagos, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
+                ->setPaper('a4', 'landscape');
             
             return $pdf->download('listadopagos.pdf');
 

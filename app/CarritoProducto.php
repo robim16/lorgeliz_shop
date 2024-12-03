@@ -16,11 +16,13 @@ class CarritoProducto extends Pivot
 
     public $timestamps = false;
 
-    public function carrito (){
+    public function carrito()
+    {
         return $this->belongsTo(Carrito::class);
     }
 
-    public function productoReferencia (){
+    public function productoReferencia()
+    {
         return $this->belongsTo(ProductoReferencia::class, 'producto_referencia_id');
     }
 }

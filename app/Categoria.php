@@ -11,7 +11,8 @@ class Categoria extends Model
     public static function boot () {
         parent::boot();
         
-        static::creating(function(Categoria $categoria) {
+        static::creating(function(Categoria $categoria) 
+        {
           
           $slug = \Str::slug($categoria->nombre);
           
@@ -23,7 +24,8 @@ class Categoria extends Model
 
     }
 
-    public function subcategorias (){
+    public function subcategorias()
+    {
         return $this->hasMany(Subcategoria::class);
     }
 
