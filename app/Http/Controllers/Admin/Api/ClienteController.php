@@ -11,19 +11,18 @@ class ClienteController extends Controller
 
     public function index(Request $request)
     {
-        // if (!$request->ajax()) return back();
 
         try {
 
             $buscar = $request->buscar;
             $criterio = $request->criterio;
-    
+
             $clientes = User::when($buscar, function ($query) use ($buscar, $criterio) {
-                return $query->where('users.'.$criterio, 'like', '%'. $buscar . '%');
+                return $query->where('users.' . $criterio, 'like', '%' . $buscar . '%');
             })
-            ->with('imagene', 'cliente')
-            ->paginate(5);
-    
+                ->with('imagene', 'cliente')
+                ->paginate(5);
+
             return [
                 'pagination' => [
                     'total'        => $clientes->total(),
@@ -35,10 +34,8 @@ class ClienteController extends Controller
                 ],
                 'clientes' => $clientes
             ];
-           
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
 }

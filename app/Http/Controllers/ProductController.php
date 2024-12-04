@@ -51,7 +51,7 @@ class ProductController extends Controller
 
             
         } catch (\Exception $e) {
-            //throw $th;
+            throw $e;
         }
 
     }

@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Carrito;
+use App\CarritoProducto;
 
 class Cart {
 
@@ -41,25 +42,31 @@ class Cart {
 
         $carrito =  Carrito::estado()->cliente(auth()->user()->cliente->id)
             ->first();
-
     
-        return $dbCartItems = $carrito->carritoProductos->keyBy('producto_referencia_id');
+    
+        $dbCartItems = $carrito->carritoProductos->keyBy('producto_referencia_id');
 
         $newCartItems = [];
         foreach ($cartItems as $cartItem) {
-            if (isset($dbCartItems[$cartItem['product_id']])) {
-                continue;
-            }
 
-            $newCartItems[] = [
-                'user_id' => $request->user()->id,
-                'product_id' => $cartItem['product_id'],
-                'quantity' => $cartItem['quantity']
-            ];
+            if (isset($dbCartItems[$cartItem['product_id']])) {
+                $quantity_cart = $dbCartItems[$cartItem['product_id']]['cantidad'];
+                $quantity = $cartItem['quantity'];
+                $new_quantity = $quantity_cart + $quantity;
+                $dbCartItems[$cartItem['product_id']]->update(['cantidad' => $new_quantity]);
+            }
+            else{
+
+                $newCartItems[] = [
+                    'carrito_id' => $carrito->id,
+                    'producto_referencia_id' => $cartItem['product_id'],
+                    'cantidad' => $cartItem['quantity']
+                ];
+            }
         }
 
         if (!empty($newCartItems)) {
-            CartItem::insert($newCartItems);
+            CarritoProducto::insert($newCartItems);
         }
     }
 

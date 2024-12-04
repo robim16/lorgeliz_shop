@@ -37,21 +37,19 @@ class InformesController extends Controller
 
 
         try {
-           
+
             $ventas = Venta::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio,
             COUNT(id) as cantidad, SUM(valor) as total')
-            ->whereYear('fecha',$anio)
-            // ->where('estado', '!=', '3')
-            ->estado()
-            ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
-            ->paginate(5);
-    
-            return view('admin.informes.ventas.index',compact('ventas'));
+                ->whereYear('fecha', $anio)
+                // ->where('estado', '!=', '3')
+                ->estado()
+                ->groupBy(DB::raw('MONTH(fecha)'), DB::raw('YEAR(fecha)'))
+                ->paginate(5);
 
+            return view('admin.informes.ventas.index', compact('ventas'));
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
 
 
@@ -64,32 +62,30 @@ class InformesController extends Controller
 
         $anio = date('Y');
 
-       
+
 
         try {
-            
+
             $ventas = Venta::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio
                 ,COUNT(id) as cantidad, SUM(valor) as total')
-                ->whereYear('fecha',$anio)
-                ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
+                ->whereYear('fecha', $anio)
+                ->groupBy(DB::raw('MONTH(fecha)'), DB::raw('YEAR(fecha)'))
                 ->get();
-    
+
 
             $count = $ventas->count();
-    
-            $pdf = \PDF::loadView('admin.pdf.informeventas',['ventas'=>$ventas, 'count'=>$count])
+
+            $pdf = \PDF::loadView('admin.pdf.informeventas', ['ventas' => $ventas, 'count' => $count])
                 ->setPaper('a4', 'landscape');
 
             return $pdf->download('ventas.pdf');
-
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
 
 
-    public function mostrarVentas(Request $request,$mes)
+    public function mostrarVentas(Request $request, $mes)
     {
 
         $fecha_de = $request->get('fecha_de');
@@ -98,7 +94,7 @@ class InformesController extends Controller
         $anio = date('Y');
 
         if ($fecha_de == '') {
-           $fecha_de = '01/01/'.$anio;
+            $fecha_de = '01/01/' . $anio;
         }
 
         if ($fecha_a == '') {
@@ -107,25 +103,23 @@ class InformesController extends Controller
 
 
         try {
-        
-            $ventas = ProductoVenta::whereHas('venta', function (Builder $query) 
-            use ($mes, $anio, $fecha_de, $fecha_a) {
-                $query->whereMonth('fecha',$mes)
-                ->whereYear('fecha',$anio)
-                ->whereBetween('fecha',[$fecha_de, $fecha_a])
-                ->orderBy('created_at', 'DESC');
-            })
-            ->with('venta.factura')
-            ->select('id','venta_id', DB::raw('SUM(cantidad) as cantidad'))
-            ->groupBy('venta_id')
-            ->paginate(5);
-    
-            return view('admin.informes.ventas.show',compact('ventas'));
 
+            $ventas = ProductoVenta::whereHas('venta', function (Builder $query)
+            use ($mes, $anio, $fecha_de, $fecha_a) {
+                $query->whereMonth('fecha', $mes)
+                    ->whereYear('fecha', $anio)
+                    ->whereBetween('fecha', [$fecha_de, $fecha_a])
+                    ->orderBy('created_at', 'DESC');
+            })
+                ->with('venta.factura')
+                ->select('id', 'venta_id', DB::raw('SUM(cantidad) as cantidad'))
+                ->groupBy('venta_id')
+                ->paginate(5);
+
+            return view('admin.informes.ventas.show', compact('ventas'));
         } catch (\Exception $e) {
             //throw $th;
         }
-        
     }
 
 
@@ -137,35 +131,33 @@ class InformesController extends Controller
 
         try {
 
-            $ventas = ProductoVenta::whereHas('venta', function (Builder $query) 
-            use ($mes,$anio) {
-                $query->whereMonth('fecha',$mes)
-                ->whereYear('fecha',$anio);
+            $ventas = ProductoVenta::whereHas('venta', function (Builder $query)
+            use ($mes, $anio) {
+                $query->whereMonth('fecha', $mes)
+                    ->whereYear('fecha', $anio);
             })
-            ->with('venta.factura')
-            ->select('id','venta_id', DB::raw('SUM(cantidad) as cantidad'))
-            ->groupBy('venta_id')
-            ->get();
+                ->with('venta.factura')
+                ->select('id', 'venta_id', DB::raw('SUM(cantidad) as cantidad'))
+                ->groupBy('venta_id')
+                ->get();
 
 
             $count = $ventas->count();
-    
-            $pdf = \PDF::loadView('admin.pdf.informeventashow',['ventas'=>$ventas, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
-            
+
+            $pdf = \PDF::loadView('admin.pdf.informeventashow', ['ventas' => $ventas, 'count' => $count])
+                ->setPaper('a4', 'landscape');
+
             return $pdf->download('ventas_mes.pdf');
-            
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
 
 
 
     public function ventaProductos(Request $request)
     {
-       
+
         $busqueda = $request->busqueda;
 
 
@@ -176,23 +168,23 @@ class InformesController extends Controller
         try {
 
 
-            $productos = ProductoVenta::whereHas('productoReferencia.colorProducto.producto', 
-            function (Builder $query) use ($busqueda) {
-                $query->orWhere('nombre','like',"%$busqueda%");//no funciona el filtro
-            })
-            ->with('productoReferencia')
-            ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
-            ->orderBy('cantidad', 'DESC')
-            ->groupBy('producto_referencia_id')
-            ->paginate(5);
-    
-            
-            return view('admin.informes.productos.index',compact('productos'));
-           
+            $productos = ProductoVenta::whereHas(
+                'productoReferencia.colorProducto.producto',
+                function (Builder $query) use ($busqueda) {
+                    $query->orWhere('nombre', 'like', "%$busqueda%"); //no funciona el filtro
+                }
+            )
+                ->with('productoReferencia')
+                ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
+                ->orderBy('cantidad', 'DESC')
+                ->groupBy('producto_referencia_id')
+                ->paginate(5);
+
+
+            return view('admin.informes.productos.index', compact('productos'));
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
 
 
@@ -201,37 +193,35 @@ class InformesController extends Controller
     {
 
         try {
-           
+
             $productos = ProductoVenta::with('productoReferencia')
-            ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
-            ->groupBy('producto_referencia_id')
-            ->orderBy('cantidad', 'DESC')
-            ->get();
-            
-           
+                ->select('producto_referencia_id', DB::raw('SUM(cantidad) as cantidad'))
+                ->groupBy('producto_referencia_id')
+                ->orderBy('cantidad', 'DESC')
+                ->get();
+
+
             $count = $productos->count();
 
-            $pdf = \PDF::loadView('admin.pdf.informeproductos',['productos'=>$productos, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
-    
-            return $pdf->download('productos.pdf');
+            $pdf = \PDF::loadView('admin.pdf.informeproductos', ['productos' => $productos, 'count' => $count])
+                ->setPaper('a4', 'landscape');
 
+            return $pdf->download('productos.pdf');
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
-    
+
 
 
     public function informeClientes(Request $request)
     {
-        
+
         $busqueda = $request->busqueda;
 
 
         try {
-            
+
             // $clientes = Venta::when($busqueda, function ($query) use ($busqueda) {
             //     return $query->whereHas('cliente.user',  function (Builder $query) use ($busqueda) {
             //         $query->orWhere('id','like',"%$busqueda%")
@@ -245,15 +235,13 @@ class InformesController extends Controller
             // ->groupBy('cliente_id')
             // ->orderBy('cantidad', 'DESC')
             // ->paginate(5);
-    
+
             // return view('admin.informes.clientes.index',compact('clientes'));
 
             return view('admin.informes.clientes.index');
-
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
 
 
@@ -264,22 +252,20 @@ class InformesController extends Controller
         try {
 
             $clientes = Venta::with('cliente.user')
-            ->select('cliente_id', DB::raw('COUNT(id) as cantidad'))
-            ->groupBy('cliente_id')
-            ->orderBy('cantidad', 'DESC')
-            ->get();
+                ->select('cliente_id', DB::raw('COUNT(id) as cantidad'))
+                ->groupBy('cliente_id')
+                ->orderBy('cantidad', 'DESC')
+                ->get();
 
 
             $count = $clientes->count();
-    
-            $pdf = \PDF::loadView('admin.pdf.informeclientes',['clientes'=>$clientes, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
+
+            $pdf = \PDF::loadView('admin.pdf.informeclientes', ['clientes' => $clientes, 'count' => $count])
+                ->setPaper('a4', 'landscape');
             return $pdf->download('clientes.pdf');
-           
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
 
 
@@ -290,26 +276,24 @@ class InformesController extends Controller
 
 
         try {
-           
+
             $pagos = Pago::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio,
             COUNT(id) as cantidad, SUM(monto) as total')
-            ->whereYear('fecha',$anio)
-            ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
-            ->paginate(5);
-    
-            return view('admin.informes.pagos.index',compact('pagos'));
+                ->whereYear('fecha', $anio)
+                ->groupBy(DB::raw('MONTH(fecha)'), DB::raw('YEAR(fecha)'))
+                ->paginate(5);
 
+            return view('admin.informes.pagos.index', compact('pagos'));
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
 
 
 
     public function pdfInformePagos(Request $request)
     {
-        
+
         $anio = date('Y');
 
         try {
@@ -317,29 +301,26 @@ class InformesController extends Controller
 
             $pagos = Pago::selectRaw('MONTH(fecha) as mes, YEAR(fecha) as anio,
                 COUNT(id) as cantidad, SUM(monto) as total')
-                ->whereYear('fecha',$anio)
-                ->groupBy(DB::raw('MONTH(fecha)'),DB::raw('YEAR(fecha)'))
+                ->whereYear('fecha', $anio)
+                ->groupBy(DB::raw('MONTH(fecha)'), DB::raw('YEAR(fecha)'))
                 ->get();
-            
-    
+
+
 
             $count = $pagos->count();
-    
-            $pdf = \PDF::loadView('admin.pdf.informepagos',['pagos'=>$pagos, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
-    
+
+            $pdf = \PDF::loadView('admin.pdf.informepagos', ['pagos' => $pagos, 'count' => $count])
+                ->setPaper('a4', 'landscape');
+
             return $pdf->download('pagos.pdf');
-           
         } catch (\Exception $e) {
             //throw $th;
         }
-
-
     }
 
 
 
-    public function mostrarPagos(Request $request,$mes)
+    public function mostrarPagos(Request $request, $mes)
     {
 
         $fecha_de = $request->get('fecha_de');
@@ -348,7 +329,7 @@ class InformesController extends Controller
         $anio = date('Y');
 
         if ($fecha_de == '') {
-           $fecha_de = '01/01/'.$anio;
+            $fecha_de = '01/01/' . $anio;
         }
 
         if ($fecha_a == '') {
@@ -358,18 +339,16 @@ class InformesController extends Controller
 
         try {
 
-            $pagos = Pago::whereMonth('fecha',$mes)
-            ->whereBetween('fecha',[$fecha_de, $fecha_a])
-            ->groupBy('id')
-            ->orderBy('created_at', 'DESC')
-            ->paginate(5);
-    
-            return view('admin.informes.pagos.show',compact('pagos'));
-           
+            $pagos = Pago::whereMonth('fecha', $mes)
+                ->whereBetween('fecha', [$fecha_de, $fecha_a])
+                ->groupBy('id')
+                ->orderBy('created_at', 'DESC')
+                ->paginate(5);
+
+            return view('admin.informes.pagos.show', compact('pagos'));
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
 
 
@@ -381,24 +360,21 @@ class InformesController extends Controller
         $mes = date('m', strtotime($request->mes));
 
         try {
-           
-            $pagos = Pago::whereMonth('fecha',$mes)
-            ->orderBy('created_at', 'DESC')
-            ->get();
-            
-    
+
+            $pagos = Pago::whereMonth('fecha', $mes)
+                ->orderBy('created_at', 'DESC')
+                ->get();
+
+
             $count = $pagos->count();
 
-            $pdf = \PDF::loadView('admin.pdf.informepagosmes',['pagos'=>$pagos, 'count'=>$count])
-            ->setPaper('a4', 'landscape');
-    
+            $pdf = \PDF::loadView('admin.pdf.informepagosmes', ['pagos' => $pagos, 'count' => $count])
+                ->setPaper('a4', 'landscape');
+
             return $pdf->download('pagos_mes.pdf');
-
-
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
 
 
@@ -407,21 +383,22 @@ class InformesController extends Controller
     {
 
         try {
-            
-            $saldos_pendientes = Venta::with('cliente')
-            ->where('saldo', '>', '0')
-            ->where('estado', '=', '2')
-            ->select('cliente_id', DB::raw('COUNT(id) as facturas'),
-            DB::raw('SUM(saldo) as saldos'))
-            ->groupBy('cliente_id')
-            ->paginate(5);
-    
-            return view('admin.informes.saldos.index',compact('saldos_pendientes'));
 
+            $saldos_pendientes = Venta::with('cliente')
+                ->where('saldo', '>', '0')
+                ->where('estado', '=', '2')
+                ->select(
+                    'cliente_id',
+                    DB::raw('COUNT(id) as facturas'),
+                    DB::raw('SUM(saldo) as saldos')
+                )
+                ->groupBy('cliente_id')
+                ->paginate(5);
+
+            return view('admin.informes.saldos.index', compact('saldos_pendientes'));
         } catch (\Exception $e) {
             //throw $th;
         }
-        
     }
 
 
@@ -430,27 +407,30 @@ class InformesController extends Controller
     {
 
         try {
-            
+
             $saldos_pendientes = Venta::with('cliente')
-            ->where('saldo', '>', '0')
-            ->where('estado', '=', '2')
-            ->select('cliente_id', DB::raw('COUNT(id) as facturas'),
-            DB::raw('SUM(saldo) as saldos'))
-            ->groupBy('cliente_id')
-            ->get();
-    
-          
+                ->where('saldo', '>', '0')
+                ->where('estado', '=', '2')
+                ->select(
+                    'cliente_id',
+                    DB::raw('COUNT(id) as facturas'),
+                    DB::raw('SUM(saldo) as saldos')
+                )
+                ->groupBy('cliente_id')
+                ->get();
+
+
             $count = $saldos_pendientes->count();
-    
-            $pdf = \PDF::loadView('admin.pdf.informesaldos',['saldos_pendientes'=>$saldos_pendientes,
-             'count'=>$count])->setPaper('a4', 'landscape');
+
+            $pdf = \PDF::loadView('admin.pdf.informesaldos', [
+                'saldos_pendientes' => $saldos_pendientes,
+                'count' => $count
+            ])->setPaper('a4', 'landscape');
 
             return $pdf->download('saldosclientes.pdf');
-
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
 
 
@@ -459,21 +439,17 @@ class InformesController extends Controller
     {
 
         try {
-          
-            $saldos_pendientes = Venta::with('cliente')
-            ->where('saldo', '>', '0')
-            ->where('estado', '=', '2')
-            ->where('cliente_id', $cliente->id)
-            ->orderBy('fecha', 'DESC')
-            ->paginate(5);
-    
-            return view('admin.informes.saldos.show',compact('saldos_pendientes'));
 
+            $saldos_pendientes = Venta::with('cliente')
+                ->where('saldo', '>', '0')
+                ->where('estado', '=', '2')
+                ->where('cliente_id', $cliente->id)
+                ->orderBy('fecha', 'DESC')
+                ->paginate(5);
+
+            return view('admin.informes.saldos.show', compact('saldos_pendientes'));
         } catch (\Exception $e) {
             //throw $th;
         }
-
     }
-    
-
 }

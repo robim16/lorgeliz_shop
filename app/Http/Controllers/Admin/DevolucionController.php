@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Cliente;
-Use App\Devolucione;
+use App\Devolucione;
 use App\Events\AddProductEvent;
-Use App\Producto;
-Use App\ProductoVenta;
-Use App\ProductoReferencia;
-Use App\User;
-Use App\Venta;
+use App\Producto;
+use App\ProductoVenta;
+use App\ProductoReferencia;
+use App\User;
+use App\Venta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Mail\DevolucionStatusMail;
@@ -21,7 +21,7 @@ use App\Jobs\SendDevolucionStatusMail;
 
 class DevolucionController extends Controller
 {
-     /**
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -35,13 +35,13 @@ class DevolucionController extends Controller
     {
         //devoluciones en panel de admin
         $devoluciones = Devolucione::with('venta.cliente.user')
-        ->orderBy('devoluciones.created_at','DESC')
-        ->paginate(5);
+            ->orderBy('devoluciones.created_at', 'DESC')
+            ->paginate(5);
 
         $estados = $this->estados_devolucion();
         // return $devoluciones;
 
-        return view('admin.devoluciones.index',compact('devoluciones', 'estados'));
+        return view('admin.devoluciones.index', compact('devoluciones', 'estados'));
     }
 
     /**
@@ -58,28 +58,28 @@ class DevolucionController extends Controller
         // $producto_devolucion = Devolucione::with(['venta', 'productoReferencia'])
         // ->where('id', $id)
         // ->paginate(5);
-        
 
-        return view('admin.devoluciones.show',compact('producto_devolucion'));
+
+        return view('admin.devoluciones.show', compact('producto_devolucion'));
     }
 
 
-    
+
     public function pdfListarDevoluciones(Request $request)
     {
-        
-        $devoluciones = Devolucione:: with('venta')->get();
+
+        $devoluciones = Devolucione::with('venta')->get();
 
 
         $count = $devoluciones->count();
 
-        $pdf = \PDF::loadView('admin.pdf.listado_devoluciones',['devoluciones'=>$devoluciones, 'count'=>$count])
-        ->setPaper('a4', 'landscape');
-        
+        $pdf = \PDF::loadView('admin.pdf.listado_devoluciones', ['devoluciones' => $devoluciones, 'count' => $count])
+            ->setPaper('a4', 'landscape');
+
         return $pdf->download('listado_devoluciones.pdf');
     }
 
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -90,7 +90,7 @@ class DevolucionController extends Controller
     public function update(Request $request)
     {
 
-        
+
         $devolucion = Devolucione::where('id', $request->devolucion_id)->firstOrFail();
         $devolucion->estado = $request->estado;
 
@@ -100,7 +100,7 @@ class DevolucionController extends Controller
             'cliente' => $devolucion->venta->cliente->user->nombres,
             'fecha' => date('d/m/Y', strtotime($devolucion->fecha)),
             'estado' => $devolucion->estado,
-            'url' => url('/devoluciones/'. $devolucion->id),
+            'url' => url('/devoluciones/' . $devolucion->id),
         ];
 
 
@@ -141,7 +141,7 @@ class DevolucionController extends Controller
                 // if ($totalproducto == $venta->valor) {
 
                 //     $venta->saldo = 0;
-                    
+
                 //     if ($pagos[0]->total > 0) {
 
                 //         //anular pagos
@@ -149,47 +149,40 @@ class DevolucionController extends Controller
                 // }
                 // else{
 
-                    if ($pagos[0]->total == 0) {
-                       
-                        $venta->saldo = $venta->saldo - $totalproducto;// al saldo de la venta se resta el subtotal del producto 
-                    
-                    } else {
-                        //sumatoria de pagos es > 0
+                if ($pagos[0]->total == 0) {
 
-                        if ($totalproducto <= $venta->saldo) {//si el subtotal del producto  es <= al saldo restante
+                    $venta->saldo = $venta->saldo - $totalproducto; // al saldo de la venta se resta el subtotal del producto 
 
-                            $saldo = $venta->saldo - $totalproducto;
+                } else {
+                    //sumatoria de pagos es > 0
 
-                            $venta->saldo = $saldo;
+                    if ($totalproducto <= $venta->saldo) { //si el subtotal del producto  es <= al saldo restante
 
-                            $deducciones = $pagos[0]->total + $totalproducto;//se suman los pagos totales y el subtotal del producto
+                        $saldo = $venta->saldo - $totalproducto;
 
-                            if ($saldo == 0 && $deducciones > $venta->total) {
-                                //anular pagos
-                            }
+                        $venta->saldo = $saldo;
+
+                        $deducciones = $pagos[0]->total + $totalproducto; //se suman los pagos totales y el subtotal del producto
+
+                        if ($saldo == 0 && $deducciones > $venta->total) {
+                            //anular pagos
+                        }
+                    } else { //subtotal del producto > saldo de la venta
+
+                        if ($venta->saldo > 0) { //si queda saldo aún
+                            //190 150 40 170
+
+                            //si total pagos > total producto
+                            //saldo = (total venta - subtotal producto) - (total pagos - subtotal producto)
+
+                            //si no, saldo = saldo si se devuelve el dinero
+                        } else {
+                            //anular todos los pagos si el subtotal del producto + 
+                            //envío es igual al total de la venta
 
                         }
-
-                        else{ //subtotal del producto > saldo de la venta
-
-                            if ($venta->saldo > 0) {//si queda saldo aún
-                                //190 150 40 170
-
-                                //si total pagos > total producto
-                                //saldo = (total venta - subtotal producto) - (total pagos - subtotal producto)
-                            
-                                //si no, saldo = saldo si se devuelve el dinero
-                            }
-
-                            else{
-                                //anular todos los pagos si el subtotal del producto + 
-                                //envío es igual al total de la venta
-
-                            } 
-                            
-                        }
-
                     }
+                }
                 // }
 
                 $venta->save();
@@ -216,16 +209,14 @@ class DevolucionController extends Controller
                 $product['data'] = array();
 
                 $product['data'] = $producto_data->colorProducto->id;
-                
+
                 broadcast(new AddProductEvent($product));
 
 
                 DB::commit();
-
             } catch (\Exception $e) {
                 DB::rollBack();
             }
-           
         }
 
         if ($devolucion->estado == 2) {
@@ -242,7 +233,7 @@ class DevolucionController extends Controller
         $arrayData = [
             'notificacion' => [
                 'msj' => $mensaje,
-                'url' => url('/devoluciones/'. $devolucion->id)
+                'url' => url('/devoluciones/' . $devolucion->id)
             ]
         ];
 
@@ -258,7 +249,6 @@ class DevolucionController extends Controller
         session()->flash('message', ['success', ("Se ha actualizado el estado de la solicitud")]);
 
         return back();
-
     }
 
 
@@ -271,5 +261,4 @@ class DevolucionController extends Controller
             4
         ];
     }
-
 }
