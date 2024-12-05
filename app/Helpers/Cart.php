@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Carrito;
 use App\CarritoProducto;
+use Illuminate\Support\Facades\Cookie;
 
 class Cart {
 
@@ -68,6 +69,9 @@ class Cart {
         if (!empty($newCartItems)) {
             CarritoProducto::insert($newCartItems);
         }
+
+        Cookie::queue(Cookie::forget('cart_items'));
+
     }
 
 }
