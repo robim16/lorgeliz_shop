@@ -429,83 +429,15 @@ class ProductController extends Controller
 
             $producto_id = $request->producto;
 
-            // $color_producto = ColorProducto::where('color_id', $request->color)
-            //     ->where('producto_id', $producto_id)
-            //     ->first();
-
-            // if ($color_producto) {
-
-            //     session()->flash('message', ['success', ("Este producto ya ha sido creado anteriormente")]);
-            //     return redirect()->back();
-            // }
-
-
             $productService->validarColorProducto($request);
 
             $producto = Producto::where('id', $producto_id)->first();
 
-
-
             $url_imagenes = $productService->uploadImage($request, $producto);
-
 
             $activo = 'Si';
 
-
             $productService->createColorProducto($request, $producto, $url_imagenes, $activo);
-
-
-            // $url_imagenes = [];
-
-            // if ($request->hasFile('imagenes')) {
-
-            //     $imagenes = $request->file('imagenes');
-
-            //     foreach ($imagenes as $imagen) {
-
-            //         $nombre = time() . '_' . $imagen->getClientOriginalName();
-
-            //         //$path = Storage::disk('public')->putFileAs("imagenes/productos/producto" . $producto, $imagen, $nombre);
-
-            //         //$url_imagenes[]['url'] = $path;
-
-            //         $image = Image::make($imagen)->encode('jpg', 75);
-            //         $image->resize(530, 591, function ($constraint) {
-            //             $constraint->upsize();
-            //         });
-
-            //         // Storage::disk('dropbox')->put("imagenes/productos/producto".$nombre, $image->stream()->__toString());
-            //         // $dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();
-            //         // $response = $dropbox->createSharedLinkWithSettings("imagenes/productos/producto" . $nombre, ["requested_visibility" => "public"]);
-
-            //         // $url_imagenes[]['url'] = str_replace('dl=0', 'raw=1', $response['url']);
-
-            //         // $path = "imagenes/productos/producto/".$producto->id."/".$nombre;
-
-            //         $path = "imagenes/productos/producto_" . $producto->id . "/" . $nombre;
-
-            //         Storage::disk('public')->put($path, $image->stream());
-
-            //         $url_imagenes[]['url'] = $path;
-            //     }
-            // }
-
-
-            // $colorproducto = new ColorProducto();
-            // $colorproducto->producto_id = $producto->id;
-            // $colorproducto->color_id = $request->color;
-            // $colorproducto->activo = 'Si';
-
-            // $colorproducto->save();
-
-
-            // $color_producto = ColorProducto::where('slug', $colorproducto->slug)
-            //     ->where('color_id', $colorproducto->color_id)
-            //     ->where('producto_id', $colorproducto->producto_id)
-            //     ->first();
-
-
-            // $color_producto->imagenes()->createMany($url_imagenes);
 
             DB::commit();
 

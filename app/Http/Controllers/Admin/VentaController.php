@@ -76,10 +76,6 @@ class VentaController extends Controller
             $venta = Venta::with('cliente.user', 'factura')
                 ->where('id', $id)
                 ->firstOrFail();
-    
-            // $pagos = $venta->pagos()->select('*', DB::raw('SUM(monto) as total'))
-            //     ->orderBy('pagos.fecha', 'DESC')
-            //     ->paginate(5);
 
             $pagos = $venta->pagos()
                 ->orderBy('pagos.fecha', 'DESC')
@@ -196,10 +192,6 @@ class VentaController extends Controller
             
             return response()->json($response);
 
-            // session()->flash('message', ['success', ("Se ha registrado el pago exitosamente")]);
-    
-            // return back();
-
         } catch (\Exception $e) {
             return $e;
         }
@@ -214,13 +206,8 @@ class VentaController extends Controller
         try {
            
             $ventas = Venta::with('cliente.user')
-            ->orderBy('id', 'DESC')
-            ->get();
-    
-            // $count = 0;
-            // foreach ($ventas as $venta) {
-            //     $count += 1;
-            // }
+                ->orderBy('id', 'DESC')
+                ->get();
 
             $count = $ventas->count();
     
@@ -243,8 +230,8 @@ class VentaController extends Controller
         try {
            
             $productos = ProductoVenta::where('venta_id', $id)
-            ->with('venta', 'productoReferencia')
-            ->get();
+                ->with('venta', 'productoReferencia')
+                ->get();
     
             $pdf = \PDF::loadView('admin.pdf.venta',['productos'=>$productos]);
             return $pdf->download('factura-'.$productos[0]->venta->factura->consecutivo.'.pdf');

@@ -112,10 +112,10 @@ class ChatController extends Controller
     
             $data = array();
             $data['chats'] = array();
-    
+
             $msg = Chat::with('user.imagene')
-            ->where('id', $chat->id)
-            ->first();
+                ->where('id', $chat->id)
+                ->first();
     
             $data['chats'] = $msg;
     
@@ -152,20 +152,23 @@ class ChatController extends Controller
             $user = auth()->user()->id;
 
             $mensajes = Chat::whereIn('from_id', [$user, $cliente])
-            ->whereIn('to_id', [$user, $cliente])//contamos los mensajes intercambiados por el cliente y el admin
-            ->exists();
+                ->whereIn('to_id', [$user, $cliente]) //contamos los mensajes intercambiados por el cliente y el admin
+                ->exists();
 
-            $chats = Chat::when($mensajes, function ($query) use ($user, $cliente) {
-                return $query->whereIn('chats.from_id', [$user, $cliente])
-                ->whereIn('chats.to_id', [$user, $cliente]);
-            },
-            function ($query) use($cliente) {
-                return $query->where('chats.from_id', $cliente)
-                ->orWhere('chats.to_id',$cliente);
-            })
-            ->with('user.imagene')
-            ->orderBy('chats.fecha')
-            ->get();
+            $chats = Chat::when(
+                $mensajes,
+                function ($query) use ($user, $cliente) {
+                    return $query->whereIn('chats.from_id', [$user, $cliente])
+                    ->whereIn('chats.to_id', [$user, $cliente]);
+                },
+                function ($query) use ($cliente) {
+                    return $query->where('chats.from_id', $cliente)
+                    ->orWhere('chats.to_id', $cliente);
+                }
+            )
+                ->with('user.imagene')
+                ->orderBy('chats.fecha')
+                ->get();
 
             return ['chats'=> $chats];
 
@@ -222,11 +225,11 @@ class ChatController extends Controller
             $chat->read_at = \Carbon\Carbon::now();//buscamos el mensaje y se pone como leído
     
             $chat->save();
-    
+
             $chats = Chat::where('to_id', auth()->user()->id)
-            ->where('from_id', $chat->from_id)
-            ->whereNull('read_at')//buscamos todos los mensajes no leídos
-            ->get();
+                ->where('from_id', $chat->from_id)
+                ->whereNull('read_at') //buscamos todos los mensajes no leídos
+                ->get();
     
             if ($chats) {
                 foreach ($chats as $chat) {

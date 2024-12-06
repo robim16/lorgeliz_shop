@@ -35,8 +35,8 @@ class TallaController extends Controller
         $id  = $request->id;
 
         $tallas = Talla::join('talla_tipo', 'tallas.id', 'talla_tipo.talla_id')
-        ->where('talla_tipo.tipo_id', $id)
-        ->get();
+            ->where('talla_tipo.tipo_id', $id)
+            ->get();
         
         return $tallas;
     }

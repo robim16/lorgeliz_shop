@@ -40,16 +40,14 @@ class OrdersController extends Controller
         $busqueda = $request->get('busqueda');
         
         try {
-            
+
             $pedidos = Venta::with(['pedido', 'factura'])
-                // ->orWhere('valor','like',"%$busqueda%")
-                // ->where('estado', '!=', 3)
-                ->when($busqueda, function($query) use($busqueda){
-                    return $query->where('valor','like',"%$busqueda%")
-                    ->orWhere('fecha','like',"%$busqueda%")
-                    ->orWhere('id','like',"%$busqueda%");
-                })
-                ->estado()
+            ->when($busqueda, function ($query) use ($busqueda) {
+                return $query->where('valor', 'like', "%$busqueda%")
+                    ->orWhere('fecha', 'like', "%$busqueda%")
+                    ->orWhere('id', 'like', "%$busqueda%");
+            })
+            ->estado()
                 ->where('cliente_id', auth()->user()->cliente->id)
                 ->orderBy('created_at', 'DESC')
                 ->paginate(5);
@@ -96,21 +94,29 @@ class OrdersController extends Controller
 
         try {
 
-            $productos = ProductoVenta::whereHas('venta.pedido',
-            function (Builder $query) use ($pedido) {
-               $query->where('id', $pedido->id);
-            })
-            ->whereHas('venta',
-            function (Builder $query) {
-               $query->where('cliente_id', auth()->user()->cliente->id);
-            })
-            ->with(['productoReferencia.colorProducto.color', 'productoReferencia.colorProducto.producto',
-            'productoReferencia.talla','venta.pedido', 'productoReferencia.colorProducto.imagenes',
-                'productoReferencia.devoluciones'=>function($query) use($pedido){
-                    $query->where('venta_id', $pedido->venta_id);
+            $productos = ProductoVenta::whereHas(
+                'venta.pedido',
+                function (Builder $query) use ($pedido) {
+                    $query->where('id', $pedido->id);
                 }
-            ])
-            ->get();
+            )
+                ->whereHas(
+                    'venta',
+                    function (Builder $query) {
+                        $query->where('cliente_id', auth()->user()->cliente->id);
+                    }
+                )
+                ->with([
+                    'productoReferencia.colorProducto.color',
+                    'productoReferencia.colorProducto.producto',
+                    'productoReferencia.talla',
+                    'venta.pedido',
+                    'productoReferencia.colorProducto.imagenes',
+                    'productoReferencia.devoluciones' => function ($query) use ($pedido) {
+                        $query->where('venta_id', $pedido->venta_id);
+                    }
+                ])
+                ->get();
     
             return ['productos' => $productos];
             
@@ -127,25 +133,6 @@ class OrdersController extends Controller
     {
         $productos = $this->productosOrder($id);
 
-        // $users = Venta::join('clientes','ventas.cliente_id', '=', 'clientes.id')
-        // ->join('pedidos','ventas.id', '=', 'pedidos.venta_id')
-        // ->join('users','clientes.user_id', '=', 'users.id')
-        // ->join('facturas', 'ventas.factura_id', '=', 'facturas.id')
-        // ->select('users.nombres','users.apellidos','users.identificacion','users.departamento',
-        // 'users.municipio','users.direccion','users.telefono','users.email', 'pedidos.id','ventas.fecha',
-        // 'facturas.prefijo', 'facturas.consecutivo', 'ventas.id as venta')
-        // ->where('pedidos.id', '=', $id)
-        // ->get();
-
-        // $users = Venta::with('cliente.user','pedido:id','factura')
-        // ->whereHas('pedido', function (Builder $query) use ($id) {
-        //    $query->where('id', $id);
-        // })
-        // ->get();
-
-        // $pdf = \PDF::loadView('user.pdf.factura',['productos'=>$productos,'users'=>$users]);
-        // return $pdf->download('factura-'.$users[0]->factura->consecutivo.'.pdf');
-
         $pdf = \PDF::loadView('user.pdf.factura',['productos'=>$productos]);
         return $pdf->download('factura-'.$productos[0]->venta->factura->consecutivo.'.pdf'); // imprimir factura de cliente
 
@@ -156,13 +143,6 @@ class OrdersController extends Controller
     public function showPdf(Request $request, $id)
     {
         $productos = $this->productosOrder($id);
-    
-        // $users = $this->userPedido($id);
-
-        // $pdf = \PDF::loadView('user.pdf.pedido',['productos'=>$productos, 'users'=>$users])
-        // ->setPaper('a4', 'landscape');
-        
-        // return $pdf->download('pedido-'.$users[0]->pedido.'.pdf');
 
         $pdf = \PDF::loadView('user.pdf.pedido',['productos'=>$productos])
         ->setPaper('a4', 'landscape');
@@ -176,13 +156,15 @@ class OrdersController extends Controller
     {
 
         try {
-            
-            return ProductoVenta::whereHas('venta.pedido',
-            function (Builder $query) use ($id) {
-               $query->where('id', $id);
-            })
-            ->with(['venta.pedido', 'venta.cliente.user', 'venta.factura'])
-            ->get();
+
+            return ProductoVenta::whereHas(
+                'venta.pedido',
+                function (Builder $query) use ($id) {
+                    $query->where('id', $id);
+                }
+            )
+                ->with(['venta.pedido', 'venta.cliente.user', 'venta.factura'])
+                ->get();
            
         } catch (\Exception $e) {
             //throw $th;

@@ -34,8 +34,6 @@ class ProductController extends Controller
     {
 
         try {
-
-            // return Cart::moveCartItemsIntoDb();
             
             $producto = ColorProducto::with(['imagenes:imageable_id,url', 'color:id,nombre',
                 'producto.tipo.subcategoria.categoria'])
@@ -66,8 +64,6 @@ class ProductController extends Controller
 		}
 
         $producto = ColorProducto::where('id', $id)->first();
-        // $visitas = $producto->visitas;
-        // $producto->visitas = $visitas + 1;
         $producto->visitas += 1;
 
         $producto->save(); // se incrementa el campo visitas

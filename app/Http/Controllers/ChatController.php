@@ -23,7 +23,6 @@ class ChatController extends Controller
     //retorna en el messenger los mensajes recibidos por el usuario
     public function index(Request $request)
     {
-        // if (!$request->ajax()) return back();
 
         if ( ! request()->ajax()) {
 			abort(401, 'Acceso denegado');

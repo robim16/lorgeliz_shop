@@ -33,15 +33,15 @@ class ClienteController extends Controller
         $keyword = $request->get('keyword');
 
         $clientes = User::with('cliente')
-        ->where('users.nombres','like',"%$keyword%")
-        ->orWhere('users.apellidos','like',"%$keyword%")
-        ->orWhere('users.identificacion','like',"%$keyword%")
-        ->orWhere('users.direccion','like',"%$keyword%")
-        ->orWhere('users.telefono','like',"%$keyword%")
-        ->orWhere('users.email','like',"%$keyword%")
-        // ->select('clientes.id','users.nombres', 'users.apellidos', 'users.identificacion',
-        // 'users.direccion','users.telefono','users.email', 'users.departamento', 'users.municipio')
-        ->paginate(5);
+            ->where('users.nombres', 'like', "%$keyword%")
+            ->orWhere('users.apellidos', 'like', "%$keyword%")
+            ->orWhere('users.identificacion', 'like', "%$keyword%")
+            ->orWhere('users.direccion', 'like', "%$keyword%")
+            ->orWhere('users.telefono', 'like', "%$keyword%")
+            ->orWhere('users.email', 'like', "%$keyword%")
+            // ->select('clientes.id','users.nombres', 'users.apellidos', 'users.identificacion',
+            // 'users.direccion','users.telefono','users.email', 'users.departamento', 'users.municipio')
+            ->paginate(5);
 
 
         return view('admin.clientes.index', compact('clientes'));
@@ -54,9 +54,7 @@ class ClienteController extends Controller
 
         $pedidos = Venta::with(['pedido', 'factura', 'cliente.user.imagene'])
             ->where('cliente_id', $cliente->id)
-            // ->where('estado', '!=', '3')
             ->estado();
-            // ->paginate(10);
 
 
         $total_general = $pedidos->sum('valor');

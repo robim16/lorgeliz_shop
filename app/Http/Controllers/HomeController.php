@@ -244,7 +244,7 @@ class HomeController extends Controller
 			abort(401, 'Acceso denegado');
 		}
 
-        $productos = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        $productos = ColorProducto::with(['producto.tipo:id,nombre', 'color:id,nombre', 'imagenes'])
             ->join('producto_referencia', 'color_producto.id', 'producto_referencia.color_producto_id')
             ->join('producto_venta', 'producto_referencia.id', 'producto_venta.producto_referencia_id')
             ->activo()
@@ -279,7 +279,7 @@ class HomeController extends Controller
 
         $disponibles = ProductoReferencia::disponibles();
 
-        $productos = ColorProducto::with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        $productos = ColorProducto::with(['producto.tipo:id,nombre', 'color:id,nombre', 'imagenes'])
             ->visitas()
             ->activo()
             ->whereIn('id', $disponibles)
@@ -314,11 +314,11 @@ class HomeController extends Controller
         $disponibles = ProductoReferencia::disponibles();
 
         $productos = ColorProducto::join('productos', 'productos.id', 'color_producto.producto_id')
-            ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+        ->with(['producto.tipo:id,nombre', 'color:id,nombre', 'imagenes'])
             ->activo()
             ->whereIn('color_producto.id', $disponibles)
             ->select('color_producto.*')
-            ->orderBy('productos.'.$criterio)
+            ->orderBy('productos.' . $criterio)
             ->paginate(12);
 
 
@@ -348,11 +348,11 @@ class HomeController extends Controller
 
         $disponibles = ProductoReferencia::disponibles();
 
-        $productos = ColorProducto::whereHas('producto', function (Builder $query) 
+        $productos = ColorProducto::whereHas('producto', function (Builder $query)
             use ($tipo) {
                 $query->where('tipo_id', $tipo);
             })
-            ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+            ->with(['producto.tipo:id,nombre', 'color:id,nombre', 'imagenes'])
             ->activo()
             ->whereIn('id', $disponibles)
             ->paginate(12);
@@ -383,11 +383,13 @@ class HomeController extends Controller
 
         $disponibles = ProductoReferencia::disponibles();
 
-        $productos = ColorProducto::whereHas('producto.tipo.subcategoria.categoria',
+        $productos = ColorProducto::whereHas(
+            'producto.tipo.subcategoria.categoria',
             function (Builder $query) use ($genero) {
                 $query->where('nombre', $genero);
-            })
-            ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+            }
+        )
+            ->with(['producto.tipo:id,nombre', 'color:id,nombre', 'imagenes'])
             ->activo()
             ->whereIn('id', $disponibles)
             ->paginate(12);
@@ -415,19 +417,25 @@ class HomeController extends Controller
 
         $disponibles = ProductoReferencia::disponibles();
 
-        $productos = ColorProducto::orWhereHas('producto',
+        $productos = ColorProducto::orWhereHas(
+            'producto',
             function (Builder $query) use ($keyword) {
-            $query->where('nombre','like',"%$keyword%");
-            })
-            ->orWhereHas('producto.tipo.subcategoria.categoria',
-            function (Builder $query) use ($keyword) {
-            $query->where('nombre','like',"%$keyword%");
-            })
-            ->orWhereHas('producto.tipo',
-            function (Builder $query) use ($keyword) {
-            $query->where('nombre','like',"%$keyword%");
-            })
-            ->with(['producto.tipo:id,nombre','color:id,nombre','imagenes'])
+                $query->where('nombre', 'like', "%$keyword%");
+            }
+        )
+            ->orWhereHas(
+                'producto.tipo.subcategoria.categoria',
+                function (Builder $query) use ($keyword) {
+                    $query->where('nombre', 'like', "%$keyword%");
+                }
+            )
+            ->orWhereHas(
+                'producto.tipo',
+                function (Builder $query) use ($keyword) {
+                    $query->where('nombre', 'like', "%$keyword%");
+                }
+            )
+            ->with(['producto.tipo:id,nombre', 'color:id,nombre', 'imagenes'])
             ->activo()
             ->whereIn('id', $disponibles)
             ->paginate(12);

@@ -35,20 +35,26 @@ class DevolucionController extends Controller
 
     
         try {
-            
-            $productos = Devolucione::whereHas('venta',
-            function (Builder $query) {
-               $query->where('cliente_id', auth()->user()->cliente->id);
-            })
-            ->with(['venta:id','venta.pedido:id,venta_id','productoReferencia:id,talla_id,color_producto_id',
-                'productoReferencia.colorProducto:id,color_id,slug,producto_id',
-                'productoReferencia.colorProducto.color:id,nombre', 'productoReferencia.talla:id,nombre',
-                'productoReferencia.colorProducto.producto:id,nombre',
-                'productoReferencia.colorProducto.imagenes' => function($query) {
-                    $query->select('id', 'url', 'imageable_id');
+
+            $productos = Devolucione::whereHas(
+                'venta',
+                function (Builder $query) {
+                    $query->where('cliente_id', auth()->user()->cliente->id);
                 }
-            ])
-            ->paginate(5);
+            )
+                ->with([
+                    'venta:id',
+                    'venta.pedido:id,venta_id',
+                    'productoReferencia:id,talla_id,color_producto_id',
+                    'productoReferencia.colorProducto:id,color_id,slug,producto_id',
+                    'productoReferencia.colorProducto.color:id,nombre',
+                    'productoReferencia.talla:id,nombre',
+                    'productoReferencia.colorProducto.producto:id,nombre',
+                    'productoReferencia.colorProducto.imagenes' => function ($query) {
+                        $query->select('id', 'url', 'imageable_id');
+                    }
+                ])
+                ->paginate(5);
     
             return view('user.devoluciones.index',compact('productos'));
 
@@ -66,13 +72,15 @@ class DevolucionController extends Controller
 
         try {
 
-            $productos = Devolucione::whereHas('venta',
-            function (Builder $query) {
-               $query->where('cliente_id', auth()->user()->cliente->id);
-            })
-            ->with(['venta', 'productoReferencia'])
-            ->where('id', $id)
-            ->paginate(5);
+            $productos = Devolucione::whereHas(
+                'venta',
+                function (Builder $query) {
+                    $query->where('cliente_id', auth()->user()->cliente->id);
+                }
+            )
+                ->with(['venta', 'productoReferencia'])
+                ->where('id', $id)
+                ->paginate(5);
            
     
             return view('user.devoluciones.show',compact('productos'));

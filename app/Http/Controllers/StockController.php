@@ -32,17 +32,17 @@ class StockController extends Controller
         
 
         try {
-           
+
 
             $productos = CarritoProducto::whereHas('carrito', function (Builder $query) {
                 $query->where('estado', 1)
-               ->where('cliente_id', auth()->user()->cliente->id);
+                ->where('cliente_id', auth()->user()->cliente->id);
             })
-            ->with('productoReferencia')
-            ->get()
-            ->first(function ($producto) {
-                return $producto->cantidad > $producto->productoReferencia->stock;
-            });// si un producto está agotado o la cantidad supera el stock
+                ->with('productoReferencia')
+                ->get()
+                ->first(function ($producto) {
+                    return $producto->cantidad > $producto->productoReferencia->stock;
+                });// si un producto está agotado o la cantidad supera el stock
 
 
             if ($productos) {

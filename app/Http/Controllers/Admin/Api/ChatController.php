@@ -28,25 +28,25 @@ class ChatController extends Controller
         
 
         try {
-  
+
             $chats = User::has('chats')
-                ->addSelect([
-                    'mensaje' => Chat::select('mensaje')
-                        ->whereColumn('from_id', 'users.id')
-                        ->orderBy('created_at', 'DESC')
-                        ->limit(1)
-                ])
-                ->addSelect([
-                    'fecha' => Chat::select('created_at')
-                        ->whereColumn('from_id', 'users.id')
-                        ->orderBy('created_at', 'DESC')
-                        ->limit(1)
-                ])
-                ->where('users.nombres', 'like', "%$buscar%")
-                ->whereNotIn('users.id', [$user])
-                ->with('imagene')
-                ->orderBy('fecha', 'DESC')
-                ->paginate(5);
+            ->addSelect([
+                'mensaje' => Chat::select('mensaje')
+                    ->whereColumn('from_id', 'users.id')
+                    ->orderBy('created_at', 'DESC')
+                    ->limit(1)
+            ])
+            ->addSelect([
+                'fecha' => Chat::select('created_at')
+                    ->whereColumn('from_id', 'users.id')
+                    ->orderBy('created_at', 'DESC')
+                    ->limit(1)
+            ])
+            ->where('users.nombres', 'like', "%$buscar%")
+            ->whereNotIn('users.id', [$user])
+            ->with('imagene')
+            ->orderBy('fecha', 'DESC')
+            ->paginate(5);
     
             return [
                 'pagination' => [
@@ -94,10 +94,10 @@ class ChatController extends Controller
     
             $data = array();
             $data['chats'] = array();
-    
+
             $msg = Chat::with('user.imagene')
-            ->where('id', $chat->id)
-            ->first();
+                ->where('id', $chat->id)
+                ->first();
     
             $data['chats'] = $msg;
     
