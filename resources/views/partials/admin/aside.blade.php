@@ -172,11 +172,11 @@
           <!-- Productos -->
           <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-list-alt"></i>
-                  <p>
-                      Productos
-                      <i class="right fas fa-angle-left"></i>
-                  </p>
+                <i class="nav-icon fas fa-box-open"></i>
+                <p>
+                    Productos
+                    <i class="right fas fa-angle-left"></i>
+                </p>
               </a>
               <ul class="nav nav-treeview">
                   <li class="nav-item">
@@ -197,7 +197,8 @@
           <!-- Ventas -->
           <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-list-alt"></i>
+                <i class="nav-icon fas fa-coins"></i>
+                 
                   <p>
                       Ventas
                       <i class="right fas fa-angle-left"></i>
@@ -217,7 +218,7 @@
         <!-- Pedidos -->
         <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-list-alt"></i>
+                <i class="nav-icon fas fa-shopping-cart"></i>
                 <p>
                     Pedidos
                     <i class="right fas fa-angle-left"></i>
@@ -254,7 +255,7 @@
         <!-- Pagos -->
         <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-list-alt"></i>
+                <i class="nav-icon fas fa-donate"></i>
                 <p>
                     Pagos
                     <i class="right fas fa-angle-left"></i>
@@ -396,7 +397,7 @@
         </li>
         <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-list-alt"></i>
+                <i class="nav-icon fas fa-cogs"></i>
                 <p>
                     Configuración
                     <i class="right fas fa-angle-left"></i>

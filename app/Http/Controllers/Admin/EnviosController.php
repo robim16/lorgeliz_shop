@@ -18,7 +18,8 @@ class EnviosController extends Controller
     {
 
         $envios = Envio::with('venta.cliente.user:id,nombres,apellidos')
-            ->orderBy('id')->get();
+            ->orderBy('id')
+            ->get();
 
         return view('admin.envios.index', compact('envios'));
 

@@ -64,8 +64,8 @@ class UserController extends Controller
     public function show($slug)
     {
         $user = User::where('slug', $slug)
-        ->where('id', auth()->user()->id)
-        ->first();
+            ->where('id', auth()->user()->id)
+            ->first();
         
         return view('user.show', compact('user'));
     }
@@ -93,7 +93,7 @@ class UserController extends Controller
         try {
 
 
-            // return $request;
+        
             $user = User::where('id', $id)->first();
 
             // $user = auth()->user();

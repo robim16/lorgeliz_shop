@@ -30,7 +30,10 @@ class ColorController extends Controller
     {
         $nombre = $request->get('nombre');
        
-        $colores = Color::where('nombre','like',"%$nombre%")->orderBy('created_at')->paginate(5);
+        $colores = Color::where('nombre','like',"%$nombre%")
+            ->orderBy('created_at')
+            ->paginate(5);
+            
         return view('admin.colores.index',compact('colores'));
     }
 

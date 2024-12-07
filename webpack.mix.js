@@ -33,7 +33,7 @@ mix.js('resources/js/app.js', 'public/js')
       'public/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css',
       'public/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css',
       'public/adminlte/dist/css/adminlte.min.css',
-   ], 'public/css/styles.css');  
+   ], 'public/css/styles.css');//iba en admin layout
 
    mix.scripts([
       'public/asset/js/jquery-3.2.1.min.js',

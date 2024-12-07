@@ -27,6 +27,7 @@ class TipoProductoController extends Controller
         $nombre = $request->get('nombre');
        
         $tipos = Tipo::where('nombre','like',"%$nombre%")
+            ->with(['subcategoria.categoria'])
             ->orderBy('id')
             ->paginate(5);
         

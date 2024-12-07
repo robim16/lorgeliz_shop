@@ -27,53 +27,65 @@ class DashboardController extends Controller
     {
         $anio=date('Y');
 
-        $ventas=DB::table('ventas as v')
-        ->select(DB::raw('MONTH(v.fecha) as mes'),
-        DB::raw('YEAR(v.fecha) as anio'),
-        DB::raw('SUM(v.valor) as total'))
-        ->whereYear('v.fecha',$anio)
+        $ventas = DB::table('ventas as v')
+        ->select(
+            DB::raw('MONTH(v.fecha) as mes'),
+            DB::raw('YEAR(v.fecha) as anio'),
+            DB::raw('SUM(v.valor) as total')
+        )
+        ->whereYear('v.fecha', $anio)
         ->where('v.estado', '!=', '3')
-        ->groupBy(DB::raw('MONTH(v.fecha)'),DB::raw('YEAR(v.fecha)'))
+        ->groupBy(DB::raw('MONTH(v.fecha)'), DB::raw('YEAR(v.fecha)'))
         ->get();
 
-        $pagos=DB::table('pagos as p')
-        ->select(DB::raw('MONTH(p.fecha) as mes'),
-        DB::raw('YEAR(p.fecha) as anio'),
-        DB::raw('SUM(p.monto) as total'))
-        ->whereYear('p.fecha',$anio)
-        ->groupBy(DB::raw('MONTH(p.fecha)'),DB::raw('YEAR(p.fecha)'))
+        $pagos = DB::table('pagos as p')
+        ->select(
+            DB::raw('MONTH(p.fecha) as mes'),
+            DB::raw('YEAR(p.fecha) as anio'),
+            DB::raw('SUM(p.monto) as total')
+        )
+        ->whereYear('p.fecha', $anio)
+        ->groupBy(DB::raw('MONTH(p.fecha)'), DB::raw('YEAR(p.fecha)'))
         ->get();
 
-        $pedidos=DB::table('pedidos as p')
-        ->select(DB::raw('MONTH(p.fecha) as mes'),
-        DB::raw('YEAR(p.fecha) as anio'),
-        DB::raw('COUNT(p.id) as total'))
-        ->whereYear('p.fecha',$anio)
-        ->groupBy(DB::raw('MONTH(p.fecha)'),DB::raw('YEAR(p.fecha)'))
-        ->get();
-        
-        $clientes=DB::table('clientes as c')
-        ->select(DB::raw('MONTH(c.created_at) as mes'),
-        DB::raw('YEAR(c.created_at) as anio'),
-        DB::raw('COUNT(c.id) as total'))
-        ->whereYear('c.created_at',$anio)
-        ->groupBy(DB::raw('MONTH(c.created_at)'),DB::raw('YEAR(c.created_at)'))
+        $pedidos = DB::table('pedidos as p')
+        ->select(
+            DB::raw('MONTH(p.fecha) as mes'),
+            DB::raw('YEAR(p.fecha) as anio'),
+            DB::raw('COUNT(p.id) as total')
+        )
+        ->whereYear('p.fecha', $anio)
+        ->groupBy(DB::raw('MONTH(p.fecha)'), DB::raw('YEAR(p.fecha)'))
         ->get();
 
-        $productos=DB::table('productos as p')
-        ->select(DB::raw('MONTH(p.created_at) as mes'),
-        DB::raw('YEAR(p.created_at) as anio'),
-        DB::raw('COUNT(p.id) as total'))
-        ->whereYear('p.created_at',$anio)
-        ->groupBy(DB::raw('MONTH(p.created_at)'),DB::raw('YEAR(p.created_at)'))
+        $clientes = DB::table('clientes as c')
+        ->select(
+            DB::raw('MONTH(c.created_at) as mes'),
+            DB::raw('YEAR(c.created_at) as anio'),
+            DB::raw('COUNT(c.id) as total')
+        )
+        ->whereYear('c.created_at', $anio)
+        ->groupBy(DB::raw('MONTH(c.created_at)'), DB::raw('YEAR(c.created_at)'))
         ->get();
 
-        $devoluciones=DB::table('devoluciones as d')
-        ->select(DB::raw('MONTH(d.fecha) as mes'),
-        DB::raw('YEAR(d.fecha) as anio'),
-        DB::raw('COUNT(d.id) as total'))
-        ->whereYear('d.fecha',$anio)
-        ->groupBy(DB::raw('MONTH(d.fecha)'),DB::raw('YEAR(d.fecha)'))
+        $productos = DB::table('productos as p')
+        ->select(
+            DB::raw('MONTH(p.created_at) as mes'),
+            DB::raw('YEAR(p.created_at) as anio'),
+            DB::raw('COUNT(p.id) as total')
+        )
+        ->whereYear('p.created_at', $anio)
+        ->groupBy(DB::raw('MONTH(p.created_at)'), DB::raw('YEAR(p.created_at)'))
+        ->get();
+
+        $devoluciones = DB::table('devoluciones as d')
+        ->select(
+            DB::raw('MONTH(d.fecha) as mes'),
+            DB::raw('YEAR(d.fecha) as anio'),
+            DB::raw('COUNT(d.id) as total')
+        )
+        ->whereYear('d.fecha', $anio)
+        ->groupBy(DB::raw('MONTH(d.fecha)'), DB::raw('YEAR(d.fecha)'))
         ->get();
         
 
