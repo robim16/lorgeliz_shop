@@ -116,7 +116,7 @@
                     <div class="form-group row">
                         <label class="col-md-4 form-control-label" for="text-input">Tallas del Producto</label>
                         <div class="col-md-8">
-                            <select name="tallas_id[]" id="tallas_id" class="form-control select2" multiple="multiple">
+                            <select name="tallas_id[]" id="tallas_id" class="custom-select" multiple>
                                 @foreach(\App\Talla::pluck('nombre', 'id') as $id => $nombre)
                                     <option value="{{ $id }}" class="option">
                                         {{$nombre}}
@@ -127,9 +127,9 @@
                             </select>
 
                             @if($errors->has('tallas_id'))
-                            <small class="form-text text-danger">
-                                {{ $errors->first('tallas_id') }}
-                            </small>
+                                <small class="form-text text-danger">
+                                    {{ $errors->first('tallas_id') }}
+                                </small>
                             @endif
                         </div>
                     </div>
@@ -152,11 +152,8 @@
 @endsection
 
 @section('scripts')
-    <!-- Select2 -->
-    <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
-
-    <script>
+    {{-- <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script> --}}
+    {{-- <script>
 
         $('#tallas_id').select2()
 
@@ -165,63 +162,52 @@
             theme: 'bootstrap4'
         });
 
-    </script>
+    </script> --}}
 
 
     <script>
-
-    $(document).ready(function () {
-
-        $('#tallas_id').select2()
-
-        $('.select2bs4').select2({
-            theme: 'bootstrap4'
-        });
-        
-        $('.btn-default').click(function (e) { 
-            e.preventDefault();
-
-            var id = jQuery(this).data('id');
-            $('#tipo_id').val(id);
-
-            $("#tallas_id").select2().val(null).trigger("change");
+        $(document).ready(function () {
             
-            // $(".option").each(function() {     
-            //     $(this).prop('selected',false);                   
-            // });
+            $('.btn-default').click(function (e) { 
+                e.preventDefault();
 
-        
-            //obtiene las tallas del tipo de producto
-            $.ajax({
-                type: "GET",
-                url:'http://127.0.0.1:8000/api/admin/tallas/tipos/get',
-                data:{id:id},
-                dataType: 'json',
-                success: function (response) {
-                    
-                    if (response.length > 0) {
-                    
-                        $.each(response, function (key, value) {
+                var id = jQuery(this).data('id');
+                $('#tipo_id').val(id);
 
-                            //muestra seleccionadas las tallas que ya existen del tipo de producto
-                            $(".option").each(function() {
-                                const tipo = parseInt($(this).val());
-                                if (tipo == value.talla_id) {
-                                    $(this).prop('selected',true);
-                                }
-                            
+                // $("#tallas_id").select2().val(null).trigger("change");
+                $("#tallas_id").val(null).trigger("change");
+
+            
+                //obtiene las tallas del tipo de producto
+                $.ajax({
+                    type: "GET",
+                    url:'http://127.0.0.1:8000/api/admin/tallas/tipos/get',
+                    data:{id:id},
+                    dataType: 'json',
+                    success: function (response) {
+                        
+                        if (response.length > 0) {
+                        
+                            $.each(response, function (key, value) {
+
+                                //muestra seleccionadas las tallas que ya existen del tipo de producto
+                                $(".option").each(function() {
+                                    const tipo = parseInt($(this).val());
+                                    if (tipo == value.talla_id) {
+                                        $(this).prop('selected',true);
+                                    }
+                                
+                                });
+
                             });
 
-                        });
-
+                        }
                     }
-                }
+
+                });
 
             });
 
         });
-
-    });
     </script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
 @endsection
