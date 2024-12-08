@@ -180,7 +180,6 @@ import ChatList from './ChatList.vue';
 import Messenger from './Messenger.vue';
     export default {
         components: { ChatList, Messenger },
-        // props: ['role_id', 'user'],
         props: {
             user:{
                 required:true,
@@ -195,13 +194,10 @@ import Messenger from './Messenger.vue';
         data (){
             return {
                 mensaje: '',
-                // user: '',
                 arrayMensajes: [],
                 arrayClientes: [],
                 activos: [],
-                // admin: false,
                 error: false, 
-                // show: true,
                 cliente: '',
                 modal: 0,
                 criterio: '',
@@ -332,10 +328,6 @@ import Messenger from './Messenger.vue';
                     this.loadMessages(cliente);//carga los mensajes del cliente
                 } 
             },
-
-            // disable(){
-            //     this.show = false;
-            // },
 
             cerrarModal(){
                 this.modal=0;

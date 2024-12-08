@@ -115,8 +115,6 @@ export default {
             if (this.mensaje != '') {
 
                 this.error = false;
-                // let url = '/lorgeliz_tienda_copia/public/admin/chats';
-                // let me = this;
 
                 let url = `${this.ruta}/admin/chats`;
 
@@ -124,9 +122,7 @@ export default {
                     'mensaje': this.mensaje,
                     'cliente': this.cliente
                 }).then(response => {
-                    // me.mensaje = '';
                     if (response.data.data == 'success') {
-                        // me.loadMessages();
                         this.mensajes.push(response.data.msg)
                         this.mensaje = ''
                     }

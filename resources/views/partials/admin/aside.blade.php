@@ -53,11 +53,11 @@
           <!-- Categorías -->
           <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-list-alt"></i>
-                  <p>
-                      Categorías
-                      <i class="right fas fa-angle-left"></i>
-                  </p>
+                <i class="nav-icon fas fa-paste"></i>
+                <p>
+                    Categorías
+                    <i class="right fas fa-angle-left"></i>
+                </p>
               </a>
               <ul class="nav nav-treeview">
                   <li class="nav-item">
@@ -153,7 +153,7 @@
         <!-- Clientes -->
         <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-list-alt"></i>
+                <i class="nav-icon fas fa-users"></i>
                 <p>
                     Clientes
                     <i class="right fas fa-angle-left"></i>
@@ -236,7 +236,7 @@
 
         <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-list-alt"></i>
+                <i class="nav-icon fas fa-shipping-fast"></i>
                 <p>
                     Envios
                     <i class="right fas fa-angle-left"></i>
@@ -274,11 +274,11 @@
         <!-- Devoluciones -->
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-list-alt"></i>
-              <p>
-                  Devoluciones
-                  <i class="right fas fa-angle-left"></i>
-              </p>
+                <i class="nav-icon fas fa-recycle"></i>
+                <p>
+                    Devoluciones
+                    <i class="right fas fa-angle-left"></i>
+                </p>
           </a>
           <ul class="nav nav-treeview">
               <li class="nav-item">
@@ -293,7 +293,7 @@
           <!-- Proveedores -->
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-list-alt"></i>
+                <i class="nav-icon fas fa-warehouse"></i>
                 <p>
                     Proveedores
                     <i class="right fas fa-angle-left"></i>
@@ -319,7 +319,7 @@
         <!-- Stock -->
         <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-list-alt"></i>
+                <i class="nav-icon fas fa-dolly-flatbed"></i>
                 <p>
                     Stocks
                     <i class="right fas fa-angle-left"></i>
@@ -338,7 +338,7 @@
         <!-- Informes -->
         <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-list-alt"></i>
+                <i class="nav-icon fas fa-file-pdf"></i>
                 <p>
                     Informes
                     <i class="right fas fa-angle-left"></i>

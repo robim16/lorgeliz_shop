@@ -94,11 +94,6 @@
 <script>
     export default {
         props: {
-            // role_id:{
-            //     required:true,
-            //     type:Number
-            // }
-
             ruta:{
                 required: true,
                 type: String
@@ -118,7 +113,6 @@
         methods:{
 
             loadMessages(){
-                // let url ='/lorgeliz_tienda_copia/public/chats';
                 let url = `${this.ruta}/chats`
                 axios.get(url).then(response =>{
                     this.arrayMensajes = response.data.chats;
@@ -132,8 +126,6 @@
                 if (this.mensaje != '') {
 
                     this.error = false;
-                    // let url = '/lorgeliz_tienda_copia/public/chats';
-                    // let me = this;
 
                     let url = `${this.ruta}/chats`
 
@@ -154,8 +146,7 @@
             }
         },
 
-       created() {
-
+        created() {
         
             this.loadMessages();
             var url = window.location.pathname;
@@ -164,15 +155,6 @@
 
             window.Echo.channel('chat-added').listen('.new-message', (e) => {
                 let chats = e.data.chats;
-                // let chats = e.data;
-                
-                // this.arrayMensajes = [];
-                // chats.map(chat => {
-                //     this.arrayMensajes.push(chat);
-                // });
-
-                
-
                 
                 const scroll = document.querySelector(".direct-chat-messages");
 
