@@ -68,6 +68,8 @@
             <div class="card-footer">
                 <form action="#" method="post">
                 <div class="input-group">
+                    <i id="attach" class="fas fa-paperclip" @click="attachFile"></i>
+                    <input class="d-none" type="file" name="" id="file"> 
                     <input type="text" name="message" placeholder="Escribe tu mensaje" class="form-control" v-model="mensaje">
                     <span class="input-group-append">
                     <button type="submit" class="btn btn-primary" @click.prevent="sendMessage">Enviar</button>
@@ -111,6 +113,11 @@ export default {
         }
     },
     methods: {
+
+        attachFile(){
+            document.getElementById("file").click();
+        },
+
         sendMessage(){
             if (this.mensaje != '') {
 
@@ -152,4 +159,13 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    #attach {
+        position: relative;
+        margin: 11px -14px;
+        float: right;
+        z-index: 4;
+    }
+</style>
 
